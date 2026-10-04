@@ -1,76 +1,131 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-
+import { useSession } from "./social/session";
+import { Icon } from "./social/icon";
+import { Avatar } from "./social/common";
 const navigation = [
-  { name: "Feed", href: "/feed", glyph: "◫" },
-  { name: "Explore", href: "/explore", glyph: "◇" },
-  { name: "Create", href: "/new", glyph: "+" },
-  { name: "Profile", href: "/u/me", glyph: "○" },
+  { name: "Feed", href: "/feed", icon: "feed" },
+  { name: "Explore", href: "/explore", icon: "explore" },
+  { name: "Create", href: "/new", icon: "create" },
+  { name: "Profile", href: "/u/me", icon: "profile" },
 ] as const;
-
-export function AppShell({
-  active,
-  children,
-}: {
-  active?: string;
-  children: ReactNode;
-}) {
+export function AppShell({ children }: { children: ReactNode }) {
+  const pathname = usePathname(),
+    auth = useSession();
+  const active = pathname.startsWith("/explore")
+    ? "Explore"
+    : pathname.startsWith("/new") || pathname.endsWith("/fork")
+      ? "Create"
+      : pathname.startsWith("/u/")
+        ? "Profile"
+        : "Feed";
   return (
-    <div className="mx-auto min-h-dvh max-w-7xl md:grid md:grid-cols-[216px_1fr]">
+    <div className="app-layout">
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-      <aside className="border-b border-border px-4 py-6 md:min-h-dvh md:border-r md:border-b-0 md:px-6 md:py-10">
-        <Link
-          href="/feed"
-          aria-label="FORK home"
-          className="inline-flex items-center gap-3 text-2xl font-semibold tracking-[-0.06em]"
-        >
-          <span aria-hidden="true" className="text-primary">
-            ⑂
+      <aside className="sidebar">
+        <Link className="brand" href="/feed" aria-label="FORK home">
+          <span className="brand-mark">
+            <Icon name="fork" size={28} />
           </span>
-          FORK<span className="text-primary">.</span>
+          FORK<span className="brand-dot">.</span>
         </Link>
-        <p className="mt-3 hidden text-xs leading-5 text-muted-foreground md:block">
-          Ideas evolve in public.
-        </p>
-        <nav
-          aria-label="Main navigation"
-          className="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-border bg-background px-2 pb-[max(8px,env(safe-area-inset-bottom))] pt-2 md:static md:mt-12 md:block md:space-y-2 md:border-0 md:bg-transparent md:p-0"
-        >
-          {navigation.map((item) => (
+        <p className="brand-caption">Ideas evolve in public.</p>
+        <nav aria-label="Main navigation" className="main-nav">
+          {navigation.map((n) => (
             <Link
-              key={item.name}
-              href={item.href}
-              aria-current={active === item.name ? "page" : undefined}
-              className={cn(
-                "flex min-h-12 flex-col items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground md:flex-row md:justify-start md:gap-3 md:px-4 md:text-sm",
-                active === item.name && "bg-secondary text-foreground",
-              )}
+              className={`nav-link ${active === n.name ? "active" : ""}`}
+              aria-current={active === n.name ? "page" : undefined}
+              key={n.name}
+              href={n.href}
             >
-              <span aria-hidden="true" className="text-xl leading-5 md:w-5">
-                {item.glyph}
-              </span>
-              {item.name}
+              <Icon name={n.icon} />
+              <span>{n.name}</span>
+              {active === n.name && <i />}
             </Link>
           ))}
         </nav>
+        <div className="sidebar-note">
+          <Icon name="tree" />
+          <p>
+            A thesis is a beginning.
+            <br />
+            See where it branches.
+          </p>
+          <Link href="/explore">
+            Explore the idea graph <Icon name="arrow" size={14} />
+          </Link>
+        </div>
+        <div className="sidebar-account">
+          {auth.session ? (
+            <>
+              <Link href={`/u/${auth.session.handle}`} className="account-row">
+                <Avatar
+                  name={auth.session.displayName}
+                  wallet={auth.session.wallet}
+                />
+                <span>
+                  <strong>{auth.session.displayName}</strong>
+                  <small>@{auth.session.handle}</small>
+                </span>
+              </Link>
+              <button className="text-button" onClick={auth.logout}>
+                Sign out
+              </button>
+            </>
+          ) : (
+            <button className="button secondary full" onClick={auth.login}>
+              Sign in
+            </button>
+          )}
+        </div>
       </aside>
-      <div className="min-w-0 px-4 pb-28 md:px-12 md:pb-12">
-        <header className="flex min-h-20 items-center justify-between gap-4 border-b border-border text-xs text-muted-foreground">
-          <span>Collaborative trading ideas</span>
-          <span className="flex items-center gap-2">
-            <span
-              aria-hidden="true"
-              className="size-1.5 rounded-full bg-primary"
-            />
-            Foundation preview
+      <div className="workspace">
+        <header className="topbar">
+          <Link className="mobile-brand" href="/feed">
+            FORK<span>.</span>
+          </Link>
+          <span className="topbar-caption">
+            A network of ideas, built together.
           </span>
+          <div className="topbar-actions">
+            <span className="network-label">
+              <i />
+              Monad Testnet
+            </span>
+            {auth.session ? (
+              <Link
+                className="mini-account"
+                href={`/u/${auth.session.handle}`}
+                aria-label="Open your profile"
+              >
+                <Avatar
+                  small
+                  name={auth.session.displayName}
+                  wallet={auth.session.wallet}
+                />
+              </Link>
+            ) : (
+              <button className="text-button" onClick={auth.login}>
+                Sign in <Icon name="arrow" size={14} />
+              </button>
+            )}
+          </div>
         </header>
-        <main id="main-content" tabIndex={-1} className="py-12 md:py-20">
+        {auth.error && (
+          <div role="alert" className="inline-alert">
+            {auth.error} <Link href="/feed">Browse Feed</Link>
+          </div>
+        )}
+        <main id="main-content" tabIndex={-1}>
           {children}
         </main>
+        <footer className="product-footer">
+          Ideas are perspectives, not promises. Keep your reasoning visible.
+        </footer>
       </div>
     </div>
   );

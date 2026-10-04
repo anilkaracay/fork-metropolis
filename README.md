@@ -78,19 +78,20 @@ Use a pnpm workspace. Do not add Turborepo unless build performance actually req
 
 If implementation and docs diverge, update the docs in the same pull request. `docs/29_DECISIONS.md` records every material architecture or product decision.
 
-## Phase 1 foundation (2026-10-04)
+## Phase 2 social core (2026-10-04)
 
-The approved foundation is implemented; no deployment or authenticated integration exists yet. The dark shell at `/`, `/feed`, `/explore`, `/new`, and `/u/me` is explicitly a foundation preview, without simulated social activity. Activity and light theme are P1.
+The local social journey is implemented: identity → publish → second-user fork → changed fields → Idea Tree → Agree/comments → transparent profile reputation. No deployment, credentialed wallet session or authenticated Perpl execution has occurred.
 
-Prerequisites: Node `24.21.0`, pnpm `12.6.0`. Tool installer supports macOS arm64 (the official macOS Solidity binary needs Rosetta, available on the development machine) and Linux x64 (CI). Installs stay in ignored `.tools/`.
+Prerequisites: Node `24.21.0`, pnpm `12.6.0`. Foundry installer supports macOS arm64 and Linux x64; tool files stay in ignored `.tools/`.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm tools:install
-pnpm dev
+pnpm indexer:codegen
+pnpm test:dev
 ```
 
-No secrets are needed. Optional configuration is documented in `.env.example` and `apps/web/.env.example`. Future required secrets must be validated server-side only when their integrations are authorized.
+Open http://127.0.0.1:3000 and use the labelled test identities. This explicit local workspace applies real PostgreSQL migrations with PGlite and invokes actual Envio test handlers, with simulated receipts. It needs no credentials and cannot be enabled in production. Production architecture remains Privy, Neon/Postgres, Monad RPC and Envio. `pnpm dev` runs the real integration path and shows actionable configuration states when integrations are absent; variables are documented in `apps/web/.env.example`.
 
 Quality gates:
 
@@ -99,10 +100,13 @@ pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm build
 pnpm abi:check
+pnpm build
+pnpm test:e2e
 ```
 
-`pnpm perpl:context` explicitly fetches and validates only the official unauthenticated Perpl Testnet context. Unit tests use the dated real response fixture, not live network calls. No stale exchange/collateral IDs are used as runtime fallbacks.
+On macOS Playwright uses installed Google Chrome; on Linux install Chromium with `pnpm --filter @fork/web exec playwright install --with-deps chromium`. `pnpm test:db` and `pnpm test:indexer` run focused suites. `pnpm test:contracts` uses pinned local Foundry/solc. `pnpm perpl:context` is the explicitly opt-in unauthenticated public context check; unit/browser tests use the dated context fixture.
 
-Metadata/execution reference vectors are checked against independent Foundry cast output and Solidity equivalents. An execution reference is an identifier, not proof; complete immutable fill identity is required, and the authenticated verification relay remains a later live-test gate. See `docs/31_PHASE1_FOUNDATION.md` for exact boundaries and verification evidence.
+See [Phase 2 implementation and boundaries](docs/32_PHASE2_SOCIAL_CORE.md), [decisions](docs/29_DECISIONS.md), and [review screenshots](docs/assets/phase2/). Phase 1 metadata/execution-reference vectors and contract evidence remain in [the foundation report](docs/31_PHASE1_FOUNDATION.md).
+
+Phase 2 stops here for review. Live credential setup, deployments, trading/enrollment/independent verification, Nansen calls and sponsor polish require the next authorization.

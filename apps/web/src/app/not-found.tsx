@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { AppShell } from "@/components/app-shell";
 
 export default function NotFound() {
   return (
-    <AppShell>
+    <div className="state-box">
       <h1 className="text-3xl font-semibold tracking-tight">
         This page isn’t here.
       </h1>
@@ -16,6 +15,6 @@ export default function NotFound() {
       >
         Return to Feed
       </Link>
-    </AppShell>
+    </div>
   );
 }

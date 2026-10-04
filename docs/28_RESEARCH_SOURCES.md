@@ -122,3 +122,16 @@ When docs conflict:
 5. secondary articles
 
 Record any material change in `29_DECISIONS.md`.
+
+## Phase 2 implementation references checked 2026-10-04
+
+Only official documentation/repos and installed SDK declarations were used for implementation-critical choices:
+
+- [Privy React setup](https://docs.privy.io/basics/react/setup), [access-token verification](https://docs.privy.io/authentication/user-authentication/access-tokens), [authoritative user query](https://docs.privy.io/user-management/users/managing-users/querying-users).
+- [Drizzle + Neon](https://orm.drizzle.team/docs/get-started/neon-new), [Drizzle PGlite](https://orm.drizzle.team/docs/get-started/pglite-new), [transactions](https://orm.drizzle.team/docs/transactions).
+- [Envio V3 handlers](https://docs.envio.dev/docs/HyperIndex/event-handlers), [test runner](https://docs.envio.dev/docs/HyperIndex/testing), [configuration](https://docs.envio.dev/docs/HyperIndex/configuration-file).
+- [Next asynchronous route handlers](https://nextjs.org/docs/app/api-reference/file-conventions/route); installed Next 16.3.8 App Router/error/CLI guides also checked, including supported Webpack build flag.
+- [viem receipt source](https://github.com/wevm/viem/blob/main/src/actions/public/getTransactionReceipt.ts), with installed transaction/receipt/provider declarations checked.
+- [Perpl REST endpoints](https://github.com/PerplFoundation/api-docs/blob/main/rest-endpoints.md), [request authentication](https://github.com/PerplFoundation/api-docs/blob/main/authentication.md). Verification relay is code-only; no authenticated request.
+
+No new Nansen or hackathon eligibility claims were made during this implementation phase. The semantic HTML/CSS tree needs no additional tree library.

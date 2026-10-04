@@ -1,196 +1,45 @@
-# Envio Indexer Specification
+# Envio Indexer
 
-## Goal
+Phase 2 implements a self-contained HyperIndex **3.12.1** project in `indexer/`. Its handlers import only `envio`; its ABI, config and schema stay inside that directory. No deployment or live event ingestion has occurred.
 
-Envio is the canonical query layer for FORK's onchain social graph. It must power real product features, not exist only for a bounty checkbox.
+Current V3 conventions use `indexer.onEvent` in autodiscovered `src/handlers/`, generated `.envio` types and `createTestIndexer()` simulations. These replace older generated-module handler registration examples. See D-028 and the [official handler documentation](https://docs.envio.dev/docs/HyperIndex/event-handlers), [testing documentation](https://docs.envio.dev/docs/HyperIndex/testing) and [configuration reference](https://docs.envio.dev/docs/HyperIndex/configuration-file).
 
-## Indexed contract
+## Canonical entities
 
-- Network: Monad Testnet, chain ID 10143
-- Contract: FORKRegistry
-- Start block: deployment block
+The executable schema is `indexer/schema.graphql`.
 
-## Events
+- **Thesis**: chain/registry/ID, parent/root/depth, immutable author/core/hash, creation block/hash/transaction/time, optional executionRef, raw directForkCount and uniqueExternalForkers.
+- **ForkEdge**: namespaced immutable parent/child IDs and authors, creation time.
+- **AuthorStats**: eligibleRoots, successfulRoots, eligibleForks, successfulForks, influence and linkedExecutionCount.
+- **ThesisExternalForker**: one membership per namespaced parent and external wallet, first fork time.
+- **AuthorExternalForker**: one membership per namespaced author and external forker wallet.
+- **MarketStats**: root/fork/thesis/link counts and latest activity time.
+- **ExecutionLink**: one namespaced thesis link with author, reference, transaction and block.
 
-- ThesisCreated
-- ExecutionLinked
+Canonical market/leverage uint32 fields use BigInt storage, because their maximum exceeds signed GraphQL Int; application normalization preserves their exact safe-number values. IDs include chain and normalized registry. Membership entities make unique counts exact. There is no approximate descendant counter, bounded ancestor counter or mysterious received-fork score. Full lineage derives from parent edges plus root/depth.
 
-## Namespace and reputation membership
+## Handler behavior
 
-All entity IDs include chainId + registryAddress. Thesis/edge/link identities add thesisId; author/market aggregates include the same deployment namespace. Add rootId and depth to Thesis. Add membership entities for per-thesis external forkers and author-level distinct external forkers; event processing must not count self/repeated wallets. Originality/Contribution derive from roots/forks with at least one external child. Influence is a raw distinct-wallet count. Executions Inspired requires a database join to independently verified execution evidence on strict descendants, deduplicated per originating author and excluding that author's own executions. LinkedExecutionCount alone is not verified credit.
+ThesisCreated creates an immutable thesis once, obtains its parent or rejects an orphan, derives root/depth, and updates author/market creation counts. A child increments the parent's raw direct count. Self-forks remain visible graph nodes and eligible authored forks but grant no success or influence to the parent author. An external wallet creates a per-parent membership once. The first external membership makes that root/fork successful. Author-level membership counts Influence once across all that author's directly forked ideas.
 
-## GraphQL entities
+ExecutionLinked indexes a reference once and increments explicitly named **linked** counts. It never grants Verified status or Executions Inspired. The application joins independently verified Postgres evidence, matching reference and canonical author, before displaying verified state.
 
-```graphql
-type Thesis {
-  id: ID!
-  thesisId: BigInt!
-  author: String!
-  parentId: BigInt!
-  marketId: Int!
-  side: String!
-  leverageBps: Int!
-  targetPriceE8: BigInt!
-  invalidationPriceE8: BigInt!
-  contentHash: String!
-  createdAt: BigInt!
-  blockNumber: BigInt!
-  txHash: String!
-  executionRef: String
-  isRoot: Boolean!
-  directForkCount: Int!
-  descendantCount: Int!
-}
+Creation and execution-link handlers have existing-entity replay guards. HyperIndex handles preloading and rollback of its entity state. Tests repeat semantic events at later simulated blocks because the V3 test runner requires monotonically advancing block ranges; guards prevent double counting. Live chain reorg behavior has not been exercised.
 
-type ForkEdge {
-  id: ID!
-  parentId: BigInt!
-  childId: BigInt!
-  parentAuthor: String!
-  childAuthor: String!
-  createdAt: BigInt!
-}
+## Local checks and live boundary
 
-type AuthorStats {
-  id: ID!
-  address: String!
-  rootCount: Int!
-  forkCount: Int!
-  receivedForkCount: Int!
-  uniqueExternalForkers: Int!
-  linkedExecutionCount: Int!
-}
-
-type MarketStats {
-  id: ID!
-  marketId: Int!
-  thesisCount: Int!
-  rootCount: Int!
-  forkCount: Int!
-  linkedExecutionCount: Int!
-}
-
-type ExecutionLink {
-  id: ID!
-  thesisId: BigInt!
-  author: String!
-  executionRef: String!
-  blockNumber: BigInt!
-  txHash: String!
-}
+```sh
+pnpm indexer:codegen
+pnpm test:indexer
+pnpm --filter @fork/indexer typecheck
 ```
 
-If HyperIndex schema syntax requires adjustments, preserve the semantic model.
+`config.yaml` uses chain 10143, the official Monad Testnet RPC, and deployment address/start-block environment variables. Its zero address fallback permits code generation; `scripts/start.mjs` rejects absent/zero address and absent deployment block before any live indexer can start.
 
-## Handler: ThesisCreated
+`config.test.yaml` lists explicit synthetic registry addresses and is used only by handler simulations and `pnpm test:dev`. The localhost test bridge requires NODE_ENV=test and a random per-run secret. It invokes actual HyperIndex handlers; it is not a hand-written graph substitute. The Next local test adapter is separately restricted to development, an explicit test flag, loopback host and same-origin browser calls.
 
-On every event:
+The production reader scopes GraphQL queries by chain/registry, validates scalars without losing uint64 precision, and composes typed application models. Feed candidates are bounded to 500; recent 7-day activity fails closed above 10,000 so displayed ranking does not silently become approximate. Tree views include 250 nodes plus selected ancestry, with truncation shown. Public profiles read exact indexed AuthorStats separately from their 100 recent ideas.
 
-1. Create Thesis entity.
-2. Mark `isRoot = parentId == 0`.
-3. Create/update author stats.
-4. Create/update market stats.
-5. If fork:
-   - create ForkEdge
-   - increment parent directForkCount
-   - increment ancestor descendantCount up to bounded depth
-   - increment original and intermediate author received-fork stats as defined
+Standalone installation from this directory uses `pnpm --ignore-workspace install --frozen-lockfile` and the committed local lockfile; no workspace-only imports or inherited TypeScript config are required.
 
-### Descendant aggregation strategy
-
-Do not perform unbounded recursive database walks in a handler.
-
-MVP options, ordered by preference:
-
-1. Maintain `rootId` and `depth` on Thesis and only increment root/parent aggregate counters.
-2. Compute full descendant count in GraphQL/server layer from edges for small graphs.
-3. Add a bounded ancestor path array only if Envio schema supports it cleanly.
-
-Choose the simplest implementation that keeps Idea Tree correct. Exact descendant counters are less important than canonical edges.
-
-Recommended additional Thesis fields:
-
-```text
-rootId
-Depth
-```
-
-## Handler: ExecutionLinked
-
-- create ExecutionLink
-- set Thesis.executionRef
-- increment AuthorStats.linkedExecutionCount
-- increment MarketStats.linkedExecutionCount
-
-Note: Envio knows a link exists, not whether FORK server verified the Perpl fill. Product UI joins executionRef against Postgres verification state.
-
-## Queries required by app
-
-### Feed
-
-Need:
-
-- latest theses
-- filter root/fork/market
-- order by createdAt
-- directForkCount
-
-### Idea Tree
-
-Need all edges/nodes for one root ID.
-
-Request should be bounded. For hackathon demo, cap tree at 250 nodes and show a continuation indicator if larger.
-
-### Profile
-
-Need:
-
-- AuthorStats by address
-- theses by author
-
-### Explore
-
-Need:
-
-- market stats
-- most-forked recent roots
-- authors with received-fork activity
-
-## Bounty-quality requirements
-
-Envio must visibly drive:
-
-1. Idea Tree
-2. Feed fork counts
-3. Profile graph statistics
-
-At least one derived/aggregated entity must be used in the UI.
-
-## Development workflow
-
-- use Node.js version supported by current Envio docs; recent docs recommend Node 22+
-- keep `ENVIO_API_TOKEN` outside git
-- run codegen after ABI/schema changes
-- local dev must start indexer plus database successfully
-- deploy final indexer to Envio Cloud
-
-## Monitoring
-
-Track:
-
-- indexer head lag
-- handler errors
-- GraphQL latency
-- deployment commit SHA
-
-App health endpoint should mark Envio degraded when query fails, but public onchain read fallback can keep basic thesis pages alive.
-
-## Acceptance tests
-
-1. Root thesis event creates one Thesis and correct AuthorStats/MarketStats.
-2. Fork event creates parent-child edge.
-3. Multiple forks produce deterministic tree.
-4. ExecutionLinked attaches to correct thesis.
-5. Reprocessing does not duplicate entities.
-6. App can render a 20-node seeded test tree from GraphQL.
-7. GraphQL result IDs match onchain IDs exactly.
+The real Cloud GraphQL endpoint and deployed registry will be checked in the next authorized integration phase.

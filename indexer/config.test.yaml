@@ -1,0 +1,23 @@
+# Isolated synthetic events only; never use this file for a live indexer.
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: fork-isolated-handler-tests
+description: Immutable FORK idea lineage and exact external-wallet participation.
+address_format: lowercase
+field_selection:
+  transaction_fields:
+    - hash
+contracts:
+  - name: FORKRegistry
+    abi_file_path: ./abi/FORKRegistry.json
+    events:
+      - event: ThesisCreated
+      - event: ExecutionLinked
+chains:
+  - id: 10143
+    start_block: 0
+    rpc: https://testnet-rpc.monad.xyz
+    contracts:
+      - name: FORKRegistry
+        address:
+          - "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          - "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"

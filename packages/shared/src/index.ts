@@ -6,3 +6,5 @@ export * from "./content-hash.ts";
 export * from "./perpl-context.ts";
 export * from "./execution-ref.ts";
 export * from "./registry.ts";
+export * from "./social.ts";
+export * from "./publish.ts";

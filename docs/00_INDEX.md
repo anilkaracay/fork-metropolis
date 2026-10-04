@@ -56,3 +56,8 @@ For implementation, read in this order:
 8. Codex tasks
 9. Acceptance criteria
 10. Definition of done
+
+## Implementation reports
+
+- [31_PHASE1_FOUNDATION.md](31_PHASE1_FOUNDATION.md) — foundation evidence and scope
+- [32_PHASE2_SOCIAL_CORE.md](32_PHASE2_SOCIAL_CORE.md) — implemented social core, local run, trust boundaries, tests and review artifacts

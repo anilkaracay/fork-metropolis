@@ -5,3 +5,8 @@ node_modules
 contracts/out
 contracts/cache
 artifacts
+
+.next-test
+indexer/.envio
+playwright-report
+test-results

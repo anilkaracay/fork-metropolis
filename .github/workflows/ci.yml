@@ -1,4 +1,4 @@
-name: Foundation checks
+name: Social core checks
 on:
   push:
   pull_request:
@@ -24,3 +24,5 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm --filter @fork/web exec playwright install --with-deps chromium
+      - run: pnpm test:e2e

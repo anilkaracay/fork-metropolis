@@ -1,0 +1,77 @@
+type Thesis {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  thesisId: BigInt!
+  parentId: BigInt!
+  rootId: BigInt!
+  depth: Int!
+  author: String!
+  marketId: BigInt!
+  side: String!
+  leverageBps: BigInt!
+  targetPriceE8: BigInt!
+  invalidationPriceE8: BigInt!
+  contentHash: String!
+  createdAt: BigInt!
+  blockNumber: BigInt!
+  blockHash: String!
+  txHash: String!
+  executionRef: String
+  directForkCount: Int!
+  uniqueExternalForkers: Int!
+}
+type ForkEdge {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  parentId: BigInt!
+  childId: BigInt!
+  parentAuthor: String!
+  childAuthor: String!
+  createdAt: BigInt!
+}
+type AuthorStats {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  address: String!
+  eligibleRoots: Int!
+  successfulRoots: Int!
+  eligibleForks: Int!
+  successfulForks: Int!
+  influence: Int!
+  linkedExecutionCount: Int!
+}
+type ThesisExternalForker {
+  id: ID!
+  thesisKey: String!
+  wallet: String!
+  firstForkAt: BigInt!
+}
+type AuthorExternalForker {
+  id: ID!
+  authorKey: String!
+  wallet: String!
+}
+type MarketStats {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  marketId: BigInt!
+  thesisCount: Int!
+  rootCount: Int!
+  forkCount: Int!
+  linkedExecutionCount: Int!
+  latestActivityAt: BigInt!
+}
+type ExecutionLink {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  thesisId: BigInt!
+  author: String!
+  executionRef: String!
+  blockNumber: BigInt!
+  txHash: String!
+}

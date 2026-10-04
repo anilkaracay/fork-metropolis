@@ -15,3 +15,7 @@ next-env.d.ts
 playwright-report/
 test-results/
 .DS_Store
+indexer/.envio/
+apps/web/.next-test/
+
+.pnpm-store/

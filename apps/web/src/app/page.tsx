@@ -1,11 +1,4 @@
-import { FoundationScreen } from "@/components/foundation-screen";
-
+import { redirect } from "next/navigation";
 export default function HomePage() {
-  return (
-    <FoundationScreen
-      active="Feed"
-      title="Good ideas deserve a lineage."
-      description="Share your thesis. Build on another perspective. Keep every contribution visible as an idea evolves."
-    />
-  );
+  redirect("/feed");
 }

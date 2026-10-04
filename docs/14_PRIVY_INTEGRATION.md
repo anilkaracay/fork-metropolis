@@ -124,3 +124,11 @@ Documentation should explain that Privy is the user account and signing layer ac
 - backend verifies Privy session token
 - logout removes app session without deleting device-local Perpl key unexpectedly
 - no secret Privy credentials in client source or network responses
+
+## Phase 2 implementation boundary
+
+`components/social/privy-session.tsx` uses Privy React 3.47.0, email/Google login, Monad chain configuration and Ethereum embedded-wallet creation for users without an EVM wallet. Its adapter uses the selected connected wallet's supported Ethereum provider with viem for registry transaction and typed-data signing. It stores no private key on the server. Primary selection persists a public address preference and is revalidated against verified linked wallets server-side on every mutation.
+
+`server/auth.ts` uses the current **@privy-io/node 0.35.0** SDK, `utils().auth().verifyAccessToken` and `users()._get` with the verified `user_id`. This supersedes older server-auth/sub examples. Product routes consume AuthVerifier and Session interfaces. SDK reads use 5-second timeout and one retry; no credentialed call has been made.
+
+The public app builds without Privy credentials. Sign-in fails with actionable configuration text when absent. Configured database/Envio public browsing does not require Privy credentials. `pnpm test:dev` exposes a separately labelled test identity adapter that production cannot enable. Perpl enrollment and linkExecution signing flows remain next-phase work; the transaction/typed-data adapter interfaces are ready.

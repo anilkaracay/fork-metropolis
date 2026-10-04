@@ -1,178 +1,38 @@
 # Data Model
 
-## Principle
+Implemented Phase 2 source: `packages/db/src/schema.ts`; committed SQL in `packages/db/migrations/`. Production remains Neon PostgreSQL through Drizzle. Tests apply the same migrations to an isolated PGlite PostgreSQL instance. No live database has been created or migrated.
 
-Onchain data proves provenance. Postgres stores social content and enrichment. Envio derives graph structure and aggregate stats.
+## Authority and namespace
 
-## Namespace and evidence constraints
+Envio owns canonical graph fields, edges and onchain aggregates. Postgres owns authenticated identity, reasoning metadata, social state and independently verified evidence. The small `intent` JSON object in a draft stores expected transaction parameters for receipt verification; it is not a second graph query layer.
 
-Every thesis-related row (metadata, comments, reactions, executions, thesis reports) includes chain_id bigint + registry_address normalized lowercase address + thesis_id decimal ID. Replace bare thesis uniqueness/foreign keys with this composite namespace. Envio IDs, edges, author/market/membership aggregates are similarly namespace-scoped. API route IDs resolve against the configured namespace; cross-namespace queries must be explicit. Use lossless uint64 representation (numeric(20,0) or checked decimal strings), not JavaScript numbers.
+All thesis-related rows use `(chain_id, registry_address, thesis_id)`. Addresses are lowercase checked hexadecimal text; thesis IDs use `numeric(20,0)` and checked uint64 bounds, never JavaScript numbers. Public `/t/:id` routes resolve within the server-configured chain and registry. Graph readers enforce the same namespace.
 
-Execution evidence has a globally unique fill_identity bytea as defined in docs/08, independent of thesis/registry, so the same venue fill cannot earn credit again after redeployment. Attested claims leave authoritative identity/evidence fields NULL and cannot reserve a fill identity. A verified row requires all authoritative identity fields via a CHECK constraint; fill_identity is assigned only after independent retrieval/validation. Per-thesis reference linkage remains unique within its namespace. Reserve evidence transactionally during verification.
+## Eight tables
 
-## Postgres tables
+| Table | Responsibility and constraints |
+| --- | --- |
+| users | UUID, unique verified Privy DID and lowercase handle, display name, bounded bio, primary wallet, timestamps. |
+| wallets | Address primary key, user FK, embedded/external kind. Composite owner/address uniqueness and immutable ownership. |
+| thesis_metadata | Author user and owned wallet FK, namespace, immutable finalized hash/reasoning/tags/note, request key, expected intent, parent ID, expiry, transaction hash, finalized timestamp, separate hidden flag. |
+| comments | Namespaced finalized metadata FK, author FK, 1–280 characters, author/request-key uniqueness, visible/hidden/deleted state and timestamps. Author and thesis association cannot be reassigned. |
+| reactions | Agree only. Composite namespace/user/type primary key. PUT inserts once; DELETE reverses it. |
+| reports | Namespaced metadata FK, reporter FK, spam/abuse/misinformation/other, note up to 280 characters, one report per reporter/thesis and unique reporter/request key. |
+| execution_evidence | Namespaced metadata FK and owned wallet FK, attested/verified state, unknown/open/closed position, complete authoritative venue/fill fields required for verified rows. No HTTP writer grants verification in Phase 2. |
+| rate_buckets | User/action/window primary key, atomic conditional upsert, persistent across server instances. Indexed by window for later retention cleanup. |
 
-### users
+The primary-wallet ownership FK is deferrable to permit atomic identity synchronization. Finalized content can only change its moderation flag and update timestamp; new reasoning requires another thesis. Drafts expire after 24 hours, assessed against canonical transaction creation time. Recovery after expiry still accepts a transaction created within its valid draft window.
 
-```text
-id                  uuid pk
-privy_did           text unique not null
-wallet_address      text unique not null
-handle              citext unique not null
-display_name        text null
-avatar_url          text null
-bio                  text null
-created_at           timestamptz not null
-updated_at           timestamptz not null
-```
+A unique `(chain, registry, tx_hash)` prevents receipt reuse. Author/request-key uniqueness makes draft retries idempotent. Finalized rows cannot omit receipt or finalized timestamp, including through PostgreSQL NULL CHECK semantics.
 
-Indexes:
+## Evidence
 
-- unique lower(handle)
-- unique wallet_address
-- privy_did
+`fill_identity` is a globally UNIQUE checked 32-byte hexadecimal text representation of the Phase 1 venue-bound hash. This replaces the spec's bytea representation without changing hash identity or uniqueness semantics. It is independent of registry/thesis and therefore cannot earn credit twice after redeployment. Attested rows must leave all authoritative fill/evidence fields NULL and position unknown; verified rows require complete identity, execution reference, payload and verification timestamp. Verified rows cannot be reassigned or rewritten.
 
-### thesis_metadata
+Phase 2 browser fixtures create no verified evidence. Unit integration fixtures insert explicitly marked verified rows to test composition, matching link/author checks, strict descendant credit and overlapping-ancestor deduplication. These fixtures never enter production metrics.
 
-```text
-id                  uuid pk
-thesis_id           numeric(20,0) null until finalized; composite namespace unique
-author_user_id      uuid fk users
-content_hash        bytea not null
-reasoning           varchar(500) not null
-entry_note          varchar(160) null
-tags                text[] not null default '{}'
-status              enum(draft, finalized, hidden) not null
-tx_hash             text null
-created_at           timestamptz not null
-finalized_at         timestamptz null
-```
+## Migrations and verification
 
-Rules:
+`0000_fuzzy_chronomancer.sql` is Drizzle's initial generated schema, with committed journal and snapshot. `0001_immutable_social_identity.sql` adds ownership/content/evidence triggers and the deferrable selected-wallet FK. The generated filename is retained for migration journal continuity.
 
-- finalized content is immutable except `status`
-- any edit creates a new thesis/fork, not an update
-- draft expires after 24h if not finalized
-
-### comments
-
-```text
-id                  uuid pk
-thesis_id           bigint not null
-author_user_id      uuid fk users
-body                 varchar(280) not null
-status              enum(visible, hidden, deleted) not null
-created_at           timestamptz not null
-updated_at           timestamptz not null
-```
-
-MVP comments are flat, no threading.
-
-### reactions
-
-```text
-thesis_id           bigint not null
-user_id             uuid not null
-type                 enum(agree) not null
-created_at           timestamptz not null
-primary key(chain_id, registry_address, thesis_id, user_id, type)
-```
-
-Challenge is a fork, not a reaction record.
-
-### executions
-
-```text
-id                  uuid pk
-thesis_id           numeric(20,0) not null; composite namespace unique
-user_id             uuid not null
-wallet_address      text not null
-network             enum(perpl_testnet, perpl_mainnet) not null
-market_id           int not null
-order_id            bigint not null
-position_id         numeric(20,0) null; optional display evidence only
-account_id          numeric(20,0) null until independently verified
-instance_id         int null until independently verified
-exchange_address    text null until independently verified
-transaction_hash    text null until independently verified
-log_index           int null until independently verified
-fill_identity       bytea unique null; required for verified, NULL for attested
-verification_status enum(attested, verified) not null
-position_state      enum(unknown, open, closed) not null default unknown
-fill_timestamp_ms   bigint not null
-side                 enum(long, short) not null
-fill_size_raw       numeric not null
-fill_price_raw      numeric not null
-execution_ref       bytea unique not null
-verified            boolean not null default false; must agree with verification_status
-verification_error  text null
-created_at           timestamptz not null
-verified_at          timestamptz null
-```
-
-Never store Perpl Ed25519 private key or API-key signing secret here. Unverified reported fields are claims only and never receive evidence/reputation credit; verification updates are server-only. Immutable verified evidence cannot be reassigned to another thesis.
-
-### nansen_profile_snapshots
-
-```text
-wallet_address      text not null
-chain               text not null default 'monad'; primary key(chain, wallet_address)
-pnl_summary_json     jsonb null; permitted normalized fields only
-context_status       enum(available, empty, unavailable) not null
-fetched_at           timestamptz not null
-expires_at           timestamptz not null
-last_error           text null
-```
-
-### reports
-
-```text
-id                  uuid pk
-reporter_user_id    uuid not null
-entity_type          enum(thesis, comment, user) not null
-entity_id            text not null
-reason               text not null
-status               enum(open, reviewed, dismissed, actioned) not null
-created_at           timestamptz not null
-```
-
-## Envio entities
-
-Defined fully in `12_ENVIO_INDEXER.md`:
-
-- Thesis
-- ForkEdge
-- Author
-- AuthorStats
-- MarketStats
-- ExecutionLink
-
-## Joining Envio and Postgres
-
-Canonical key is `chainId + registryAddress + thesisId`, never bare thesisId.
-
-Server response for a thesis is assembled from:
-
-- Envio: core onchain fields and lineage
-- Postgres: reasoning/tags/comments/execution verification
-- Nansen cache: wallet context
-
-Never trust Postgres author wallet over Envio author wallet. If mismatch occurs, treat record as integrity failure.
-
-## Integrity verification
-
-When reading finalized metadata:
-
-1. canonicalize stored reasoning/tags/entry note
-2. compute content hash
-3. compare to Envio/onchain contentHash
-4. if mismatch, do not render content as verified
-5. log high-severity integrity event
-
-## Retention
-
-- finalized thesis metadata: permanent unless legally required to remove; removal changes visibility, not hash history
-- drafts: 24h
-- Nansen cache: refresh based on TTL, old records may remain for audit
-- comments: soft delete
-- logs: 14-30 days depending hosting limits
+`pnpm test:db` exercises uniqueness, ownership, case normalization, namespaces, receipt/request idempotency, comments, Agree, reports, NULL checks and fill reuse using real PostgreSQL constraints. `pnpm db:migrate` is an explicit live operation requiring the intended DATABASE_URL; it was not run in this phase.

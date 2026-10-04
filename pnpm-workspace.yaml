@@ -4,8 +4,17 @@ packages:
   - contracts
   - indexer
 allowBuilds:
+  "@reown/appkit": false
   "@tailwindcss/oxide": true
+  bufferutil: false
   esbuild: true
+  keccak: true
   sharp: true
   unrs-resolver: true
+  utf-8-validate: false
 minimumReleaseAge: 1440
+overrides:
+  use-sync-external-store: 1.7.0
+  react: 19.3.0
+  react-dom: 19.3.0
+  abitype: 1.2.3

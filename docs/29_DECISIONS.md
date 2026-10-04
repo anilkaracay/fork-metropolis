@@ -258,3 +258,63 @@ Date: 2026-10-04
 Decision:
 
 Replace the undefined Wilson/log Most Forked formula with distinct external direct-forker counts in 24h, then 7d, then creation time/thesis ID descending. This supplies a deterministic social momentum baseline without invented reputation scores. Optional permitted Nansen performance adjustment remains bounded, positive and separately specified/tested during P15; missing context receives no deduction. No ranking implementation is included in Phase 1.
+
+## D-028 - Supported Phase 2 SDK conventions
+
+Status: Accepted implementation choice within approved Phase 2
+Date: 2026-10-04
+
+Use Privy React 3.47.0 and current Node SDK @privy-io/node 0.35.0. Resolve the DID from verified access tokens, then fetch authoritative linked wallets; product services depend on AuthVerifier rather than SDK internals. Use Envio 3.12.1 V3 `indexer.onEvent`, autodiscovered handlers and createTestIndexer, replacing the prior generated-module examples. Keep Envio fully inside its project directory. Drizzle 0.45.3/kit 0.31.11 remain stable pinned releases; Neon 1.2.0 Pool supports the interactive identity transaction and deferrable selected-wallet ownership FK. Next 16 asynchronous route params and viem receipt/event APIs follow current official docs. Documentation references are in 32_PHASE2_SOCIAL_CORE.md.
+
+## D-029 - Isolated PostgreSQL and real handler test workspace
+
+Status: Accepted implementation choice within approved Phase 2
+Date: 2026-10-04
+
+No database URL or live identity credentials are available. Apply committed PostgreSQL migrations to PGlite 0.5.8 for tests and the explicit local test workspace. Production architecture remains Neon/Postgres. Simulate receipt confirmation only in development with an explicit flag and random per-run test secret; feed resulting events into actual Envio test handlers. No local contract deployment. Production rejects the flag, live indexer startup rejects test/zero registry configuration, test browser APIs require loopback/same-origin, and all screens display a test-workspace banner. Tests never create production metrics. Do not claim live Privy, RPC receipt, Neon, GraphQL Cloud or Perpl verification validation.
+
+## D-030 - Dependency compatibility and exact pins
+
+Status: Accepted implementation choice within approved Phase 2
+Date: 2026-10-04
+
+Use TypeScript 5.9.3 across the workspace: current Privy transitive Solana packages require TypeScript ^5, superseding the TypeScript 6 pin in D-026. Keep Next/React/Tailwind/viem/Zod versions from Phase 1. Pin TanStack Query 5.104.1 and Playwright 1.63.0. Override compatible use-sync-external-store 1.7.0 (React 19 support) and abitype 1.2.3 (Zod 3/4 support), and unify React/ReactDOM 19.3.0; peer checking must pass. Disable Reown's optional install version check and ws native accelerators, retain the JavaScript fallback, and permit required keccak build. Report upstream SDK deprecations rather than upgrading unrelated majors.
+
+## D-031 - Phase 2 social ranking and responsive tree
+
+Status: Accepted implementation choice within approved Phase 2
+Date: 2026-10-04
+
+Implement D-027's tuple exactly: unique external direct forkers in 24h descending, then 7d descending, then creation time and thesis ID descending. Smart Signal deliberately uses the same social-only baseline as Most Forked in Phase 2; there are no hidden weights, fabricated Nansen inputs or profitability scores. Fresh uses only creation time/ID. Membership uniqueness excludes self forks and deduplicates a wallet within each time window. Ranking candidates and Explore counts explicitly describe the latest 500 indexed ideas. Explore lists actual metadata tags and four supported markets from context, not synthetic market statistics.
+
+Use a semantic HTML/CSS tree with native links: desktop branching hierarchy and scrollable canvas; mobile stacked branches with capped visual indentation. No graph-library dependency. Selected ancestry remains visible, authorship and changed fields appear on each node, and bounds are explicitly shown.
+
+## D-032 - Persistence, trust and moderation
+
+Status: Accepted implementation choice within approved Phase 2
+Date: 2026-10-04
+
+Use eight tables only. Normalize addresses/handles through application validation plus SQL checks; represent content/fill hashes as checked hexadecimal text instead of bytea, preserving the same bytes and global fill uniqueness. Split moderation hidden flag from publication status. Finalized metadata, wallet ownership and verified evidence are immutable; only metadata visibility changes through server-authorized moderator DIDs. Agree supports idempotent PUT and reversal by DELETE. Sensitive mutation rate limits use atomic PostgreSQL buckets across instances. Draft/request keys and confirmation checks are idempotent. Browser refresh retains intent/transaction hash and resumes verification without a second send. A parent hidden after valid drafting cannot strand a confirmed fork; the parent graph and finalized metadata are immutable.
+
+## D-033 - Perpl read boundary only
+
+Status: Accepted implementation choice within approved Phase 2
+Date: 2026-10-04
+
+Code accepts only server-owned GET /v1/trading/wallet and /v1/trading/fills targets at official Testnet origin. Strict schemas reject caller URL/hostname/method/body or trading endpoints. Proofs are valid at most 20 seconds old and 3 seconds future, within Perpl's documented 30-second window. Canonical signing preserves exact query order/encoding. Logging exposes an explicit endpoint/result allowlist. The API returns RELAY_NOT_ENABLED after boundary validation; no transport, enrollment, orders or verified evidence writer runs. Normalizer/verifier interfaces remain interfaces until the next approved live integration phase.
+
+## D-034 - Supported production compiler and upstream warnings
+
+Status: Accepted implementation choice within approved Phase 2
+Date: 2026-10-04
+
+Use Next's documented `next build --webpack` production compiler. Turbopack production compilation fails its internal local-port binding under this development environment; changing dependencies or relaxing product controls is unnecessary. Development retains Turbopack. Webpack produces a working credential-free production build and exposes two upstream warnings: Privy 3.47.0 optionally imports @farcaster/mini-app-solana behind a Farcaster-environment check and catches its absence; Privy's x402 dependency imports viem's Tempo chain bundle, whose ox VirtualMaster worker uses a dynamic node:worker_threads import. FORK config enables email/Google and Ethereum/Monad, not Farcaster/Solana/Tempo. Leave these warnings visible and document them; do not add unsupported wallet features, alias modules to stubs, filter warnings or blindly upgrade SDKs. Real Privy signing still needs credentialed verification in the next approved phase.
+
+Pin React/ReactDOM 19.3.0 explicitly for Envio's terminal/runtime transitive peers and commit indexer/pnpm-lock.yaml for standalone installation; this fixes a React/ReactDOM peer mismatch in standalone resolution without changing handler semantics.
+
+## D-035 - Lossless canonical uint32 indexing
+
+Status: Accepted correctness fix within approved Phase 2
+Date: 2026-10-04
+
+Envio Thesis.marketId/leverageBps and MarketStats.marketId use BigInt storage, not signed GraphQL Int: the contract permits uint32 values through 4294967295, beyond 2147483647. The typed application normalizes these safely into checked uint32 numbers. Add a real-handler maximum-value regression case and read-model scalar test. Keep lineage IDs/prices in their existing lossless representations. This prevents a valid public registry event from overflowing a canonical indexer field.

@@ -8,6 +8,11 @@ export default defineConfig([
   { settings: { next: { rootDir: "apps/web/" } } },
   globalIgnores([
     "**/.next/**",
+    "**/.next-test/**",
+    "indexer/.envio/**",
+    "indexer/envio-env.d.ts",
+    "**/test-results/**",
+    "**/playwright-report/**",
     "**/node_modules/**",
     "**/next-env.d.ts",
     ".tools/**",
