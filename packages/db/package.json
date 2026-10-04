@@ -11,16 +11,16 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "generate": "drizzle-kit generate",
-    "migrate": "node --experimental-strip-types src/migrate.ts"
+    "migrate": "node --env-file-if-exists=../../apps/web/.env.local --experimental-strip-types src/migrate.ts",
+    "smoke": "node --env-file-if-exists=../../apps/web/.env.local --experimental-strip-types src/smoke.ts"
   },
   "dependencies": {
     "drizzle-orm": "0.45.3",
-    "@neondatabase/serverless": "1.2.0",
-    "ws": "8.22.0"
+    "pg": "8.23.1"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",
     "drizzle-kit": "0.31.11",
-    "@types/ws": "8.18.2"
+    "@types/pg": "8.23.1"
   }
 }

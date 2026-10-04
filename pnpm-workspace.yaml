@@ -18,3 +18,7 @@ overrides:
   react: 19.3.0
   react-dom: 19.3.0
   abitype: 1.2.3
+
+# Do not install the unused provider-specific optional driver.
+ignoredOptionalDependencies:
+  - "@neondatabase/serverless"

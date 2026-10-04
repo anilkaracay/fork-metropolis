@@ -1,25 +1,28 @@
 # Phase 3 — Live Integration and Proof
 
-Status: **in progress; blocked on human configuration, not live-complete**. No Phase 4 work, automation, order, product deployment or authenticated Privy/Neon/Envio/Perpl/Nansen product flow was performed. Only Monad public RPC and Perpl public context are genuinely live product observations. Test fixtures are not live integration evidence.
+Status: **local PostgreSQL gate passed; overall Phase 3 remains in progress**. No Phase 4 work, trading automation, order, product deployment or authenticated Privy/Envio/Perpl/Nansen product flow was performed. The local standard PostgreSQL database is running and migrated; this is live local database evidence, not deployed production evidence. Other live product observations remain Monad public RPC and Perpl public context. Test fixtures are not live integration evidence.
 
-## Phase 3B — guided live unblock
+## Phase 3B — automate-first live unblock
 
-Current step: **Neon live development database**. Repository creation and main push are complete. The user superseded Vercel/stable-staging prerequisites: no Vercel login/project/deployment, no server deployment now. Prior passing checks were not repeated.
+Current step: **local provider-agnostic PostgreSQL complete; stop for user review before Privy**. Repository creation and main push are complete. The user superseded Vercel/stable-staging prerequisites: no Vercel login/project/deployment, no server deployment now. The driver change was validated with relevant unit/type/lint/format/build checks and actual local development/production database health; unrelated integrations were not repeated.
 
 | Requirement | Observed state |
 | --- | --- |
-| Repository | Private anilkaracay/fork-metropolis; origin/main pushed and verified at 9d6e67ab552188c38ee1bc9d4ea949d025da896e before this documentation update. Public visibility remains a later user action. |
+| Repository | Private anilkaracay/fork-metropolis; origin/main previously pushed and verified; this database change is a local review checkpoint. Public visibility remains a later user action. |
 | Development origin | http://localhost:3000; provider localhost support must be verified before configuring origins. |
 | Hosting plan | Later self-hosted standard Node.js, optional simple Docker container and reverse proxy under the user's final HTTPS domain. No deployment now. |
 | Superseded Vercel work | Removed from critical path. CLI remains only in ignored local tools; no Vercel project or application dependency exists. No further Vercel login request. |
-| Neon inspection | DATABASE_URL absent from process environment; apps/web/.env.local does not exist. No credential value was printed or connection attempted. |
-| Neon setup target | Project fork-metropolis-dev; development branch fork-dev; database neondb; owner role neondb_owner; recommend Frankfurt aws-eu-central-1 for European development, nearer final-server region if different. Use direct connection with pooling OFF for current app/migration/smoke shared URL. |
+| Database plan | D-039 supersedes Neon. Local Docker Compose PostgreSQL now; standard PostgreSQL on the user's server/another host later. No Neon API/project/SDK dependency or browser approval is required. |
+| Local database | Official postgres:17-bookworm; actual server 17.11 (Debian 17.11-1.pgdg12+2); fork_dev database/user; healthy; 127.0.0.1:5432 only; one named persistent volume; unrelated container on 55432 untouched. Docker Desktop started automatically. |
+| Credential configuration | Generated development password file .env.postgres.password and apps/web/.env.local, both mode 0600 and gitignored. DATABASE_URL validates and is server-only; no credential value was printed. |
+| Migrations/schema | Three committed migrations applied unchanged; all nine expected public tables and migration journal verified. No schema push. |
+| Live local checks | HTTP GET /api/health/database returned 200 with ready/applied; ten rollback-only constraint assertions passed, zero retained smoke rows. Includes wallet uniqueness/reassignment/selected-wallet association/metadata ownership, namespace uniqueness/cross-registry coexistence, reaction idempotency, comment ownership, report uniqueness, fillIdentity uniqueness. |
 | Perpl enrollment | BLOCKED BY STABLE ORIGIN until the final production HTTPS domain is available and approved. |
 | Perpl real order / verified execution | BLOCKED BY ENROLLMENT; independent localhost gates continue. |
 
-Updated order: Neon → verified Privy localhost configuration → Monad Testnet registry → Envio Cloud → real two-user localhost journey → authenticated Nansen → self-host production readiness → independent Perpl public/readiness work, then stop. No Phase 4.
+Updated order: local PostgreSQL → verified Privy localhost configuration → Monad Testnet registry → Envio Cloud → real two-user localhost journey → authenticated Nansen → self-host production readiness → independent Perpl public/readiness work, then stop. No Phase 4.
 
-Next single human action: create/select the Neon development resources above, copy the direct connection string from Connect (Connection pooling OFF), put it as DATABASE_URL in ignored apps/web/.env.local and confirm presence only. After confirmation, validate configuration/connection, apply committed migrations, check live health/schema, run always-rollback smoke and record actual region/database/migration results. No secret in chat.
+User authorized automate-first setup. Official Docker/PostgreSQL/Drizzle/node-postgres/pnpm documentation was checked before changes. Standard TCP node-postgres replaces the Neon WebSocket adapter; unchanged Drizzle SQL migrations work with any compatible PostgreSQL host through DATABASE_URL. No Neon authentication or project creation continues. Stop after database validation and wait for review; next recommended integration is Privy localhost setup through current official tooling.
 
 ## Baseline
 
@@ -30,12 +33,12 @@ Clean approved commit e87fc8256d2693bc2bb07d4d0cf50a47ef4b28af. All seven Phase 
 | Gate | State | Evidence / dependency |
 | --- | --- | --- |
 | 0 Baseline | Passed | Clean reviewed commit, full fresh checks, seven screenshots, production test-route rejection. |
-| 1 Neon | Prepared / blocked | Three committed migrations, health endpoint and rollback-safe seven-assertion smoke; DATABASE_URL confirmation absent. Local migrated PostgreSQL tests pass. |
+| 1 PostgreSQL | Passed locally | Healthy Compose PostgreSQL 17.11; ignored mode-0600 DATABASE_URL; three unchanged migrations, nine tables, actual HTTP health 200, ten rollback-only live assertions, zero retained fixtures. Production database is deferred. |
 | 2 Privy | Blocked | Real app ID/server secret/domain setup unconfirmed; no actual login/wallet/token/signature. Existing adapter/security tests pass with fixtures. |
 | 3 Monad registry | Prepared / blocked | Public chain 10143 verified; reviewed compiled source/settings/ABI agree; 28 Foundry tests pass. Public funded human deployer not supplied. Read-only artifact recorder ready; no artifact/transaction created. |
 | 4 Envio Cloud | Prepared / blocked | ENVIO_ custom variables fixed; standalone pnpm 10.32.0 install/typecheck/12 tests pass. Requires GitHub/Cloud access and actual contract address/start block. |
 | 5 Production readiness | Revised / pending | Existing local production smoke passed 3/3. Standard root build/start and optional Docker self-host readiness will be verified at the revised later step; no server deployment. |
-| 6 Two real users | Blocked | Depends on live Neon/Privy/Monad/Envio; final domain is not a prerequisite. No actual root/fork hashes or live graph/reputation. Five isolated browser tests are fixtures only. |
+| 6 Two real users | Blocked | Depends on live Privy/Monad/Envio; local PostgreSQL gate is passed; final domain is not a prerequisite. No actual root/fork hashes or live graph/reputation. Five isolated browser tests are fixtures only. |
 | 7 Perpl readiness | Partial live | Actual current public context saved; documentation funding/collateral discrepancy unresolved with sponsor. |
 | 8 Origin/enrollment | Blocked by stable Origin | Final production HTTPS domain and team whitelisting pending. Per instruction, browser-local enrollment implementation waits for approval. No keys/accounts/collateral/forwarding verified. |
 | 9 Authoritative verification | Blocked | No enrolled proof/account. Wallet/fills constrained read boundary tested; actual transport remains disabled. API log-index and lossless IDs must be checked with real evidence. No assertion that safe retrieval is impossible. |
@@ -61,9 +64,15 @@ No authenticated wallet/account/fill context was fetched. README collateral diff
 
 Added database health and always-rollback development smoke; migration errors redact driver detail. Third additive migration adds a normalized external-wallet cache. Corrected Cloud ENVIO_ variables without changing dependencies. Added strict production/staging Playwright suite and server runner. Added read-only deployment proof recorder with reviewed source/bytecode/receipt checks; it cannot sign/broadcast and writes only after actual proof. Implemented permitted mainnet Nansen scalar profile context, server-only key, shared cache/lease/global credit reservations, six-second timeout and zero billed retries. Native graph/reputation/ranking remain social.
 
-No live Neon migrations, provider project, registry or enrollment exists. No order/fillIdentity/executionRef/linkExecution transaction exists. Relay still returns RELAY_NOT_ENABLED and author attestation does not become Verified.
+Local PostgreSQL migrations are applied. No remote database deployment, registry or enrollment exists. No order/fillIdentity/executionRef/linkExecution transaction exists. Relay still returns RELAY_NOT_ENABLED and author attestation does not become Verified.
 
-## Final local validation
+## Current database validation
+
+[Local PostgreSQL evidence](evidence/phase3/local-postgres.json): 174 unit tests passed, including 13 database constraint tests plus the expanded rollback smoke on isolated PGlite; strict workspace typecheck, lint and format passed; root production build and ABI check passed. The actual Docker PostgreSQL service passed ten live constraint assertions and schema/migration verification. Both development and production HTTP health returned 200. Zero smoke rows remain. The unchanged committed migration files use the standard node-postgres adapter. The frozen lockfile was accepted; offline installation encountered an uncached package, so a frozen online installation was used to restore dependencies, and pnpm why shows no Neon SDK dependency. No database credentials appeared in 201 production browser files or Git changes; Gitleaks found no leaks in changed/new source. The temporary app servers were stopped; PostgreSQL remains running.
+
+The build retains the two existing upstream SDK warnings; Foundry's sandbox signature-cache warning did not fail compilation. No Privy setup/authentication or other integration continued. Review this database result before proceeding.
+
+## Phase 3 validation (baseline plus current database checks)
 
 | Check | Result |
 | --- | --- |
@@ -71,7 +80,7 @@ No live Neon migrations, provider project, registry or enrollment exists. No ord
 | pnpm lint | Passed; zero warnings |
 | pnpm typecheck | Passed; all strict workspaces |
 | pnpm test | Passed: 174 root / 12 Envio / 28 Foundry |
-| Database tests | Passed: 13 constraints + rollback smoke (seven assertions, zero retained fixtures) |
+| Database tests | Passed: 13 constraints + rollback smoke (expanded to ten assertions, zero retained fixtures) |
 | Nansen tests | Passed: 12, mocked HTTP / migrated local PostgreSQL only |
 | Database-health tests | Passed: four, explicit mocked connection only |
 | pnpm abi:check | Passed |
@@ -84,17 +93,18 @@ No live Neon migrations, provider project, registry or enrollment exists. No ord
 | Secret scan | Git/current source clean; browser three reviewed public SDK identifiers, no FORK credential detected |
 | Production test adapters | identity/submit/reset 404; test flag rejected in production tests |
 | Fresh real localhost Privy journey | Pending credentials and verified localhost setup; stable staging requirement superseded |
-| Live Neon / Envio / Perpl / Nansen integration | Blocked; not substituted by local tests |
+| Live local PostgreSQL | Passed: migration journal, nine tables, HTTP health and ten rollback-only assertions |
+| Live Envio / Perpl / Nansen integration | Blocked; not substituted by fixture tests |
 
 Sandbox initially denied local browser server port bindings; reruns with authorized local-server access passed. Default sandbox Foundry cache writes warned; separate authorized run passed without warning. Build retains Privy's optional Farcaster import and ox Tempo dynamic worker warnings (D-034), no stubs/filtering/upgrades.
 
 ## Human actions and continuation
 
-1. Put development DATABASE_URL, NEXT_PUBLIC_PRIVY_APP_ID and PRIVY_APP_SECRET into apps/web/.env.local from Neon Connect and the Privy app dashboard; confirm presence only. Do not paste values.
-2. After Neon passes, configure Privy for verified localhost development support. GitHub is already private/pushed; server and final domain setup are deferred.
+1. Review the completed local PostgreSQL result; no database login or manual configuration action is required. Stop before Privy.
+2. After the user reviews the local PostgreSQL result, automate Privy setup through verified official tooling for localhost development support. GitHub is already private/pushed; server and final domain setup are deferred.
 3. Supply public funded Monad Testnet deployer address and wallet type. Keep signing/private key local; obtain gas MON from Monad Testnet faucet.
 4. After stable hostname exists, request exact Origin whitelisting/test collateral funding from Perpl via official Discord, giving public wallet/chain 10143/instance 12/exchange. Ask funding method for current AUSD contract; no secret or signature in support messages.
-5. At Gate 12 put NANSEN_API_KEY into apps/web/.env.local from Nansen agent setup and confirm presence only. Verify plan/credit entitlement before expanding the default budget.
+5. At Gate 12 use official tooling to retrieve/configure NANSEN_API_KEY securely where supported; request browser approval only if unavoidable. Verify plan/credit entitlement before expanding the default budget.
 6. Participate in fresh-browser localhost email/Google auth and two distinct real identities/wallet signatures. Perpl enrollment/order/verification stay deferred until the final HTTPS domain exists.
 
 Exact commands, sources and dependency sequence are in [deployment instructions](23_DEPLOYMENT_ENV.md). Sponsor records: [Privy](evidence/phase3/PRIVY.md), [Envio](evidence/phase3/ENVIO.md), [Nansen](evidence/phase3/NANSEN.md), [Perpl](evidence/phase3/PERPL.md). [Secret scan scope](evidence/phase3/SECRET_SCAN.md).

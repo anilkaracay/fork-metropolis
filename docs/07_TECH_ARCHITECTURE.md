@@ -33,7 +33,7 @@ Envio HyperIndex
   |-- Thesis/Fork/ExecutionLink events
   |-- derived AuthorStats/MarketStats/TreeEdge
   |
-Neon Postgres
+Standard PostgreSQL (local Docker development, self-hosted later; D-039)
   |
   |-- immutable thesis metadata
   |-- social offchain data
@@ -90,7 +90,7 @@ Three-day MVP priorities are UX, verifiable lineage, and live product quality. L
 
 ### Database
 
-- Neon Postgres
+- Standard PostgreSQL (local Docker development, self-hosted later; D-039)
 - Drizzle ORM
 - SQL migrations committed to repo
 

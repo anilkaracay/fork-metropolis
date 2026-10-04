@@ -41,7 +41,7 @@ Exit criteria:
 
 - Privy provider/login
 - user sync endpoint
-- Neon + Drizzle schema/migrations
+- Standard PostgreSQL + Drizzle schema/migrations (D-039)
 - dark-only app shell with Feed/Explore/Create/Profile navigation
 - public/private route behavior
 

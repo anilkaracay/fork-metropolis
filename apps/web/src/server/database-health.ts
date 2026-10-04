@@ -20,7 +20,7 @@ export async function databaseHealth() {
       "DATABASE_UNAVAILABLE",
       "The application database is unavailable or migrations are incomplete.",
       503,
-      "Check the Neon development connection and apply committed migrations, then retry.",
+      "Check the PostgreSQL connection and apply committed migrations, then retry.",
     );
   } finally {
     await connection.close();

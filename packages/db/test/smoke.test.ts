@@ -5,14 +5,14 @@ import { testDatabase } from "../src/testing";
 import { databaseSmoke } from "../src/smoke-check";
 import * as s from "../src/schema";
 
-it("the staging constraint smoke checks all six boundaries and leaves no fixtures", async () => {
+it("the development constraint smoke checks ownership and uniqueness and leaves no fixtures", async () => {
   const connection = await testDatabase(
     fileURLToPath(new URL("../migrations", import.meta.url)),
   );
   try {
     const result = await databaseSmoke(connection.db);
     expect(result.rolledBack).toBe(true);
-    expect(result.checks).toHaveLength(7);
+    expect(result.checks).toHaveLength(10);
     for (const table of [
       s.users,
       s.wallets,

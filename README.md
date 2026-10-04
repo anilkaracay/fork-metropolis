@@ -91,7 +91,7 @@ pnpm indexer:codegen
 pnpm test:dev
 ```
 
-Open http://127.0.0.1:3000 and use the labelled test identities. This explicit local workspace applies real PostgreSQL migrations with PGlite and invokes actual Envio test handlers, with simulated receipts. It needs no credentials and cannot be enabled in production. Production architecture remains Privy, Neon/Postgres, Monad RPC and Envio. `pnpm dev` runs the real integration path and shows actionable configuration states when integrations are absent; variables are documented in `apps/web/.env.example`.
+Open http://127.0.0.1:3000 and use the labelled test identities. This explicit local workspace applies real PostgreSQL migrations with PGlite and invokes actual Envio test handlers, with simulated receipts. It needs no credentials and cannot be enabled in production. Production architecture remains Privy, standard PostgreSQL, Monad RPC and Envio. `pnpm dev` runs the real integration path and shows actionable configuration states when integrations are absent; variables are documented in `apps/web/.env.example`.
 
 Quality gates:
 
@@ -111,6 +111,16 @@ See [Phase 2 implementation and boundaries](docs/32_PHASE2_SOCIAL_CORE.md), [dec
 
 ## Phase 3 live integration (authorized, in progress)
 
-Database health, rollback-safe constraint smoke, strict production/staging browser smoke, Envio Cloud configuration compatibility, read-only contract proof recording and permitted server-only Nansen profile context are prepared. Only public Monad RPC/Perpl context were checked live. No authenticated deployment, real user transaction or trade has occurred; credential/account confirmation is pending.
+Database health, rollback-safe constraint smoke, strict production/staging browser smoke, Envio Cloud configuration compatibility, read-only contract proof recording and permitted server-only Nansen profile context are prepared. The local PostgreSQL service now uses the standard node-postgres driver and the same committed migrations intended for production. Other live evidence remains public Monad RPC/Perpl context. No authenticated deployment, real user transaction or trade has occurred; credential/account confirmation is pending.
 
 Use [deployment instructions](docs/23_DEPLOYMENT_ENV.md) for exact environment variables, migration/smoke commands and stable-Origin setup. Put secrets only in ignored apps/web/.env.local or the provider's server settings and confirm presence without sharing values. Never supply wallet or Perpl private keys. [Phase 3 gate ledger and evidence](docs/33_PHASE3_LIVE_INTEGRATION.md) distinguish local fixture checks from missing live proof. No Phase 4 work is started.
+
+### Local development database
+
+```sh
+pnpm db:up
+pnpm db:migrate
+pnpm db:smoke
+```
+
+Docker Compose runs one official PostgreSQL 17 service at localhost:5432 with database/user fork_dev and a persistent volume. Startup securely generates ignored local credentials and configures apps/web/.env.local; no password copying is needed. pnpm db:down stops the service and preserves data; pnpm db:logs shows its logs. Production later injects a standard PostgreSQL DATABASE_URL and runs the same pnpm db:migrate command. No provider SDK is required. See [database setup and portability](docs/23_DEPLOYMENT_ENV.md).

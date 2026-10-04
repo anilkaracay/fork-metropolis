@@ -149,3 +149,10 @@ No new Nansen or hackathon eligibility claims were made during this implementati
 - Gitleaks: https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1 — official Darwin arm64 archive verified SHA-256 b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5, local ignored scanner.
 
 Hackathon sponsor-track portal URLs could not be retrieved through the research tool. No new prize/eligibility claim is inferred. The approved Perpl automation requirement remains unsatisfied by manual execution.
+
+## D-039 standard PostgreSQL setup (checked 2026-10-04)
+
+- [Official PostgreSQL Docker image](https://hub.docker.com/_/postgres): major 17 volume path, default password authentication and password-file support.
+- [Docker Desktop start](https://docs.docker.com/reference/cli/docker/desktop/start/) and [Compose secrets](https://docs.docker.com/compose/how-tos/use-secrets/): automated daemon startup and local file-secret mounts.
+- [Drizzle PostgreSQL drivers](https://orm.drizzle.team/docs/get-started-postgresql), [migrations](https://orm.drizzle.team/docs/migrations) and [node-postgres Pool](https://node-postgres.com/apis/pool): standard TCP adapter, committed SQL migration path and bounded pool.
+- [pnpm optional dependency settings](https://pnpm.io/settings/dependency-resolution#ignoredoptionaldependencies): exclude the unused Neon SDK and prune its obsolete optional peer resolution without upgrading Drizzle. Earlier Neon research is historical and superseded by D-039.

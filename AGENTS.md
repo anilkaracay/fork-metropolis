@@ -49,7 +49,7 @@ Do not implement without an explicit decision log entry:
 
 - Web: Next.js App Router, TypeScript, React, Tailwind CSS, shadcn/ui primitives, TanStack Query, viem.
 - Auth/wallet: Privy React SDK.
-- Database: Postgres on Neon, Drizzle ORM.
+- Database: standard PostgreSQL via node-postgres and Drizzle ORM. Local Docker Compose for development; self-hosted or standard PostgreSQL host later. No provider-specific SDK.
 - Contracts: Solidity + Foundry.
 - Indexing: Envio HyperIndex + GraphQL.
 - Trading: Perpl REST + WebSocket APIs.
@@ -57,6 +57,10 @@ Do not implement without an explicit decision log entry:
 - Deployment: self-hosted Node.js web behind a reverse proxy and HTTPS domain (later), Envio Cloud for indexer, Monad Testnet for contract. Development uses localhost; do not use Vercel.
 
 Pin exact versions in the lockfile when implementation begins. Do not blindly upgrade dependencies during the final day.
+
+## Infrastructure workflow
+
+Use automate-first setup: check current official documentation, prefer official CLIs/APIs/local tooling, use existing authenticated sessions and perform authorized non-sensitive setup. Initiate browser authorization when needed and ask only for unavoidable human approval/login, wallet signatures, funding or provider actions. Retrieve and write secrets locally where official tooling supports it; never print or commit them. Development database is local PostgreSQL; do not fall back to Neon. Do not proceed to Privy until the user reviews the database result.
 
 ## Required quality bar
 

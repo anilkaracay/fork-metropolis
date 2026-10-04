@@ -27,7 +27,11 @@
     "db:generate": "pnpm --filter @fork/db generate",
     "db:migrate": "pnpm --filter @fork/db migrate",
     "indexer:codegen": "pnpm --filter @fork/indexer codegen",
-    "test:dev": "node scripts/test-dev.mjs"
+    "test:dev": "node scripts/test-dev.mjs",
+    "db:up": "node scripts/local-db.mjs",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs --tail 100 -f postgres",
+    "db:smoke": "FORK_DATABASE_SMOKE=development pnpm --filter @fork/db smoke"
   },
   "devDependencies": {
     "@types/node": "24.19.1",

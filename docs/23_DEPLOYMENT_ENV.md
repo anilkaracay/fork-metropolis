@@ -1,10 +1,10 @@
 # Deployment and Environment
 
-Phase 3 is authorized; authenticated infrastructure is not yet deployed. Use a Neon development branch, Monad Testnet and Perpl Testnet. Development uses http://localhost:3000. Verify official provider support before configuring localhost. Final hosting will use the user's server and stable HTTPS domain; no server deployment is authorized yet. Perpl enrollment waits for that final approved Origin.
+Phase 3 is authorized; authenticated infrastructure is not yet deployed. Use local PostgreSQL for development, Monad Testnet and Perpl Testnet. Production later uses standard PostgreSQL on the user's server or another PostgreSQL host. Development uses http://localhost:3000. Verify official provider support before configuring localhost. Final hosting will use the user's server and stable HTTPS domain; no server deployment is authorized yet. Perpl enrollment waits for that final approved Origin.
 
 ## Credentials and implemented variables
 
-Put variables in ignored `apps/web/.env.local`, following `apps/web/.env.example`. Confirm presence before the agent uses them. Never paste values into chat. Later inject corresponding server variables into the self-hosted Node.js process/container, outside source control. No wallet or Perpl Ed25519 private key belongs on a server.
+The agent retrieves provider credentials through official tooling where supported and writes them securely to ignored `apps/web/.env.local`, following `apps/web/.env.example`. Human action is limited to unavoidable browser authorization, signatures or provider approvals. Never paste values into chat or print them in tooling output. Later inject corresponding server variables into the self-hosted Node.js process/container, outside source control. No wallet or Perpl Ed25519 private key belongs on a server.
 
 Only NEXT_PUBLIC_APP_URL and NEXT_PUBLIC_PRIVY_APP_ID are browser environment variables. Implemented server variables:
 
@@ -20,21 +20,25 @@ NANSEN_API_KEY                    # optional, Gate 12
 FORK_NANSEN_DAILY_CREDIT_BUDGET=20
 ```
 
-Obtain DATABASE_URL from the development branch's [Neon Connect dialog](https://neon.com/docs/connect/connect-from-any-app), Privy ID/secret from the [application dashboard](https://dashboard.privy.io/), and Nansen key from [agent setup](https://app.nansen.ai/auth/agent-setup) when Gate 12 is ready. Never set FORK_TEST_MODE in production.
+Run pnpm db:up to generate local development credentials and configure DATABASE_URL securely. The application uses [node-postgres through Drizzle](https://orm.drizzle.team/docs/get-started-postgresql), with no provider-specific SDK or network transport. Verify current official tooling before each subsequent service setup. Privy and Nansen setup remain deferred until their gates are reviewed. Never set FORK_TEST_MODE in production.
 
 ## Database migration and smoke
 
-Current guided setup: create project fork-metropolis-dev, recommended AWS Europe (Frankfurt) / aws-eu-central-1 for European development, then create child branch fork-dev from the default production branch. Select its primary read-write compute, neondb and neondb_owner. For the current single DATABASE_URL used by app/migrations/smoke, switch Connection pooling OFF and copy the direct string unchanged (including SSL parameters). The application already has a bounded five-connection client Pool. Neon recommends direct connections for schema migrations; a separately configured pooled runtime can be considered later if needed. If the final server is elsewhere, prefer its nearest region.
-
-
-From the workspace root after confirming the intended development connection:
+The minimal Compose service uses the [official PostgreSQL image](https://hub.docker.com/_/postgres), pinned to stable major 17 (Bookworm), one persistent named volume, healthcheck, restart unless-stopped and only 127.0.0.1:5432 exposure. No other service is added. The existing unrelated PostgreSQL container on port 55432 is untouched. Docker Desktop was installed but stopped; the official CLI started it successfully.
 
 ```sh
-pnpm --filter @fork/db exec node --env-file=../../apps/web/.env.local --experimental-strip-types src/migrate.ts
-FORK_DATABASE_SMOKE=development pnpm --filter @fork/db exec node --env-file=../../apps/web/.env.local --experimental-strip-types src/smoke.ts
+pnpm db:up
+pnpm db:migrate
+pnpm db:smoke
+pnpm db:logs
+pnpm db:down
 ```
 
-Apply all three committed migrations; never schema push. The smoke checks namespace uniqueness, cross-registry coexistence, Agree idempotence, wallet association, comment ownership, report uniqueness and globally unique verified fills. Its transaction always rolls back, including on failure. It never deletes/resets application data. Select a development branch explicitly: the guard does not independently establish database environment.
+pnpm db:up generates a 32-byte random development password in gitignored .env.postgres.password and writes DATABASE_URL to gitignored apps/web/.env.local, both mode 0600. Compose mounts the password as a [file secret](https://docs.docker.com/compose/how-tos/use-secrets/), rather than an environment value. Repeated startup reuses credentials and preserves other environment variables; an existing non-local URL is never overwritten. db:down preserves the named volume; do not remove it or regenerate its password to reset data. Startup waits for health for up to 60 seconds; retry after starting Docker Desktop or freeing port 5432 if needed.
+
+Migrations load apps/web/.env.local when present; an injected process DATABASE_URL takes precedence, so the same pnpm db:migrate command works on a future production server. TLS follows the supplied standard PostgreSQL connection configuration; local loopback development uses plain TCP. Keep production credentials injected server-side. Never schema push: apply the three committed SQL migrations unchanged. The five-connection Pool retains five-second connection and eight-second query/statement timeouts. Failed mutations are not automatically retried; recovery instructs the caller to retry explicitly, avoiding duplicate writes.
+
+The development smoke checks wallet uniqueness/immutable ownership/selected-wallet association/metadata ownership, namespace uniqueness, cross-registry coexistence, Agree idempotence, comment ownership, report uniqueness and globally unique verified fills. All ten checks run in one transaction that always rolls back, including on failure. No application data is deleted or reset. The development guard does not independently establish the target environment; never run this fixture smoke on production.
 
 GET /api/health/database runs SELECT 1 and checks the migration journal. Missing configuration or unavailable/incomplete migrations returns 503 with recovery and no driver details. Successful database health alone does not establish Privy/Envio readiness.
 
@@ -67,7 +71,7 @@ Measure receipt-confirmed time to first matching scoped GraphQL visibility. Pres
 
 Vercel is removed from the critical path. GitHub origin is private anilkaracay/fork-metropolis; the user will make it public before submission. No Vercel login/project/deployment is required. Use http://localhost:3000 now. Privy localhost support and exact settings must be verified at its live gate; no support assumption is made here.
 
-Final architecture: HTTPS domain → reverse proxy → standard Node.js Next.js application → existing Neon/Envio/Monad/Privy/Nansen/Perpl services. Docker plus Caddy/Nginx may be prepared later, without deploying the user's server. No Edge-only API, proprietary hosting feature, Redis, queue or Kubernetes is required. Self-host readiness will add/verify root pnpm start alongside pnpm build; this new readiness check has not run yet. Existing web start is standard next start, and the local production runner has passed prior smoke.
+Final architecture: HTTPS domain → reverse proxy → standard Node.js Next.js application → standard PostgreSQL and existing Envio/Monad/Privy/Nansen/Perpl services. Docker plus Caddy/Nginx may be prepared later, without deploying the user's server. No Edge-only API, proprietary hosting feature, Redis, queue or Kubernetes is required. Self-host readiness will add/verify root pnpm start alongside pnpm build; this new readiness check has not run yet. Existing web start is standard next start, and the local production runner has passed prior smoke.
 
 Local production smoke after build:
 

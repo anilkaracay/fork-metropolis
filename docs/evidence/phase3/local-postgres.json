@@ -1,0 +1,80 @@
+{
+  "observedAt": "2026-10-04T19:52:48.293Z",
+  "scope": "live-local-database-only",
+  "postgresqlVersion": "17.11",
+  "image": "postgres:17-bookworm",
+  "database": "fork_dev",
+  "status": "healthy",
+  "migrationStatus": {
+    "applied": 3,
+    "committedSqlUnchanged": true,
+    "schemaPushUsed": false,
+    "publicTables": 9
+  },
+  "liveTests": {
+    "developmentHttpHealth": 200,
+    "productionHttpHealth": 200,
+    "constraintsPassed": 10,
+    "rolledBack": true,
+    "retainedSmokeRows": 0,
+    "checks": [
+      "wallet uniqueness",
+      "wallet ownership immutable",
+      "wallet association",
+      "metadata wallet ownership",
+      "namespace uniqueness",
+      "distinct registry namespace",
+      "reaction idempotency",
+      "comment ownership",
+      "report uniqueness",
+      "fillIdentity uniqueness"
+    ]
+  },
+  "checks": {
+    "unitTestsPassed": 174,
+    "typecheck": "passed",
+    "lint": "passed",
+    "format": "passed",
+    "build": "passed with existing upstream SDK warnings",
+    "databaseCredentialsInBrowserAssets": false,
+    "browserFilesChecked": 201,
+    "gitChangesSecretScan": "passed",
+    "frozenInstall": "passed online; offline cache was incomplete"
+  },
+  "databaseUrlConfigured": true,
+  "localCredentialFilesIgnored": true,
+  "localCredentialPermissions": "0600",
+  "providerSpecificSdkInApplicationDependencies": false,
+  "nextRecommendedIntegration": "Privy localhost setup after user review",
+  "filesCreated": [
+    "compose.yaml",
+    "scripts/local-db.mjs",
+    "docs/evidence/phase3/local-postgres.json",
+    "apps/web/.env.local (ignored)",
+    ".env.postgres.password (ignored)"
+  ],
+  "filesChanged": [
+    "AGENTS.md",
+    "README.md",
+    "apps/web/.env.example",
+    "apps/web/next.config.ts",
+    "apps/web/src/server/database-health.ts",
+    "docs/07_TECH_ARCHITECTURE.md",
+    "docs/09_DATA_MODEL.md",
+    "docs/20_3_DAY_EXECUTION_PLAN.md",
+    "docs/23_DEPLOYMENT_ENV.md",
+    "docs/28_RESEARCH_SOURCES.md",
+    "docs/29_DECISIONS.md",
+    "docs/33_PHASE3_LIVE_INTEGRATION.md",
+    "docs/evidence/phase3/SECRET_SCAN.md",
+    "package.json",
+    "packages/db/package.json",
+    "packages/db/src/index.ts",
+    "packages/db/src/migrate.ts",
+    "packages/db/src/smoke-check.ts",
+    "packages/db/src/smoke.ts",
+    "packages/db/test/smoke.test.ts",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml"
+  ]
+}

@@ -5,7 +5,7 @@ const config: NextConfig = {
   serverExternalPackages: [
     "@electric-sql/pglite",
     "@privy-io/node",
-    "@neondatabase/serverless",
+    "pg",
     "ws",
   ],
   distDir: process.env.FORK_TEST_MODE === "1" ? ".next-test" : ".next",

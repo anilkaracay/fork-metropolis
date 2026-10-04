@@ -3,7 +3,7 @@ import { databaseSmoke } from "./smoke-check.ts";
 
 if (process.env.FORK_DATABASE_SMOKE !== "development") {
   console.error(
-    "Set FORK_DATABASE_SMOKE=development only for the intended Neon development branch.",
+    "Set FORK_DATABASE_SMOKE=development only for the intended PostgreSQL development database.",
   );
   process.exit(1);
 }

@@ -1,6 +1,6 @@
 # Data Model
 
-Implemented Phase 2 source: `packages/db/src/schema.ts`; committed SQL in `packages/db/migrations/`. Production remains Neon PostgreSQL through Drizzle. Tests apply the same migrations to an isolated PGlite PostgreSQL instance. No live database has been created or migrated.
+Implemented Phase 2 source: `packages/db/src/schema.ts`; committed SQL in `packages/db/migrations/`. Development uses local PostgreSQL 17; production later uses standard PostgreSQL through the same Drizzle/node-postgres adapter (D-039). Tests apply the same migrations to an isolated PGlite PostgreSQL instance. The local database uses the same three committed migrations; current live checks are recorded in the Phase 3 ledger.
 
 ## Authority and namespace
 

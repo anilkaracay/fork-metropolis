@@ -51,6 +51,19 @@ export async function databaseSmoke(db: Database) {
         { address: wallet, userId: user, kind: "external" },
         { address: otherWallet, userId: other, kind: "external" },
       ]);
+      await reject("wallet uniqueness", "23505", (sp) =>
+        sp.insert(s.wallets).values({
+          address: wallet,
+          userId: other,
+          kind: "external",
+        }),
+      );
+      await reject("wallet ownership immutable", "P0001", (sp) =>
+        sp
+          .update(s.wallets)
+          .set({ userId: other })
+          .where(eq(s.wallets.address, wallet)),
+      );
       await reject("wallet association", "23503", async (sp) => {
         await sp
           .update(s.users)
@@ -81,6 +94,11 @@ export async function databaseSmoke(db: Database) {
         expiresAt: new Date(Date.now() + 60000),
       });
       await tx.insert(s.metadata).values(metadata("1"));
+      await reject("metadata wallet ownership", "23503", (sp) =>
+        sp
+          .insert(s.metadata)
+          .values({ ...metadata("3"), authorWallet: otherWallet }),
+      );
       await reject("namespace uniqueness", "23505", (sp) =>
         sp.insert(s.metadata).values(metadata("1")),
       );

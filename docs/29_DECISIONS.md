@@ -339,3 +339,12 @@ Status: Explicit user decision, supersedes Vercel staging prerequisite
 Date: 2026-10-04
 
 Use http://localhost:3000 for independent development/live gates after checking each provider's official localhost support. Repository stays private until the user's later pre-submission visibility change. Remove Vercel login/project/deployment from the critical path. Final hosting is standard Node.js on the user's server behind a reverse proxy and stable HTTPS domain, optionally simple Docker; no server deployment yet, no proprietary hosting features or new services. Perpl enrollment is blocked by final approved stable Origin, and real orders/verified executions by enrollment; no tunnel/preview workaround. Revised order is Neon, Privy localhost, Monad, Envio, two real users, Nansen, self-host readiness, independent Perpl public readiness. Stop before Phase 4.
+
+## D-039 - Local provider-agnostic PostgreSQL and automate-first setup
+
+Status: Explicit user decision, supersedes Neon in D-008/D-028/D-029/D-038 and prior setup instructions
+Date: 2026-10-04
+
+Use local PostgreSQL via a single Docker Compose service for development; later supply a standard PostgreSQL URL for the user's own server or another standard host. Keep the three committed Drizzle migrations unchanged. Replace the Neon WebSocket SDK with pinned pg 8.23.1 and @types/pg 8.23.1 through Drizzle's node-postgres adapter, retaining bounded connection/query timeouts and redacted errors. Remove the obsolete optional Neon peer resolution from the lockfile and use pnpm ignoredOptionalDependencies to exclude the unused provider SDK. No Neon API, provider project or login approval is needed. Historical phase reports describe the previous plan, not the current architecture.
+
+Compose uses official postgres:17-bookworm, persistent named volume, TCP healthcheck, localhost-only port 5432 and restart unless-stopped. Generate local development credentials into ignored mode-0600 files, mount the password as a Compose secret and never log or commit it. Add minimal db:up/down/logs/migrate/smoke commands. Automate safe setup and use current official CLI/API tooling for each future service; human action is limited to genuinely unavoidable authorizations/signatures/funding. Stop after local database migration and live checks; Privy requires the user's review of the database result first.
