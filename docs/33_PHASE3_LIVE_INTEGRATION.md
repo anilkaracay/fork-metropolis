@@ -4,20 +4,22 @@ Status: **in progress; blocked on human configuration, not live-complete**. No P
 
 ## Phase 3B — guided live unblock
 
-Current step: **1 — repository and stable staging origin**. Do not proceed to Neon until this step is complete. Prior quality checks remain valid and were not repeated.
+Current step: **Neon live development database**. Repository creation and main push are complete. The user superseded Vercel/stable-staging prerequisites: no Vercel login/project/deployment, no server deployment now. Prior passing checks were not repeated.
 
-| Step 1 requirement | Observed state |
+| Requirement | Observed state |
 | --- | --- |
-| Local branch/checkpoint | main, aaeaa0739f2a09f2e48bd58fa64a59816de15cb4; clean at entry. |
-| GitHub authentication | GitHub CLI active account anilkaracay; network-enabled auth check succeeded. |
-| Remote repository | origin points to https://github.com/anilkaracay/fork-metropolis.git; repository created under anilkaracay and verified PRIVATE. |
-| Visibility instruction | User explicitly approved private anilkaracay/fork-metropolis after the original public proposal was blocked. Any later public visibility change is reserved to the user. |
-| Creation/push | Complete: initial pushed main checkpoint a70352090f0cbddbfd416223bba4248828e88b1c matches local HEAD at verification. Subsequent ledger updates are pushed on main. No public publication occurred. |
-| Vercel | CLI 62.2.0 installed in ignored .tools/vercel-cli without changing app dependencies. Non-interactive whoami returned Logged out. No project linked. .vercel/ is ignored to protect future local provider state. |
-| Deployment configuration | Next.js monorepo apps/web, pinned Node 24.21.0/pnpm 12.6.0, Webpack; existing env examples inspected. No provider secrets configured. |
-| Stable staging hostname | Not established; no project linked. |
+| Repository | Private anilkaracay/fork-metropolis; origin/main pushed and verified at 9d6e67ab552188c38ee1bc9d4ea949d025da896e before this documentation update. Public visibility remains a later user action. |
+| Development origin | http://localhost:3000; provider localhost support must be verified before configuring origins. |
+| Hosting plan | Later self-hosted standard Node.js, optional simple Docker container and reverse proxy under the user's final HTTPS domain. No deployment now. |
+| Superseded Vercel work | Removed from critical path. CLI remains only in ignored local tools; no Vercel project or application dependency exists. No further Vercel login request. |
+| Neon inspection | DATABASE_URL absent from process environment; apps/web/.env.local does not exist. No credential value was printed or connection attempted. |
+| Neon setup target | Project fork-metropolis-dev; development branch fork-dev; database neondb; owner role neondb_owner; recommend Frankfurt aws-eu-central-1 for European development, nearer final-server region if different. Use direct connection with pooling OFF for current app/migration/smoke shared URL. |
+| Perpl enrollment | BLOCKED BY STABLE ORIGIN until the final production HTTPS domain is available and approved. |
+| Perpl real order / verified execution | BLOCKED BY ENROLLMENT; independent localhost gates continue. |
 
-Next single human action: run `.tools/vercel-cli/node_modules/.bin/vercel login` from /Users/anil/Desktop/fork-metropolis-spec, complete Vercel login/CLI authorization in the intended account, then confirm completion without sharing a token. After confirmation, verify the session and resume stable project linking/deployment. Do not use the CLI's temporary-deployment alternative; do not proceed to Step 2 yet.
+Updated order: Neon → verified Privy localhost configuration → Monad Testnet registry → Envio Cloud → real two-user localhost journey → authenticated Nansen → self-host production readiness → independent Perpl public/readiness work, then stop. No Phase 4.
+
+Next single human action: create/select the Neon development resources above, copy the direct connection string from Connect (Connection pooling OFF), put it as DATABASE_URL in ignored apps/web/.env.local and confirm presence only. After confirmation, validate configuration/connection, apply committed migrations, check live health/schema, run always-rollback smoke and record actual region/database/migration results. No secret in chat.
 
 ## Baseline
 
@@ -32,10 +34,10 @@ Clean approved commit e87fc8256d2693bc2bb07d4d0cf50a47ef4b28af. All seven Phase 
 | 2 Privy | Blocked | Real app ID/server secret/domain setup unconfirmed; no actual login/wallet/token/signature. Existing adapter/security tests pass with fixtures. |
 | 3 Monad registry | Prepared / blocked | Public chain 10143 verified; reviewed compiled source/settings/ABI agree; 28 Foundry tests pass. Public funded human deployer not supplied. Read-only artifact recorder ready; no artifact/transaction created. |
 | 4 Envio Cloud | Prepared / blocked | ENVIO_ custom variables fixed; standalone pnpm 10.32.0 install/typecheck/12 tests pass. Requires GitHub/Cloud access and actual contract address/start block. |
-| 5 Vercel staging | Prepared / blocked | Strict live smoke available; local production smoke 3/3. Login/stable hostname/configuration pending; no URL deployed. |
-| 6 Two real users | Blocked | Depends on Gates 1–5. No actual root/fork hashes or live graph/reputation. Five isolated browser tests are fixtures only. |
+| 5 Production readiness | Revised / pending | Existing local production smoke passed 3/3. Standard root build/start and optional Docker self-host readiness will be verified at the revised later step; no server deployment. |
+| 6 Two real users | Blocked | Depends on live Neon/Privy/Monad/Envio; final domain is not a prerequisite. No actual root/fork hashes or live graph/reputation. Five isolated browser tests are fixtures only. |
 | 7 Perpl readiness | Partial live | Actual current public context saved; documentation funding/collateral discrepancy unresolved with sponsor. |
-| 8 Origin/enrollment | Blocked | Stable Origin and team whitelisting pending. Per instruction, browser-local enrollment implementation waits for approval. No keys/accounts/collateral/forwarding verified. |
+| 8 Origin/enrollment | Blocked by stable Origin | Final production HTTPS domain and team whitelisting pending. Per instruction, browser-local enrollment implementation waits for approval. No keys/accounts/collateral/forwarding verified. |
 | 9 Authoritative verification | Blocked | No enrolled proof/account. Wallet/fills constrained read boundary tested; actual transport remains disabled. API log-index and lossless IDs must be checked with real evidence. No assertion that safe retrieval is impossible. |
 | 10 One real order | Not permitted yet | Gates 8/9 have not passed; zero orders sent. |
 | 11 Verified reputation | Blocked | No independent fill + real author link/indexed event. No verification or inspired credit invented. |
@@ -81,7 +83,7 @@ No live Neon migrations, provider project, registry or enrollment exists. No ord
 | Reviewed compiled contract | Source/config/hash/compiler/settings/ABI match approved commit; no deployment tested |
 | Secret scan | Git/current source clean; browser three reviewed public SDK identifiers, no FORK credential detected |
 | Production test adapters | identity/submit/reset 404; test flag rejected in production tests |
-| Live staging URL / fresh Privy journey | Blocked; no configured staging origin/credentials |
+| Fresh real localhost Privy journey | Pending credentials and verified localhost setup; stable staging requirement superseded |
 | Live Neon / Envio / Perpl / Nansen integration | Blocked; not substituted by local tests |
 
 Sandbox initially denied local browser server port bindings; reruns with authorized local-server access passed. Default sandbox Foundry cache writes warned; separate authorized run passed without warning. Build retains Privy's optional Farcaster import and ox Tempo dynamic worker warnings (D-034), no stubs/filtering/upgrades.
@@ -89,11 +91,11 @@ Sandbox initially denied local browser server port bindings; reruns with authori
 ## Human actions and continuation
 
 1. Put development DATABASE_URL, NEXT_PUBLIC_PRIVY_APP_ID and PRIVY_APP_SECRET into apps/web/.env.local from Neon Connect and the Privy app dashboard; confirm presence only. Do not paste values.
-2. Complete the current Vercel CLI login, then establish a stable HTTPS project hostname. GitHub origin now exists as private anilkaracay/fork-metropolis; Envio authorization remains a later sequential step.
+2. After Neon passes, configure Privy for verified localhost development support. GitHub is already private/pushed; server and final domain setup are deferred.
 3. Supply public funded Monad Testnet deployer address and wallet type. Keep signing/private key local; obtain gas MON from Monad Testnet faucet.
 4. After stable hostname exists, request exact Origin whitelisting/test collateral funding from Perpl via official Discord, giving public wallet/chain 10143/instance 12/exchange. Ask funding method for current AUSD contract; no secret or signature in support messages.
 5. At Gate 12 put NANSEN_API_KEY into apps/web/.env.local from Nansen agent setup and confirm presence only. Verify plan/credit entitlement before expanding the default budget.
-6. Participate in fresh-browser email/Google auth and two distinct real identities/wallet signatures, then exactly one manual order only after enrollment/independent verification pass.
+6. Participate in fresh-browser localhost email/Google auth and two distinct real identities/wallet signatures. Perpl enrollment/order/verification stay deferred until the final HTTPS domain exists.
 
 Exact commands, sources and dependency sequence are in [deployment instructions](23_DEPLOYMENT_ENV.md). Sponsor records: [Privy](evidence/phase3/PRIVY.md), [Envio](evidence/phase3/ENVIO.md), [Nansen](evidence/phase3/NANSEN.md), [Perpl](evidence/phase3/PERPL.md). [Secret scan scope](evidence/phase3/SECRET_SCAN.md).
 

@@ -332,3 +332,10 @@ Status: Accepted implementation choice within approved Phase 3 Gates 12–13
 Date: 2026-10-04
 
 Keep Smart Signal's existing social tuple; do not introduce unmeasured ranking enrichment. Offer separately labeled Monad mainnet PnL context on a real wallet profile, never Testnet/native reputation. Rechecked policy explicitly permits PnL/PnL Summary; strip labels and unknown payload fields. Add one dedicated shared cache table (superseding D-032's eight-table limit solely for this approved integration). Reserve Free-tier 10 credits per attempt across instances/users, default budget 20/day, one-hour success/empty cache, five-minute error cache and no billed retries. Disabled/outage states cannot break social data. Actual provider proof remains pending; fixture success is not live evidence.
+
+## D-038 - Localhost integration and later self-hosting
+
+Status: Explicit user decision, supersedes Vercel staging prerequisite
+Date: 2026-10-04
+
+Use http://localhost:3000 for independent development/live gates after checking each provider's official localhost support. Repository stays private until the user's later pre-submission visibility change. Remove Vercel login/project/deployment from the critical path. Final hosting is standard Node.js on the user's server behind a reverse proxy and stable HTTPS domain, optionally simple Docker; no server deployment yet, no proprietary hosting features or new services. Perpl enrollment is blocked by final approved stable Origin, and real orders/verified executions by enrollment; no tunnel/preview workaround. Revised order is Neon, Privy localhost, Monad, Envio, two real users, Nansen, self-host readiness, independent Perpl public readiness. Stop before Phase 4.

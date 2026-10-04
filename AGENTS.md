@@ -54,7 +54,7 @@ Do not implement without an explicit decision log entry:
 - Indexing: Envio HyperIndex + GraphQL.
 - Trading: Perpl REST + WebSocket APIs.
 - Onchain intelligence: Nansen API through server-only routes.
-- Deployment: Vercel for web, Envio Cloud for indexer, Monad Testnet for contract.
+- Deployment: self-hosted Node.js web behind a reverse proxy and HTTPS domain (later), Envio Cloud for indexer, Monad Testnet for contract. Development uses localhost; do not use Vercel.
 
 Pin exact versions in the lockfile when implementation begins. Do not blindly upgrade dependencies during the final day.
 

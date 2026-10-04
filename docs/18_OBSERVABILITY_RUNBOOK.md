@@ -62,7 +62,7 @@ Do not send wallet secrets or full thesis text to analytics.
 
 If time permits, add Sentry or equivalent with source maps and PII scrubbing.
 
-If not, Vercel logs plus client error boundary and explicit request IDs are acceptable for hackathon scale.
+If not, self-hosted application stdout/stderr logs plus client error boundary and explicit request IDs are acceptable for hackathon scale.
 
 ## Provider runbook
 
@@ -147,7 +147,7 @@ Actions:
 
 Web:
 
-- use previous known-good Vercel deployment
+- use the previous known-good application release/container image
 
 Indexer:
 

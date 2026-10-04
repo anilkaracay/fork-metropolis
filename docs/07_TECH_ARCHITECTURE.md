@@ -13,7 +13,7 @@ Browser
   |-- Perpl Ed25519 keypair in IndexedDB
   |-- Perpl WebSocket for live execution
   |
-Next.js web app on Vercel
+Next.js web app on localhost during development; later self-hosted Node.js behind a reverse proxy and HTTPS domain
   |
   |-- Server API routes
   |     |-- Privy access-token verification
