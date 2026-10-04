@@ -34,7 +34,7 @@ pnpm test:indexer
 pnpm --filter @fork/indexer typecheck
 ```
 
-`config.yaml` uses chain 10143, the official Monad Testnet RPC, and deployment address/start-block environment variables. Its zero address fallback permits code generation; `scripts/start.mjs` rejects absent/zero address and absent deployment block before any live indexer can start.
+`config.yaml` uses chain 10143, the official Monad Testnet RPC, `ENVIO_FORK_REGISTRY_ADDRESS` and `ENVIO_FORK_START_BLOCK`. Cloud custom variables require the `ENVIO_` prefix. Its zero address fallback permits code generation; `scripts/start.mjs` rejects absent/zero address and absent/zero deployment block before any live indexer can start. Standalone frozen installation, typecheck and 12 handler tests also pass with Cloud's documented pnpm 10.32.0.
 
 `config.test.yaml` lists explicit synthetic registry addresses and is used only by handler simulations and `pnpm test:dev`. The localhost test bridge requires NODE_ENV=test and a random per-run secret. It invokes actual HyperIndex handlers; it is not a hand-written graph substitute. The Next local test adapter is separately restricted to development, an explicit test flag, loopback host and same-origin browser calls.
 

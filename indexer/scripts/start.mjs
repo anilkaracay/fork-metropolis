@@ -1,8 +1,8 @@
 import { spawnSync } from "node:child_process";
 if (
-  !/^0x[0-9a-fA-F]{40}$/.test(process.env.FORK_REGISTRY_ADDRESS ?? "") ||
-  /^0x0{40}$/.test(process.env.FORK_REGISTRY_ADDRESS ?? "") ||
-  !/^\d+$/.test(process.env.FORK_START_BLOCK ?? "")
+  !/^0x[0-9a-fA-F]{40}$/.test(process.env.ENVIO_FORK_REGISTRY_ADDRESS ?? "") ||
+  /^0x0{40}$/.test(process.env.ENVIO_FORK_REGISTRY_ADDRESS ?? "") ||
+  !/^[1-9]\d*$/.test(process.env.ENVIO_FORK_START_BLOCK ?? "")
 ) {
   throw new Error(
     "Configure the reviewed registry address and deployment start block before starting live indexing. Codegen/tests need no deployment.",

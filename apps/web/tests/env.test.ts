@@ -11,6 +11,7 @@ describe("environment boundaries", () => {
       FORK_PHASE: "social-core",
       MONAD_RPC_URL: "https://testnet-rpc.monad.xyz",
       FORK_ADMIN_DIDS: "",
+      FORK_NANSEN_DAILY_CREDIT_BUDGET: 20,
     });
   });
   it("only returns allowed public configuration", () => {
@@ -30,9 +31,10 @@ describe("environment boundaries", () => {
         NANSEN_API_KEY: "unused-secret",
       }),
     ).toMatchObject({ PRIVY_APP_SECRET: "server-secret" });
-    expect(
-      parseServerEnv({ NANSEN_API_KEY: "unused-secret" }),
-    ).not.toHaveProperty("NANSEN_API_KEY");
+    expect(parseServerEnv({ NANSEN_API_KEY: "server-key" })).toHaveProperty(
+      "NANSEN_API_KEY",
+      "server-key",
+    );
   });
   it("rejects production test bypass configuration", () => {
     expect(() =>

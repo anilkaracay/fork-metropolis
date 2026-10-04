@@ -13,8 +13,8 @@ contracts:
       - event: ExecutionLinked
 chains:
   - id: 10143
-    start_block: ${FORK_START_BLOCK:-0}
+    start_block: ${ENVIO_FORK_START_BLOCK:-0}
     rpc: https://testnet-rpc.monad.xyz
     contracts:
       - name: FORKRegistry
-        address: "${FORK_REGISTRY_ADDRESS:-0x0000000000000000000000000000000000000000}"
+        address: "${ENVIO_FORK_REGISTRY_ADDRESS:-0x0000000000000000000000000000000000000000}"

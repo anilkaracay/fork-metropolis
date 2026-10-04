@@ -318,3 +318,17 @@ Status: Accepted correctness fix within approved Phase 2
 Date: 2026-10-04
 
 Envio Thesis.marketId/leverageBps and MarketStats.marketId use BigInt storage, not signed GraphQL Int: the contract permits uint32 values through 4294967295, beyond 2147483647. The typed application normalizes these safely into checked uint32 numbers. Add a real-handler maximum-value regression case and read-model scalar test. Keep lineage IDs/prices in their existing lossless representations. This prevents a valid public registry event from overflowing a canonical indexer field.
+
+## D-036 - Envio Cloud environment compatibility
+
+Status: Accepted implementation choice within approved Phase 3
+Date: 2026-10-04
+
+Use ENVIO_FORK_REGISTRY_ADDRESS and ENVIO_FORK_START_BLOCK for live indexer configuration: Cloud only accepts custom ENVIO_-prefixed variables. Require a nonzero address and positive deployment block. Keep the standalone lockfile/dependencies unchanged; isolated frozen installation, typecheck and 12 tests pass with Cloud pnpm 10.32.0. The web workspace retains 12.6.0. No deployment is implied.
+
+## D-037 - Permitted Nansen profile context and bounded credit use
+
+Status: Accepted implementation choice within approved Phase 3 Gates 12–13
+Date: 2026-10-04
+
+Keep Smart Signal's existing social tuple; do not introduce unmeasured ranking enrichment. Offer separately labeled Monad mainnet PnL context on a real wallet profile, never Testnet/native reputation. Rechecked policy explicitly permits PnL/PnL Summary; strip labels and unknown payload fields. Add one dedicated shared cache table (superseding D-032's eight-table limit solely for this approved integration). Reserve Free-tier 10 credits per attempt across instances/users, default budget 20/day, one-hour success/empty cache, five-minute error cache and no billed retries. Disabled/outage states cannot break social data. Actual provider proof remains pending; fixture success is not live evidence.

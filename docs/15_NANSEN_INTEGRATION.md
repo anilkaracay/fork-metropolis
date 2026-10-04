@@ -1,50 +1,29 @@
-# Nansen Integration Specification
+# Nansen Integration
 
-## Approved P0 role
+## Approved context and policy
 
-Nansen supplies permitted EXTERNAL wallet PnL/PnL Summary context in discovery/profile, never FORK-native reputation. No Address Labels, Smart Money labels/badges, prohibited datasets or prohibited derived redistribution.
+Checked 2026-10-04 against the [official redistribution guide](https://docs.nansen.ai/guides/redistribution-guide): PnL/PnL Summary is permitted. Address Labels, Smart Money/premium labels and prohibited derived redistribution are excluded. No raw upstream payload reaches clients. Attribution is retained near context even though permitted PnL redistribution does not require it.
 
-Sources checked 2026-10-04:
+Implemented server/context route/profile panel; authenticated Nansen calls have **not** run. Credential confirmation and live profile infrastructure are pending. Tests use explicit mock HTTP and real migrated PostgreSQL-compatible storage.
 
-- https://docs.nansen.ai/guides/redistribution-guide
-- https://docs.nansen.ai/api/profiler/address-pnl-and-trade-performance
-- https://docs.nansen.ai/getting-started/authentication
+## Endpoint and provenance
 
-Check current policy and endpoint schema for every exposed field. PnL/PnL Summary is explicitly allowed by the current redistribution table; this does not authorize prohibited labels or a Smart Money leaderboard.
+POST https://api.nansen.ai/api/v1/profiler/address/pnl-summary uses server-only apikey header and `{chain:"monad", wallet_address, date:{from,to}}`. Wallet comes from the persisted profile, not arbitrary caller host/body/address. Current [endpoint documentation](https://docs.nansen.ai/api/profiler/address-pnl-and-trade-performance) uses wallet_address; address is deprecated.
 
-## Server-only architecture
+Window: previous 30 complete UTC days. Nansen Monad history is **mainnet** context, separate from FORK Testnet reputation. Normalize only realized_pnl_usd, realized_pnl_percent (fraction), win_rate (fraction), traded_token_count and traded_times. Profile displays USD PnL, sales/token count and observation time. Strip unknown fields, including labels/token lists. Empty counts yield an empty summary rather than fabricated performance.
 
-Browser -> FORK /api/nansen/profile/:address -> cache -> Nansen API. Key only on server. Never proxy raw payloads.
+## Shared cache and budget
 
-Normalized context: address, chain, permitted realized-wallet-performance summary when available, observation window/sample if provided, fetchedAt, status available/empty/unavailable. No labels or smartMoney field. Do not invent an upstream value or substitute FORK Perpl outcomes.
+wallet_context_cache keys chain/wallet/window and stores normalized permitted summaries with a 30-second refresh lease. Atomic PostgreSQL advisory-lock reservations and daily buckets bound requests globally across users/instances. Success/empty cache: one hour. Error cache: five minutes. Same-window cached context is explicitly stale during outage. No key disables calls. DB failures, timeout, malformed responses and entitlement/upstream failures preserve Feed/Profile.
 
-## Product experience
+[Credit documentation](https://docs.nansen.ai/getting-started/credits) lists pnl-summary as 1 Pro / 10 Free credits. Conservatively reserve 10 per attempt, including failures; six-second timeout, zero automatic billed retries. Default FORK_NANSEN_DAILY_CREDIT_BUDGET=20 permits at most two uncached attempts/day globally. Set 0 to disable; verify plan before raising (maximum 1000). This limiter does not track actual provider consumption headers or other API users.
 
-Optional wallet-performance context can add a bounded positive adjustment to Smart Signal discovery. Keep FORK social momentum primary; document exact adjustment before P15 implementation. Missing data never receives a penalty. Deterministic social-only fallback with stable tie-breaking. Profile may show interpreted permitted performance context separately from graph reputation; no fake credibility badge.
+## Product and ranking
 
-Fresh Privy wallets may have no historical activity. An empty result is valid; no assumption of existing PnL. Use a legitimate participant wallet with history to demonstrate real behavior, never borrowed attribution.
+GET /api/profiles/:handle/context supplies a separate optional panel. Local test identities never call Nansen or display invented context. Missing context has no native reputation/discovery penalty.
 
-## Cache and credit policy
+Smart Signal retains D-031: unique external direct forkers in 24h, then 7d, then creation time/ID descending. No Nansen ranking weight. The approved contextual treatment preserves the social product; live discovery benefit remains unmeasured. No PnL, wallet size or profitability enters Originality, Contribution, Influence or Executions Inspired.
 
-- cache successful/empty summaries at least 1 hour; longer if appropriate to their observation window
-- short error cache and bounded retry policy to prevent storms
-- no fetch per feed card render; preload a bounded set of addresses
-- monitor plan entitlements/credit cost and implement a budget before broad refresh
-- return permitted stale context or null on 401/402/403/429/5xx; app remains functional
+## Evidence still required
 
-## Attribution
-
-Show Nansen attribution near interpreted context where policy requires; retain product attribution even for allowed fields. No claim that Nansen verifies FORK performance, execution or reputation.
-
-## Acceptance and bounty evidence
-
-- only permitted Monad PnL context is fetched/exposed
-- server key never enters bundle/logs
-- cache prevents repeated rendering calls
-- real context changes a meaningful discovery/profile experience
-- missing/empty/unavailable data has no penalty
-- outage preserves deterministic social-only Feed/Profile
-- no label/Smart Money badges or prohibited derived fields
-- no realized-PnL component in P0 reputation
-
-Phase 1 defines boundaries only: no Nansen network calls yet.
+Confirmed server key, real profile wallet and permitted successful response must demonstrate actual empty/history context, cache reuse and outage/entitlement recovery. Code/fixtures alone do not establish bounty readiness.

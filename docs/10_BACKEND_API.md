@@ -45,3 +45,7 @@ Persistent atomic database limits: draft 20/hour; finalization 60/minute; Agree 
 ## Test-only routes
 
 `test/identity`, `test/submit` and `test/reset` exist only for the explicit development test workspace on loopback, with same-origin browser access. Submitted synthetic confirmations pass through normal draft/finalization/composition code and actual Envio test handlers. Production rejects test configuration and returns 404 for test routes. Tests never grant production reputation credit.
+
+## Phase 3 readiness endpoints
+
+GET /api/health/database independently checks connectivity and all three committed migrations; 503 configuration/unavailable responses include recovery without driver/credential details. GET /api/profiles/:handle/context exposes only normalized permitted Nansen context for an existing persisted profile. It has a shared cache/global daily credit limit, fixed server-owned upstream, disabled/no-key mode and deterministic outage fallback. Local test identities cannot trigger Nansen requests. These endpoints do not grant independent execution verification.

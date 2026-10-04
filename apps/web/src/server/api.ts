@@ -5,6 +5,11 @@ import { authenticate, bearer, synchronizeIdentity } from "./auth";
 import { getRuntime, testMode } from "./runtime";
 import { AppError, assert, mapError } from "./errors";
 import { prepareReadOnlyRelay } from "./perpl-relay";
+import { databaseHealth } from "./database-health";
+import { nansenContext } from "./nansen";
+import { getServerEnv } from "../lib/env/server";
+import { schema as dbSchema } from "@fork/db";
+import { eq } from "drizzle-orm";
 async function body(request: Request): Promise<unknown> {
   assert(
     request.headers.get("content-type")?.startsWith("application/json"),
@@ -69,6 +74,8 @@ export async function handleApi(request: Request, path: string[]) {
       },
     );
   try {
+    if (route === "health/database" && method === "GET")
+      return reply(await databaseHealth());
     if (route.startsWith("test/")) {
       assert(
         testMode() && ["localhost", "127.0.0.1"].includes(url.hostname),
@@ -167,6 +174,43 @@ export async function handleApi(request: Request, path: string[]) {
               .parse(path[1]),
           ),
         );
+      if (
+        path[0] === "profiles" &&
+        path[2] === "context" &&
+        path.length === 3
+      ) {
+        const handle = z
+          .string()
+          .regex(/^[a-z0-9_]{3,24}$/)
+          .parse(path[1]);
+        const [user] = await core.db
+          .select()
+          .from(dbSchema.users)
+          .where(eq(dbSchema.users.handle, handle));
+        assert(
+          user?.primaryWallet,
+          "PROFILE_NOT_FOUND",
+          "This profile is not available.",
+          404,
+          "Return to Explore.",
+        );
+        if (runtime.test)
+          return reply(
+            await nansenContext(
+              core.db,
+              undefined,
+              0,
+            )(user.id, user.primaryWallet),
+          );
+        const env = getServerEnv();
+        return reply(
+          await nansenContext(
+            core.db,
+            env.NANSEN_API_KEY,
+            env.FORK_NANSEN_DAILY_CREDIT_BUDGET,
+          )(user.id, user.primaryWallet),
+        );
+      }
     }
     if (route === "session" && method === "POST") {
       const identity = await runtime.auth.verify(bearer(request));

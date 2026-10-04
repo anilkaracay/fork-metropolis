@@ -1,4 +1,4 @@
-name: Social core checks
+name: Social core and integration readiness checks
 on:
   push:
   pull_request:
@@ -26,3 +26,4 @@ jobs:
       - run: pnpm build
       - run: pnpm --filter @fork/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
+      - run: pnpm --filter @fork/web exec playwright test --config playwright.production.config.ts

@@ -61,3 +61,4 @@ For implementation, read in this order:
 
 - [31_PHASE1_FOUNDATION.md](31_PHASE1_FOUNDATION.md) — foundation evidence and scope
 - [32_PHASE2_SOCIAL_CORE.md](32_PHASE2_SOCIAL_CORE.md) — implemented social core, local run, trust boundaries, tests and review artifacts
+- [33_PHASE3_LIVE_INTEGRATION.md](33_PHASE3_LIVE_INTEGRATION.md) — live-integration preparation, public observations, pending human configuration and gate evidence

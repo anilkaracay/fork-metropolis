@@ -15,6 +15,13 @@
       "when": 1791128198102,
       "tag": "0001_immutable_social_identity",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791138883903,
+      "tag": "0002_windy_red_ghost",
+      "breakpoints": true
     }
   ]
 }

@@ -109,4 +109,8 @@ On macOS Playwright uses installed Google Chrome; on Linux install Chromium with
 
 See [Phase 2 implementation and boundaries](docs/32_PHASE2_SOCIAL_CORE.md), [decisions](docs/29_DECISIONS.md), and [review screenshots](docs/assets/phase2/). Phase 1 metadata/execution-reference vectors and contract evidence remain in [the foundation report](docs/31_PHASE1_FOUNDATION.md).
 
-Phase 2 stops here for review. Live credential setup, deployments, trading/enrollment/independent verification, Nansen calls and sponsor polish require the next authorization.
+## Phase 3 live integration (authorized, in progress)
+
+Database health, rollback-safe constraint smoke, strict production/staging browser smoke, Envio Cloud configuration compatibility, read-only contract proof recording and permitted server-only Nansen profile context are prepared. Only public Monad RPC/Perpl context were checked live. No authenticated deployment, real user transaction or trade has occurred; credential/account confirmation is pending.
+
+Use [deployment instructions](docs/23_DEPLOYMENT_ENV.md) for exact environment variables, migration/smoke commands and stable-Origin setup. Put secrets only in ignored apps/web/.env.local or the provider's server settings and confirm presence without sharing values. Never supply wallet or Perpl private keys. [Phase 3 gate ledger and evidence](docs/33_PHASE3_LIVE_INTEGRATION.md) distinguish local fixture checks from missing live proof. No Phase 4 work is started.

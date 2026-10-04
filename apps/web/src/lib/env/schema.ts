@@ -14,12 +14,21 @@ const serverSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
-  FORK_PHASE: z.enum(["foundation", "social-core"]).default("social-core"),
+  FORK_PHASE: z
+    .enum(["foundation", "social-core", "live-integration"])
+    .default("social-core"),
   DATABASE_URL: z
     .string()
     .regex(/^postgres(ql)?:\/\//)
     .optional(),
   PRIVY_APP_SECRET: z.string().min(1).optional(),
+  NANSEN_API_KEY: z.string().min(1).optional(),
+  FORK_NANSEN_DAILY_CREDIT_BUDGET: z.coerce
+    .number()
+    .int()
+    .min(0)
+    .max(1000)
+    .default(20),
   FORK_REGISTRY_ADDRESS: z
     .string()
     .regex(/^0x[0-9a-fA-F]{40}$/)

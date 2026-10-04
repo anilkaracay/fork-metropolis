@@ -9,6 +9,7 @@ import { useSession } from "./session";
 import { Avatar, EmptyState, ErrorState, Skeleton } from "./common";
 import { ThesisCard } from "./thesis-card";
 import { Icon } from "./icon";
+import { ExternalWalletContext } from "./wallet-context";
 export function MyProfile() {
   const auth = useSession(),
     router = useRouter();
@@ -142,6 +143,7 @@ export function ProfileScreen({ handle }: { handle: string }) {
           measures participation, not profitability or Sybil resistance.
         </p>
       </details>
+      <ExternalWalletContext handle={handle} />
       {isOwner && auth.wallets.length > 1 && (
         <label className="wallet-select">
           Primary wallet

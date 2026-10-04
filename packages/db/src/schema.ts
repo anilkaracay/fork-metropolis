@@ -309,3 +309,16 @@ export const rateBuckets = pgTable(
     index("rate_cleanup_idx").on(t.windowStart),
   ],
 );
+
+// Permitted external context only; this table never contributes to native reputation.
+export const walletContext = pgTable("wallet_context_cache", {
+  key: text("key").primaryKey(),
+  walletAddress: text("wallet_address")
+    .notNull()
+    .references(() => wallets.address),
+  value: jsonb("value").$type<Record<string, unknown>>(),
+  expiresAt: date("expires_at").notNull(),
+  leaseId: uuid("lease_id"),
+  leaseExpiresAt: date("lease_expires_at"),
+  ...audit(),
+});
