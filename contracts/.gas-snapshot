@@ -1,0 +1,3 @@
+FORKRegistryTest:testGasFork() (gas: 278881)
+FORKRegistryTest:testGasLinkExecution() (gas: 210774)
+FORKRegistryTest:testGasRoot() (gas: 149417)

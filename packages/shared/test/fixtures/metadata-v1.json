@@ -1,0 +1,29 @@
+[
+  {
+    "input": {
+      "reasoning": "  ETH breaks above resistance.  ",
+      "tags": [" Momentum ", "breakout", "BREAKOUT"]
+    },
+    "canonical": "{\"version\":1,\"reasoning\":\"ETH breaks above resistance.\",\"tags\":[\"breakout\",\"momentum\"],\"entryNote\":null}",
+    "contentHash": "0x8456f42c3ae0ad636ef78ba7194dddf572eba1d1fc8dd0f8f57d8488cb22e818"
+  },
+  {
+    "input": {
+      "version": 1,
+      "reasoning": "Monad fikri: katkı görünür.\nKeep  internal spaces.",
+      "tags": ["monad"],
+      "entryNote": "  Wait for a retest.  "
+    },
+    "canonical": "{\"version\":1,\"reasoning\":\"Monad fikri: katkı görünür.\\nKeep  internal spaces.\",\"tags\":[\"monad\"],\"entryNote\":\"Wait for a retest.\"}",
+    "contentHash": "0xdad661de7a99dbf9224d1b098c76e2fb2ff925a0a6edb6bcc0c8adbae0fef65b"
+  },
+  {
+    "input": {
+      "reasoning": "An idea with no tags.",
+      "tags": [],
+      "entryNote": "   "
+    },
+    "canonical": "{\"version\":1,\"reasoning\":\"An idea with no tags.\",\"tags\":[],\"entryNote\":null}",
+    "contentHash": "0x56837fbb3b8df9943b92d3ac0b3c65726f62fc2fbb20d81d142db30bda16323d"
+  }
+]

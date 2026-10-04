@@ -1,0 +1,33 @@
+{
+  "name": "fork",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": "24.21.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @fork/web dev",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit && pnpm -r typecheck",
+    "test": "vitest run && pnpm test:contracts",
+    "test:unit": "vitest run",
+    "test:contracts": "node scripts/forge.mjs test -vv",
+    "build": "pnpm --filter @fork/shared build && pnpm --filter @fork/web build && node scripts/forge.mjs build && pnpm abi:check",
+    "abi:export": "node scripts/export-abi.mjs",
+    "abi:check": "node scripts/export-abi.mjs --check",
+    "format": "prettier --write \"{apps,packages,indexer,scripts}/**/*.{ts,tsx,mts,mjs,json,css,yaml}\" \"*.{json,yaml,mjs}\" \".github/**/*.yml\" && node scripts/forge.mjs fmt",
+    "format:check": "prettier --check \"{apps,packages,indexer,scripts}/**/*.{ts,tsx,mts,mjs,json,css,yaml}\" \"*.{json,yaml,mjs}\" \".github/**/*.yml\" && node scripts/forge.mjs fmt --check",
+    "tools:install": "node scripts/install-foundry.mjs",
+    "perpl:context": "node --experimental-strip-types scripts/check-perpl-context.mts"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.8",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "vitest": "5.0.3"
+  }
+}

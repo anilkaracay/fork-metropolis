@@ -1,0 +1,17 @@
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+libs = []
+solc = "0.8.37"
+network = "monad"
+evm_version = "prague"
+optimizer = true
+optimizer_runs = 200
+deny = "warnings"
+
+[profile.default.fuzz]
+runs = 256
+
+[fmt]
+line_length = 100

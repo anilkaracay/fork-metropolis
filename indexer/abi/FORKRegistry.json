@@ -1,0 +1,292 @@
+[
+  {
+    "type": "function",
+    "name": "createThesis",
+    "inputs": [
+      {
+        "name": "parentId",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "marketId",
+        "type": "uint32",
+        "internalType": "uint32"
+      },
+      {
+        "name": "side",
+        "type": "uint8",
+        "internalType": "enum FORKRegistry.Side"
+      },
+      {
+        "name": "leverageBps",
+        "type": "uint32",
+        "internalType": "uint32"
+      },
+      {
+        "name": "targetPriceE8",
+        "type": "uint128",
+        "internalType": "uint128"
+      },
+      {
+        "name": "invalidationPriceE8",
+        "type": "uint128",
+        "internalType": "uint128"
+      },
+      {
+        "name": "contentHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "thesisId",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "executionRefs",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "linkExecution",
+    "inputs": [
+      {
+        "name": "thesisId",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "executionRef",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "nextThesisId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "theses",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "author",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "parentId",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "marketId",
+        "type": "uint32",
+        "internalType": "uint32"
+      },
+      {
+        "name": "side",
+        "type": "uint8",
+        "internalType": "enum FORKRegistry.Side"
+      },
+      {
+        "name": "leverageBps",
+        "type": "uint32",
+        "internalType": "uint32"
+      },
+      {
+        "name": "targetPriceE8",
+        "type": "uint128",
+        "internalType": "uint128"
+      },
+      {
+        "name": "invalidationPriceE8",
+        "type": "uint128",
+        "internalType": "uint128"
+      },
+      {
+        "name": "createdAt",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "contentHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "ExecutionLinked",
+    "inputs": [
+      {
+        "name": "thesisId",
+        "type": "uint64",
+        "indexed": true,
+        "internalType": "uint64"
+      },
+      {
+        "name": "author",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "executionRef",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ThesisCreated",
+    "inputs": [
+      {
+        "name": "thesisId",
+        "type": "uint64",
+        "indexed": true,
+        "internalType": "uint64"
+      },
+      {
+        "name": "author",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "parentId",
+        "type": "uint64",
+        "indexed": true,
+        "internalType": "uint64"
+      },
+      {
+        "name": "marketId",
+        "type": "uint32",
+        "indexed": false,
+        "internalType": "uint32"
+      },
+      {
+        "name": "side",
+        "type": "uint8",
+        "indexed": false,
+        "internalType": "enum FORKRegistry.Side"
+      },
+      {
+        "name": "leverageBps",
+        "type": "uint32",
+        "indexed": false,
+        "internalType": "uint32"
+      },
+      {
+        "name": "targetPriceE8",
+        "type": "uint128",
+        "indexed": false,
+        "internalType": "uint128"
+      },
+      {
+        "name": "invalidationPriceE8",
+        "type": "uint128",
+        "indexed": false,
+        "internalType": "uint128"
+      },
+      {
+        "name": "contentHash",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "createdAt",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "EmptyContentHash",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "EmptyExecutionRef",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ExecutionAlreadyLinked",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidLeverage",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidMarket",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidPrice",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotThesisAuthor",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ThesisNotFound",
+    "inputs": []
+  }
+]

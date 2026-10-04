@@ -1,0 +1,121 @@
+Phase 1 file inventory
+Existing docs/14_PRIVY_INTEGRATION.md and docs/27_ROADMAP.md were preserved.
+Generated build outputs, dependencies and local tools are excluded.
+
+root (22 files)
+created: .env.example
+created: .github/workflows/ci.yml
+created: .gitignore
+created: .node-version
+created: .prettierignore
+created: .prettierrc.json
+modified: AGENTS.md
+modified: README.md
+created: artifacts/phase1/desktop.jpg
+created: artifacts/phase1/files.txt
+created: artifacts/phase1/mobile.jpg
+created: eslint.config.mjs
+created: package.json
+created: pnpm-lock.yaml
+created: pnpm-workspace.yaml
+created: scripts/check-perpl-context.mts
+created: scripts/export-abi.mjs
+created: scripts/forge.mjs
+created: scripts/install-foundry.mjs
+created: tsconfig.base.json
+created: tsconfig.json
+created: vitest.config.ts
+
+web (24 files)
+created: apps/web/.env.example
+created: apps/web/components.json
+created: apps/web/next.config.ts
+created: apps/web/package.json
+created: apps/web/postcss.config.mjs
+created: apps/web/src/app/error.tsx
+created: apps/web/src/app/explore/page.tsx
+created: apps/web/src/app/feed/page.tsx
+created: apps/web/src/app/global-error.tsx
+created: apps/web/src/app/globals.css
+created: apps/web/src/app/layout.tsx
+created: apps/web/src/app/new/page.tsx
+created: apps/web/src/app/not-found.tsx
+created: apps/web/src/app/page.tsx
+created: apps/web/src/app/u/me/page.tsx
+created: apps/web/src/components/app-shell.tsx
+created: apps/web/src/components/foundation-screen.tsx
+created: apps/web/src/components/ui/button.tsx
+created: apps/web/src/lib/env/client.ts
+created: apps/web/src/lib/env/schema.ts
+created: apps/web/src/lib/env/server.ts
+created: apps/web/src/lib/utils.ts
+created: apps/web/tests/env.test.ts
+created: apps/web/tsconfig.json
+
+shared (19 files)
+created: packages/shared/package.json
+created: packages/shared/src/abi/FORKRegistry.json
+created: packages/shared/src/chains.ts
+created: packages/shared/src/content-hash.ts
+created: packages/shared/src/execution-ref.ts
+created: packages/shared/src/fixed-point.ts
+created: packages/shared/src/index.ts
+created: packages/shared/src/namespace.ts
+created: packages/shared/src/perpl-context.ts
+created: packages/shared/src/registry.ts
+created: packages/shared/src/thesis.ts
+created: packages/shared/test/execution-ref.test.ts
+created: packages/shared/test/fixtures/execution-v1.json
+created: packages/shared/test/fixtures/metadata-v1.json
+created: packages/shared/test/fixtures/perpl-context-2026-10-04.json
+created: packages/shared/test/metadata.test.ts
+created: packages/shared/test/perpl-context.test.ts
+created: packages/shared/test/thesis.test.ts
+created: packages/shared/tsconfig.json
+
+contracts (6 files)
+created: contracts/.gas-snapshot
+created: contracts/foundry.toml
+created: contracts/package.json
+created: contracts/src/FORKRegistry.sol
+created: contracts/test/ExecutionReference.t.sol
+created: contracts/test/FORKRegistry.t.sol
+
+indexer (5 files)
+created: indexer/README.md
+created: indexer/abi/FORKRegistry.json
+created: indexer/package.json
+created: indexer/tsconfig.json
+created: indexer/types.d.ts
+
+docs (30 files)
+modified: docs/00_INDEX.md
+modified: docs/01_PRODUCT_BRIEF.md
+modified: docs/02_PRD.md
+modified: docs/03_TRACK3_AND_BOUNTY_STRATEGY.md
+modified: docs/04_USER_FLOWS.md
+modified: docs/05_INFORMATION_ARCHITECTURE.md
+modified: docs/06_DESIGN_SYSTEM.md
+modified: docs/07_TECH_ARCHITECTURE.md
+modified: docs/08_SMART_CONTRACT_SPEC.md
+modified: docs/09_DATA_MODEL.md
+modified: docs/10_BACKEND_API.md
+modified: docs/11_FRONTEND_SPEC.md
+modified: docs/12_ENVIO_INDEXER.md
+modified: docs/13_PERPL_INTEGRATION.md
+modified: docs/15_NANSEN_INTEGRATION.md
+modified: docs/16_SECURITY_THREAT_MODEL.md
+modified: docs/17_TESTING_QA.md
+modified: docs/18_OBSERVABILITY_RUNBOOK.md
+modified: docs/19_ANALYTICS_METRICS.md
+modified: docs/20_3_DAY_EXECUTION_PLAN.md
+modified: docs/21_CODEX_TASKS.md
+modified: docs/22_ACCEPTANCE_CRITERIA.md
+modified: docs/23_DEPLOYMENT_ENV.md
+modified: docs/24_DEMO_SUBMISSION.md
+modified: docs/25_LAUNCH_TRACTION.md
+modified: docs/26_RISK_REGISTER.md
+modified: docs/28_RESEARCH_SOURCES.md
+modified: docs/29_DECISIONS.md
+modified: docs/30_DEFINITION_OF_DONE.md
+created: docs/31_PHASE1_FOUNDATION.md
