@@ -1,6 +1,6 @@
 # Phase 3 — Live Integration and Proof
 
-Status: **in progress; blocked on human configuration, not live-complete**. No Phase 4 work, automation, order, deployment or credentialed provider call was performed. Only Monad public RPC and Perpl public context are genuinely live observations. Test fixtures are not live integration evidence.
+Status: **in progress; blocked on human configuration, not live-complete**. No Phase 4 work, automation, order, product deployment or authenticated Privy/Neon/Envio/Perpl/Nansen product flow was performed. Only Monad public RPC and Perpl public context are genuinely live product observations. Test fixtures are not live integration evidence.
 
 ## Phase 3B — guided live unblock
 
@@ -10,14 +10,14 @@ Current step: **1 — repository and stable staging origin**. Do not proceed to 
 | --- | --- |
 | Local branch/checkpoint | main, aaeaa0739f2a09f2e48bd58fa64a59816de15cb4; clean at entry. |
 | GitHub authentication | GitHub CLI active account anilkaracay; network-enabled auth check succeeded. |
-| Remote repository | No remote. Proposed anilkaracay/fork-metropolis does not exist in the checked account. |
-| Proposed publication | Public repository anilkaracay/fork-metropolis; target and public recommendation announced before attempted creation. |
-| Creation/push | Not performed. Automatic approval review rejected the exact creation/push action pending explicit approval for public destination and visibility. |
-| Vercel | CLI absent; no root/web .vercel/project.json or vercel.json. Official npm registry identifies CLI 62.2.0; not installed yet. |
+| Remote repository | origin points to https://github.com/anilkaracay/fork-metropolis.git; repository created under anilkaracay and verified PRIVATE. |
+| Visibility instruction | User explicitly approved private anilkaracay/fork-metropolis after the original public proposal was blocked. Any later public visibility change is reserved to the user. |
+| Creation/push | Complete: initial pushed main checkpoint a70352090f0cbddbfd416223bba4248828e88b1c matches local HEAD at verification. Subsequent ledger updates are pushed on main. No public publication occurred. |
+| Vercel | CLI 62.2.0 installed in ignored .tools/vercel-cli without changing app dependencies. Non-interactive whoami returned Logged out. No project linked. .vercel/ is ignored to protect future local provider state. |
 | Deployment configuration | Next.js monorepo apps/web, pinned Node 24.21.0/pnpm 12.6.0, Webpack; existing env examples inspected. No provider secrets configured. |
 | Stable staging hostname | Not established; no project linked. |
 
-Next single human action: explicitly approve creating **public anilkaracay/fork-metropolis** and pushing the current main branch. This publishes code/history. No external mutation occurred because the execution was rejected before starting. After approval, resume that exact action, then inspect Vercel authentication/linking; do not move to Step 2 yet.
+Next single human action: run `.tools/vercel-cli/node_modules/.bin/vercel login` from /Users/anil/Desktop/fork-metropolis-spec, complete Vercel login/CLI authorization in the intended account, then confirm completion without sharing a token. After confirmation, verify the session and resume stable project linking/deployment. Do not use the CLI's temporary-deployment alternative; do not proceed to Step 2 yet.
 
 ## Baseline
 
@@ -89,7 +89,7 @@ Sandbox initially denied local browser server port bindings; reruns with authori
 ## Human actions and continuation
 
 1. Put development DATABASE_URL, NEXT_PUBLIC_PRIVY_APP_ID and PRIVY_APP_SECRET into apps/web/.env.local from Neon Connect and the Privy app dashboard; confirm presence only. Do not paste values.
-2. Supply chosen stable HTTPS staging hostname and make intended Vercel/Envio accounts available; select the GitHub repository for Cloud deployment. No repository remote/project exists yet.
+2. Complete the current Vercel CLI login, then establish a stable HTTPS project hostname. GitHub origin now exists as private anilkaracay/fork-metropolis; Envio authorization remains a later sequential step.
 3. Supply public funded Monad Testnet deployer address and wallet type. Keep signing/private key local; obtain gas MON from Monad Testnet faucet.
 4. After stable hostname exists, request exact Origin whitelisting/test collateral funding from Perpl via official Discord, giving public wallet/chain 10143/instance 12/exchange. Ask funding method for current AUSD contract; no secret or signature in support messages.
 5. At Gate 12 put NANSEN_API_KEY into apps/web/.env.local from Nansen agent setup and confirm presence only. Verify plan/credit entitlement before expanding the default budget.
