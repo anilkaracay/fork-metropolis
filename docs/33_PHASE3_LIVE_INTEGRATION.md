@@ -2,6 +2,23 @@
 
 Status: **in progress; blocked on human configuration, not live-complete**. No Phase 4 work, automation, order, deployment or credentialed provider call was performed. Only Monad public RPC and Perpl public context are genuinely live observations. Test fixtures are not live integration evidence.
 
+## Phase 3B — guided live unblock
+
+Current step: **1 — repository and stable staging origin**. Do not proceed to Neon until this step is complete. Prior quality checks remain valid and were not repeated.
+
+| Step 1 requirement | Observed state |
+| --- | --- |
+| Local branch/checkpoint | main, aaeaa0739f2a09f2e48bd58fa64a59816de15cb4; clean at entry. |
+| GitHub authentication | GitHub CLI active account anilkaracay; network-enabled auth check succeeded. |
+| Remote repository | No remote. Proposed anilkaracay/fork-metropolis does not exist in the checked account. |
+| Proposed publication | Public repository anilkaracay/fork-metropolis; target and public recommendation announced before attempted creation. |
+| Creation/push | Not performed. Automatic approval review rejected the exact creation/push action pending explicit approval for public destination and visibility. |
+| Vercel | CLI absent; no root/web .vercel/project.json or vercel.json. Official npm registry identifies CLI 62.2.0; not installed yet. |
+| Deployment configuration | Next.js monorepo apps/web, pinned Node 24.21.0/pnpm 12.6.0, Webpack; existing env examples inspected. No provider secrets configured. |
+| Stable staging hostname | Not established; no project linked. |
+
+Next single human action: explicitly approve creating **public anilkaracay/fork-metropolis** and pushing the current main branch. This publishes code/history. No external mutation occurred because the execution was rejected before starting. After approval, resume that exact action, then inspect Vercel authentication/linking; do not move to Step 2 yet.
+
 ## Baseline
 
 Clean approved commit e87fc8256d2693bc2bb07d4d0cf50a47ef4b28af. All seven Phase 2 screenshots existed. Fresh baseline format/lint/typecheck/test/ABI/build passed: 157 root tests, 12 Envio tests, 28 Foundry tests and five browser journeys. Local production feed returned 200, test identity route 404 and unconfigured feed API actionable 503. Subsequent final validation is below.
