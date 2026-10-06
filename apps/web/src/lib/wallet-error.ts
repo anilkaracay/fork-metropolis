@@ -1,6 +1,9 @@
 import { ApiError } from "./api-client";
 /** A missing hash is an uncertain wallet result, never permission to auto-resend. */
-export function walletError(error: unknown): ApiError {
+export function walletError(
+  error: unknown,
+  operation: "transaction" | "signature" = "transaction",
+): ApiError {
   if (error instanceof ApiError) return error;
   let current = error;
   const seen = new Set<unknown>();
@@ -12,7 +15,7 @@ export function walletError(error: unknown): ApiError {
       return new ApiError(
         "WALLET_REJECTED",
         "The wallet request was declined.",
-        "Approve the request when you are ready to publish.",
+        "Approve the wallet request when you are ready.",
         409,
       );
     if (typeof e.message === "string") message += ` ${e.message}`;
@@ -31,6 +34,13 @@ export function walletError(error: unknown): ApiError {
       "The wallet is not on Monad Testnet.",
       "Switch to Monad Testnet and retry the wallet request.",
       409,
+    );
+  if (operation === "signature")
+    return new ApiError(
+      "SIGNATURE_UNAVAILABLE",
+      "The wallet signature could not be completed.",
+      "Retry the signature request from your signed-in account.",
+      503,
     );
   return new ApiError(
     "WALLET_RESULT_UNCERTAIN",

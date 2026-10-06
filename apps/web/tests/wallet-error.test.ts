@@ -2,6 +2,16 @@ import { describe, expect, it } from "vitest";
 import { walletError } from "../src/lib/wallet-error";
 import { ApiError } from "../src/lib/api-client";
 describe("wallet recovery mapping", () => {
+  it("redacts signature errors and gives signature-specific recovery", () => {
+    const error = walletError(
+      new Error("private provider detail"),
+      "signature",
+    );
+    expect(error.code).toBe("SIGNATURE_UNAVAILABLE");
+    expect(error.recovery).toContain("signature");
+    expect(error.message).not.toContain("private provider detail");
+    expect(error.recovery).not.toContain("transaction hash");
+  });
   it("preserves existing structured errors", () => {
     const e = new ApiError(
       "WRONG_WALLET",

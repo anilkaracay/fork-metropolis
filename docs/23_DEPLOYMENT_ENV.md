@@ -69,7 +69,7 @@ Measure receipt-confirmed time to first matching scoped GraphQL visibility. Pres
 
 ## Local development and later self-hosting
 
-Vercel is removed from the critical path. GitHub origin is private anilkaracay/fork-metropolis; the user will make it public before submission. No Vercel login/project/deployment is required. Use http://localhost:3000 now. Privy localhost support and exact settings must be verified at its live gate; no support assumption is made here.
+Vercel is removed from the critical path. GitHub origin is private anilkaracay/fork-metropolis; the user will make it public before submission. No Vercel login/project/deployment is required. Use http://localhost:3000 now. Privy's current official documentation supports this exact localhost origin including its port; verified settings and the pending credential handoff are in [Privy evidence](evidence/phase3/PRIVY.md).
 
 Final architecture: HTTPS domain → reverse proxy → standard Node.js Next.js application → standard PostgreSQL and existing Envio/Monad/Privy/Nansen/Perpl services. Docker plus Caddy/Nginx may be prepared later, without deploying the user's server. No Edge-only API, proprietary hosting feature, Redis, queue or Kubernetes is required. Self-host readiness will add/verify root pnpm start alongside pnpm build; this new readiness check has not run yet. Existing web start is standard next start, and the local production runner has passed prior smoke.
 

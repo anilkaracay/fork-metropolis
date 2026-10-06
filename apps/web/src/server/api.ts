@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { fetchPerplPublicContext, uint64IdSchema } from "@fork/shared";
 import { authenticate, bearer, synchronizeIdentity } from "./auth";
-import { getRuntime, testMode } from "./runtime";
+import { getRuntime, getIdentityRuntime, testMode } from "./runtime";
 import { AppError, assert, mapError } from "./errors";
 import { prepareReadOnlyRelay } from "./perpl-relay";
 import { databaseHealth } from "./database-health";
@@ -145,6 +145,23 @@ export async function handleApi(request: Request, path: string[]) {
       }
       return reply(await fetchPerplPublicContext());
     }
+    if (route === "session" && (method === "POST" || method === "GET")) {
+      const token = bearer(request);
+      const account = await getIdentityRuntime();
+      let session;
+      if (method === "POST") {
+        const identity = await account.auth.verify(token);
+        const v = z
+          .object({ wallet: z.string().optional() })
+          .strict()
+          .parse(await body(request));
+        session = await synchronizeIdentity(account.db, identity, v.wallet);
+      } else {
+        session = await authenticate(account.db, account.auth, request);
+      }
+      return reply({ session, isAdmin: account.adminDids.has(session.did) });
+    }
+    if (method !== "GET") bearer(request);
     const runtime = await getRuntime(),
       core = runtime.core;
     if (method === "GET") {
@@ -212,18 +229,7 @@ export async function handleApi(request: Request, path: string[]) {
         );
       }
     }
-    if (route === "session" && method === "POST") {
-      const identity = await runtime.auth.verify(bearer(request));
-      const v = z
-        .object({ wallet: z.string() })
-        .strict()
-        .parse(await body(request));
-      const session = await synchronizeIdentity(core.db, identity, v.wallet);
-      return reply({ session, isAdmin: core.adminDids.has(session.did) });
-    }
     const session = await authenticate(core.db, runtime.auth, request);
-    if (route === "session" && method === "GET")
-      return reply({ session, isAdmin: core.adminDids.has(session.did) });
     if (route === "profile" && method === "POST")
       return reply(await core.updateProfile(session, await body(request)));
     if (route === "theses/draft" && method === "POST")

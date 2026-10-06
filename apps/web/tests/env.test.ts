@@ -1,5 +1,7 @@
-import { describe, expect, it } from "vitest";
-import { parseClientEnv, parseServerEnv } from "../src/lib/env/schema";
+import { describe, expect, it, vi } from "vitest";
+import { parseClientEnv } from "../src/lib/env/schema";
+import { parseServerEnv } from "../src/lib/env/server-schema";
+vi.mock("server-only", () => ({}));
 
 describe("environment boundaries", () => {
   it("boots social core without any secret", () => {

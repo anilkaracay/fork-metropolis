@@ -211,6 +211,41 @@ describe("auth trust boundary", () => {
       code: "CONFIGURATION_REQUIRED",
     });
   });
+  it("chooses deterministically and requires explicit recovery when a primary is unlinked", async () => {
+    const identity: VerifiedIdentity = {
+      did: "did:test:deterministic",
+      wallets: [
+        { address: `0x${"77".repeat(20)}`, kind: "external" },
+        { address: `0x${"66".repeat(20)}`, kind: "embedded" },
+        { address: `0x${"55".repeat(20)}`, kind: "embedded" },
+      ],
+    };
+    const first = await synchronizeIdentity(connection.db, identity);
+    expect(first.wallet).toBe(identity.wallets[2]!.address);
+    expect(
+      (
+        await synchronizeIdentity(connection.db, {
+          ...identity,
+          wallets: [...identity.wallets].reverse(),
+        })
+      ).wallet,
+    ).toBe(first.wallet);
+    const external = identity.wallets[0]!.address;
+    await synchronizeIdentity(connection.db, identity, external);
+    expect((await synchronizeIdentity(connection.db, identity)).wallet).toBe(
+      external,
+    );
+    const unlinked = { ...identity, wallets: identity.wallets.slice(1) };
+    await expect(
+      synchronizeIdentity(connection.db, unlinked),
+    ).rejects.toMatchObject({ code: "WRONG_WALLET" });
+    expect((await synchronizeIdentity(connection.db, identity)).wallet).toBe(
+      external,
+    );
+    expect(
+      (await synchronizeIdentity(connection.db, unlinked, first.wallet)).wallet,
+    ).toBe(first.wallet);
+  });
 });
 describe("publish and fork finalization", () => {
   it("distinguishes confirmed/indexing from Published and finalizes idempotently", async () => {

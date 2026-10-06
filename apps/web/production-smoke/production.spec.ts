@@ -26,6 +26,7 @@ test("production public screens and mobile layout never expose the test workspac
 test("all test mutations are unavailable and unauthenticated publication cannot succeed", async ({
   request,
 }) => {
+  expect((await request.get("/dev/privy")).status()).toBe(404);
   for (const endpoint of ["identity", "submit", "reset"]) {
     const r = await request.post(`/api/test/${endpoint}`, {
       data: { name: "alice" },

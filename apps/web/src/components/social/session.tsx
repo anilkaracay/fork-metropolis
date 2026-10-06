@@ -31,6 +31,7 @@ export type SessionValue = {
   selectWallet: (address: string) => Promise<void>;
   submit: (intent: PublishIntent, draftId: string) => Promise<Hex>;
   signTypedData: (data: TypedDataDefinition) => Promise<Hex>;
+  sendSelfTransaction: () => Promise<Hex>;
 };
 export const SessionContext = createContext<SessionValue | null>(null);
 export const useSession = () => {
@@ -42,7 +43,7 @@ const RealSession = dynamic(() => import("./privy-session"), {
   ssr: false,
   loading: () => (
     <div className="state-box" role="status">
-      Preparing wallet sign-in…
+      Preparing sign-in…
     </div>
   ),
 });
@@ -189,6 +190,14 @@ function LocalSession({
         "TEST_SIGNING_UNAVAILABLE",
         "Typed-data signing requires a real wallet.",
         "Use the configured Privy wallet in the next integration phase.",
+        409,
+      );
+    },
+    sendSelfTransaction: async () => {
+      throw new ApiError(
+        "REAL_WALLET_REQUIRED",
+        "A real signed-in wallet is required.",
+        "Sign in with Privy in the development environment.",
         409,
       );
     },

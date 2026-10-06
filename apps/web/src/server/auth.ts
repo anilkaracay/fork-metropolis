@@ -91,8 +91,11 @@ export async function synchronizeIdentity(
       identity,
       selection ??
         user.primaryWallet ??
-        identity.wallets.find((w) => w.kind === "embedded")?.address ??
-        identity.wallets[0]!.address,
+        [...identity.wallets].sort(
+          (a, b) =>
+            (a.kind === b.kind ? 0 : a.kind === "embedded" ? -1 : 1) ||
+            a.address.toLowerCase().localeCompare(b.address.toLowerCase()),
+        )[0]!.address,
     );
     if (user.primaryWallet !== selected)
       await tx

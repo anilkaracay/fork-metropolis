@@ -9,3 +9,7 @@ No real server credentials were configured/confirmed. This scan does not prove a
 ## Local PostgreSQL change
 
 The generated local development credential files are gitignored and mode 0600. Exact-value checks found neither DATABASE_URL nor its password in Git changes or any of 201 production browser files. Redacted Gitleaks stdin scans of changed tracked content and the new Compose/setup script found no leaks. The standard PostgreSQL driver replaced the Neon SDK, and the unused optional SDK is absent from the application dependency graph. No credential value is stored in this evidence.
+
+## Privy local preparation — 2026-10-06
+
+Moved server environment validation out of the browser-imported shared schema into a server-only module. The new production build's 203 browser static files contain neither PRIVY_APP_SECRET nor the configured database URL/password. Privy secret value scanning remains pending because the credential is missing. Changed/new source passes exact local credential checks and redacted Gitleaks stdin scanning. Environment inspection reports presence only; credential files remain ignored and were not changed. Real tokens, wallet signatures and email are not present in evidence. Credentialed browser/build checks must be repeated after configuration; this preflight does not establish live authentication security.

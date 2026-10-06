@@ -4,12 +4,12 @@ Status: **local PostgreSQL gate passed; overall Phase 3 remains in progress**. N
 
 ## Phase 3B — automate-first live unblock
 
-Current step: **local provider-agnostic PostgreSQL complete; stop for user review before Privy**. Repository creation and main push are complete. The user superseded Vercel/stable-staging prerequisites: no Vercel login/project/deployment, no server deployment now. The driver change was validated with relevant unit/type/lint/format/build checks and actual local development/production database health; unrelated integrations were not repeated.
+Current step: **local PostgreSQL reviewed and approved; Privy localhost preparation complete, pending dashboard credentials**. Repository creation and main push are complete. The user superseded Vercel/stable-staging prerequisites: no Vercel login/project/deployment, no server deployment now. The user authorized the Privy gate and explicitly requires a concise dashboard handoff if official app bootstrap cannot be automated. No actual Privy login/wallet/signature proof exists yet; registry deployment remains unauthorized.
 
 | Requirement | Observed state |
 | --- | --- |
 | Repository | Private anilkaracay/fork-metropolis; origin/main previously pushed and verified; this database change is a local review checkpoint. Public visibility remains a later user action. |
-| Development origin | http://localhost:3000; provider localhost support must be verified before configuring origins. |
+| Development origin | http://localhost:3000; Privy's current official allowed-URLs documentation explicitly supports localhost with a port. |
 | Hosting plan | Later self-hosted standard Node.js, optional simple Docker container and reverse proxy under the user's final HTTPS domain. No deployment now. |
 | Superseded Vercel work | Removed from critical path. CLI remains only in ignored local tools; no Vercel project or application dependency exists. No further Vercel login request. |
 | Database plan | D-039 supersedes Neon. Local Docker Compose PostgreSQL now; standard PostgreSQL on the user's server/another host later. No Neon API/project/SDK dependency or browser approval is required. |
@@ -22,7 +22,7 @@ Current step: **local provider-agnostic PostgreSQL complete; stop for user revie
 
 Updated order: local PostgreSQL → verified Privy localhost configuration → Monad Testnet registry → Envio Cloud → real two-user localhost journey → authenticated Nansen → self-host production readiness → independent Perpl public/readiness work, then stop. No Phase 4.
 
-User authorized automate-first setup. Official Docker/PostgreSQL/Drizzle/node-postgres/pnpm documentation was checked before changes. Standard TCP node-postgres replaces the Neon WebSocket adapter; unchanged Drizzle SQL migrations work with any compatible PostgreSQL host through DATABASE_URL. No Neon authentication or project creation continues. Stop after database validation and wait for review; next recommended integration is Privy localhost setup through current official tooling.
+User authorized automate-first setup. Official Docker/PostgreSQL/Drizzle/node-postgres/pnpm documentation was checked before database changes. Standard TCP node-postgres replaces the Neon WebSocket adapter; unchanged Drizzle SQL migrations work with any compatible PostgreSQL host through DATABASE_URL. No Neon authentication or project creation continues. Database review is complete; the current authorized integration is Privy localhost only, through current official tooling.
 
 ## Baseline
 
@@ -34,7 +34,7 @@ Clean approved commit e87fc8256d2693bc2bb07d4d0cf50a47ef4b28af. All seven Phase 
 | --- | --- | --- |
 | 0 Baseline | Passed | Clean reviewed commit, full fresh checks, seven screenshots, production test-route rejection. |
 | 1 PostgreSQL | Passed locally | Healthy Compose PostgreSQL 17.11; ignored mode-0600 DATABASE_URL; three unchanged migrations, nine tables, actual HTTP health 200, ten rollback-only live assertions, zero retained fixtures. Production database is deferred. |
-| 2 Privy | Blocked | Real app ID/server secret/domain setup unconfirmed; no actual login/wallet/token/signature. Existing adapter/security tests pass with fixtures. |
+| 2 Privy | Prepared / blocked | Both app ID/server secret MISSING. Current official setup requires dashboard bootstrap; installed SDK app settings are read-only. Local independent session bootstrap, explicit persisted primary, EVM-only provider and opt-in real signing proof prepared. No actual login/wallet/token/signature; isolated SDK JWT/database tests are not live proof. |
 | 3 Monad registry | Prepared / blocked | Public chain 10143 verified; reviewed compiled source/settings/ABI agree; 28 Foundry tests pass. Public funded human deployer not supplied. Read-only artifact recorder ready; no artifact/transaction created. |
 | 4 Envio Cloud | Prepared / blocked | ENVIO_ custom variables fixed; standalone pnpm 10.32.0 install/typecheck/12 tests pass. Requires GitHub/Cloud access and actual contract address/start block. |
 | 5 Production readiness | Revised / pending | Existing local production smoke passed 3/3. Standard root build/start and optional Docker self-host readiness will be verified at the revised later step; no server deployment. |
@@ -74,6 +74,8 @@ The build retains the two existing upstream SDK warnings; Foundry's sandbox sign
 
 ## Phase 3 validation (baseline plus current database checks)
 
+Privy localhost preflight (2026-10-06): local account bootstrap is independent of registry/Envio, primary selection is persisted and explicit, and real signing checks are prepared outside product navigation. Fresh format/lint/typecheck/full test/build checks pass: 188 root unit / 12 indexer / 28 contract tests. Fresh production browser smoke passes 3/3, including the new development proof page's production 404. Browser scan of 203 static files and changed-source credential/Gitleaks checks pass; the missing Privy credential prevents a value scan or any real auth/signing evidence. The earlier counts below remain the approved database baseline. [Current Privy preflight evidence](evidence/phase3/PRIVY.md).
+
 | Check | Result |
 | --- | --- |
 | pnpm format:check | Passed |
@@ -100,8 +102,8 @@ Sandbox initially denied local browser server port bindings; reruns with authori
 
 ## Human actions and continuation
 
-1. Review the completed local PostgreSQL result; no database login or manual configuration action is required. Stop before Privy.
-2. After the user reviews the local PostgreSQL result, automate Privy setup through verified official tooling for localhost development support. GitHub is already private/pushed; server and final domain setup are deferred.
+1. Current next action: configure the Privy development app's Email/Google, user-controlled embedded Ethereum wallet and exact localhost origin, and populate ignored local app credentials. Exact dashboard pages/options are recorded in [Privy evidence](evidence/phase3/PRIVY.md). No secret in chat. After user confirmation, verify real login, wallet persistence, authoritative token/DID/wallet ownership, typed-data signing, PostgreSQL sync and security; stop for review.
+2. GitHub is already private/pushed; server and final domain setup are deferred. Contract/Envio/Nansen/Perpl work waits until the relevant gate is authorized after review.
 3. Supply public funded Monad Testnet deployer address and wallet type. Keep signing/private key local; obtain gas MON from Monad Testnet faucet.
 4. After stable hostname exists, request exact Origin whitelisting/test collateral funding from Perpl via official Discord, giving public wallet/chain 10143/instance 12/exchange. Ask funding method for current AUSD contract; no secret or signature in support messages.
 5. At Gate 12 use official tooling to retrieve/configure NANSEN_API_KEY securely where supported; request browser approval only if unavoidable. Verify plan/credit entitlement before expanding the default budget.
