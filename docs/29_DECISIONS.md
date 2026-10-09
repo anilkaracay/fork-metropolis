@@ -404,9 +404,11 @@ D-044 completion: after explicit user funding confirmation, official RPC verifie
 
 ## D-045 - Official Envio Cloud CLI and explicit deployment control
 
-Status: Selected workflow within the user-approved real Envio Cloud gate; authenticated, GitHub App repository approval pending
+Status: Accepted and completed within the user-approved real Envio Cloud gate; actual Cloud deployment and empty application proof pass
 Date: 2026-10-09
 
 Current official Envio documentation provides the separate envio-cloud CLI for browser login, indexer/repository management, ENVIO_ environment configuration and commit-based deployment. Use pinned local tooling 1.0.0 under ignored .tools rather than requiring manual dashboard configuration or upgrading HyperIndex 3.12.1. Preserve standalone pnpm 10.32.0/Node 24 compatibility. Browser login approval and any unavoidable GitHub App authorization remain human actions; never ask for pasted tokens.
 
 Use the canonical Monad deployment artifact to derive the real public registry/start-block variables. Prefer one development-tier public-event indexer, a dedicated envio branch and explicit commit deployment with auto-deploy disabled to avoid creating new indexer versions for unrelated documentation/web pushes. Confirm actual account settings before creation. Cloud indexers have provider-managed HyperSync access; do not generate an unnecessary HyperSync API token. Keep Cloud account credentials out of web environment, browser and git. No paid plan, billing change or thesis publication is authorized. Sources, preflight and pending live checks are in [Envio evidence](evidence/phase3/ENVIO.md).
+
+D-045 completion: user-approved OAuth and repository-only GitHub App installation succeeded. One public development EU deployment is active/synced, version d98ed3a, with canonical chain/registry/start block and provider-managed HyperSync access. The initial pre-creation push registered no commit; a later evidence push registered the branch, then explicit deployment succeeded. Preserve the existing handler/config/schema and public GraphQL reader; actual generated types match. Prepare read-only two-second receipt/visibility polling, report an honest upper bound including late starts, and do not publish until review. Evidence and full checks are in the completed Envio report.

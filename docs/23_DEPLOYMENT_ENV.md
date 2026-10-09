@@ -1,6 +1,6 @@
 # Deployment and Environment
 
-Phase 3 is authorized; local PostgreSQL, the Google-based Privy gate and the real Monad Testnet registry are complete. Envio Cloud, authenticated Nansen/Perpl flows and production hosting remain pending their gates. Use local PostgreSQL for development, Monad Testnet and Perpl Testnet. Production later uses standard PostgreSQL on the user's server or another PostgreSQL host. Development uses http://localhost:3000. Verify official provider support before configuring localhost. Final hosting will use the user's server and stable HTTPS domain; no server deployment is authorized yet. Perpl enrollment waits for that final approved Origin.
+Phase 3 is authorized; local PostgreSQL, the Google-based Privy gate and the real Monad Testnet registry are complete. Envio Cloud is deployed and its genuine empty application baseline passes; real publishing, authenticated Nansen/Perpl flows and production hosting remain pending their gates. Use local PostgreSQL for development, Monad Testnet and Perpl Testnet. Production later uses standard PostgreSQL on the user's server or another PostgreSQL host. Development uses http://localhost:3000. Verify official provider support before configuring localhost. Final hosting will use the user's server and stable HTTPS domain; no server deployment is authorized yet. Perpl enrollment waits for that final approved Origin.
 
 ## Credentials and implemented variables
 
@@ -52,20 +52,21 @@ After successful direct deployment:
 node scripts/registry-proof.mjs REAL_DEPLOYMENT_TX_HASH REVIEWED_FULL_GIT_COMMIT
 ```
 
-This read-only tool checks reviewed source/config, compiled source hash/settings/ABI, chain, transaction, canonical receipt/block and exact creation/runtime bytecode before exclusively writing contracts/deployments/10143.json. It never signs/broadcasts or overwrites existing evidence. Explorer verification is initially not-attempted; update only after actual verification. The real canonical artifact now records successful official Sourcify exact_match verification, and FORK_REGISTRY_ADDRESS is configured in ignored server-side .env.local. Do not rerun deployment; the current gate stops before Envio review.
+This read-only tool checks reviewed source/config, compiled source hash/settings/ABI, chain, transaction, canonical receipt/block and exact creation/runtime bytecode before exclusively writing contracts/deployments/10143.json. It never signs/broadcasts or overwrites existing evidence. Explorer verification is initially not-attempted; update only after actual verification. The real canonical artifact now records successful official Sourcify exact_match verification, and FORK_REGISTRY_ADDRESS is configured in ignored server-side .env.local. Do not rerun deployment; Envio now consumes this canonical artifact.
 
 ## Envio Cloud
 
-Follow the [hosted deployment guide](https://docs.envio.dev/docs/HyperIndex/hosted-service-deployment). Connect the intended GitHub repository, choose indexer as project root, config.yaml and the reviewed branch. Custom Cloud variables require ENVIO_ prefix:
+Use the [official Cloud CLI](https://docs.envio.dev/docs/HyperIndex/envio-cloud-cli), installed locally under ignored .tools/envio-cloud-cli. The user-approved repository App is restricted to anilkaracay/fork-metropolis. One development indexer fork-social-indexer runs deployment d98ed3a, dedicated branch envio, root indexer, config.yaml and auto-deploy=false. Avoid unrelated pushes triggering reindexes or unnecessary versions. The real deployment uses canonical ENVIO_FORK_REGISTRY_ADDRESS / ENVIO_FORK_START_BLOCK derived from contracts/deployments/10143.json; never deploy config.test.yaml.
 
-```text
-ENVIO_FORK_REGISTRY_ADDRESS=REAL_DEPLOYED_ADDRESS
-ENVIO_FORK_START_BLOCK=REAL_DEPLOYMENT_BLOCK
+Cloud uses Node 24/pnpm 10.32.0. Standalone frozen install, typecheck and 12 handler tests pass; web retains pnpm 12.6.0. Cloud manages its own HyperSync credentials. No separately generated token is required. Official deployment endpoint discovery returned https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql, securely configured as server-only FORK_ENVIO_URL in ignored mode-0600 .env.local. It is public development GraphQL, requires no account token and is not a promoted static production endpoint. Future private-tier authentication needs reviewed server-only headers; never send an account login credential as endpoint authorization.
+
+[Actual Cloud proof](evidence/phase3/ENVIO.md) records exact chain/address/start block, sync metadata, schema and empty real application reads. Future read-only observation, only after real publication is approved:
+
+```sh
+pnpm indexer:latency REAL_THESIS_TRANSACTION_HASH
 ```
 
-Cloud documents Node 24/pnpm 10.32.0. The standalone frozen lockfile, typecheck and 12 handler tests pass with that version; web retains pnpm 12.6.0. Never deploy config.test.yaml. Set FORK_ENVIO_URL to the actual GraphQL endpoint. The current reader expects a public endpoint; private-tier authentication needs a reviewed server-only header configuration before use.
-
-Measure receipt-confirmed time to first matching scoped GraphQL visibility. Preserve Confirmed / indexing until queryable. Record actual root/fork/link transactions. Handler simulations do not satisfy live proof.
+This verifies the canonical successful creation receipt/event and matching scoped GraphQL row, then reports block timestamp, first observed visibility and a polling/late-start upper bound. No signature/broadcast and no invented latency. Preserve Confirmed / indexing until queryable; fixtures do not prove actual event ingestion.
 
 ## Local development and later self-hosting
 
@@ -78,6 +79,14 @@ Local production smoke after build:
 ```sh
 env -u NO_COLOR pnpm --filter @fork/web exec playwright test --config playwright.production.config.ts
 ```
+
+For the real empty Cloud gate, strict smoke requires an existing actual profile handle (no thesis is published):
+
+```sh
+FORK_SMOKE_EMPTY=1 FORK_SMOKE_PROFILE_HANDLE=REAL_PROFILE_HANDLE pnpm --filter @fork/web exec playwright test --config playwright.production.config.ts
+```
+
+The current four production tests pass in that mode, including zero-data Feed/Explore/Profile API and screen assertions. Empty mode cannot be combined with a thesis/live-publication smoke.
 
 Strict live smoke can target the local production Node server after a real indexed thesis exists:
 

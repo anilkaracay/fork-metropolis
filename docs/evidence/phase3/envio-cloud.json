@@ -1,0 +1,134 @@
+{
+  "observedAt": "2026-10-09T13:06:49.189Z",
+  "organization": "anilkaracay",
+  "indexerName": "fork-social-indexer",
+  "deploymentCommit": "d98ed3a138f46fe7937830bc6bb0c63000c342a8",
+  "chainId": 10143,
+  "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+  "startBlock": "69535255",
+  "settings": {
+    "branch": "envio",
+    "config_file": "config.yaml",
+    "root_dir": "indexer",
+    "auto_deploy": false,
+    "description": "fork-social-indexer",
+    "access_type": "public",
+    "tier": "development",
+    "repository": "fork-metropolis"
+  },
+  "endpoint": "https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql",
+  "httpStatus": 200,
+  "syncStatus": [
+    {
+      "has_processed_to_end_block": false,
+      "chain_id": 10143,
+      "start_block": 69535255,
+      "end_block": 0,
+      "block_height": 69547051,
+      "latest_processed_block": 69547051,
+      "num_events_processed": 0,
+      "first_event_block_number": 0,
+      "is_hyper_sync": true,
+      "num_batches_fetched": 0,
+      "latest_fetched_block_number": 69547051,
+      "timestamp_caught_up_to_head_or_endblock": "2026-10-09T13:02:15.984+00:00"
+    }
+  ],
+  "graphqlBaseline": {
+    "_meta": [
+      {
+        "chainId": 10143,
+        "startBlock": 69535255,
+        "progressBlock": 69547051,
+        "sourceBlock": 69547051,
+        "isReady": true,
+        "eventsProcessed": 0,
+        "readyAt": "2026-10-09T13:02:15.984+00:00"
+      }
+    ],
+    "Thesis": [],
+    "ForkEdge": [],
+    "AuthorStats": [],
+    "MarketStats": [],
+    "ExecutionLink": [],
+    "ThesisExternalForker": [],
+    "AuthorExternalForker": []
+  },
+  "initialCounts": {
+    "Thesis": 0,
+    "ForkEdge": 0,
+    "AuthorStats": 0,
+    "MarketStats": 0,
+    "ExecutionLink": 0,
+    "ThesisExternalForker": 0,
+    "AuthorExternalForker": 0
+  },
+  "countMethod": "Global limit:1 queries returned empty arrays: exact zero, not inferred from a truncated nonempty page.",
+  "schema": {
+    "namespaceFields": true,
+    "Thesis_bool_exp": true,
+    "limitOffsetOrderBy": true,
+    "AuthorStats_by_pk": true,
+    "bigIntScalar": "numeric"
+  },
+  "auth": "public development endpoint, no authorization header",
+  "latency": "Not measured: no thesis has been published.",
+  "validation": {
+    "validatedAt": "2026-10-09T13:15:29.148Z",
+    "format": "passed",
+    "lint": "passed, zero warnings",
+    "typecheck": "passed",
+    "rootTests": {
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0
+    },
+    "handlerTests": {
+      "passed": 12,
+      "failed": 0
+    },
+    "contractTests": {
+      "passed": 28,
+      "failed": 0,
+      "fuzzCases": 3,
+      "runsPerFuzzCase": 256
+    },
+    "abi": "passed",
+    "build": "passed with the two existing upstream SDK warnings",
+    "standalone": {
+      "pnpm": "10.32.0",
+      "frozenInstall": "passed",
+      "codegen": "passed",
+      "typecheck": "passed",
+      "handlerTestsPassed": 12
+    },
+    "productionSmoke": {
+      "passed": 4,
+      "failed": 0,
+      "mode": "FORK_SMOKE_EMPTY=1, actual Cloud endpoint, actual existing profile, no thesis"
+    },
+    "latency": "prepared, eight isolated regression cases; real observation not measured"
+  },
+  "security": {
+    "observedAt": "2026-10-09T13:09:25.510Z",
+    "nonIgnoredFiles": 227,
+    "browserFiles": 203,
+    "exactCredentialLeaks": 0,
+    "serverSecretNamesInBrowser": 0,
+    "serverEndpointInBrowser": 0,
+    "envMode": "600",
+    "cloudAuthMode": "600",
+    "cloudAuthDirectoryMode": "700",
+    "fixtureModePresent": false,
+    "nansenConfigured": false,
+    "finalSourceScanAt": "2026-10-09T13:15:29.155Z",
+    "finalNonIgnoredFiles": 231,
+    "finalExactCredentialLeaks": 0,
+    "gitleaksSourceFindings": 0,
+    "gitleaksHistoryFindings": 0,
+    "apiKeyProtection": false,
+    "ipWhitelist": false,
+    "handlerOffchainIdentityIngest": false,
+    "scope": "Exact configured credentials and redacted scanner rules over inspected source/history/browser files."
+  }
+}

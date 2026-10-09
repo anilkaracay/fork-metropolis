@@ -1,41 +1,76 @@
-# Envio — Cloud gate / deployment pending
+# Envio — real Cloud deployment and empty application baseline
 
-Status: IN PROGRESS / GitHub App installation approved. One public development Cloud indexer exists; deployment and live GraphQL proof are pending. No event fixture or real thesis was submitted.
+Status: READY for the user-approved Cloud gate, observed 2026-10-09. One actual development deployment is active and synced. This proves Cloud availability and the real empty FORK read model; first-event ingestion, root/fork lineage, live reorg behavior and indexing delay remain unmeasured until the next approved gate. No thesis, execution link or simulated event was submitted.
+
+## Cloud deployment
+
+- Organisation/indexer: anilkaracay / fork-social-indexer; development tier, EU region shown in the official dashboard.
+- GitHub repository: private anilkaracay/fork-metropolis; only this repository was selected for the user-approved GitHub App installation.
+- Deployment commit: d98ed3a138f46fe7937830bc6bb0c63000c342a8; dedicated envio branch, root indexer, config.yaml, auto-deploy disabled.
+- HyperIndex 3.12.1; official Cloud CLI 1.0.0 is separate, pinned under ignored .tools. No application dependency upgrade.
+- Canonical target: chain 10143, registry 0x1889a7216b1ecad9a44910dd0996834d0894b9e1, inclusive start block 69535255, derived from [deployment artifact](../../../contracts/deployments/10143.json).
+- GraphQL: https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql. Discovered through official deployment endpoint CLI, not a guessed hostname. This is a public development deployment endpoint, not a promoted production endpoint.
+- Build succeeded in 33.17 seconds; runtime error/warning query returned no entries. CLI and GraphQL _meta independently report HyperSync, correct chain/start block and caught-up head. Live baseline at 13:06:49Z: progress/source block 69547051, isReady=true, zero processed events. Dashboard shows Active / Synced 100%.
+
+[Public machine-readable Cloud proof](envio-cloud.json). [Dashboard proof](envio-cloud-live.png).
+
+The initial envio branch push preceded indexer creation; it registered no commits. Official deploy rejected that unregistered commit without creating a deployment. Pushing the subsequent evidence commit through the configured GitHub integration registered it as inactive; one explicit deployment then succeeded. No second indexer or unnecessary deployment was created. Local evidence/measurement commits after this deployment do not alter the running indexer; its config/schema/ABI/handlers are unchanged.
 
 ## Current official requirements checked on 2026-10-09
 
-- [Envio Cloud deployment](https://docs.envio.dev/docs/HyperIndex/hosted-service-deployment): supported HyperIndex version, Node 24+, pnpm 10.32.0, GitHub deployment branch, monorepo root indexer, local imports and ENVIO_-prefixed custom variables.
-- [Official Cloud CLI](https://docs.envio.dev/docs/HyperIndex/envio-cloud-cli): browser login, repository/indexer/environment management, explicit commit deployment, status/logs and endpoint discovery. This is separate from the HyperIndex envio executable.
-- [Supported chains](https://docs.envio.dev/docs/HyperIndex/supported-networks): Monad Testnet 10143 has https://10143.hypersync.xyz.
-- [Config reference](https://docs.envio.dev/docs/HyperIndex/configuration-file): precise numeric start_block is supported; short-form official RPC is valid.
-- [Cloud HyperSync access](https://docs.envio.dev/docs/HyperSync/api-tokens): Cloud indexers have their own HyperSync access and do not require a separately generated API token. Local HyperSync access does.
-- [GraphQL behavior](https://docs.envio.dev/docs/HyperIndex/navigating-hasura): hosted aggregate endpoints are not exposed; the existing reader uses stored handler aggregates, not runtime aggregate queries.
-- [Cloud endpoint/security](https://docs.envio.dev/docs/HyperIndex/hosted-service-features): endpoint access depends on actual configured public/private policy; optional paid-tier API-key auth is separate from Cloud account authentication.
+- [Cloud deployment](https://docs.envio.dev/docs/HyperIndex/hosted-service-deployment): supported HyperIndex versions, Node 24+, pnpm 10.32.0, monorepo root/config/branch, self-contained imports and ENVIO_-prefixed custom variables.
+- [Official Cloud CLI](https://docs.envio.dev/docs/HyperIndex/envio-cloud-cli): browser login, repos, indexer settings/env, explicit commit deployment, logs/status, actual endpoint and security inspection.
+- [Supported networks](https://docs.envio.dev/docs/HyperIndex/supported-networks): Monad Testnet 10143 HyperSync support; actual deployment confirms this source.
+- [Configuration](https://docs.envio.dev/docs/HyperIndex/configuration-file): precise inclusive numeric start_block and official RPC fallback. Codegen-only zero sentinel is overridden by the actual Cloud environment.
+- [HyperSync credentials](https://docs.envio.dev/docs/HyperSync/api-tokens): Cloud has provider-managed access; no separate local HyperSync token was generated.
+- [Hosted GraphQL](https://docs.envio.dev/docs/HyperIndex/navigating-hasura): aggregate endpoints are not exposed. Use stored handler counters. [Endpoint/security features](https://docs.envio.dev/docs/HyperIndex/hosted-service-features) distinguish account credentials from optional endpoint access controls.
 
-## Tools and local quality
+The user completed GitHub OAuth and scoped GitHub App approvals. The official CLI securely used the existing authenticated GitHub CLI session; account API access was checked, not inferred from exit code. Cloud CLI login/token may exit zero while printing authentication failures. Credentials remain outside the repository in a mode-0600 file under mode-0700 ~/.envio-cloud; no token value is recorded here. No billing or paid plan was changed.
 
-Installed official envio-cloud npm package 1.0.0 into ignored .tools/envio-cloud-cli, leaving project dependencies untouched. Binary reports commit 2bea4b5550f31b3ad3ed427636fde637f9736310, built 2026-08-13. npm initially withheld its postinstall; inspected the published script (platform-binary presence check only) and ran that check locally. No shell profile or global package install was needed.
+## Live GraphQL and application
 
-No existing ~/.envio-cloud directory or Envio process credential was present. The Cloud token status command was captured without exposing output and confirmed missing authentication. Use official browser login, not pasted credentials. GitHub CLI status in the sandbox initially did not validate. The actual network-enabled Cloud login then detected the existing authenticated GitHub CLI account anilkaracay, but reported that no Envio account existed and required the first Envio browser sign-in. Both login and token status can exit 0 while authentication is absent; success must be checked through actual credentials/account API access, not exit code alone. No Cloud credential was stored. Opened the official Envio login and initiated GitHub login; the current page awaits the user's Authorize action for Envio Deployments. The consent screen shows identity/resource access and email read permission. The approval itself was not clicked.
+Unauthenticated HTTPS POST returned HTTP 200 without GraphQL errors. Introspection confirms all expected entities, namespace fields, numeric BigInt scalars, Thesis_bool_exp, limit/offset/order_by and AuthorStats_by_pk(id: String!). Existing application queries work unchanged; no Cloud compatibility patch to handlers/schema/read client was required.
 
-HyperIndex remains exactly 3.12.1. All indexer package dependencies are exact versions; its independent lockfile and strict TypeScript config are unchanged. Schema/ABI/config/handlers are contained inside indexer, with no import escaping that directory. Only ThesisCreated and ExecutionLinked are configured; forks derive from parentId. No fake ThesisForked event or offchain identity ingest exists.
+Global limit:1 queries returned empty arrays for Thesis, ForkEdge, AuthorStats, MarketStats, ExecutionLink, ThesisExternalForker and AuthorExternalForker. Empty global first pages establish exact zero counts, not a truncated count estimate. No _aggregate query, fixture or synthetic live event was used.
 
-A fresh isolated copy outside the monorepo passed frozen installation using pnpm 10.32.0, schema/codegen/typecheck and 12 real-handler simulations. pnpm reported a withheld esbuild postinstall; install, codegen, typecheck and tests still passed. Root/fork/multi-level depth, namespace isolation, external/repeated wallet uniqueness, self-fork exclusion, author/market counters, maximum uint32 values and execution links without verified credit remain covered. These simulations are local tests, not live Cloud evidence.
+Server-only FORK_ENVIO_URL is securely configured in ignored mode-0600 apps/web/.env.local; Next's installed @next/env loads the expected value. Database/Privy/registry settings are preserved. FORK_TEST_MODE is absent. Actual application HTTP reads pass for database health, all three Feed modes, Explore and the existing real account profile. Profile recent activity is empty; all raw reputation counters are zero, Originality/Contribution are Emerging and no verified execution credit exists. [Public application proof](envio-application.json).
 
-Official codegen also passed with config.yaml and canonical real registry/start-block variables. envio config view exited successfully but returned only version/storage fields in this installed version; it did not itself prove Cloud network selection. pnpm abi:check passes; the indexer ABI file SHA-256 matches the real deployment artifact.
+The fresh local production build passed strict opt-in empty-index Playwright proof: Feed “The first idea starts with you.”, Explore “A conversation waiting to start.” and Profile “The next idea is unwritten.”. No test-workspace controls or fixture cards appear. [Feed](envio-empty-feed.png), [Explore](envio-empty-explore.png), [Profile](envio-empty-profile.png). Nansen credentials are absent; profile context remains disabled and no authenticated Nansen flow was run.
 
-## Canonical deployment target and next steps
+## Next-gate latency preparation
 
-Source: [contracts/deployments/10143.json](../../../contracts/deployments/10143.json). Chain 10143, registry 0x1889a7216b1ecad9a44910dd0996834d0894b9e1, inclusive start block 69535255. Prepared only these public ENVIO_ variables in an ignored local env file, derived from that artifact. config.yaml retains its codegen-only zero sentinel fallback; the actual Cloud environment must supply the real values.
+Run pnpm indexer:latency REAL_THESIS_TRANSACTION_HASH immediately once the next approved transaction is submitted. This read-only tool loads local server configuration, verifies actual Monad chain, successful canonical receipt and exactly one ThesisCreated event from the canonical registry, then polls the scoped live Thesis. It requires matching transaction, thesis, author, content hash, block hash/number and creation time before reporting visibility. It cannot sign, broadcast or write an event.
 
-After authentication, inspect linked repos and existing indexers before creating anything. Prefer one development-tier, public-event-only fork-social-indexer using root indexer, config.yaml, a dedicated envio deployment branch and explicit commit deployment with auto-deploy disabled. Resolve the actual public/private GraphQL policy and endpoint from the provider; do not guess a hostname or add an account token to the application. Existing graph reader will use server-only FORK_ENVIO_URL after actual deployment.
+Output records canonical receipt block timestamp, measurement start, first observed GraphQL visibility, two-second polling interval and block-to-observed-visibility upper bound. Polling/network delay and late starts are explicitly included; this is not internal ingest latency. A three-minute timeout or mismatch fails without producing a fake observation. Eight isolated regression cases cover pending receipts, delayed visibility, namespace/transaction/content/block mismatches, timeout, duplicates and future clock timestamps. No real latency has been measured, because this gate publishes nothing.
 
-Pending live proof: deployment/sync metadata, healthy real GraphQL/schema/pagination, empty entity results and empty Feed/Explore/Profile behavior with no fixture fallback. Next-gate receipt-to-visibility instrumentation remains to be checked/prepared; no latency has been measured. Full postdeployment quality/security checks remain pending Cloud deployment.
+## Quality and security
 
-The user completed the GitHub login authorization. The official CLI login then created a mode-0600 credential file; authenticated indexer list API access succeeded with zero existing indexers. Linked the personal anilkaracay organisation through the official Link Organisation UI; organisation-scoped CLI access now succeeds. No Cloud secrets were printed or added to the application.
+| Check | Result |
+| --- | --- |
+| pnpm format:check / lint / strict typecheck | PASS; zero lint warnings |
+| pnpm test | 202 root + 12 handler + 28 Foundry tests passed; zero failed/skipped, three 256-run fuzz cases |
+| pnpm abi:check | PASS; deployed artifact ABI SHA-256 matches indexer/shared copies |
+| pnpm build | PASS; existing optional Privy Farcaster and ox Tempo worker warnings remain visible |
+| Standalone Cloud-runtime frozen install / codegen / typecheck / tests | PASS using pnpm 10.32.0; 12/12 handler cases, no dependency changes |
+| Cloud build / actual sync / live GraphQL baseline | PASS; real HyperSync source, correct namespace/start block, HTTP 200, all seven entities empty |
+| Production Playwright | 4/4 passed against the fresh local production server and actual Cloud endpoint, including strict empty-index proof |
+| Exact credential checks | PASS in 227 non-ignored files and 203 browser static files at scan time |
+| Redacted Gitleaks current source / reachable history | Zero findings |
 
-The organisation currently has zero linked repositories. Opened the official Connect Repository GitHub App flow, selected the personal anilkaracay account, changed All repositories to Only select repositories and selected only anilkaracay/fork-metropolis. The Install button is awaiting human approval. Current requested installation permissions are read access to administration, code, commit statuses, metadata and pull requests; email read is an individually authorized user permission. No installation was submitted and no paid plan changed.
+No Envio account token, PostgreSQL URL/password or Privy server secret appears in inspected source/evidence or browser files. Server secret variable names and the server-only GraphQL endpoint are absent from browser bundles. .env.local and .tools remain ignored/untracked. Actual endpoint security reports API-key protection disabled and no IP whitelist on the public development tier; the application sends no provider account token. Public blockchain data contains no email, Privy DID, session token or wallet private key. Handlers have no external/offchain identity ingest or secret logging. Scans are bounded to inspected files and rules, not a guarantee about uninspected future content. [Security scope](SECRET_SCAN.md).
 
-Stop now for this single GitHub App installation approval. After Cloud completion, stop again for review before real thesis publishing, the two-user journey, Nansen or Perpl. This preflight is not bounty-ready.
+Foundry's sandbox signature-cache write warning does not affect the passing tests/build; the two known SDK build warnings are unchanged. Standalone pnpm withholds esbuild postinstall by default; install/codegen/typecheck/tests and actual Cloud build all passed without a bypass.
 
-The user completed the scoped GitHub App installation. Official CLI access confirms the linked repository and exactly one indexer, anilkaracay/fork-social-indexer. Settings are development tier, public access, branch envio, root indexer, config.yaml and auto_deploy=false; both canonical public environment values match the deployment artifact. The branch was pushed before indexer creation, so the provider has no registered commits and rejected that initial explicit deployment without creating a deployment. Push this evidence commit after creation to register the configured branch through the official GitHub integration, then deploy explicitly.
+## Files in this completion checkpoint
+
+- Code/tooling: scripts/measure-indexing.mjs, scripts/measure-indexing.test.mjs, package.json, vitest.config.ts.
+- Production smoke: apps/web/playwright.production.config.ts, apps/web/production-smoke/production.spec.ts.
+- Documentation: indexer/README.md, docs/12_ENVIO_INDEXER.md, docs/23_DEPLOYMENT_ENV.md, docs/29_DECISIONS.md, docs/33_PHASE3_LIVE_INTEGRATION.md, docs/evidence/phase3/ENVIO.md, docs/evidence/phase3/SECRET_SCAN.md.
+- Public evidence: docs/evidence/phase3/envio-cloud.json, envio-application.json, envio-cloud-live.png, envio-empty-feed.png, envio-empty-explore.png, envio-empty-profile.png (all six in docs/evidence/phase3).
+- Local only, untracked: apps/web/.env.local and ignored .tools Cloud/preflight state; credential file outside the repository. No indexer runtime/config/schema/ABI/lockfile or Solidity change.
+
+The final exact-value scan after saving all images also passes across 231 non-ignored files; its timestamp and zero findings are recorded in envio-cloud.json.
+
+## Stop / next review
+
+No human action is required for this completed gate. Stop before publishing. Next recommended integration, only after user review: real user A publishes the first root → measure real receipt-to-visibility observation → genuinely distinct user B forks it → Idea Tree and exact profile participation update. Funding/signatures will require the real users when that gate is authorized. No Nansen setup, Perpl enrollment/order, P1 feature, production hosting or Phase 4 work was started.

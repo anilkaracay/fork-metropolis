@@ -27,6 +27,7 @@
     "db:generate": "pnpm --filter @fork/db generate",
     "db:migrate": "pnpm --filter @fork/db migrate",
     "indexer:codegen": "pnpm --filter @fork/indexer codegen",
+    "indexer:latency": "node scripts/measure-indexing.mjs",
     "test:dev": "node scripts/test-dev.mjs",
     "db:up": "node scripts/local-db.mjs",
     "db:down": "docker compose down",

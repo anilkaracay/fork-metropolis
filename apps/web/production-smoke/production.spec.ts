@@ -1,5 +1,62 @@
 import { expect, test } from "@playwright/test";
 
+test("real empty index serves Feed, Explore and zero-activity Profile", async ({
+  request,
+  page,
+}) => {
+  test.skip(
+    process.env.FORK_SMOKE_EMPTY !== "1",
+    "Opt-in real Cloud baseline only.",
+  );
+  const health = await request.get("/api/health/database");
+  expect(health.status()).toBe(200);
+  expect((await health.json()).ok).toBe(true);
+  for (const mode of ["fresh", "most-forked", "smart-signal"]) {
+    const response = await request.get(`/api/feed?mode=${mode}`);
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.ok).toBe(true);
+    expect(body.data.items).toEqual([]);
+    expect(body.data.nextOffset).toBeNull();
+    expect(body.data.bounded).toBe(false);
+  }
+  const explore = await request.get("/api/explore");
+  expect(explore.status()).toBe(200);
+  const discovery = await explore.json();
+  expect(discovery.ok).toBe(true);
+  expect(discovery.data.items).toEqual([]);
+  expect(discovery.data.topics).toEqual([]);
+  const handle = process.env.FORK_SMOKE_PROFILE_HANDLE!;
+  const profile = await request.get(`/api/profiles/${handle}`);
+  expect(profile.status()).toBe(200);
+  const body = await profile.json();
+  expect(body.ok).toBe(true);
+  expect(body.data.recent).toEqual([]);
+  for (const field of [
+    "eligibleRoots",
+    "successfulRoots",
+    "eligibleForks",
+    "successfulForks",
+    "influence",
+    "executionsInspired",
+  ])
+    expect(body.data.reputation[field]).toBe(0);
+  expect(body.data.scope.chainId).toBe(10143);
+  for (const [path, title] of [
+    ["/feed", "The first idea starts with you."],
+    ["/explore", "A conversation waiting to start."],
+    [`/u/${handle}`, "The next idea is unwritten."],
+  ]) {
+    await page.goto(path!);
+    await expect(
+      page.getByRole("heading", { name: title!, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Local test workspace · simulated confirmations"),
+    ).toHaveCount(0);
+  }
+});
+
 test("production public screens and mobile layout never expose the test workspace", async ({
   page,
 }) => {

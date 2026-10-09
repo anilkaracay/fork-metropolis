@@ -1,0 +1,86 @@
+{
+  "observedAt": "2026-10-09T13:07:45.619Z",
+  "origin": "http://127.0.0.1:3000",
+  "mode": "real development runtime, FORK_TEST_MODE absent",
+  "reads": [
+    {
+      "route": "health/database",
+      "status": 200,
+      "data": {
+        "database": "ready",
+        "migrations": "applied"
+      }
+    },
+    {
+      "route": "feed?mode=fresh",
+      "status": 200,
+      "data": {
+        "items": [],
+        "nextOffset": null,
+        "bounded": false,
+        "ranking": "Latest published ideas"
+      }
+    },
+    {
+      "route": "feed?mode=most-forked",
+      "status": 200,
+      "data": {
+        "items": [],
+        "nextOffset": null,
+        "bounded": false,
+        "ranking": "Unique external direct forkers in 24h, then 7d, then newest. Smart Signal uses this social-only baseline."
+      }
+    },
+    {
+      "route": "feed?mode=smart-signal",
+      "status": 200,
+      "data": {
+        "items": [],
+        "nextOffset": null,
+        "bounded": false,
+        "ranking": "Unique external direct forkers in 24h, then 7d, then newest. Smart Signal uses this social-only baseline."
+      }
+    },
+    {
+      "route": "explore",
+      "status": 200,
+      "data": {
+        "items": [],
+        "scope": "Latest 500 indexed ideas; counts below describe this bounded discovery window.",
+        "topics": []
+      }
+    },
+    {
+      "route": "profiles/u_4dcde4749ffd",
+      "status": 200,
+      "data": {
+        "recent": [],
+        "reputation": {
+          "eligibleRoots": 0,
+          "successfulRoots": 0,
+          "eligibleForks": 0,
+          "successfulForks": 0,
+          "influence": 0,
+          "executionsInspired": 0,
+          "originality": {
+            "label": "Emerging",
+            "successful": 0,
+            "eligible": 0,
+            "percentage": null
+          },
+          "contribution": {
+            "label": "Emerging",
+            "successful": 0,
+            "eligible": 0,
+            "percentage": null
+          }
+        },
+        "scope": {
+          "chainId": 10143,
+          "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+          "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4"
+        }
+      }
+    }
+  ]
+}

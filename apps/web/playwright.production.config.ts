@@ -24,6 +24,14 @@ if (
   throw new Error(
     "Live staging smoke requires FORK_SMOKE_THESIS_ID for a real indexed thesis.",
   );
+if (process.env.FORK_SMOKE_EMPTY === "1") {
+  if (process.env.FORK_SMOKE_LIVE === "1" || process.env.FORK_SMOKE_THESIS_ID)
+    throw new Error("Empty-index smoke cannot use an existing thesis.");
+  if (!/^[a-z0-9_]{3,24}$/.test(process.env.FORK_SMOKE_PROFILE_HANDLE ?? ""))
+    throw new Error(
+      "Empty-index smoke requires an existing real profile handle.",
+    );
+}
 
 export default defineConfig({
   testDir: "./production-smoke",

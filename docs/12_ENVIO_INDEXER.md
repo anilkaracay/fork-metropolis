@@ -1,6 +1,6 @@
 # Envio Indexer
 
-Phase 2 implements a self-contained HyperIndex **3.12.1** project in `indexer/`. Its handlers import only `envio`; its ABI, config and schema stay inside that directory. No deployment or live event ingestion has occurred.
+Phase 2 implements a self-contained HyperIndex **3.12.1** project in `indexer/`. Its handlers import only `envio`; its ABI, config and schema stay inside that directory. An actual Cloud deployment is now active and synced against the canonical Monad Testnet registry. The genuine empty GraphQL/application baseline passes; live thesis/fork event ingestion remains pending the next user-approved gate.
 
 Current V3 conventions use `indexer.onEvent` in autodiscovered `src/handlers/`, generated `.envio` types and `createTestIndexer()` simulations. These replace older generated-module handler registration examples. See D-028 and the [official handler documentation](https://docs.envio.dev/docs/HyperIndex/event-handlers), [testing documentation](https://docs.envio.dev/docs/HyperIndex/testing) and [configuration reference](https://docs.envio.dev/docs/HyperIndex/configuration-file).
 
@@ -42,4 +42,4 @@ The production reader scopes GraphQL queries by chain/registry, validates scalar
 
 Standalone installation from this directory uses `pnpm --ignore-workspace install --frozen-lockfile` and the committed local lockfile; no workspace-only imports or inherited TypeScript config are required.
 
-The real Cloud GraphQL endpoint and deployed registry will be checked in the next authorized integration phase.
+The real public development Cloud endpoint, namespace, generated schema and empty Feed/Explore/Profile reads are proven in [Envio evidence](evidence/phase3/ENVIO.md). No handler/config/schema change was needed. The read-only `pnpm indexer:latency REAL_THESIS_TRANSACTION_HASH` tool is ready for the next gate; no real delay is claimed before an actual thesis exists.
