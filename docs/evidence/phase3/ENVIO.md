@@ -1,6 +1,6 @@
-# Envio — Cloud gate preflight / repository approval pending
+# Envio — Cloud gate / deployment pending
 
-Status: BLOCKED / GitHub App repository installation approval required. The user approved the real Envio Cloud gate after the verified Monad deployment. No Cloud indexer/deployment/GraphQL endpoint has been created. No event fixture or real thesis was submitted.
+Status: IN PROGRESS / GitHub App installation approved. One public development Cloud indexer exists; deployment and live GraphQL proof are pending. No event fixture or real thesis was submitted.
 
 ## Current official requirements checked on 2026-10-09
 
@@ -37,3 +37,5 @@ The user completed the GitHub login authorization. The official CLI login then c
 The organisation currently has zero linked repositories. Opened the official Connect Repository GitHub App flow, selected the personal anilkaracay account, changed All repositories to Only select repositories and selected only anilkaracay/fork-metropolis. The Install button is awaiting human approval. Current requested installation permissions are read access to administration, code, commit statuses, metadata and pull requests; email read is an individually authorized user permission. No installation was submitted and no paid plan changed.
 
 Stop now for this single GitHub App installation approval. After Cloud completion, stop again for review before real thesis publishing, the two-user journey, Nansen or Perpl. This preflight is not bounty-ready.
+
+The user completed the scoped GitHub App installation. Official CLI access confirms the linked repository and exactly one indexer, anilkaracay/fork-social-indexer. Settings are development tier, public access, branch envio, root indexer, config.yaml and auto_deploy=false; both canonical public environment values match the deployment artifact. The branch was pushed before indexer creation, so the provider has no registered commits and rejected that initial explicit deployment without creating a deployment. Push this evidence commit after creation to register the configured branch through the official GitHub integration, then deploy explicitly.
