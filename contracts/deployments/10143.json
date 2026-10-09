@@ -1,0 +1,29 @@
+{
+  "chainId": 10143,
+  "network": "monad-testnet",
+  "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+  "deploymentTransactionHash": "0xc1ba5d4fc31bc0a45e973ec8a63c0583a3fb4f643c0f46053a7ee5dd5fbf4a86",
+  "deploymentBlock": "69535255",
+  "deploymentBlockHash": "0x66144818a39c03cbce0d2e75139de0fb199cba6e879c96b301605f567546933f",
+  "deployerAddress": "0x8eeaca7389758aa32fc672714565aa77503e2091",
+  "compilerVersion": "0.8.37+commit.f401782d",
+  "foundryVersion": "forge Version: 1.8.4\nCommit SHA: 50af4efe189dc64bad2b75ed6990b835de66c4ae\nBuild Timestamp: 2026-10-01T13:56:19.344774000Z (1790862979)\nBuild Profile: dist",
+  "gitCommit": "dfcc50f7b95bf6df035cf97c739b503493856797",
+  "abiHash": "sha256:470ca8da70ee14c11399984ed3aed11a3563e69e7699438f27d8738724ac9dc7",
+  "creationBytecodeHash": "sha256:dbe484b245a591898e03c6977bfb01eecbf9ff20949760a6789086e36e72b1c6",
+  "runtimeBytecodeHash": "sha256:2b426270900e8735ce04978c6e415a5a34857081881627fd40dd46c61ce2c610",
+  "deploymentTimestamp": "2026-10-09T12:06:41.000Z",
+  "recordedAt": "2026-10-09T12:07:28.069Z",
+  "sourceVerification": "verified",
+  "verification": {
+    "provider": "sourcify",
+    "result": "exact_match",
+    "officialMethod": "https://docs.monad.xyz/guides/verify-smart-contract/foundry",
+    "verifierUrl": "https://sourcify-api-monad.blockvision.org/",
+    "jobId": "2a55629e-c249-49ed-b562-a6c07e261713",
+    "reference": "https://sourcify-api-monad.blockvision.org/verify-ui/jobs/2a55629e-c249-49ed-b562-a6c07e261713",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+    "checkedAt": "2026-10-09T12:09:10.927Z",
+    "compilerIdentifier": "0.8.37+commit.f401782d"
+  }
+}

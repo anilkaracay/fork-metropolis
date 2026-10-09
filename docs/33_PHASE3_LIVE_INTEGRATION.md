@@ -1,10 +1,10 @@
 # Phase 3 — Live Integration and Proof
 
-Status: **local PostgreSQL passed; Privy localhost READY for the user-approved Google scope; overall Phase 3 remains in progress**. Real Google authentication, embedded Ethereum identity sync, authoritative backend verification, EIP-712 recovery and wallet persistence pass. D-043 defers Email/OTP/private-session login by explicit user choice. No Phase 4, contract deployment, order, production deployment or authenticated Envio/Perpl/Nansen product flow was performed. Test fixtures are not live integration evidence.
+Status: **local PostgreSQL passed; Privy localhost READY for the user-approved Google scope; Monad Testnet registry deployed and source-verified; overall Phase 3 remains in progress**. Real Google authentication, embedded Ethereum identity sync, authoritative backend verification, EIP-712 recovery and wallet persistence pass. D-043 defers Email/OTP/private-session login by explicit user choice. The real registry deployment is complete. No Phase 4, order, production web deployment or authenticated Envio/Perpl/Nansen product flow was performed. Test fixtures are not live integration evidence.
 
 ## Phase 3B — automate-first live unblock
 
-Current step: **Privy localhost result ready for review; next recommended integration is FORKRegistry on Monad Testnet, not yet authorized**. Both Privy credentials were securely configured after concrete user approval; official SDK settings verification passes. One real Google user and embedded EVM wallet are persisted locally, actual token/wrong-wallet checks and signing pass, and logout/login preserves the primary. The wallet has zero MON, so the approved transaction readiness exception applies. Email/OTP and private-session login remain untested and explicitly deferred (D-043). No Vercel or server deployment.
+Current step: **Monad registry deployment READY for review; next recommended integration is Envio Cloud, not yet authorized**. Both Privy credentials were securely configured after concrete user approval; official SDK settings verification passes. One real Google user and embedded EVM wallet are persisted locally, actual token/wrong-wallet checks and signing pass, and logout/login preserves the primary. The wallet has zero MON, so the approved transaction readiness exception applies. Email/OTP and private-session login remain untested and explicitly deferred (D-043). No Vercel or server deployment.
 
 | Requirement | Observed state |
 | --- | --- |
@@ -22,7 +22,7 @@ Current step: **Privy localhost result ready for review; next recommended integr
 
 Updated order: local PostgreSQL → verified Privy localhost configuration → Monad Testnet registry → Envio Cloud → real two-user localhost journey → authenticated Nansen → self-host production readiness → independent Perpl public/readiness work, then stop. No Phase 4.
 
-User authorized automate-first setup. Official Docker/PostgreSQL/Drizzle/node-postgres/pnpm documentation was checked before database changes. Standard TCP node-postgres replaces the Neon WebSocket adapter; unchanged Drizzle SQL migrations work with any compatible PostgreSQL host through DATABASE_URL. No Neon authentication or project creation continues. Database review is complete; the current authorized integration is Privy localhost only, through current official tooling.
+User authorized automate-first setup. Official Docker/PostgreSQL/Drizzle/node-postgres/pnpm documentation was checked before database changes. Standard TCP node-postgres replaces the Neon WebSocket adapter; unchanged Drizzle SQL migrations work with any compatible PostgreSQL host through DATABASE_URL. No Neon authentication or project creation continues. Database and the Google-based Privy reviews are complete. The explicitly authorized Monad registry gate is now complete; Envio requires the next review.
 
 ## Baseline
 
@@ -35,8 +35,8 @@ Clean approved commit e87fc8256d2693bc2bb07d4d0cf50a47ef4b28af. All seven Phase 
 | 0 Baseline | Passed | Clean reviewed commit, full fresh checks, seven screenshots, production test-route rejection. |
 | 1 PostgreSQL | Passed locally | Healthy Compose PostgreSQL 17.11; ignored mode-0600 DATABASE_URL; three unchanged migrations, nine tables, actual HTTP health 200, ten rollback-only live assertions, zero retained fixtures. Production database is deferred. |
 | 2 Privy | Ready under D-043 | Dashboard Email/Google, EVM-only automatic wallets for all users and localhost:3000 configured. App ID and approved additional server secret PRESENT in ignored mode-0600 local environment; official SDK credential/settings check passes. Credentialed production smoke 3/3; live no-token/invalid-token rejection passes. Real Google login, authoritative DID/embedded-wallet association, PostgreSQL sync, live wrong-wallet/token boundaries and EIP-712 recovery pass. Primary wallet has zero Testnet MON (adapter READY). Same-account Google logout/login preserves the same primary and fresh backend verification passes. Email/OTP and private-session login are explicitly deferred by user, not passed (D-043). |
-| 3 Monad registry | Prepared / blocked | Public chain 10143 verified; reviewed compiled source/settings/ABI agree; 28 Foundry tests pass. Public funded human deployer not supplied. Read-only artifact recorder ready; no artifact/transaction created. |
-| 4 Envio Cloud | Prepared / blocked | ENVIO_ custom variables fixed; standalone pnpm 10.32.0 install/typecheck/12 tests pass. Requires GitHub/Cloud access and actual contract address/start block. |
+| 3 Monad registry | Ready / deployed and verified | Dedicated local encrypted Testnet deployer funded after user action; exactly one real direct deployment. Canonical source/config/ABI/creation/runtime proof matches reviewed dfcc50f commit. Receipt/block/getters pass; official Sourcify exact_match. Server registry configuration securely written. [Monad evidence](evidence/phase3/MONAD.md). |
+| 4 Envio Cloud | Prepared / blocked | ENVIO_ custom variables fixed; standalone pnpm 10.32.0 install/typecheck/12 tests pass. Canonical registry address/start block are now available; Cloud setup awaits user review and authenticated access. |
 | 5 Production readiness | Revised / pending | Existing local production smoke passed 3/3. Standard root build/start and optional Docker self-host readiness will be verified at the revised later step; no server deployment. |
 | 6 Two real users | Blocked | Depends on live Privy/Monad/Envio; local PostgreSQL gate is passed; final domain is not a prerequisite. No actual root/fork hashes or live graph/reputation. Five isolated browser tests are fixtures only. |
 | 7 Perpl readiness | Partial live | Actual current public context saved; documentation funding/collateral discrepancy unresolved with sponsor. |
@@ -64,7 +64,7 @@ No authenticated wallet/account/fill context was fetched. README collateral diff
 
 Added database health and always-rollback development smoke; migration errors redact driver detail. Third additive migration adds a normalized external-wallet cache. Corrected Cloud ENVIO_ variables without changing dependencies. Added strict production/staging Playwright suite and server runner. Added read-only deployment proof recorder with reviewed source/bytecode/receipt checks; it cannot sign/broadcast and writes only after actual proof. Implemented permitted mainnet Nansen scalar profile context, server-only key, shared cache/lease/global credit reservations, six-second timeout and zero billed retries. Native graph/reputation/ranking remain social.
 
-Local PostgreSQL migrations are applied. No remote database deployment, registry or enrollment exists. No order/fillIdentity/executionRef/linkExecution transaction exists. Relay still returns RELAY_NOT_ENABLED and author attestation does not become Verified.
+Local PostgreSQL migrations are applied. No remote database deployment or Perpl enrollment exists; the real Monad Testnet registry is recorded in canonical public evidence. No order/fillIdentity/executionRef/linkExecution transaction exists. Relay still returns RELAY_NOT_ENABLED and author attestation does not become Verified.
 
 ## Current database validation
 
@@ -100,14 +100,15 @@ Privy localhost preflight (2026-10-06): local account bootstrap is independent o
 
 Sandbox initially denied local browser server port bindings; reruns with authorized local-server access passed. Default sandbox Foundry cache writes warned; separate authorized run passed without warning. Build retains Privy's optional Farcaster import and ox Tempo dynamic worker warnings (D-034), no stubs/filtering/upgrades.
 
+## Current Monad validation — 2026-10-09
+
+[Monad evidence](evidence/phase3/MONAD.md) records the real deployment, official-source verification and independent read proof. Source and Foundry config match reviewed dfcc50f7b95bf6df035cf97c739b503493856797 unchanged. The canonical artifact is contracts/deployments/10143.json. Exactly one deployment; no thesis or execution link was published.
+
+All postdeployment commands passed: format, lint, strict typecheck, test (194 root / 12 indexer / 28 Foundry, three 256-run fuzz cases), ABI and production build. Production Playwright passed 3/3 for isolation/recovery. Known SDK build warnings remain visible. Secret checks passed for source/history, deployment records and 203 browser files; encrypted local credentials and .env.local stay ignored/untracked. This does not establish an Envio-backed social journey.
+
 ## Human actions and continuation
 
-1. Current next action: review the completed Google-based Privy localhost result. No Email/OTP action remains required for the user-revised gate (D-043). The next recommended integration is FORKRegistry on Monad Testnet; deployment remains unauthorized until review. Its public funded deployer/wallet signing is a separate later action.
-2. GitHub is already private/pushed; server and final domain setup are deferred. Contract/Envio/Nansen/Perpl work waits until the relevant gate is authorized after review.
-3. Supply public funded Monad Testnet deployer address and wallet type. Keep signing/private key local; obtain gas MON from Monad Testnet faucet.
-4. After stable hostname exists, request exact Origin whitelisting/test collateral funding from Perpl via official Discord, giving public wallet/chain 10143/instance 12/exchange. Ask funding method for current AUSD contract; no secret or signature in support messages.
-5. At Gate 12 use official tooling to retrieve/configure NANSEN_API_KEY securely where supported; request browser approval only if unavoidable. Verify plan/credit entitlement before expanding the default budget.
-6. Participate in fresh-browser localhost email/Google auth and two distinct real identities/wallet signatures. Perpl enrollment/order/verification stay deferred until the final HTTPS domain exists.
+The Monad deployment gate is complete; no funding or signing action remains. Review this result before the next recommended integration, Envio Cloud. Do not proceed to Envio, real thesis/fork publication, authenticated Nansen or Perpl orders before that review. GitHub remains private, and server/domain work stays deferred. Email/OTP/private-session Privy proof remains user-deferred under D-043. Later Perpl enrollment still needs the final stable HTTPS Origin and sponsor approval.
 
 Exact commands, sources and dependency sequence are in [deployment instructions](23_DEPLOYMENT_ENV.md). Sponsor records: [Privy](evidence/phase3/PRIVY.md), [Envio](evidence/phase3/ENVIO.md), [Nansen](evidence/phase3/NANSEN.md), [Perpl](evidence/phase3/PERPL.md). [Secret scan scope](evidence/phase3/SECRET_SCAN.md).
 

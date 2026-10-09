@@ -1,0 +1,17 @@
+{
+  "state": "confirmed-by-foundry",
+  "chainId": 10143,
+  "rpc": "https://testnet-rpc.monad.xyz",
+  "reviewedCommit": "dfcc50f7b95bf6df035cf97c739b503493856797",
+  "deployer": "0x8EEACa7389758aa32fc672714565aA77503e2091",
+  "nonce": "0",
+  "expectedContractAddress": "0x1889a7216b1ECaD9A44910Dd0996834D0894b9E1",
+  "balanceBeforeWei": "5000000000000000000",
+  "gasLimit": "750000",
+  "gasPriceWei": "200000000000",
+  "preBroadcastBlock": "69535253",
+  "startedAt": "2026-10-09T12:06:41.066Z",
+  "transactionHash": "0xc1ba5d4fc31bc0a45e973ec8a63c0583a3fb4f643c0f46053a7ee5dd5fbf4a86",
+  "contractAddress": "0x1889a7216b1ECaD9A44910Dd0996834D0894b9E1",
+  "finishedAt": "2026-10-09T12:06:41.724Z"
+}

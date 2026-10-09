@@ -144,16 +144,23 @@ try {
   );
   const record = {
     chainId: 10143,
+    network: "monad-testnet",
     registryAddress: receipt.contractAddress.toLowerCase(),
     deploymentTransactionHash: transactionHash.toLowerCase(),
     deploymentBlock: BigInt(receipt.blockNumber).toString(),
     deploymentBlockHash: receipt.blockHash,
     deployerAddress: tx.from.toLowerCase(),
     compilerVersion: artifact.metadata.compiler.version,
+    foundryVersion: execFileSync(`${root}.tools/foundry/forge`, ["--version"], {
+      encoding: "utf8",
+    }).trim(),
     gitCommit: reviewedCommit,
     abiHash: `sha256:${hash(abiBytes)}`,
     creationBytecodeHash: `sha256:${hash(artifact.bytecode.object)}`,
     runtimeBytecodeHash: `sha256:${hash(artifact.deployedBytecode.object)}`,
+    deploymentTimestamp: new Date(
+      Number(BigInt(block.timestamp)) * 1000,
+    ).toISOString(),
     recordedAt: new Date().toISOString(),
     sourceVerification: "not-attempted",
   };

@@ -1,6 +1,6 @@
 # Deployment and Environment
 
-Phase 3 is authorized; authenticated infrastructure is not yet deployed. Use local PostgreSQL for development, Monad Testnet and Perpl Testnet. Production later uses standard PostgreSQL on the user's server or another PostgreSQL host. Development uses http://localhost:3000. Verify official provider support before configuring localhost. Final hosting will use the user's server and stable HTTPS domain; no server deployment is authorized yet. Perpl enrollment waits for that final approved Origin.
+Phase 3 is authorized; local PostgreSQL, the Google-based Privy gate and the real Monad Testnet registry are complete. Envio Cloud, authenticated Nansen/Perpl flows and production hosting remain pending their gates. Use local PostgreSQL for development, Monad Testnet and Perpl Testnet. Production later uses standard PostgreSQL on the user's server or another PostgreSQL host. Development uses http://localhost:3000. Verify official provider support before configuring localhost. Final hosting will use the user's server and stable HTTPS domain; no server deployment is authorized yet. Perpl enrollment waits for that final approved Origin.
 
 ## Credentials and implemented variables
 
@@ -44,7 +44,7 @@ GET /api/health/database runs SELECT 1 and checks the migration journal. Missing
 
 ## Contract deployment and proof
 
-Run pnpm test:contracts before deployment. Pinned Foundry 1.8.4/solc 0.8.37 use Monad network mode, Prague and optimizer 200. FORKRegistry has no constructor arguments or owner/admin role. Confirm chain 10143 and sufficient MON at the human-held public deployer address. Follow the [official Monad Foundry guide](https://docs.monad.xyz/guides/deploy-smart-contract/foundry); signing stays in a human-held wallet/encrypted keystore. Gas MON comes from [Monad Testnet](https://testnet.monad.xyz).
+Run pnpm test:contracts before deployment. Pinned Foundry 1.8.4/solc 0.8.37 use Monad network mode, Prague and optimizer 200. FORKRegistry has no constructor arguments or owner/admin role. Confirm chain 10143 and sufficient MON at the human-held public deployer address. Follow the [official Monad Foundry guide](https://docs.monad.xyz/guides/deploy-smart-contract/foundry); signing stays in a human-held wallet/encrypted keystore. Gas MON comes from the current [official Monad Testnet faucet](https://faucet.monad.xyz). The dedicated local Testnet deployer and funding checkpoint are recorded in [Monad evidence](evidence/phase3/MONAD.md) and D-044.
 
 After successful direct deployment:
 
@@ -52,7 +52,7 @@ After successful direct deployment:
 node scripts/registry-proof.mjs REAL_DEPLOYMENT_TX_HASH REVIEWED_FULL_GIT_COMMIT
 ```
 
-This read-only tool checks reviewed source/config, compiled source hash/settings/ABI, chain, transaction, canonical receipt/block and exact creation/runtime bytecode before exclusively writing contracts/deployments/10143.json. It never signs/broadcasts or overwrites existing evidence. Explorer verification is initially not-attempted; update only after actual verification. Set FORK_REGISTRY_ADDRESS afterward.
+This read-only tool checks reviewed source/config, compiled source hash/settings/ABI, chain, transaction, canonical receipt/block and exact creation/runtime bytecode before exclusively writing contracts/deployments/10143.json. It never signs/broadcasts or overwrites existing evidence. Explorer verification is initially not-attempted; update only after actual verification. The real canonical artifact now records successful official Sourcify exact_match verification, and FORK_REGISTRY_ADDRESS is configured in ignored server-side .env.local. Do not rerun deployment; the current gate stops before Envio review.
 
 ## Envio Cloud
 

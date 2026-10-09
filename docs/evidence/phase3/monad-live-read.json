@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "chainId": 10143,
+  "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+  "checkedAt": "2026-10-09T12:07:28.105Z",
+  "readBlock": "69535408",
+  "deploymentBlock": "69535255",
+  "confirmations": "154",
+  "runtimeMatchesReviewedBuild": true,
+  "nextThesisId": "1",
+  "thesisOneEmpty": true,
+  "executionReferenceOneEmpty": true,
+  "deployerBalanceAfterMON": "4.85",
+  "gasUsed": "750000",
+  "effectiveGasPriceWei": "200000000000",
+  "onlyReadCalls": true,
+  "noThesisPublished": true
+}
