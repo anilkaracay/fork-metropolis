@@ -5,8 +5,12 @@ import { monadTestnet } from "@fork/shared";
 export function developmentTypedData(
   wallet: Address,
   nonce: string,
-  issuedAt: bigint,
+  issuedAt: number,
 ) {
+  // Unix seconds fit exactly in a JSON number. Avoid BigInt.toJSON overrides
+  // from browser tooling/extensions turning the RPC value into "123n".
+  if (!Number.isSafeInteger(issuedAt) || issuedAt < 0 || issuedAt >= 2 ** 48)
+    throw new RangeError("The proof timestamp must be safe Unix seconds.");
   return {
     domain: {
       name: "FORK Local Development Proof",
@@ -17,7 +21,7 @@ export function developmentTypedData(
       DevelopmentProof: [
         { name: "wallet", type: "address" },
         { name: "nonce", type: "string" },
-        { name: "issuedAt", type: "uint256" },
+        { name: "issuedAt", type: "uint48" },
         { name: "purpose", type: "string" },
       ],
     },

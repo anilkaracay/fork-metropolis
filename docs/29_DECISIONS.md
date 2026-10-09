@@ -372,3 +372,12 @@ Date: 2026-10-09
 The first build with a real public Privy App ID exposed a production smoke regression: /dev/privy returned HTTP 200 instead of 404 when the provider/layout streamed before page-level notFound(). Next 16.3.8's installed official not-found documentation explicitly describes HTTP 200 for streamed not-found responses. Keep page-level checks and add the documented src/proxy.ts convention, narrowly matched to /dev/privy, to reject non-development, fixture-workspace or non-loopback URL/Host requests with a no-store 404 before rendering. This guard neither authenticates users nor alters normal product/API requests. Add isolation regression tests and retain the actual credentialed production smoke assertion; no failure suppression or dependency upgrade.
 
 The opt-in local proof also checks real-session security boundaries using the existing API: missing/invalid tokens, wrong-wallet reads/explicit selection, and unchanged primary after rejection. Rejected probe addresses are request inputs only; no fixture identity/wallet or test key is created. Typed-data and transaction proof still use the real selected wallet adapter and require real login. Live expired-token evidence is not manufactured; the official SDK expiry check is covered separately by isolated cryptographic unit tests.
+
+## D-042 - JSON-safe timestamp for the real development signing proof
+
+Status: Accepted fix observed during the approved live Privy gate
+Date: 2026-10-09
+
+A real Google-authenticated embedded EVM wallet reached Privy's signing modal, but the provider rejected the proof timestamp as an n-suffixed string (Cannot convert ...n to a BigInt). Replacing the development-only timestamp with safe numeric Unix seconds allowed the same real viem/Privy adapter to sign successfully and recover the selected primary address. Use a range-checked uint48 for this development proof so the schema's inferred TypeScript primitive and JSON numeric representation agree without losing precision. The origin of the n-suffixed serialization override was not established; no extension or SDK was disabled or upgraded.
+
+Two regression tests verify equal EIP-712 hashing for equivalent numeric/BigInt values, reject invalid/out-of-range timestamps, and inspect the real viem RPC request while a BigInt.toJSON override is present. String fields ending in n remain unchanged. No signing bypass, fake live wallet, server private key, persisted signature or transaction was introduced. The real final uint48 payload was signed and recovered successfully after the change.

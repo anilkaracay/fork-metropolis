@@ -107,7 +107,7 @@ export function PrivyProof() {
         const data = developmentTypedData(
           wallet,
           crypto.randomUUID(),
-          BigInt(Math.floor(Date.now() / 1000)),
+          Math.floor(Date.now() / 1000),
         );
         const signature = await auth.signTypedData(data);
         const recovered = await recoverTypedDataAddress({ ...data, signature });
