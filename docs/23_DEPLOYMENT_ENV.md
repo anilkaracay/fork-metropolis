@@ -20,7 +20,7 @@ NANSEN_API_KEY                    # optional, Gate 12
 FORK_NANSEN_DAILY_CREDIT_BUDGET=20
 ```
 
-Run pnpm db:up to generate local development credentials and configure DATABASE_URL securely. The application uses [node-postgres through Drizzle](https://orm.drizzle.team/docs/get-started-postgresql), with no provider-specific SDK or network transport. Verify current official tooling before each subsequent service setup. Privy and Nansen setup remain deferred until their gates are reviewed. Never set FORK_TEST_MODE in production.
+Run pnpm db:up to generate local development credentials and configure DATABASE_URL securely. The application uses [node-postgres through Drizzle](https://orm.drizzle.team/docs/get-started-postgresql), with no provider-specific SDK or network transport. Verify current official tooling before each subsequent service setup. The local Privy Google gate is READY under D-043; Email/OTP/private-session proof is deferred by user, not passed. Nansen setup remains deferred until its gate is authorized. Never set FORK_TEST_MODE in production.
 
 ## Database migration and smoke
 
@@ -69,7 +69,7 @@ Measure receipt-confirmed time to first matching scoped GraphQL visibility. Pres
 
 ## Local development and later self-hosting
 
-Vercel is removed from the critical path. GitHub origin is private anilkaracay/fork-metropolis; the user will make it public before submission. No Vercel login/project/deployment is required. Use http://localhost:3000 now. Privy's current official documentation supports this exact localhost origin including its port; verified settings and the pending credential handoff are in [Privy evidence](evidence/phase3/PRIVY.md).
+Vercel is removed from the critical path. GitHub origin is private anilkaracay/fork-metropolis; the user will make it public before submission. No Vercel login/project/deployment is required. Use http://localhost:3000 now. Privy's current official documentation supports this exact localhost origin including its port; verified settings, secure credential status, real Google signing/persistence and the user-deferred Email test are in [Privy evidence](evidence/phase3/PRIVY.md).
 
 Final architecture: HTTPS domain → reverse proxy → standard Node.js Next.js application → standard PostgreSQL and existing Envio/Monad/Privy/Nansen/Perpl services. Docker plus Caddy/Nginx may be prepared later, without deploying the user's server. No Edge-only API, proprietary hosting feature, Redis, queue or Kubernetes is required. Self-host readiness will add/verify root pnpm start alongside pnpm build; this new readiness check has not run yet. Existing web start is standard next start, and the local production runner has passed prior smoke.
 

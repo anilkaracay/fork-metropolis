@@ -1,10 +1,10 @@
-# Privy — PARTIAL
+# Privy — localhost READY (Google); sponsor proof PARTIAL
 
 Pinned React SDK 3.47.0 / Node SDK 0.35.0. Existing product implements email/Google auth, embedded EVM wallet, server-verified access token/DID, linked-wallet ownership and primary selection. Authoritative receipt checks bind author and canonical content to Monad transactions. Token/wallet rejection tests pass with explicit provider fixtures.
 
-Current status (2026-10-09): real development credentials are securely configured; Email/Google, EVM-only automatic wallets for all users and http://localhost:3000 are confirmed in the saved dashboard. Real Google login, embedded EVM wallet retrieval, authoritative DID/wallet association, PostgreSQL synchronization, live token/wrong-wallet rejection and EIP-712 signature recovery pass. Email/OTP, same-account logout/login persistence and fresh private-browser proof remain pending; transaction submission is READY / NEEDS TESTNET MON. Production identity/submit/reset test routes and the development proof page return actual HTTP 404 in the credentialed local production build. Earlier dated sections below preserve the preparation history.
+Current status (2026-10-09): real development credentials are securely configured; Email/Google, EVM-only automatic wallets for all users and http://localhost:3000 are confirmed in the saved dashboard. Real Google login, embedded EVM wallet retrieval, authoritative DID/wallet association, PostgreSQL synchronization, live token/wrong-wallet rejection and EIP-712 signature recovery pass. Same-account logout/login persistence passes. Email/OTP and fresh private-browser proof are NOT TESTED / DEFERRED BY USER under D-043; transaction submission is READY / NEEDS TESTNET MON. Production identity/submit/reset test routes and the development proof page return actual HTTP 404 in the credentialed local production build. Earlier dated sections below preserve the preparation history.
 
-Required evidence: actual allowed localhost origin, verified real identities/public wallets, embedded wallet type, sanitized server verification outcomes and typed-data signing outcome. Root/fork hashes and a two-user journey belong to the later registry/Envio gates. No tokens/email/private keys may enter evidence. This is not bounty-ready.
+Local evidence established: saved localhost origin/auth configuration, one real Google identity and embedded Ethereum wallet, sanitized authoritative server verification, persistence, rejected token/wallet probes and matching typed-data recovery. Root/fork hashes and a two-user journey belong to the later registry/Envio gates. No tokens/email/private keys may enter evidence. This is not bounty-ready.
 
 ## Local preparation — 2026-10-06
 
@@ -63,3 +63,21 @@ After the signing fix, format/lint/typecheck and full tests pass: 194 root tests
 The user completed the real Google account chooser. FORK returned to /dev/privy with the same generated handle and primary wallet 0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4. A fresh Verify account action passed authoritative backend verification using the new authenticated session. Logout/login persistence is PASS; no explicit primary change was requested and none occurred. [Real re-login persistence](privy-live-persistence.jpg).
 
 The remaining user action is real Email/OTP sign-in in an independent browser session. Opened a new native Chrome incognito window (New Incognito Tab verified), but subsequent native input was interrupted when the active Chrome window changed to another user tab. No unrelated page was altered. Using Chrome’s Window menu, then a refreshed native state, selected the newly opened incognito window and navigated it to http://localhost:3000/dev/privy. Its title and address bar explicitly show FORK in Chrome (Incognito). Native accessibility exposes only browser chrome for this window, its screenshot capture fails, and the selected extension browser does not expose the private tab; the user must complete the Email/OTP login there. No private-tab login result is inferred from its title or URL. Email login and private-session proof remain pending, not passed. The normal Google session is preserved; all previous final code checks remain applicable because this update changes evidence only. No contract/indexer/Nansen/Perpl work continued.
+
+## Gate closure after user scope change — 2026-10-09
+
+The user explicitly elected to continue without the remaining Email/OTP test in the private window. D-043 records this acceptance boundary. Localhost status: READY for the real Google path; Email/OTP and private-session login remain NOT TESTED / DEFERRED BY USER. This is not an assertion that the untested method has no problems. No login bypass or provider setting was changed to obtain this status.
+
+| Report item | Final result |
+| --- | --- |
+| Privy status | READY for current user-revised localhost Google scope; sponsor submission proof remains PARTIAL. |
+| Configuration | React SDK 3.47.0, Node SDK 0.35.0; http://localhost:3000; Email/Google enabled; user-controlled embedded Ethereum only; Monad Testnet 10143. |
+| Real auth tests | Google login/re-login, token/backend verification, linked-wallet resolution, invalid/missing token and wrong-wallet rejection pass. Email/OTP/private login deferred by user. Expired-token rejection is isolated SDK crypto coverage only. |
+| Wallet | 0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4; embedded EVM; same wallet/handle after logout/login; deterministic persisted primary, no silent change. |
+| Server identity | Authoritative DID equals verified subject; primary equals a real linked Ethereum wallet. No raw token/DID/email included in evidence. |
+| Signing | Final real EIP-712 signature recovers to primary; transaction adapter READY / NEEDS TESTNET MON; balance zero; no transaction. |
+| Database | One real user and one embedded wallet synchronized in standard local PostgreSQL; unnecessary profile data not stored; local service remains healthy. |
+| Security | Ignored mode-0600 credentials; 203 browser static files clean of actual server/database secrets and server-secret name; source/Gitleaks clean; actual production test/proof routes 404; real 401/403 boundaries pass. |
+| Quality | Final format/lint/typecheck/build/ABI pass; 194 root / 12 indexer / 28 contract tests; credentialed production smoke 3/3. Existing upstream build warnings and sandbox Foundry cache warning retained honestly. Closure changes docs only; no redundant rerun after unchanged code. |
+| Human action | None required to close the revised current gate. MON funding is needed before a later actual transaction, not to accept this gate. |
+| Next recommendation | Review the Privy result, then authorize FORKRegistry Monad Testnet deployment. It has not started; Envio/Nansen/Perpl also remain deferred. |

@@ -381,3 +381,12 @@ Date: 2026-10-09
 A real Google-authenticated embedded EVM wallet reached Privy's signing modal, but the provider rejected the proof timestamp as an n-suffixed string (Cannot convert ...n to a BigInt). Replacing the development-only timestamp with safe numeric Unix seconds allowed the same real viem/Privy adapter to sign successfully and recover the selected primary address. Use a range-checked uint48 for this development proof so the schema's inferred TypeScript primitive and JSON numeric representation agree without losing precision. The origin of the n-suffixed serialization override was not established; no extension or SDK was disabled or upgraded.
 
 Two regression tests verify equal EIP-712 hashing for equivalent numeric/BigInt values, reject invalid/out-of-range timestamps, and inspect the real viem RPC request while a BigInt.toJSON override is present. String fields ending in n remain unchanged. No signing bypass, fake live wallet, server private key, persisted signature or transaction was introduced. The real final uint48 payload was signed and recovered successfully after the change.
+
+## D-043 - Accept the Google-proven localhost gate; defer Email/private-session proof
+
+Status: Accepted by explicit user instruction
+Date: 2026-10-09
+
+After real Google login, authoritative server identity/wallet verification, real EIP-712 recovery and successful same-account logout/login persistence, the user explicitly requested continuing without the pending Email/OTP login in the prepared private Chrome window. Close the current localhost Privy gate as READY for the demonstrated Google path. Email/OTP and private-session login proof remain NOT TESTED / DEFERRED BY USER, never marked passing or inferred from Google authentication. Email remains enabled; do not introduce an auth bypass, testing token, fake wallet or weaken server checks.
+
+Monad transaction submission remains READY / NEEDS TESTNET MON, consistent with the originally approved zero-balance exception; no transaction was sent. Invalid-token/wrong-wallet rejection has real evidence; expired-token rejection has isolated official SDK cryptographic coverage, not an expired live-session request. This acceptance does not establish bounty/production readiness or authorize FORKRegistry deployment, Envio, Nansen or Perpl. Return the gate result for review before the next integration.
