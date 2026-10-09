@@ -363,3 +363,12 @@ Use the pinned React SDK's documented Ethereum-only appearance, automatic embedd
 Provide an opt-in /dev/privy page restricted to non-test localhost development and returning 404 in production. It uses the existing real viem/Privy provider adapter for a harmless EIP-712 proof, public-address recovery and at most one attempted zero-value self transaction per mounted check. An empty balance reports READY / NEEDS TESTNET MON without sending. It is outside product navigation and contains no fake wallet/key, token logging, signature persistence, contract deployment or trade. Actual credentialed proof remains pending; isolated SDK JWT/database tests do not satisfy live evidence.
 
 Current official documentation describes app creation/configuration through the dashboard. The installed official Node SDK app-settings API is read-only and requires app credentials already; no documented app-bootstrap CLI/API was established. Follow the user's explicit dashboard handoff rule after completing local preparation. Sources and exact settings are recorded in [Privy evidence](evidence/phase3/PRIVY.md).
+
+## D-041 - Development signing proof rejected before response streaming
+
+Status: Accepted security fix within the approved Privy localhost gate
+Date: 2026-10-09
+
+The first build with a real public Privy App ID exposed a production smoke regression: /dev/privy returned HTTP 200 instead of 404 when the provider/layout streamed before page-level notFound(). Next 16.3.8's installed official not-found documentation explicitly describes HTTP 200 for streamed not-found responses. Keep page-level checks and add the documented src/proxy.ts convention, narrowly matched to /dev/privy, to reject non-development, fixture-workspace or non-loopback URL/Host requests with a no-store 404 before rendering. This guard neither authenticates users nor alters normal product/API requests. Add isolation regression tests and retain the actual credentialed production smoke assertion; no failure suppression or dependency upgrade.
+
+The opt-in local proof also checks real-session security boundaries using the existing API: missing/invalid tokens, wrong-wallet reads/explicit selection, and unchanged primary after rejection. Rejected probe addresses are request inputs only; no fixture identity/wallet or test key is created. Typed-data and transaction proof still use the real selected wallet adapter and require real login. Live expired-token evidence is not manufactured; the official SDK expiry check is covered separately by isolated cryptographic unit tests.

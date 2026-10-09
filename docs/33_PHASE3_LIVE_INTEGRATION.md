@@ -4,7 +4,7 @@ Status: **local PostgreSQL gate passed; overall Phase 3 remains in progress**. N
 
 ## Phase 3B — automate-first live unblock
 
-Current step: **local PostgreSQL reviewed and approved; Privy localhost preparation complete, pending dashboard credentials**. Repository creation and main push are complete. The user superseded Vercel/stable-staging prerequisites: no Vercel login/project/deployment, no server deployment now. The user authorized the Privy gate and explicitly requires a concise dashboard handoff if official app bootstrap cannot be automated. No actual Privy login/wallet/signature proof exists yet; registry deployment remains unauthorized.
+Current step: **local PostgreSQL reviewed and approved; Privy localhost dashboard configured, App Secret approval pending**. Repository creation and main push are complete. The user superseded Vercel/stable-staging prerequisites: no Vercel login/project/deployment, no server deployment now. On 2026-10-09 the user explicitly authorized computer use; the existing authenticated development app was configured and its public App ID securely written locally. The existing secret is masked/unretrievable; creating an additional persistent API credential requires action-time computer-use approval. No actual Privy login/wallet/signature proof exists yet; registry deployment remains unauthorized.
 
 | Requirement | Observed state |
 | --- | --- |
@@ -34,7 +34,7 @@ Clean approved commit e87fc8256d2693bc2bb07d4d0cf50a47ef4b28af. All seven Phase 
 | --- | --- | --- |
 | 0 Baseline | Passed | Clean reviewed commit, full fresh checks, seven screenshots, production test-route rejection. |
 | 1 PostgreSQL | Passed locally | Healthy Compose PostgreSQL 17.11; ignored mode-0600 DATABASE_URL; three unchanged migrations, nine tables, actual HTTP health 200, ten rollback-only live assertions, zero retained fixtures. Production database is deferred. |
-| 2 Privy | Prepared / blocked | Both app ID/server secret MISSING. Current official setup requires dashboard bootstrap; installed SDK app settings are read-only. Local independent session bootstrap, explicit persisted primary, EVM-only provider and opt-in real signing proof prepared. No actual login/wallet/token/signature; isolated SDK JWT/database tests are not live proof. |
+| 2 Privy | Configured / blocked | Dashboard Email/Google, EVM-only automatic wallets for all users and localhost:3000 configured. App ID and approved additional server secret PRESENT in ignored mode-0600 local environment; official SDK credential/settings check passes. Credentialed production smoke 3/3; live no-token/invalid-token rejection passes. Real login modal is open, awaiting user authentication; no actual wallet/token/signature proof. |
 | 3 Monad registry | Prepared / blocked | Public chain 10143 verified; reviewed compiled source/settings/ABI agree; 28 Foundry tests pass. Public funded human deployer not supplied. Read-only artifact recorder ready; no artifact/transaction created. |
 | 4 Envio Cloud | Prepared / blocked | ENVIO_ custom variables fixed; standalone pnpm 10.32.0 install/typecheck/12 tests pass. Requires GitHub/Cloud access and actual contract address/start block. |
 | 5 Production readiness | Revised / pending | Existing local production smoke passed 3/3. Standard root build/start and optional Docker self-host readiness will be verified at the revised later step; no server deployment. |
@@ -74,7 +74,7 @@ The build retains the two existing upstream SDK warnings; Foundry's sandbox sign
 
 ## Phase 3 validation (baseline plus current database checks)
 
-Privy localhost preflight (2026-10-06): local account bootstrap is independent of registry/Envio, primary selection is persisted and explicit, and real signing checks are prepared outside product navigation. Fresh format/lint/typecheck/full test/build checks pass: 188 root unit / 12 indexer / 28 contract tests. Fresh production browser smoke passes 3/3, including the new development proof page's production 404. Browser scan of 203 static files and changed-source credential/Gitleaks checks pass; the missing Privy credential prevents a value scan or any real auth/signing evidence. The earlier counts below remain the approved database baseline. [Current Privy preflight evidence](evidence/phase3/PRIVY.md).
+Privy localhost preflight (2026-10-06): local account bootstrap is independent of registry/Envio, primary selection is persisted and explicit, and real signing checks are prepared outside product navigation. Fresh format/lint/typecheck/full test/build checks pass: 188 root unit / 12 indexer / 28 contract tests. Fresh production browser smoke passes 3/3, including the new development proof page's production 404. Browser scan of 203 static files and changed-source credential/Gitleaks checks pass; the missing Privy credential prevents a value scan or any real auth/signing evidence. The earlier counts below remain the approved database baseline. Update 2026-10-09: both real Privy credentials are now securely configured, official SDK settings verification passes, root tests pass 192/192, credentialed build and production smoke pass 3/3, and exact browser/source secret scans pass. Live localhost unauthenticated/invalid-token requests return 401 and database health returns 200. Actual user authentication/signing remains pending; see D-041 for the production streaming-response fix. [Current Privy preflight evidence](evidence/phase3/PRIVY.md).
 
 | Check | Result |
 | --- | --- |
@@ -94,7 +94,7 @@ Privy localhost preflight (2026-10-06): local account bootstrap is independent o
 | Reviewed compiled contract | Source/config/hash/compiler/settings/ABI match approved commit; no deployment tested |
 | Secret scan | Git/current source clean; browser three reviewed public SDK identifiers, no FORK credential detected |
 | Production test adapters | identity/submit/reset 404; test flag rejected in production tests |
-| Fresh real localhost Privy journey | Pending credentials and verified localhost setup; stable staging requirement superseded |
+| Fresh real localhost Privy journey | Credentials/settings ready; user login pending in the open real SDK modal. Normal unauthenticated Chrome tab is not verified incognito proof; stable staging requirement superseded |
 | Live local PostgreSQL | Passed: migration journal, nine tables, HTTP health and ten rollback-only assertions |
 | Live Envio / Perpl / Nansen integration | Blocked; not substituted by fixture tests |
 
@@ -102,7 +102,7 @@ Sandbox initially denied local browser server port bindings; reruns with authori
 
 ## Human actions and continuation
 
-1. Current next action: configure the Privy development app's Email/Google, user-controlled embedded Ethereum wallet and exact localhost origin, and populate ignored local app credentials. Exact dashboard pages/options are recorded in [Privy evidence](evidence/phase3/PRIVY.md). No secret in chat. After user confirmation, verify real login, wallet persistence, authoritative token/DID/wallet ownership, typed-data signing, PostgreSQL sync and security; stop for review.
+1. Current next action: complete Email/OTP sign-in in the opened localhost Privy modal. The approved additional App Secret and public App ID are securely configured; dashboard settings and official SDK checks pass. No secret in chat. Then verify real wallet persistence, authoritative token/DID/wallet ownership, typed-data signing, PostgreSQL sync and security; stop for review.
 2. GitHub is already private/pushed; server and final domain setup are deferred. Contract/Envio/Nansen/Perpl work waits until the relevant gate is authorized after review.
 3. Supply public funded Monad Testnet deployer address and wallet type. Keep signing/private key local; obtain gas MON from Monad Testnet faucet.
 4. After stable hostname exists, request exact Origin whitelisting/test collateral funding from Perpl via official Discord, giving public wallet/chain 10143/instance 12/exchange. Ask funding method for current AUSD contract; no secret or signature in support messages.
