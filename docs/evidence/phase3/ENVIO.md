@@ -1,6 +1,6 @@
-# Envio — Cloud gate preflight / authentication pending
+# Envio — Cloud gate preflight / repository approval pending
 
-Status: BLOCKED / browser login approval required. The user approved the real Envio Cloud gate after the verified Monad deployment. No Cloud indexer/deployment/GraphQL endpoint has been created. No event fixture or real thesis was submitted.
+Status: BLOCKED / GitHub App repository installation approval required. The user approved the real Envio Cloud gate after the verified Monad deployment. No Cloud indexer/deployment/GraphQL endpoint has been created. No event fixture or real thesis was submitted.
 
 ## Current official requirements checked on 2026-10-09
 
@@ -32,4 +32,8 @@ After authentication, inspect linked repos and existing indexers before creating
 
 Pending live proof: deployment/sync metadata, healthy real GraphQL/schema/pagination, empty entity results and empty Feed/Explore/Profile behavior with no fixture fallback. Next-gate receipt-to-visibility instrumentation remains to be checked/prepared; no latency has been measured. Full postdeployment quality/security checks remain pending Cloud deployment.
 
-Stop now for the official browser login approval. After Cloud completion, stop again for review before real thesis publishing, the two-user journey, Nansen or Perpl. This preflight is not bounty-ready.
+The user completed the GitHub login authorization. The official CLI login then created a mode-0600 credential file; authenticated indexer list API access succeeded with zero existing indexers. Linked the personal anilkaracay organisation through the official Link Organisation UI; organisation-scoped CLI access now succeeds. No Cloud secrets were printed or added to the application.
+
+The organisation currently has zero linked repositories. Opened the official Connect Repository GitHub App flow, selected the personal anilkaracay account, changed All repositories to Only select repositories and selected only anilkaracay/fork-metropolis. The Install button is awaiting human approval. Current requested installation permissions are read access to administration, code, commit statuses, metadata and pull requests; email read is an individually authorized user permission. No installation was submitted and no paid plan changed.
+
+Stop now for this single GitHub App installation approval. After Cloud completion, stop again for review before real thesis publishing, the two-user journey, Nansen or Perpl. This preflight is not bounty-ready.

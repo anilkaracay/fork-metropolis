@@ -404,7 +404,7 @@ D-044 completion: after explicit user funding confirmation, official RPC verifie
 
 ## D-045 - Official Envio Cloud CLI and explicit deployment control
 
-Status: Selected workflow within the user-approved real Envio Cloud gate; authentication pending
+Status: Selected workflow within the user-approved real Envio Cloud gate; authenticated, GitHub App repository approval pending
 Date: 2026-10-09
 
 Current official Envio documentation provides the separate envio-cloud CLI for browser login, indexer/repository management, ENVIO_ environment configuration and commit-based deployment. Use pinned local tooling 1.0.0 under ignored .tools rather than requiring manual dashboard configuration or upgrading HyperIndex 3.12.1. Preserve standalone pnpm 10.32.0/Node 24 compatibility. Browser login approval and any unavoidable GitHub App authorization remain human actions; never ask for pasted tokens.
