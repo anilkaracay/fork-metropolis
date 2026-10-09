@@ -18,6 +18,10 @@ import { useSession } from "./session";
 import { EmptyState, ErrorState, Skeleton, Avatar } from "./common";
 import { marketName, price, useMarkets } from "./thesis-card";
 import { Icon } from "./icon";
+import {
+  recordPublishObservation,
+  type PublishStage,
+} from "@/lib/publish-observation";
 
 export function Composer({
   parentId,
@@ -167,11 +171,43 @@ function ComposerForm({
     setPending(value);
     localStorage.setItem(storageKey, JSON.stringify(value));
   }
+  function observe(p: Pending, stage: PublishStage, thesisId?: string) {
+    recordPublishObservation(
+      auth.test,
+      p.requestKey,
+      {
+        chainId: 10143,
+        registryAddress: p.intent.registryAddress.toLowerCase(),
+        wallet: p.intent.authorWallet.toLowerCase(),
+        parentId: p.intent.parentId,
+        ...(p.txHash ? { txHash: p.txHash.toLowerCase() } : {}),
+        ...(thesisId ? { thesisId } : {}),
+      },
+      stage,
+    );
+  }
+  useEffect(() => {
+    if (state === "Published" && pending?.txHash) {
+      recordPublishObservation(
+        auth.test,
+        pending.requestKey,
+        {
+          chainId: 10143,
+          registryAddress: pending.intent.registryAddress.toLowerCase(),
+          wallet: pending.intent.authorWallet.toLowerCase(),
+          parentId: pending.intent.parentId,
+          txHash: pending.txHash.toLowerCase(),
+        },
+        "Published",
+      );
+    }
+  }, [state, pending, auth.test]);
   async function finish(p: Pending) {
     const token = await auth.getToken();
     let result: { thesisId: string; state: string } | undefined;
     for (let attempt = 0; attempt < 20 && !abort.current; attempt++) {
       setState("Confirming");
+      observe(p, "Confirming");
       try {
         result = await api("theses/finalize", {
           method: "POST",
@@ -188,10 +224,12 @@ function ComposerForm({
     }
     if (!result || abort.current) return;
     setState("Confirmed / indexing");
+    observe(p, "Confirmed / indexing", result.thesisId);
     for (let attempt = 0; attempt < 15 && !abort.current; attempt++) {
       try {
         const item = await api<ThesisDetail>(`theses/${result.thesisId}`);
         if (item.metadataState === "trusted") {
+          observe(p, "Envio visible", result.thesisId);
           setState("Published");
           localStorage.removeItem(storageKey);
           await query.invalidateQueries();
@@ -262,11 +300,14 @@ function ComposerForm({
       );
       const p: Pending = { ...draft, form, requestKey: requestKey.current };
       save(p);
+      observe(p, "Draft");
       setState("Awaiting wallet");
+      observe(p, "Awaiting wallet");
       const hash = await auth.submit(draft.intent, draft.draftId);
       const sent = { ...p, txHash: hash };
       save(sent);
       setState("Submitted");
+      observe(sent, "Submitted");
       await finish(sent);
     } catch (e) {
       setError(e);

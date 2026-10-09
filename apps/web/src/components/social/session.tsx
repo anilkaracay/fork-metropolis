@@ -16,6 +16,7 @@ import type { Hex, TypedDataDefinition } from "viem";
 import type { Session } from "@/server/auth";
 import type { PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
+import { DevelopmentPublishObservation } from "./publish-observation";
 
 export type SessionValue = {
   session: Session | null;
@@ -71,6 +72,9 @@ export function ProductProviders({
   );
   return (
     <QueryClientProvider client={query}>
+      {process.env.NODE_ENV === "development" && !test && (
+        <DevelopmentPublishObservation />
+      )}
       {test ? (
         <LocalSession test>{children}</LocalSession>
       ) : appId ? (
