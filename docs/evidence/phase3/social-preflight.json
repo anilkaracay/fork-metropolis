@@ -1,0 +1,89 @@
+{
+  "observedAt": "2026-10-09T13:27:30.305Z",
+  "gitCommit": "33cefa5a63b413632863fb41934559bfff59d91b",
+  "initialWorkingTreeClean": true,
+  "database": "healthy; actual migrated PostgreSQL; ownership association read",
+  "chainId": 10143,
+  "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+  "registryHasCode": true,
+  "nextThesisId": "1",
+  "userA": {
+    "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+    "balanceMON": "0",
+    "recommendedFundingMON": "1",
+    "handle": "u_4dcde4749ffd",
+    "authoritativeDidMatches": true,
+    "embeddedWalletMatches": true,
+    "googleIdentity": true,
+    "ownershipMatches": true
+  },
+  "privy": {
+    "googleEnabled": true,
+    "localhostAllowed": true
+  },
+  "environment": {
+    "realGraphql": true,
+    "registryMatches": true,
+    "testModeAbsent": true
+  },
+  "envio": {
+    "_meta": [
+      {
+        "chainId": 10143,
+        "startBlock": 69535255,
+        "progressBlock": 69551099,
+        "sourceBlock": 69551099,
+        "isReady": true,
+        "eventsProcessed": 0
+      }
+    ],
+    "Thesis": []
+  },
+  "routes": [
+    {
+      "route": "health/database",
+      "method": "GET",
+      "status": 200,
+      "ready": true
+    },
+    {
+      "route": "feed",
+      "method": "GET",
+      "status": 200,
+      "items": 0
+    },
+    {
+      "route": "test/identity",
+      "method": "POST",
+      "status": 404,
+      "errorCode": "NOT_FOUND"
+    },
+    {
+      "route": "test/submit",
+      "method": "POST",
+      "status": 404,
+      "errorCode": "NOT_FOUND"
+    },
+    {
+      "route": "test/reset",
+      "method": "POST",
+      "status": 404,
+      "errorCode": "NOT_FOUND"
+    },
+    {
+      "route": "session",
+      "method": "POST",
+      "status": 401,
+      "errorCode": "AUTH_REQUIRED"
+    }
+  ],
+  "status": "BLOCKED / User A Testnet MON funding required",
+  "publishedTransactions": 0,
+  "focusedProductionSmoke": {
+    "passed": 4,
+    "failed": 0,
+    "mode": "actual empty Cloud endpoint; existing production build; no fixtures"
+  },
+  "officialFaucet": "https://faucet.monad.xyz",
+  "officialFaucetDocumentation": "https://docs.monad.xyz/developer-essentials/testnet"
+}
