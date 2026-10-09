@@ -1,0 +1,348 @@
+{
+  "observedAt": "2026-10-09T14:01:34.096Z",
+  "scope": {
+    "chainId": 10143,
+    "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+    "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+    "parentId": "0",
+    "txHash": "0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f",
+    "thesisId": "1"
+  },
+  "receipt": {
+    "status": "success",
+    "blockNumber": "69554661",
+    "blockHash": "0xa89f3f48d68a25e34b5d1b2c9ccbff8381918d7ef5924f3ee05e59d079545e64",
+    "blockTimestamp": 1791553538,
+    "gasUsed": "120979",
+    "createdEventCount": 1,
+    "noForkEvent": true,
+    "calldataMatches": true,
+    "canonicalBlockMatches": true,
+    "storageMatches": true,
+    "nextThesisId": "2"
+  },
+  "metadata": {
+    "rowCount": 1,
+    "status": "finalized",
+    "contentHash": "0x0f42287f84c7d51038cc77af7324969c268efa0247fd914b8d3764efd228224e",
+    "contentHashMatches": true,
+    "requestKeyMatches": true,
+    "finalizedAt": "2026-10-09T13:45:40.689Z"
+  },
+  "envio": {
+    "meta": [
+      {
+        "chainId": 10143,
+        "startBlock": 69535255,
+        "progressBlock": 69557786,
+        "sourceBlock": 69557786,
+        "isReady": true,
+        "eventsProcessed": 1
+      }
+    ],
+    "counts": {
+      "Thesis": 1,
+      "ForkEdge": 0,
+      "AuthorStats": 1,
+      "MarketStats": 1,
+      "ThesisExternalForker": 0,
+      "AuthorExternalForker": 0,
+      "ExecutionLink": 0
+    },
+    "thesis": {
+      "id": "10143:0x1889a7216b1ecad9a44910dd0996834d0894b9e1:1",
+      "chainId": 10143,
+      "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+      "thesisId": "1",
+      "parentId": "0",
+      "rootId": "1",
+      "depth": 0,
+      "author": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+      "marketId": "32",
+      "side": "long",
+      "leverageBps": "20000",
+      "targetPriceE8": "420000000000",
+      "invalidationPriceE8": "360000000000",
+      "contentHash": "0x0f42287f84c7d51038cc77af7324969c268efa0247fd914b8d3764efd228224e",
+      "createdAt": "1791553538",
+      "blockNumber": "69554661",
+      "blockHash": "0xa89f3f48d68a25e34b5d1b2c9ccbff8381918d7ef5924f3ee05e59d079545e64",
+      "txHash": "0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f",
+      "executionRef": null,
+      "directForkCount": 0,
+      "uniqueExternalForkers": 0
+    },
+    "authorStats": [
+      {
+        "id": "10143:0x1889a7216b1ecad9a44910dd0996834d0894b9e1:0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+        "address": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+        "eligibleRoots": 1,
+        "successfulRoots": 0,
+        "eligibleForks": 0,
+        "successfulForks": 0,
+        "influence": 0,
+        "linkedExecutionCount": 0
+      }
+    ],
+    "marketStats": [
+      {
+        "id": "10143:0x1889a7216b1ecad9a44910dd0996834d0894b9e1:32",
+        "thesisCount": 1,
+        "rootCount": 1,
+        "forkCount": 0,
+        "linkedExecutionCount": 0
+      }
+    ]
+  },
+  "latency": {
+    "kind": "first observed client wall clock; includes network/polling",
+    "T0": 1791553539922,
+    "T1": 1791553540968,
+    "T2": 1791553541122,
+    "T3": 1791553541127,
+    "submittedToReceiptMs": 1046,
+    "receiptToEnvioMs": 154,
+    "envioToPublishedMs": 5
+  },
+  "application": {
+    "detail": {
+      "ok": true,
+      "data": {
+        "graph": {
+          "chainId": 10143,
+          "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+          "thesisId": "1",
+          "parentId": "0",
+          "rootId": "1",
+          "depth": 0,
+          "author": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+          "core": {
+            "marketId": 32,
+            "side": "long",
+            "leverageBps": 20000,
+            "targetPriceE8": "420000000000",
+            "invalidationPriceE8": "360000000000"
+          },
+          "contentHash": "0x0f42287f84c7d51038cc77af7324969c268efa0247fd914b8d3764efd228224e",
+          "createdAt": 1791553538,
+          "blockNumber": "69554661",
+          "txHash": "0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f",
+          "executionRef": null,
+          "directForkCount": 0,
+          "uniqueExternalForkers": 0
+        },
+        "author": {
+          "handle": "u_4dcde4749ffd",
+          "displayName": "u_4dcde4749ffd",
+          "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4"
+        },
+        "metadata": {
+          "version": 1,
+          "reasoning": "Testnet demo: explore a long ETH thesis if price holds above 3600 and reclaims 3800. Target 4200; invalidate on loss of 3600. This publication validates social lineage, not a performance claim.",
+          "tags": [
+            "demo",
+            "eth"
+          ],
+          "entryNote": "Demo only; wait for a reclaim of 3800 before considering the setup."
+        },
+        "metadataState": "trusted",
+        "parent": null,
+        "changes": [],
+        "challenge": false,
+        "social": {
+          "agrees": 0,
+          "comments": 0
+        },
+        "execution": {
+          "state": "not-executed",
+          "position": "unknown"
+        },
+        "provenance": {
+          "graph": "envio",
+          "metadata": "postgres",
+          "verification": "postgres",
+          "enrichment": "absent"
+        },
+        "comments": [],
+        "commentsHasMore": false,
+        "children": []
+      }
+    },
+    "profile": {
+      "ok": true,
+      "data": {
+        "identity": {
+          "handle": "u_4dcde4749ffd",
+          "displayName": "u_4dcde4749ffd",
+          "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4"
+        },
+        "bio": null,
+        "reputation": {
+          "eligibleRoots": 1,
+          "successfulRoots": 0,
+          "eligibleForks": 0,
+          "successfulForks": 0,
+          "influence": 0,
+          "executionsInspired": 0,
+          "originality": {
+            "label": "Emerging",
+            "successful": 0,
+            "eligible": 1,
+            "percentage": null
+          },
+          "contribution": {
+            "label": "Emerging",
+            "successful": 0,
+            "eligible": 0,
+            "percentage": null
+          }
+        },
+        "recent": [
+          {
+            "graph": {
+              "chainId": 10143,
+              "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+              "thesisId": "1",
+              "parentId": "0",
+              "rootId": "1",
+              "depth": 0,
+              "author": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+              "core": {
+                "marketId": 32,
+                "side": "long",
+                "leverageBps": 20000,
+                "targetPriceE8": "420000000000",
+                "invalidationPriceE8": "360000000000"
+              },
+              "contentHash": "0x0f42287f84c7d51038cc77af7324969c268efa0247fd914b8d3764efd228224e",
+              "createdAt": 1791553538,
+              "blockNumber": "69554661",
+              "txHash": "0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f",
+              "executionRef": null,
+              "directForkCount": 0,
+              "uniqueExternalForkers": 0
+            },
+            "author": {
+              "handle": "u_4dcde4749ffd",
+              "displayName": "u_4dcde4749ffd",
+              "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4"
+            },
+            "metadata": {
+              "version": 1,
+              "reasoning": "Testnet demo: explore a long ETH thesis if price holds above 3600 and reclaims 3800. Target 4200; invalidate on loss of 3600. This publication validates social lineage, not a performance claim.",
+              "tags": [
+                "demo",
+                "eth"
+              ],
+              "entryNote": "Demo only; wait for a reclaim of 3800 before considering the setup."
+            },
+            "metadataState": "trusted",
+            "parent": null,
+            "changes": [],
+            "challenge": false,
+            "social": {
+              "agrees": 0,
+              "comments": 0
+            },
+            "execution": {
+              "state": "not-executed",
+              "position": "unknown"
+            },
+            "provenance": {
+              "graph": "envio",
+              "metadata": "postgres",
+              "verification": "postgres",
+              "enrichment": "absent"
+            }
+          }
+        ],
+        "scope": {
+          "chainId": 10143,
+          "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+          "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4"
+        }
+      }
+    },
+    "feed": {
+      "ok": true,
+      "data": {
+        "items": [
+          {
+            "graph": {
+              "chainId": 10143,
+              "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+              "thesisId": "1",
+              "parentId": "0",
+              "rootId": "1",
+              "depth": 0,
+              "author": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+              "core": {
+                "marketId": 32,
+                "side": "long",
+                "leverageBps": 20000,
+                "targetPriceE8": "420000000000",
+                "invalidationPriceE8": "360000000000"
+              },
+              "contentHash": "0x0f42287f84c7d51038cc77af7324969c268efa0247fd914b8d3764efd228224e",
+              "createdAt": 1791553538,
+              "blockNumber": "69554661",
+              "txHash": "0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f",
+              "executionRef": null,
+              "directForkCount": 0,
+              "uniqueExternalForkers": 0
+            },
+            "author": {
+              "handle": "u_4dcde4749ffd",
+              "displayName": "u_4dcde4749ffd",
+              "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4"
+            },
+            "metadata": {
+              "version": 1,
+              "reasoning": "Testnet demo: explore a long ETH thesis if price holds above 3600 and reclaims 3800. Target 4200; invalidate on loss of 3600. This publication validates social lineage, not a performance claim.",
+              "tags": [
+                "demo",
+                "eth"
+              ],
+              "entryNote": "Demo only; wait for a reclaim of 3800 before considering the setup."
+            },
+            "metadataState": "trusted",
+            "parent": null,
+            "changes": [],
+            "challenge": false,
+            "social": {
+              "agrees": 0,
+              "comments": 0
+            },
+            "execution": {
+              "state": "not-executed",
+              "position": "unknown"
+            },
+            "provenance": {
+              "graph": "envio",
+              "metadata": "postgres",
+              "verification": "postgres",
+              "enrichment": "absent"
+            }
+          }
+        ],
+        "nextOffset": null,
+        "bounded": false,
+        "ranking": "Latest published ideas"
+      }
+    },
+    "health": {
+      "ok": true,
+      "data": {
+        "database": "ready",
+        "migrations": "applied"
+      }
+    }
+  },
+  "refresh": {
+    "metadataRowsRemainOne": true,
+    "indexedThesesRemainOne": true,
+    "nextThesisIdRemainsTwo": true,
+    "noResubmission": true
+  },
+  "status": "ROOT PROVEN / distinct User B journey pending"
+}
