@@ -128,3 +128,6 @@ Current social gate is still BLOCKED, not complete: genuine User B authenticatio
 
 
 2026-10-10 continuation: an actual native Chrome incognito window is now observed. User B login remains pending because the extension connection cannot yet control incognito tabs. Browser security policy rejected opening chrome://extensions; no workaround followed. The single current human action is enabling Allow in Incognito for the ChatGPT Chrome extension, with removal after this social test. Existing localhost/database health remains ready and migrations applied; application code and provider settings are unchanged. This supersedes the earlier window-opening handoff and does not establish a second user or a completed social gate.
+
+
+Current handoff after permission confirmation: the isolated product tab is controllable and initially signed out, while User A stays authenticated after reload. Privy Google authorization has reached its real blank identifier form in the same incognito tab. The sole next human action is second-account Google sign-in. Distinct authoritative identity/wallet and post-login isolation are still pending; no User B social mutation or fork exists yet. See the sanitized login evidence in the social journey report.
