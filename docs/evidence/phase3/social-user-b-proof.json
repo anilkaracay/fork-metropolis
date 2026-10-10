@@ -1,0 +1,27 @@
+{
+  "observedAt": "2026-10-10T05:54:26.900Z",
+  "chainId": 10143,
+  "userA": {
+    "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+    "handle": "u_4dcde4749ffd",
+    "authoritativeDidMatches": true,
+    "googleIdentity": true,
+    "embeddedWalletMatches": true,
+    "ownershipMatches": true
+  },
+  "userB": {
+    "wallet": "0xd86946d01ed9de86a8a16406e73acb5b312a2d03",
+    "handle": "u_03572f901994",
+    "authoritativeDidMatches": true,
+    "googleIdentity": true,
+    "embeddedWalletMatches": true,
+    "ownershipMatches": true,
+    "balanceMON": "0",
+    "recommendedFundingMON": "1"
+  },
+  "distinctPrivyIdentity": true,
+  "distinctDatabaseUser": true,
+  "distinctPrimaryWallet": true,
+  "sessionMode": "User-authorized sequential account switch in the same Chrome profile; prior separate-window checkpoint is historical, simultaneous isolation not claimed",
+  "status": "BLOCKED / User B Testnet MON funding required"
+}
