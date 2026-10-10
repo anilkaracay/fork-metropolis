@@ -1,5 +1,5 @@
 {
-  "observedAt": "2026-10-10T05:54:26.900Z",
+  "observedAt": "2026-10-10T05:58:28.962Z",
   "chainId": 10143,
   "userA": {
     "wallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
@@ -16,12 +16,12 @@
     "googleIdentity": true,
     "embeddedWalletMatches": true,
     "ownershipMatches": true,
-    "balanceMON": "0",
+    "balanceMON": "5",
     "recommendedFundingMON": "1"
   },
   "distinctPrivyIdentity": true,
   "distinctDatabaseUser": true,
   "distinctPrimaryWallet": true,
   "sessionMode": "User-authorized sequential account switch in the same Chrome profile; prior separate-window checkpoint is historical, simultaneous isolation not claimed",
-  "status": "BLOCKED / User B Testnet MON funding required"
+  "status": "FUNDED / actual social interactions pending"
 }

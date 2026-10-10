@@ -1,0 +1,70 @@
+{
+  "observedAt": "2026-10-10T06:01:36.409Z",
+  "scope": {
+    "chainId": 10143,
+    "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+    "thesisId": "1"
+  },
+  "userB": {
+    "wallet": "0xd86946d01ed9de86a8a16406e73acb5b312a2d03",
+    "handle": "u_03572f901994"
+  },
+  "database": {
+    "reactionRows": 1,
+    "commentRows": 1,
+    "metadataRows": 1,
+    "commentStatus": "visible",
+    "correctReactionOwner": true,
+    "correctCommentOwner": true
+  },
+  "application": {
+    "agrees": 1,
+    "comments": 1,
+    "commentBody": "The 3600 invalidation is clear. I will explore a higher target with a modest leverage change in a demo fork."
+  },
+  "reputation": {
+    "userA": {
+      "eligibleRoots": 1,
+      "successfulRoots": 0,
+      "eligibleForks": 0,
+      "successfulForks": 0,
+      "influence": 0,
+      "executionsInspired": 0,
+      "originality": {
+        "label": "Emerging",
+        "successful": 0,
+        "eligible": 1,
+        "percentage": null
+      },
+      "contribution": {
+        "label": "Emerging",
+        "successful": 0,
+        "eligible": 0,
+        "percentage": null
+      }
+    },
+    "userB": {
+      "eligibleRoots": 0,
+      "successfulRoots": 0,
+      "eligibleForks": 0,
+      "successfulForks": 0,
+      "influence": 0,
+      "executionsInspired": 0,
+      "originality": {
+        "label": "Emerging",
+        "successful": 0,
+        "eligible": 0,
+        "percentage": null
+      },
+      "contribution": {
+        "label": "Emerging",
+        "successful": 0,
+        "eligible": 0,
+        "percentage": null
+      }
+    }
+  },
+  "repeatedAgreePutProbe": "pending",
+  "crossUserFinalizeProbe": "pending",
+  "status": "REAL AGREE AND COMMENT PERSISTED / fork transaction pending"
+}
