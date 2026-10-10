@@ -1,5 +1,57 @@
 import { expect, test } from "@playwright/test";
 
+test("real published fork preserves its parent, changed fields and two-node tree", async ({
+  request,
+  page,
+}) => {
+  const id = process.env.FORK_SMOKE_FORK_ID;
+  test.skip(!id, "Opt-in actual published fork only.");
+  if (!id || !/^[1-9]\d*$/.test(id)) throw new Error("Use a real fork ID.");
+  const response = await request.get(`/api/theses/${id}`);
+  expect(response.status()).toBe(200);
+  const fork = (await response.json()).data;
+  expect(fork.metadataState).toBe("trusted");
+  expect(fork.parent.thesisId).toBe(fork.graph.parentId);
+  expect(fork.graph.parentId).not.toBe("0");
+  expect(fork.changes.map((c: { field: string }) => c.field)).toEqual(
+    expect.arrayContaining(["targetPriceE8", "leverageBps", "reasoning"]),
+  );
+  expect(fork.execution.state).toBe("not-executed");
+  await page.goto(`/t/${id}`);
+  await expect(
+    page.getByRole("heading", { name: "What changed", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Open Idea Tree", exact: true }).click();
+  await expect(
+    page.getByRole("heading", {
+      name: "One idea. Many perspectives.",
+      exact: true,
+    }),
+  ).toBeVisible();
+  const nodes = page.locator(".tree-node-link");
+  await expect(nodes).toHaveCount(2);
+  await expect(
+    page.locator(`.tree-node-link[href="/t/${id}/tree"]`),
+  ).toHaveAttribute("aria-current", "page");
+  await page
+    .locator(`.tree-node-link[href="/t/${fork.graph.parentId}/tree"]`)
+    .click();
+  await expect(
+    page.locator(`.tree-node-link[href="/t/${fork.graph.parentId}/tree"]`),
+  ).toHaveAttribute("aria-current", "page");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator(`.tree-node-link[href="/t/${id}/tree"]`).click();
+  await expect(nodes).toHaveCount(2);
+  await expect(
+    page.locator(`.tree-node-link[href="/t/${id}/tree"]`),
+  ).toHaveAttribute("aria-current", "page");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+});
+
 test("real empty index serves Feed, Explore and zero-activity Profile", async ({
   request,
   page,

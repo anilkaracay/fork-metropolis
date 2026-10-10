@@ -2,6 +2,13 @@
 
 Add every material change as a new entry. Never silently change architecture in code.
 
+## D-047 - Opt-in real-session social boundary verification
+
+Status: Accepted implementation within the explicitly authorized two-user safety probes
+Date: 2026-10-10
+
+Extend the existing localhost-only development Privy proof page with a manually invoked check for already-published external root/own fork. All requests use the normal authenticated API and real browser session. Check consecutive Agree PUTs, wrong-wallet Agree rejection, cross-user finalized metadata rejection, malformed parent validation and same-hash finalization replay. No new mutation route, fixture, token extraction, identity impersonation, signing or blockchain submission is added. Before mutations, require a trusted same-namespace root/fork, distinct authors, own fork and an existing Agree. Return only public namespace/wallet/thesis IDs, counts and checked status codes; keep tokens in the existing session adapter and reject unexpected successes/outages. Production and test-workspace exclusions remain unchanged. Add positive-control and fail-closed regression cases plus opt-in real-fork production tree/mobile smoke. This is bounded verification tooling for the approved gate, not a product feature or visual redesign.
+
 ## D-001 - Primary track
 
 Status: Accepted

@@ -10,6 +10,7 @@ import { monadTestnet } from "@fork/shared";
 import { Button } from "@/components/ui/button";
 import { api, ApiError } from "@/lib/api-client";
 import { developmentTypedData } from "@/lib/privy-proof";
+import { checkSocialBoundaries } from "@/lib/social-proof";
 import { useSession } from "./session";
 
 // Opt-in local proof page, outside product navigation; no tokens or signatures
@@ -217,6 +218,105 @@ export function PrivyProof() {
           Self transaction: <code>{transaction}</code>
         </p>
       )}
+      {auth.session && !auth.test && <SocialBoundaryProof />}
     </section>
+  );
+}
+
+function SocialBoundaryProof() {
+  const auth = useSession();
+  const [rootId, setRootId] = useState("1");
+  const [forkId, setForkId] = useState("2");
+  const [rootDraftId, setRootDraftId] = useState("");
+  const [forkDraftId, setForkDraftId] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState(
+    "Use the already-published external root and your own fork. No wallet submission is requested.",
+  );
+  async function check() {
+    if (!auth.session || auth.test || busy) return;
+    setBusy(true);
+    try {
+      const token = await auth.getToken();
+      if (!token)
+        throw new ApiError(
+          "AUTH_REQUIRED",
+          "Sign in to run the check.",
+          "Sign in again.",
+          401,
+        );
+      const wallet = auth.session.wallet;
+      const proof = await checkSocialBoundaries(
+        { wallet, rootId, forkId, rootDraftId, forkDraftId },
+        <T,>(path: string, options: Parameters<typeof api>[1] = {}) =>
+          api<T>(path, { ...options, token, wallet: options.wallet ?? wallet }),
+      );
+      setResult(JSON.stringify(proof));
+    } catch (error) {
+      setResult(
+        error instanceof ApiError
+          ? `${error.message} ${error.recovery}`
+          : "Check the published IDs and draft references, then retry.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="space-y-4 border-t pt-6">
+      <h2>Published social boundary check</h2>
+      <p>
+        Uses the normal authenticated API for Agree replay, ownership rejection,
+        invalid parent rejection and finalized transaction recovery.
+      </p>
+      <div className="grid gap-3">
+        <label>
+          Root thesis ID
+          <input
+            className="form-input"
+            value={rootId}
+            onChange={(event) => setRootId(event.target.value)}
+            disabled={busy}
+          />
+        </label>
+        <label>
+          Your fork thesis ID
+          <input
+            className="form-input"
+            value={forkId}
+            onChange={(event) => setForkId(event.target.value)}
+            disabled={busy}
+          />
+        </label>
+        <label>
+          Root draft reference
+          <input
+            className="form-input"
+            value={rootDraftId}
+            onChange={(event) => setRootDraftId(event.target.value)}
+            disabled={busy}
+          />
+        </label>
+        <label>
+          Your fork draft reference
+          <input
+            className="form-input"
+            value={forkDraftId}
+            onChange={(event) => setForkDraftId(event.target.value)}
+            disabled={busy}
+          />
+        </label>
+      </div>
+      <Button disabled={busy} onClick={() => void check()}>
+        Check published social boundaries
+      </Button>
+      <p
+        role="status"
+        className="break-words"
+        id="fork-development-social-boundaries"
+      >
+        {result}
+      </p>
+    </div>
   );
 }

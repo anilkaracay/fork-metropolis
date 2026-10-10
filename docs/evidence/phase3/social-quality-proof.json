@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-10-10T06:21:18.568784+00:00",
+  "format": "passed",
+  "lint": "passed; zero warnings",
+  "typecheck": "passed; all strict workspaces",
+  "abi": "passed; compiled copies identical",
+  "productionBuild": "passed",
+  "unit": {
+    "passed": 215,
+    "files": 22,
+    "socialBoundaryRegressions": 6
+  },
+  "envioHandlers": {
+    "passed": 12
+  },
+  "foundry": {
+    "passed": 28,
+    "fuzzCases": 3,
+    "runsPerFuzzCase": 256
+  },
+  "liveDatabase": {
+    "passed": 10,
+    "allProbeRowsRolledBack": true
+  },
+  "liveProductionSmoke": {
+    "passed": 4,
+    "skipped": 1,
+    "skipReason": "Obsolete opt-in empty-index-only test; live root/fork now exist",
+    "rootId": "1",
+    "forkId": "2",
+    "realForkDesktopMobileTreePassed": true,
+    "developmentProof404": true,
+    "fixtureMutations404": true
+  },
+  "knownWarnings": [
+    "Upstream Privy optional Farcaster mini-app-solana and ox dynamic dependency build warnings",
+    "Sandbox Foundry signature-cache write warning"
+  ],
+  "scope": "Real root/fork social gate only; no Nansen/Perpl/hosting/Phase 4"
+}

@@ -1,0 +1,42 @@
+{
+  "observedAt": "2026-10-10T06:13:22.213Z",
+  "namespace": {
+    "chainId": 10143,
+    "registryAddress": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1"
+  },
+  "wallet": "0xd86946d01ed9de86a8a16406e73acb5b312a2d03",
+  "rootId": "1",
+  "forkId": "2",
+  "repeatedAgreeRequests": 2,
+  "agreesBefore": 1,
+  "agreesAfter": 1,
+  "wrongWalletMutation": {
+    "status": 403,
+    "code": "WRONG_WALLET"
+  },
+  "crossUserFinalize": {
+    "status": 403,
+    "code": "WRONG_WALLET"
+  },
+  "malformedParent": {
+    "status": 400,
+    "code": "VALIDATION_FAILED"
+  },
+  "ownFinalizeReplays": 2,
+  "rootMetadataUnchanged": true,
+  "walletSubmissionRequested": false,
+  "database": {
+    "observedAt": "2026-10-10T06:14:23.364Z",
+    "metadataRows": 2,
+    "finalizedRows": 2,
+    "draftRows": 0,
+    "uniqueNamespaceRows": 2,
+    "uniqueReceiptRows": 2,
+    "walletOwnershipMatches": true,
+    "reactionRows": 1,
+    "commentRows": 1,
+    "correctReactionOwner": true,
+    "correctCommentOwner": true,
+    "rootHashTransactionFinalizationUnchanged": true
+  }
+}

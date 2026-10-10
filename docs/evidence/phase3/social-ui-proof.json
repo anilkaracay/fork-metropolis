@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-10-10T06:15:34.728Z",
+  "desktop": {
+    "documentWidth": 1512,
+    "nodeCount": 2,
+    "selectedHref": "/t/2/tree",
+    "viewportWidth": 1512
+  },
+  "mobile": {
+    "documentWidth": 390,
+    "nodeCount": 2,
+    "selectedHref": "/t/2/tree",
+    "viewportWidth": 390
+  },
+  "parentNodeSelectedAndReturnedToChild": true,
+  "refreshPreservesPublishedGraph": true,
+  "fixtureDataUsed": false,
+  "mobileSelectedBranchScreenshot": "social-idea-tree-mobile-selected.png",
+  "mobileKeyboardScrollObserved": {
+    "viewportWidth": 390,
+    "scrollY": 219.5,
+    "bothPublicAuthorsAndSelectedForkActionsVisible": true
+  },
+  "temporaryViewportReset": true
+}

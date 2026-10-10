@@ -1,6 +1,6 @@
 # Real two-user social journey — real root proven
 
-Status: BLOCKED / User A root, distinct authenticated/funded User B and real Agree/comment persistence are proven; the prepared User B fork needs human publication/wallet approval. The user approved Envio Cloud and explicitly authorized the real root → second real identity → Agree/comment → fork → Envio lineage → Idea Tree/reputation gate. No Nansen, Perpl, hosting, P1 or Phase 4 work is authorized. Earlier checkpoints below are historical, not the current state.
+Status: READY / Real User A root → distinct authenticated User B Agree/comment → real fork → live Envio lineage → desktop/mobile Idea Tree → correct reputation are proven. Live safety probes and fresh full implementation quality checks pass. Temporary incognito extension access removal still needs human confirmation, separately from the completed social journey. No Nansen, Perpl, hosting, P1 or Phase 4 work is authorized. Earlier checkpoints below are historical, not the current state.
 
 ## Focused preflight — 2026-10-09
 
@@ -34,7 +34,7 @@ The attempted Publish on Monad click was rejected before execution by automatic 
 
 ## Real User A root — after human publication
 
-The user completed the prepared publication. Actual Feed, direct Detail and Profile now render the real root. Public wallet: 0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4; thesis ID: 1; transaction: 0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f. [Independent public proof](social-root-proof.json) validates chain 10143, registry, successful receipt, canonical block/hash/timestamp, exactly one ThesisCreated event, no ThesisForked event, author, root parent 0, market 32, LONG, leverage 20000 bps, target 420000000000 E8 and invalidation 360000000000 E8. Exact calldata and contract storage match the persisted intent and event. No developer signing or resubmission was used.
+The user completed the prepared publication. Actual Feed, direct Detail and Profile now render the real root. Public wallet: 0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4; thesis ID: 1; transaction: 0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f. [Independent public proof](social-root-proof.json) validates chain 10143, registry, successful receipt, canonical block/hash/timestamp, exactly one ThesisCreated event with parent 0, author, market 32, LONG, leverage 20000 bps, target 420000000000 E8 and invalidation 360000000000 E8. The contract represents both roots and forks with ThesisCreated; there is no separate ThesisForked event. Exact calldata and contract storage match the persisted intent and event. No developer signing or resubmission was used.
 
 PostgreSQL contains exactly one finalized metadata row; recomputed canonical reasoning/tags/entry-note hash matches the event and Envio. Envio reports thesis 1 / parent 0 / root 1 / depth 0, the same transaction and canonical block, and zero direct/external forkers. Its entity counts are Thesis 1, ForkEdge 0, AuthorStats 1, MarketStats 1, ThesisExternalForker 0, AuthorExternalForker 0, ExecutionLink 0. The scoped public API marks metadata trusted and Feed contains one idea. A browser refresh followed by independent reads leaves one finalized row, one indexed thesis and nextThesisId=2, with the same hash. This proves refresh recovery did not duplicate the root; authenticated finalize replay is not yet separately exercised.
 
@@ -89,3 +89,98 @@ Using the existing localhost-only, production/test-disabled Privy proof page wit
 Clicked the real Fork this idea CTA, preserving parent 1, ETH market 32 and LONG. Actual parent prefill was visible. Changed Target 4200 → 4400 and Leverage 2× → 3×; replaced the reasoning with: “Testnet demo fork: keep the original ETH long thesis and 3600 invalidation, but explore a 4400 target with 3x leverage after a reclaim of 3800. This tests a distinct perspective and attributable lineage, not a performance claim.” Invalidation remains 3600, entry note and two tags remain inherited. The real UI displays User A attribution, all three changes, Draft, Publishing as @u_03572f901994 and Publish fork. No Challenge or market change was introduced.
 
 Sanitized screenshots: [real B Agree/comment](social-root-user-b-interactions.png), [passing B authentication boundaries](social-user-b-auth-boundaries.png), [actual prepared fork and diff](social-fork-prepared.png). The original task tab retains the completed form for the human action. The agent did not click Publish fork or request a wallet transaction; previous automatic approval review had rejected agent initiation of the analogous root publication, and no signing workaround was attempted. The exact next human action is completing publication from the prepared Publish fork button. The committed development observer will collect actual T0/T1/T2/T3 only if the real wallet submission/finalization/indexing/Published steps occur. No B transaction hash, allocated thesis ID, fork latency or lineage/reputation success is claimed yet. Existing full implementation checks remain applicable; no full suite was repeated for unchanged product code.
+
+## Completed real two-user gate — 2026-10-10
+
+### 1. Social journey status
+
+READY. The human completed B's prepared fork through the actual product and real embedded wallet. Independent [fork proof](social-fork-proof.json), [live safety proof](social-safety-proof.json), [UI proof](social-ui-proof.json) and [quality results](social-quality-proof.json) establish the required root → interaction → fork → lineage → reputation loop. Development-only proof controls call normal authenticated API routes and do not bypass authorization, manufacture identities or submit blockchain transactions. The user explicitly chose sequential different-account sign-in in the same Chrome profile; concurrent isolated sessions are not claimed.
+
+### 2. User A
+
+Public wallet: 0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4. Root thesis: 1. Transaction: 0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f. Successful canonical block 69554661; parent 0/root 1/depth 0. Exact chain/registry/wallet/intent/event/storage/content hash and finalized metadata match. The existing [root proof](social-root-proof.json) is a historical first-publication snapshot; its zero-fork reputation is superseded by the final fork proof.
+
+### 3. User B
+
+Public wallet: 0xd86946d01ed9de86a8a16406e73acb5b312a2d03. Fork thesis: 2. Transaction: 0xe5fbf9c835109a566be8afebd5c2d146731d1f998851ea1875798e328ab6b192. Successful canonical block 69749256, block hash 0x1bfe6151869b471b547ee0b97c122467da5a13d5782f27ad166578ab604ca0b8, gas used 129235. Distinct authoritative Privy identity/database user/owned embedded wallet already passed, without saving private identity values.
+
+### 4. Publishing state machines and measured latency
+
+Both actual publications traverse Draft → Awaiting wallet → Submitted → Confirming → Confirmed / indexing → Published. The observer separately records the first trusted Envio detail before Published commits. T0 is the real wallet adapter returning the submitted hash; T1 is the successful authoritative receipt/finalization response; T2 is first trusted Envio visibility; T3 is the Published React commit. These are first observed client wall-clock intervals including network/polling, not internal consensus or ingestion timestamps. Canonical block timestamps are independent receipt evidence.
+
+| UTC observation | Root, 2026-10-09 | Fork, 2026-10-10 |
+| --- | --- | --- |
+| T0 hash returned | 13:45:39.922 | 06:05:52.190 |
+| T1 receipt/finalization observed | 13:45:40.968 | 06:05:53.087 |
+| T2 trusted Envio visible | 13:45:41.122 | 06:05:53.425 |
+| T3 Published committed | 13:45:41.127 | 06:05:53.430 |
+| T0 → T1 | 1046 ms | 897 ms |
+| T1 → T2 | 154 ms | 338 ms |
+| T2 → T3 | 5 ms | 5 ms |
+
+Raw sanitized observations: [root](social-root-observation.json), [fork](social-fork-observation.json). No missing observation was inferred or replaced.
+
+### 5. Fork validation
+
+Exactly three changes: target 4200 → 4400 (E8 420000000000 → 440000000000), leverage 2× → 3× (20000 → 30000 bps), and new demo reasoning. Parent 1/ETH market 32/LONG are preserved; invalidation 3600, entry note and two tags are inherited. Challenge is false. Receipt status succeeds at registry 0x1889a7216b1ecad9a44910dd0996834d0894b9e1 on chain 10143. Exactly one ThesisCreated with parentId=1 matches actual author B, canonical timestamp, calldata and both fork/parent contract storage. The contract does not emit a separate fork event. Recomputed metadata contentHash matches receipt/event/storage/Envio. Metadata is trusted and finalized. Envio child is parent 1/root 1/depth 1 with the matching block/hash/transaction; ForkEdge names A as parent author and B as child author. External-wallet membership and stats are exact, with no self-fork classification.
+
+### 6. Idea Tree
+
+The actual live graph is A root 1 → B fork 2. Desktop renders both public authors and changed target/leverage. Selecting root switches Viewing to branch 1/depth 0; selecting the child restores branch 2/depth 1, and parent/open-idea navigation works. Mobile 390×844 renders two nodes with selected child href /t/2/tree; document width is exactly 390, with no horizontal overflow. A supported keyboard scroll brings both authors, changed-field badge, Viewing and fork actions into the viewport: [selected mobile branch](social-idea-tree-mobile-selected.png). Temporary viewport overrides were reset. A page reload preserves the two-node Published graph. Fresh production smoke independently repeats root/child selection and mobile overflow checks. [Desktop](social-idea-tree-desktop.png) and [full mobile page](social-idea-tree-mobile.png) are real UI screenshots, not seeded trees.
+
+### 7. Social actions
+
+The actual B Agree and normal 108-character comment persist under B's database user in the canonical root namespace. Exactly one reaction and one visible comment remain. Normal root UI shows Agreed 1 and the B comment after fresh navigation. Two consecutive authenticated Agree PUT requests return agreed=true while count stays 1. The original [interaction proof](social-interactions-proof.json) records the pre-fork reputation baseline; final [safety proof](social-safety-proof.json) records completed replay/ownership checks and independent database counts.
+
+### 8. Reputation
+
+| Exact count | User A | User B |
+| --- | ---: | ---: |
+| eligibleRoots | 1 | 0 |
+| successfulRoots | 1 | 0 |
+| eligibleForks | 0 | 1 |
+| successfulForks | 0 | 0 |
+| Influence | 1 | 0 |
+| Executions Inspired | 0 | 0 |
+| Originality | Emerging, 1/1 | Emerging, 0/0 |
+| Contribution | Emerging, 0/0 | Emerging, 0/1 |
+
+A's single root received one external B fork, so successfulRoots=1 and Influence=1. B's fork has no external child, so successfulForks/Influence remain 0. Percentages remain null because each relevant sample is below three. Agree/comment do not affect fork reputation. ExecutionLink is empty and both ideas are Not executed; no execution/PnL credit exists.
+
+### 9. PostgreSQL and Envio counts
+
+Two finalized metadata rows, zero draft rows, two unique canonical namespace keys and two unique receipt hashes remain after replay/refresh. Wallet ownership matches both authors; A's content hash, transaction and original finalization timestamp are unchanged. One B reaction and one B visible comment remain. Contract nextThesisId=3 proves no extra thesis submission occurred. Envio counts: Thesis 2, ForkEdge 1, AuthorStats 2, MarketStats 1, ThesisExternalForker 1, AuthorExternalForker 1, ExecutionLink 0; processed creation events=2 and the indexer is ready. Market stats are thesisCount=2/rootCount=1/forkCount=1/linkedExecutionCount=0. Runtime schema remains standard PostgreSQL with committed migrations, not provider-specific or schema push.
+
+### 10. Bugs and verification changes
+
+No real product-flow defect required a fix. The evidence helper's flat reputation shape correction and browser automation selector deadline were tooling issues, not application bugs. Six positive-control/fail-closed regressions accompany D-047's bounded proof transport: actual repeated PUT/finalize calls, unexpected foreign success, outage mistaken for rejection, same-author guard before mutations, inflated Agree count and wrong replay thesis. The localhost-only proof extension is excluded by unchanged production/test guards and uses the actual browser session; no new mutation endpoint exists. No visual redesign, new protocol event, dependency upgrade, P1 feature or extra chain publication was added.
+
+### 11. Quality results
+
+Fresh format:check, lint with zero warnings, all strict workspace typechecks, ABI comparison and production build pass. Tests: 215 unit/shared/database/web across 22 files; 12 Envio handler cases; 28 Foundry tests, including three 256-run fuzz cases. Ten live PostgreSQL constraint smoke checks pass and roll back all temporary rows, including namespace uniqueness, wallet ownership/association, reaction idempotence, comment ownership and fillIdentity uniqueness. Live production Playwright passes four tests against root 1/fork 2; one obsolete empty-index-only test intentionally skips. Actual fork/parent/diff/desktop-mobile tree and production proof/test routes 404 are covered. Known upstream Privy optional Farcaster/ox build warnings and the sandbox Foundry signature-cache warning remain visible; they do not fail the checks. No unrelated expensive checks were repeatedly run after success.
+
+### 12. Security
+
+No private identity email/DID/user UUID, Privy token, cookie, wallet signature/private key, Perpl key material or PostgreSQL credential is saved in the public proof. Tokens remain internal to the existing real session adapter. Configuration stays mode 0600/ignored/untracked; current exact-value browser/repository scans and redacted Gitleaks results are in [SECRET_SCAN.md](SECRET_SCAN.md). The two reviewed Gitleaks UUID findings are public root/fork requestKey correlations without authentication authority; raw findings are not suppressed. Wrong-wallet Agree and cross-user A finalization return 403/WRONG_WALLET; a malformed parent returns 400/VALIDATION_FAILED before draft creation. Own finalized fork replay twice returns the same thesis 2/Published; refresh leaves nextThesisId=3, two metadata rows/two indexed theses. No secret or signature extraction, alternate security-screen workaround or redundant blockchain transaction was used.
+
+### 13. Sanitized screenshots
+
+- [Live two-user Feed](social-feed-two-users.png)
+- [Root Detail after fork](social-root-detail-after-fork.png)
+- [B Agree/comment](social-root-user-b-interactions.png)
+- [Prepared fork/diff](social-fork-prepared.png)
+- [Published fork Detail](social-fork-detail.png)
+- [Idea Tree desktop](social-idea-tree-desktop.png)
+- [Idea Tree mobile](social-idea-tree-mobile.png)
+- [Mobile selected branch and actions](social-idea-tree-mobile-selected.png)
+- [A Profile after fork](social-user-a-profile-after-fork.png)
+- [B Profile after fork](social-user-b-profile-after-fork.png)
+- [Live social safety results](social-safety-checks.png)
+
+### 14. Human action
+
+No authentication, funding, signature or product action remains for the completed social gate. One temporary-access cleanup still needs human confirmation: disable Allow in Incognito for the ChatGPT Chrome extension previously enabled for this test. The browser tool blocks chrome://extensions, so the agent cannot reverse that setting through its supported surface and does not circumvent the restriction. A single confirmation question is pending; this permission removal is not claimed automated or completed.
+
+### 15. Next recommended gate
+
+Nansen authenticated integration, subject to explicit user review/approval. Stop here; no Nansen setup, Perpl enrollment/execution, self-host deployment, P1 work or Phase 4 was started. Optional Challenge was skipped to avoid an unnecessary chain transaction.
