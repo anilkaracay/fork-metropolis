@@ -2,6 +2,32 @@
 
 Add every material change as a new entry. Never silently change architecture in code.
 
+## D-051 - Defer Perpl and audit one shared landing/product identity
+
+Status: Explicit user priority change; Stage A research only
+Date: 2026-10-11
+
+PERPL: **BLOCKED / DEFERRED — EXTERNAL ORIGIN APPROVAL PENDING**. This supersedes D-050's requirement to wait for Perpl before presentation work. Preserve its implementation and historical evidence; no new enrollment, execution, Verified claim, reputation credit or Perpl bounty eligibility is authorized. Nansen remains deferred. Unavailable execution must be represented honestly without a broken action.
+
+Stage A covers the live social application's visual audit, current official product/marketing references, two creative directions, exact shared design tokens, Idea Tree, a premium landing at the canonical root, safe route preservation, README/submission presentation and a bounded implementation plan. The landing is an addition to the same audit, not a separate brand or restarted research task. Use genuine thesis #1 and fork #2; never fabricate activity or execution.
+
+Do not implement UI or routing changes, install dependencies, rewrite the README, deploy, alter production or contracts during Stage A. Stage B starts only after the user selects the art direction. Preserve existing deep links and authenticated social flows. Research output: [expanded art-direction report](assets/stage-a/art-direction-report.html).
+
+## D-050 - Real Perpl gate stops at provider Origin approval
+
+Status: Accepted scope; live execution blocked on provider approval
+Date: 2026-10-11
+
+The user approved one manual Testnet execution, authoritative GET-only verification, existing executionRef v1 encoding, author-only registry linking and Envio indexing. Preserve browser-local Ed25519 signing and the user-controlled Privy wallet. No bot, Nansen, submission polish or unrelated server changes are authorized.
+
+Current official developer guides and live context confirm chain 10143, instance 12, exchange `0x1964c32f0be608e7d29302aff5e61268e72080cc`, 6-decimal AUSD at `0xa9012a055bd4e0edff8ce09f960291c09d5322dc`, 100 AUSD account-opening minimum and 10 AUSD subsequent-deposit minimum. Eight markets are open, including the four supported MVP symbols. The API README lists an inconsistent older collateral address; current Networks & Configuration agrees with runtime context. Resolve configuration dynamically. REST docs also support POST order submission; the FORK server relay stays GET-only.
+
+Official enrollment requires a provider-whitelisted Origin for browser and backend calls. An unsigned fixture-public-key payload check returns HTTP 400 for `https://forktrades.xyz`; the identical request using Perpl's own Origin returns HTTP 200. That is only a diagnostic control, never a substitute enrollment Origin. Its typed data/MAC was discarded without logging/persistence; no private key, signature or enrollment was created. Official documentation directs integrations to ask Perpl for Origin approval; no self-service Origin registration API is documented. Stop here as explicitly requested.
+
+Keep v1 domains, ABI types and fields unchanged. Docs describe `at.l` as transaction-local log index and account/order IDs as uint64 numbers; receipt correspondence and lossless parsing must be validated with real authoritative evidence after approval. Static vectors are not live verification. The relay transport remains disabled. Current official Metropolis bounty still requires a production-ready bot/automation with real onchain activity: manual FORK execution is NOT ELIGIBLE. No automation is added for eligibility.
+
+See [Perpl checkpoint](evidence/phase3/PERPL.md) for evidence and the single provider action. Resume this gate after Origin approval; final submission polish remains subsequent and unstarted.
+
 ## D-049 - Canonical public HTTPS cutover on cherry
 
 Status: Accepted within the explicitly approved domain/HTTPS gate

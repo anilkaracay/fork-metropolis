@@ -1,0 +1,245 @@
+[
+  {
+    "name": "kronos-desktop",
+    "url": "https://www.kronosresearch.com/",
+    "title": "Kronos",
+    "width": 1512,
+    "height": 861,
+    "scrollWidth": 1512,
+    "file": "references/kronos-desktop.jpg"
+  },
+  {
+    "name": "aquanow-desktop",
+    "url": "https://www.aquanow.com/",
+    "title": "Aquanow | Digital Asset Infrastructure for Institutions",
+    "width": 1512,
+    "height": 861,
+    "scrollWidth": 1512,
+    "file": "references/aquanow-desktop.jpg"
+  },
+  {
+    "name": "aquanow-mobile",
+    "url": "https://www.aquanow.com/",
+    "title": "Aquanow | Digital Asset Infrastructure for Institutions",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "file": "references/aquanow-mobile.jpg"
+  },
+  {
+    "name": "linear-marketing",
+    "url": "https://linear.app/",
+    "title": "Linear – The system for product development",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/linear-marketing.jpg"
+  },
+  {
+    "name": "raycast-marketing",
+    "url": "https://www.raycast.com/",
+    "title": "Raycast - Your shortcut to everything",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/raycast-marketing.jpg"
+  },
+  {
+    "name": "resend-marketing",
+    "url": "https://resend.com/",
+    "title": "Resend · Email for developers",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/resend-marketing.jpg"
+  },
+  {
+    "name": "kraken-marketing",
+    "url": "https://pro.kraken.com/",
+    "title": "Kraken Pro — Advanced Trading Platform for Crypto, Stocks & Futures",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/kraken-marketing.jpg"
+  },
+  {
+    "name": "stripe-marketing",
+    "url": "https://stripe.com/",
+    "title": "Stripe | Financial Infrastructure to Grow Your Revenue",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/stripe-marketing.jpg"
+  },
+  {
+    "name": "vercel-marketing",
+    "url": "https://vercel.com/",
+    "title": "Login – Vercel",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/vercel-marketing.jpg"
+  },
+  {
+    "name": "notion-marketing",
+    "url": "https://www.notion.com/",
+    "title": "The AI workspace that works for you. | Notion",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/notion-marketing.jpg"
+  },
+  {
+    "name": "figma-marketing",
+    "url": "https://www.figma.com/",
+    "title": "Figma: The collaborative canvas for design, code, and AI",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/figma-marketing.jpg"
+  },
+  {
+    "name": "linear-product-docs",
+    "url": "https://linear.app/docs/display-options",
+    "title": "Display options – Linear Docs",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/linear-product-docs.jpg"
+  },
+  {
+    "name": "raycast-product-docs",
+    "url": "https://manual.raycast.com/search-bar",
+    "title": "Search Bar | Raycast Manual",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/raycast-product-docs.jpg"
+  },
+  {
+    "name": "github-product",
+    "url": "https://github.com/shadcn-ui/ui",
+    "title": "shadcn-ui/ui: Composable, accessible components with thoughtful defaults. Build your own component library with code you can customize, extend, and make your own.",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/github-product.jpg"
+  },
+  {
+    "name": "github-branches",
+    "url": "https://github.com/shadcn-ui/ui/branches",
+    "title": "Branches · shadcn-ui/ui",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/github-branches.jpg"
+  },
+  {
+    "name": "github-diff",
+    "url": "https://github.com/shadcn-ui/ui/commit/c2a67849be260701852b0977ba15eb5f3a0ce2a4",
+    "title": "fix(tests): skip turbo dependency builds in test:dev (#12259) · shadcn-ui/ui@c2a6784",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/github-diff.jpg"
+  },
+  {
+    "name": "hyperliquid-product",
+    "url": "https://app.hyperliquid.xyz/trade",
+    "title": "83,010 | BTC | Hyperliquid",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/hyperliquid-product.jpg"
+  },
+  {
+    "name": "zora-product",
+    "url": "https://zora.co/",
+    "title": "Zora — Post, discover, and trade what’s next",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/zora-product.jpg"
+  },
+  {
+    "name": "kraken-product",
+    "url": "https://pro.kraken.com/app/trade/btc-usd",
+    "title": "82,983.6 | BTC/USD Spot Trading | Kraken Pro",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/kraken-product.jpg"
+  },
+  {
+    "name": "polymarket-official-help",
+    "url": "https://help.polymarket.com/en/articles/13364444-limit-orders",
+    "title": "Limit Orders | Polymarket Help Center",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/polymarket-official-help.jpg"
+  },
+  {
+    "name": "raycast-product-preview",
+    "url": "https://www.raycast.com/",
+    "title": "Raycast - Your shortcut to everything",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "file": "references/raycast-product-preview.jpg"
+  },
+  {
+    "name": "linear-mobile",
+    "url": "https://linear.app/",
+    "title": "Linear – The system for product development",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "file": "references/linear-mobile.jpg"
+  },
+  {
+    "name": "resend-mobile",
+    "url": "https://resend.com/",
+    "title": "Resend · Email for developers",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "file": "references/resend-mobile.jpg"
+  },
+  {
+    "name": "kronos-mobile",
+    "url": "https://www.kronosresearch.com/",
+    "title": "Kronos",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "file": "references/kronos-mobile.jpg"
+  },
+  {
+    "name": "raycast-mobile",
+    "url": "https://www.raycast.com/",
+    "title": "Raycast - Your shortcut to everything",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "file": "references/raycast-mobile.jpg"
+  },
+  {
+    "name": "kraken-mobile",
+    "url": "https://pro.kraken.com/",
+    "title": "Kraken Pro — Advanced Trading Platform for Crypto, Stocks & Futures",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "file": "references/kraken-mobile.jpg"
+  },
+  {
+    "name": "zora-discovery",
+    "url": "https://zora.co/",
+    "title": "Zora — Post, discover, and trade what’s next",
+    "width": 1512,
+    "height": 805,
+    "scrollWidth": 1512,
+    "file": "references/zora-discovery.jpg"
+  }
+]

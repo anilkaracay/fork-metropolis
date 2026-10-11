@@ -1,0 +1,2989 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FORK — Stage A art direction and live visual audit</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0d10;
+        --panel: #12161b;
+        --text: #f2f4f2;
+        --muted: #a5ada7;
+        --line: #303731;
+        --accent: #b1d6ac;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          16px/1.65 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      main {
+        max-width: 1240px;
+        margin: auto;
+        padding: 56px 32px 96px;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.15;
+        letter-spacing: -0.035em;
+      }
+      h1 {
+        font-size: clamp(36px, 5vw, 66px);
+        max-width: 1000px;
+        margin: 22px 0;
+      }
+      h2 {
+        font-size: 32px;
+        margin-top: 0;
+      }
+      h3 {
+        font-size: 22px;
+      }
+      p {
+        max-width: 92ch;
+      }
+      a {
+        color: #c7dfc4;
+        text-underline-offset: 4px;
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      small,
+      .muted,
+      figcaption {
+        color: var(--muted);
+      }
+      section {
+        padding: 44px 0;
+        border-top: 1px solid var(--line);
+      }
+      header {
+        padding-bottom: 38px;
+      }
+      .eyebrow {
+        font:
+          12px/1.5 ui-monospace,
+          monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .notice {
+        border-left: 3px solid var(--accent);
+        padding: 12px 20px;
+        background: #151c16;
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+      .scroll {
+        overflow: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 14px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      th {
+        color: var(--accent);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      td:first-child {
+        font-weight: 600;
+      }
+      code,
+      pre,
+      .num {
+        font-family: ui-monospace, SFMono-Regular, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+      code {
+        font-size: 0.9em;
+      }
+      pre {
+        overflow: auto;
+        border: 1px solid var(--line);
+        padding: 20px;
+        background: #111519;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      li {
+        margin: 8px 0;
+      }
+      .board {
+        border: 1px solid var(--line);
+        padding: 30px;
+        min-height: 640px;
+      }
+      .board h3 {
+        font-size: clamp(30px, 4vw, 48px);
+        max-width: 460px;
+        margin: 42px 0 14px;
+        line-height: 1.02;
+      }
+      .board .deck {
+        font-size: 16px;
+        max-width: 350px;
+      }
+      .brand {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid currentColor;
+        padding-bottom: 18px;
+      }
+      .brand strong {
+        font-size: 24px;
+        letter-spacing: -0.06em;
+      }
+      .mock-cta {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 6px;
+        background: #b1d6ac;
+        color: #132014;
+        font-size: 14px;
+        font-weight: 600;
+        margin: 8px 8px 20px 0;
+      }
+      .mock-secondary {
+        font-size: 14px;
+      }
+      .node {
+        padding: 18px;
+        border: 1px solid #39413c;
+        border-radius: 8px;
+        background: #14191d;
+      }
+      .node small {
+        font:
+          11px/1.4 ui-monospace,
+          monospace;
+      }
+      .node strong {
+        display: block;
+        font-size: 21px;
+        margin: 8px 0;
+      }
+      .node p {
+        font-size: 14px;
+        margin: 6px 0;
+      }
+      .node.selected {
+        border-color: #b1d6ac;
+      }
+      .connector {
+        height: 56px;
+        display: block;
+        width: 100%;
+      }
+      .diff {
+        border-top: 1px solid #39413c;
+        padding-top: 8px !important;
+        color: #b1d6ac;
+        font-variant-numeric: tabular-nums;
+      }
+      .board-b {
+        color: #152b25;
+        background: #f1eee6;
+        border-color: #aaa99d;
+      }
+      .board-b .eyebrow,
+      .board-b small {
+        color: #52665a;
+      }
+      .board-b h3 {
+        font-family: Georgia, serif;
+        font-size: clamp(34px, 4vw, 52px);
+        font-weight: 400;
+        letter-spacing: -0.055em;
+        line-height: 1.06;
+      }
+      .board-b .mock-cta {
+        background: #174c3c;
+        color: #f3f0e8;
+        border-radius: 3px;
+      }
+      .board-b .node {
+        border-radius: 2px;
+        border-color: #b5b8ac;
+        background: transparent;
+      }
+      .board-b .node.selected {
+        background: #e4eadf;
+        border-color: #456855;
+      }
+      .board-b .diff {
+        color: #174c3c;
+        border-color: #adb4a8;
+      }
+      .board-b .connector {
+        color: #456855;
+      }
+      .swatch {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #566057;
+        background: var(--swatch);
+        margin-right: 8px;
+        vertical-align: middle;
+      }
+      details {
+        border: 1px solid var(--line);
+        padding: 16px;
+        margin: 14px 0;
+        border-radius: 6px;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .shots {
+        display: grid;
+        grid-template-columns: 1.2fr 1.1fr 0.5fr;
+        gap: 12px;
+        align-items: start;
+        margin-top: 18px;
+      }
+      .shots figure {
+        margin: 0;
+      }
+      .shots img {
+        width: 100%;
+        height: auto;
+        max-height: 620px;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid var(--line);
+      }
+      figcaption {
+        font-size: 12px;
+        margin-top: 8px;
+      }
+      .references {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .references figure {
+        margin: 0;
+      }
+      .references img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid var(--line);
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+        font-size: 13px;
+        padding: 22px 0;
+      }
+      .proof {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 24px;
+      }
+      .wireframe {
+        display: grid;
+        gap: 0;
+        border: 1px solid var(--line);
+      }
+      .wireframe article {
+        padding: 28px;
+        border-bottom: 1px solid var(--line);
+      }
+      .wireframe article:last-child {
+        border-bottom: 0;
+      }
+      .wireframe h3 {
+        margin: 8px 0;
+      }
+      .bounds {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      @media (max-width: 760px) {
+        main {
+          padding: 28px 20px 60px;
+        }
+        section {
+          padding: 30px 0;
+        }
+        h2 {
+          font-size: 27px;
+        }
+        .columns,
+        .references {
+          grid-template-columns: 1fr;
+        }
+        .board {
+          min-height: 0;
+          padding: 22px;
+        }
+        .shots {
+          grid-template-columns: 1fr;
+        }
+        .shots img {
+          max-height: 560px;
+        }
+        .scroll table {
+          min-width: 760px;
+        }
+        .references img {
+          height: auto;
+        }
+        .mock-cta {
+          min-height: 44px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto;
+        }
+      }
+      @media print {
+        body {
+          background: white;
+          color: #111;
+        }
+        main {
+          max-width: none;
+        }
+        section {
+          break-before: auto;
+        }
+        a {
+          color: #174c3c;
+        }
+        .notice {
+          background: #eee;
+        }
+        .board {
+          break-inside: avoid;
+        }
+        .references,
+        .shots {
+          display: block;
+        }
+        .references figure {
+          display: inline-block;
+          width: 31%;
+          margin: 1%;
+        }
+        .muted,
+        figcaption {
+          color: #444;
+        }
+      }
+
+      .ledger {
+        margin-top: 24px;
+        border-top: 1px solid #456855;
+        border-bottom: 1px solid #456855;
+      }
+      .ledger-authors {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        padding-top: 18px;
+      }
+      .ledger-author {
+        padding: 0 18px 16px 0;
+      }
+      .ledger-author + .ledger-author {
+        border-left: 1px solid #b5b8ac;
+        padding-left: 22px;
+      }
+      .ledger-author b {
+        display: block;
+        font:
+          400 60px/1.1 Georgia,
+          serif;
+        letter-spacing: -0.05em;
+        margin-bottom: 14px;
+      }
+      .ledger-author strong {
+        display: block;
+        font-size: 14px;
+        letter-spacing: 0;
+        margin-bottom: 4px;
+      }
+      .ledger-author small {
+        font:
+          12px/1.4 ui-monospace,
+          monospace;
+      }
+      .ledger-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        border-top: 1px solid #b5b8ac;
+        padding: 14px 0;
+      }
+      .ledger-row span {
+        font-size: 12px;
+      }
+      .ledger-row strong {
+        display: block;
+        font:
+          400 28px/1.3 Georgia,
+          serif;
+        letter-spacing: -0.025em;
+      }
+      .ledger-row span + span {
+        padding-left: 22px;
+      }
+      .ledger-footer {
+        font-size: 12px;
+        padding: 14px 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">
+          FORK / Stage A / 11 October 2026 / research and proposal
+        </div>
+        <h1>
+          Make the history of an idea the product’s unmistakable signature.
+        </h1>
+        <p>
+          One direction for the marketing landing, social application and
+          judge-facing README. Existing research is preserved and expanded. The
+          live application and its routes have not been redesigned or deployed.
+        </p>
+        <div class="notice">
+          <strong
+            >Recommendation: Direction A — Precision Social / Product
+            First.</strong
+          >
+          Use expressive landing typography and a genuine #1 → #2 lineage
+          composition within the same dark, restrained system. Adopt editorial
+          rhythm from the financial references without introducing a second
+          visual identity.
+        </div>
+        <p class="proof">
+          PERPL: BLOCKED / DEFERRED — EXTERNAL ORIGIN APPROVAL PENDING. Nansen:
+          deferred. No execution, Verified execution or Perpl bounty eligibility
+          claim. This report proposes Stage B; it does not authorize
+          implementation.
+        </p>
+        <nav aria-label="Report contents">
+          <a href="#assessment">Assessment</a
+          ><a href="#screenshots">Current screenshots</a
+          ><a href="#references">References</a
+          ><a href="#directions">Two directions</a
+          ><a href="#tokens">Design system</a><a href="#tree">Idea Tree</a
+          ><a href="#pages">Page audit</a><a href="#landing">Landing</a
+          ><a href="#routing">Routing</a><a href="#libraries">Libraries</a
+          ><a href="#readme">README</a><a href="#judge">90 seconds</a
+          ><a href="#sequence">Delivery plan</a><a href="#qa">QA</a
+          ><a href="#blockers">Blockers</a>
+        </nav>
+      </header>
+
+      <section id="assessment">
+        <h2>01 / Executive visual assessment</h2>
+        <p>
+          The live social core is credible. Real authors, immutable parent
+          attribution, field changes, comments, Agree state and conservative
+          reputation accounting already work together. The main weakness is
+          explanation through hierarchy: a visitor can read a trading post
+          before understanding what makes FORK different.
+        </p>
+        <ol>
+          <li>
+            <strong>The signature is underexposed.</strong> Tree links sit in
+            secondary rails and, on mobile detail, below much of the
+            conversation. The two-node Tree occupies a large canvas but does not
+            display the numerical differences that make the fork meaningful.
+          </li>
+          <li>
+            <strong
+              >Typography is inconsistent with its declared intent.</strong
+            >
+            CSS names Geist/Inter but the root layout does not load them. A live
+            computed body chain showed Apple/system/Roboto/Helvetica Neue/Nanum
+            Gothic instead. Stage B must identify and control the overriding
+            rule, not merely change font names. Multiple 9–11px labels weaken
+            the premium impression and readability.
+          </li>
+          <li>
+            <strong
+              >Empty space often carries filler instead of context.</strong
+            >
+            Repeated sidebar manifestos, large profile covers and four discovery
+            cards consume attention while only two actual ideas exist. Do not
+            manufacture more content. Make the genuine journey legible.
+          </li>
+          <li>
+            <strong>Semantic color is overloaded.</strong> Green marks
+            navigation, root cards, selection, Long and a dot beside “Not
+            executed.” Anchored provenance, bullish direction, selection and
+            execution must have distinct meanings.
+          </li>
+          <li>
+            <strong>The presentation is behind the implementation.</strong>
+            README still opens as a build specification and discusses
+            execution/Nansen ambitions before the proven live product. This is a
+            submission risk, not just a copy issue.
+          </li>
+        </ol>
+        <p>
+          <strong>Keep:</strong> dark restraint, the branch mark, social-first
+          navigation, the Fork verb, visible author attribution, existing real
+          data/API/security boundaries, field-diff logic, the Emerging sample
+          threshold, tabular numbers, focus styles and reduced-motion support.
+          Polish their presentation before adding features.
+        </p>
+        <p class="bounds">
+          Method: read-only production browser audit plus repository source
+          review. Nine settled views × 1440/1280/390px; additional
+          initial-render, empty and missing-thesis evidence. No publish, fork,
+          reaction, comment, wallet signature or blockchain transaction was
+          submitted. Visual responsive testing is browser viewport resizing, not
+          certification on physical iOS/Android devices. Reference
+          accessibility/performance comments are design observations; no
+          Lighthouse or complete WCAG audit was run.
+        </p>
+      </section>
+
+      <section id="screenshots">
+        <h2>02 / Current UI screenshot matrix</h2>
+        <p>
+          All 27 JPEGs were checked against their actual image dimensions.
+          Recorded document scroll width equals viewport width in every settled
+          view. Full-page captures place a fixed bottom navigation at the
+          original viewport position; that alone is not evidence that content
+          becomes unreachable. Open each image to inspect the unscaled original.
+        </p>
+        <div id="gallery">
+          <details>
+            <summary>Feed — /feed — 1440 / 1280 / 390</summary>
+            <div class="shots">
+              <figure>
+                <a href="feed-1440.jpg"
+                  ><img
+                    src="feed-1440.jpg"
+                    width="1440"
+                    height="1246"
+                    loading="lazy"
+                    alt="Actual production Feed at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="feed-1280.jpg"
+                  ><img
+                    src="feed-1280.jpg"
+                    width="1280"
+                    height="1277"
+                    loading="lazy"
+                    alt="Actual production Feed at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="feed-390.jpg"
+                  ><img
+                    src="feed-390.jpg"
+                    width="390"
+                    height="1277"
+                    loading="lazy"
+                    alt="Actual production Feed at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details>
+            <summary>Explore — /explore — 1440 / 1280 / 390</summary>
+            <div class="shots">
+              <figure>
+                <a href="explore-1440.jpg"
+                  ><img
+                    src="explore-1440.jpg"
+                    width="1440"
+                    height="1170"
+                    loading="lazy"
+                    alt="Actual production Explore at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="explore-1280.jpg"
+                  ><img
+                    src="explore-1280.jpg"
+                    width="1280"
+                    height="1154"
+                    loading="lazy"
+                    alt="Actual production Explore at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="explore-390.jpg"
+                  ><img
+                    src="explore-390.jpg"
+                    width="390"
+                    height="1815"
+                    loading="lazy"
+                    alt="Actual production Explore at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details>
+            <summary>Create — /new — 1440 / 1280 / 390</summary>
+            <div class="shots">
+              <figure>
+                <a href="create-1440.jpg"
+                  ><img
+                    src="create-1440.jpg"
+                    width="1440"
+                    height="1085"
+                    loading="lazy"
+                    alt="Actual production Create at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="create-1280.jpg"
+                  ><img
+                    src="create-1280.jpg"
+                    width="1280"
+                    height="1069"
+                    loading="lazy"
+                    alt="Actual production Create at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="create-390.jpg"
+                  ><img
+                    src="create-390.jpg"
+                    width="390"
+                    height="1679"
+                    loading="lazy"
+                    alt="Actual production Create at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details>
+            <summary>Thesis #1 — /t/1 — 1440 / 1280 / 390</summary>
+            <div class="shots">
+              <figure>
+                <a href="thesis-1-1440.jpg"
+                  ><img
+                    src="thesis-1-1440.jpg"
+                    width="1440"
+                    height="1236"
+                    loading="lazy"
+                    alt="Actual production Thesis #1 at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="thesis-1-1280.jpg"
+                  ><img
+                    src="thesis-1-1280.jpg"
+                    width="1280"
+                    height="1272"
+                    loading="lazy"
+                    alt="Actual production Thesis #1 at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="thesis-1-390.jpg"
+                  ><img
+                    src="thesis-1-390.jpg"
+                    width="390"
+                    height="1817"
+                    loading="lazy"
+                    alt="Actual production Thesis #1 at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details>
+            <summary>Fork #2 detail — /t/2 — 1440 / 1280 / 390</summary>
+            <div class="shots">
+              <figure>
+                <a href="thesis-2-1440.jpg"
+                  ><img
+                    src="thesis-2-1440.jpg"
+                    width="1440"
+                    height="1635"
+                    loading="lazy"
+                    alt="Actual production Fork #2 detail at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="thesis-2-1280.jpg"
+                  ><img
+                    src="thesis-2-1280.jpg"
+                    width="1280"
+                    height="1619"
+                    loading="lazy"
+                    alt="Actual production Fork #2 detail at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="thesis-2-390.jpg"
+                  ><img
+                    src="thesis-2-390.jpg"
+                    width="390"
+                    height="2120"
+                    loading="lazy"
+                    alt="Actual production Fork #2 detail at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details>
+            <summary>Fork composer — /t/1/fork — 1440 / 1280 / 390</summary>
+            <div class="shots">
+              <figure>
+                <a href="fork-composer-1440.jpg"
+                  ><img
+                    src="fork-composer-1440.jpg"
+                    width="1440"
+                    height="1161"
+                    loading="lazy"
+                    alt="Actual production Fork composer at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="fork-composer-1280.jpg"
+                  ><img
+                    src="fork-composer-1280.jpg"
+                    width="1280"
+                    height="1145"
+                    loading="lazy"
+                    alt="Actual production Fork composer at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="fork-composer-390.jpg"
+                  ><img
+                    src="fork-composer-390.jpg"
+                    width="390"
+                    height="1598"
+                    loading="lazy"
+                    alt="Actual production Fork composer at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details open>
+            <summary>Idea Tree — /t/2/tree — 1440 / 1280 / 390</summary>
+            <div class="shots">
+              <figure>
+                <a href="idea-tree-1440.jpg"
+                  ><img
+                    src="idea-tree-1440.jpg"
+                    width="1440"
+                    height="1025"
+                    loading="lazy"
+                    alt="Actual production Idea Tree at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="idea-tree-1280.jpg"
+                  ><img
+                    src="idea-tree-1280.jpg"
+                    width="1280"
+                    height="1009"
+                    loading="lazy"
+                    alt="Actual production Idea Tree at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="idea-tree-390.jpg"
+                  ><img
+                    src="idea-tree-390.jpg"
+                    width="390"
+                    height="1093"
+                    loading="lazy"
+                    alt="Actual production Idea Tree at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details>
+            <summary>
+              User A profile — /u/u_4dcde4749ffd — 1440 / 1280 / 390
+            </summary>
+            <div class="shots">
+              <figure>
+                <a href="profile-a-1440.jpg"
+                  ><img
+                    src="profile-a-1440.jpg"
+                    width="1440"
+                    height="1248"
+                    loading="lazy"
+                    alt="Actual production User A profile at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="profile-a-1280.jpg"
+                  ><img
+                    src="profile-a-1280.jpg"
+                    width="1280"
+                    height="1232"
+                    loading="lazy"
+                    alt="Actual production User A profile at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="profile-a-390.jpg"
+                  ><img
+                    src="profile-a-390.jpg"
+                    width="390"
+                    height="1396"
+                    loading="lazy"
+                    alt="Actual production User A profile at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+          <details>
+            <summary>
+              User B profile — /u/u_03572f901994 — 1440 / 1280 / 390
+            </summary>
+            <div class="shots">
+              <figure>
+                <a href="profile-b-1440.jpg"
+                  ><img
+                    src="profile-b-1440.jpg"
+                    width="1440"
+                    height="1299"
+                    loading="lazy"
+                    alt="Actual production User B profile at 1440px, settled real User A session"
+                /></a>
+                <figcaption>1440px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="profile-b-1280.jpg"
+                  ><img
+                    src="profile-b-1280.jpg"
+                    width="1280"
+                    height="1283"
+                    loading="lazy"
+                    alt="Actual production User B profile at 1280px, settled real User A session"
+                /></a>
+                <figcaption>1280px · full page · actual product</figcaption>
+              </figure>
+              <figure>
+                <a href="profile-b-390.jpg"
+                  ><img
+                    src="profile-b-390.jpg"
+                    width="390"
+                    height="1462"
+                    loading="lazy"
+                    alt="Actual production User B profile at 390px, settled real User A session"
+                /></a>
+                <figcaption>390px · full page · actual product</figcaption>
+              </figure>
+            </div>
+          </details>
+        </div>
+        <p>
+          <a href="captures.json">Machine-readable capture matrix</a> ·
+          <a href="initial-fork-composer-1440.jpg"
+            >Initial composer context/auth render</a
+          >
+          · <a href="initial-idea-tree-1440.jpg">Initial Tree render</a> ·
+          <a href="empty-btc-390.jpg">Real empty BTC view</a> ·
+          <a href="not-found-390.jpg">Real missing thesis</a>.
+        </p>
+        <p>
+          The two initial captures show transient Sign in/market fallback
+          presentation during readiness, not loss of an authenticated account.
+          Settled captures are labeled separately. The approved
+          <a href="../../evidence/phase3/PUBLIC_DEPLOYMENT.md"
+            >public deployment/auth evidence</a
+          >
+          supplies real Google login and wallet persistence proof; this design
+          audit did not repeat login/logout or expose private identity material.
+        </p>
+      </section>
+
+      <section id="references">
+        <h2>03 / Product reference findings</h2>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Reference / evidence type</th>
+                <th>Specific finding</th>
+                <th>Transfer into FORK</th>
+                <th>Inappropriate pattern</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a href="https://linear.app/docs/display-options">Linear</a
+                  ><br />Official product captures; live marketing
+                </td>
+                <td>
+                  Grouping and ordering live in a compact contextual control.
+                  Primary issue content stays readable while secondary
+                  properties form a narrow rail. Peek is a separate contextual
+                  experience.
+                </td>
+                <td>
+                  One Feed sorting row; one detailed thesis body; secondary
+                  provenance panel. Selected Tree node opens a compact detail
+                  view without forcing a full graph reload.
+                </td>
+                <td>
+                  A workspace hierarchy, command launcher or dense issue table
+                  would make a two-post consumer network feel like internal
+                  tooling.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://manual.raycast.com/search-bar">Raycast</a
+                  ><br />Official manual + rendered product demonstration
+                </td>
+                <td>
+                  A focused search/result surface exposes actions in a separate
+                  action panel. Shortcut labels and selected rows make keyboard
+                  behavior discoverable.
+                </td>
+                <td>
+                  Clear primary action per surface; focus-equivalent node
+                  preview; stable selected state. Preserve native keyboard
+                  interaction rather than inventing shortcuts everywhere.
+                </td>
+                <td>
+                  Global command palette is P2. The marketing’s dramatic
+                  texture, glow and virtual desktop chrome are unsuitable for
+                  FORK.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://github.com/shadcn-ui/ui/branches"
+                    >GitHub branches</a
+                  >
+                  /
+                  <a
+                    href="https://github.com/shadcn-ui/ui/commit/c2a67849be260701852b0977ba15eb5f3a0ce2a4"
+                    >actual diff</a
+                  ><br />Live public interface
+                </td>
+                <td>
+                  Branch lists distinguish the default branch and ahead/behind
+                  context. The observed commit places parent identity and change
+                  count above explicit old/new lines.
+                </td>
+                <td>
+                  “Original #1” / “Fork #2”; parent author link; target 4,200 →
+                  4,400 and leverage 2× → 3× before prose. Retain unchanged
+                  invalidation as context, not a change.
+                </td>
+                <td>
+                  Raw code diffs, commit hashes as headlines and merge
+                  terminology are unnecessary for trading ideas. Never trigger
+                  GitHub’s actual Fork action during reference research.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://pro.kraken.com/app/trade/btc-usd"
+                    >Kraken Pro</a
+                  ><br />Live signed-out market interface
+                </td>
+                <td>
+                  Numerical units, alignment, consistent panel boundaries and
+                  explicit unauthenticated action explain an information-rich
+                  screen.
+                </td>
+                <td>
+                  Aligned three-field thesis metrics, readable units, clear
+                  sign-in-to-publish state. Reuse numerical discipline only.
+                </td>
+                <td>
+                  Order books, permanent charts, portfolio bars and a Buy-first
+                  hierarchy would violate FORK’s social mission.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://polymarket.com/predictions">Polymarket</a
+                  ><br />Official sources; live browser timeout
+                </td>
+                <td>
+                  Official discovery describes topic browsing and sorting; its
+                  rules distinguish a market title from the evidence governing
+                  resolution. The live site timed out, so no fresh interactive
+                  visual proof is claimed.
+                </td>
+                <td>
+                  Use understandable topic filters and separate concise thesis
+                  summary from full reasoning/invalidation. Treat this as
+                  information-architecture input, not a copied visual layout.
+                </td>
+                <td>
+                  No probability or accuracy percentage for a thesis without a
+                  defined model and data. No attempt to bypass site
+                  restrictions.
+                  <a
+                    href="https://help.polymarket.com/en/articles/13364548-how-are-markets-clarified"
+                    >Official rules reference</a
+                  >.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://app.hyperliquid.xyz/trade">Hyperliquid</a
+                  ><br />Live public market interface
+                </td>
+                <td>
+                  One accent, stable tabs and numeric columns prioritize
+                  functional clarity. Its screen is intentionally a dense
+                  terminal.
+                </td>
+                <td>
+                  Keep metric rows stable as data arrives; neutral inactive
+                  actions and clear account readiness. Do not confuse a trade
+                  ACK with a verified fill.
+                </td>
+                <td>
+                  The entire trading layout, leverage prominence and multi-panel
+                  density belong to an exchange, not the FORK Feed.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://zora.co/">Zora</a><br />Live public
+                  discovery, desktop and mobile states
+                </td>
+                <td>
+                  The current route settles into a discovery table with
+                  creator/topic chips and Trending/Top/New. An initial
+                  media-oriented view and promotional overlay appeared during
+                  loading; they are not treated as the settled route.
+                </td>
+                <td>
+                  Creator attribution, compact discovery controls and distinct
+                  author identities. Keep idea content the main object.
+                </td>
+                <td>
+                  Token market cap, return columns, coin creation and Buy
+                  primacy do not belong in FORK. Avoid promotional overlays
+                  blocking a first visit.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          These are extracted decisions, not a request to reproduce any
+          reference. Linear and Raycast’s authenticated private workspaces were
+          not accessed or created; their official product captures and
+          demonstrations were examined instead.
+        </p>
+        <h3>Marketing references — composition, behavior and useful limits</h3>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Why the observed composition works</th>
+                <th>Concrete FORK decision</th>
+                <th>Reject / mobile / delivery implication</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a href="https://www.kronosresearch.com/">Kronos Research</a>
+                </td>
+                <td>
+                  Large left-anchored type, a defined outer frame, numbered
+                  sections and a disciplined evidence grid produce institutional
+                  weight.
+                </td>
+                <td>
+                  Use a visible 12-column alignment, quiet numbered section
+                  labels and one real provenance proof strip. Give typography
+                  priority over cards.
+                </td>
+                <td>
+                  Reject particle/texture animation and unsupported volume
+                  counters. Mobile stacks headline, explanation, CTA and
+                  evidence; do the same with real lineage. Its observed heading
+                  levels are not a semantic pattern to copy.
+                </td>
+              </tr>
+              <tr>
+                <td><a href="https://www.aquanow.com/">Aquanow</a></td>
+                <td>
+                  Oversized headline balances a smaller right-hand
+                  explanation/CTA. Generous spacing separates institutional
+                  service narratives.
+                </td>
+                <td>
+                  Let copy and lineage have asymmetrical visual weight. One
+                  compact infrastructure section is enough.
+                </td>
+                <td>
+                  The decorative 3D logo delays product explanation, especially
+                  on mobile. Replace that visual weight with actual root/fork
+                  content. FORK does not need Contact sales, regulatory claims
+                  or a large enterprise footer.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://pro.kraken.com/">Kraken Pro marketing</a>
+                </td>
+                <td>
+                  The hero pairs a plain promise and two CTA levels with
+                  recognizable product imagery; mobile switches to a
+                  phone-oriented presentation.
+                </td>
+                <td>
+                  “Explore FORK” is the strong CTA; “See how it works” is quiet.
+                  Show genuine UI below, and a readable mobile lineage model
+                  instead of a shrunk desktop screenshot.
+                </td>
+                <td>
+                  No purple exchange skin, native-app promotion, award badge or
+                  dashboard hero. The requested URL currently leads to Kraken’s
+                  official Pro marketing surface.
+                </td>
+              </tr>
+              <tr>
+                <td><a href="https://linear.app/">Linear marketing</a></td>
+                <td>
+                  Left-aligned bold typography, low-noise navigation and a large
+                  contextual product surface make the product recognizable
+                  before the explanation expands.
+                </td>
+                <td>
+                  Same tokens inside the product preview and the app;
+                  intentional crop of a real detail/diff, never a fabricated
+                  dashboard.
+                </td>
+                <td>
+                  On 390px its wide preview remains small and clipped. FORK must
+                  recompose into two native-width nodes. Initial reveal briefly
+                  hid hero content; FORK’s initial HTML must already explain the
+                  product.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://www.raycast.com/">Raycast marketing</a>
+                </td>
+                <td>
+                  A single large proposition and one dominant action precede
+                  focused demonstrations. Desktop product action overlays
+                  illustrate capability.
+                </td>
+                <td>
+                  One hero message; one purposeful demonstration of selecting #2
+                  and reading changes.
+                </td>
+                <td>
+                  Reject glowing illustration, animated wallpaper and huge
+                  inter-section dead zones. Its mobile download action is
+                  platform-specific; FORK’s browser CTA must remain present and
+                  usable.
+                </td>
+              </tr>
+              <tr>
+                <td><a href="https://resend.com/">Resend</a></td>
+                <td>
+                  Serif hero against a sober interface creates a deliberate
+                  editorial/product contrast. A simple start/docs CTA pair
+                  precedes concrete technical examples.
+                </td>
+                <td>
+                  This makes Direction B credible: editorial headlines with
+                  disciplined sans-serif app controls. Borrow concrete proof and
+                  compact footer links.
+                </td>
+                <td>
+                  Reject the decorative black cube. The saved 390px resize
+                  rendered unusually scaled; exclude it as reliable
+                  native-mobile evidence. Do not promise measured mobile
+                  performance from this capture.
+                </td>
+              </tr>
+              <tr>
+                <td><a href="https://stripe.com/">Additional 1: Stripe</a></td>
+                <td>
+                  The outer grid and differentiated text weights organize a
+                  broad infrastructure story. Product examples below the hero
+                  connect claims to operation.
+                </td>
+                <td>
+                  Align every landing section to the same rails; use hierarchy
+                  inside one sentence rather than more badges.
+                </td>
+                <td>
+                  Reject gradient spectacle, live global counters and
+                  customer-logo walls. FORK has verified infrastructure, not
+                  enterprise customer endorsement.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://www.notion.com/">Additional 2: Notion</a>
+                </td>
+                <td>
+                  A very large plain-language headline, clear CTA pair and
+                  recognizable product preview make the proposition
+                  approachable. Motion includes a visible Pause control.
+                </td>
+                <td>
+                  Make the social proposition understandable without crypto
+                  vocabulary; any long-running motion must be stoppable.
+                </td>
+                <td>
+                  No agent/AI pivot, invented testimonials, animated word
+                  carousel or decorative character art. FORK is about the
+                  authors’ ideas.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://www.figma.com/">Additional 3: Figma</a>
+                </td>
+                <td>
+                  Asymmetrical type/product/CTA placement creates a distinctive
+                  silhouette. The creative collage has an explicit Pause
+                  control.
+                </td>
+                <td>
+                  Own a distinctive lineage silhouette; use focus/click on real
+                  nodes to explain authorship. Keep a clear static state.
+                </td>
+                <td>
+                  The hero’s collage/cycling previews and event promotions would
+                  compete with a two-node story. Avoid them and keep the footer
+                  to product, source/demo and network identity.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Shared research conclusion:</strong> strong type, an
+          understandable product object, one action hierarchy and stable
+          alignment matter more than decorative assets. Section transitions
+          should be changes in density and a ruled boundary, not theatrical
+          full-screen scroll scenes. A small footer with live
+          product/source/demo links is appropriate; no fake press,
+          sponsors-as-customers or testimonials.
+        </p>
+        <div class="references">
+          <figure>
+            <a href="references/kronos-desktop.jpg"
+              ><img
+                src="references/kronos-desktop.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Kronos / live marketing"
+            /></a>
+            <figcaption>Kronos / live marketing</figcaption>
+          </figure>
+          <figure>
+            <a href="references/aquanow-desktop.jpg"
+              ><img
+                src="references/aquanow-desktop.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Aquanow / live marketing"
+            /></a>
+            <figcaption>Aquanow / live marketing</figcaption>
+          </figure>
+          <figure>
+            <a href="references/linear-marketing.jpg"
+              ><img
+                src="references/linear-marketing.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Linear / live marketing"
+            /></a>
+            <figcaption>Linear / live marketing</figcaption>
+          </figure>
+          <figure>
+            <a href="references/raycast-marketing.jpg"
+              ><img
+                src="references/raycast-marketing.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Raycast / live marketing"
+            /></a>
+            <figcaption>Raycast / live marketing</figcaption>
+          </figure>
+          <figure>
+            <a href="references/resend-marketing.jpg"
+              ><img
+                src="references/resend-marketing.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Resend / live marketing"
+            /></a>
+            <figcaption>Resend / live marketing</figcaption>
+          </figure>
+          <figure>
+            <a href="references/kraken-marketing.jpg"
+              ><img
+                src="references/kraken-marketing.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Kraken / live marketing"
+            /></a>
+            <figcaption>Kraken / live marketing</figcaption>
+          </figure>
+          <figure>
+            <a href="references/stripe-marketing.jpg"
+              ><img
+                src="references/stripe-marketing.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Stripe / extra reference"
+            /></a>
+            <figcaption>Stripe / extra reference</figcaption>
+          </figure>
+          <figure>
+            <a href="references/notion-marketing.jpg"
+              ><img
+                src="references/notion-marketing.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Notion / extra reference"
+            /></a>
+            <figcaption>Notion / extra reference</figcaption>
+          </figure>
+          <figure>
+            <a href="references/figma-marketing.jpg"
+              ><img
+                src="references/figma-marketing.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Figma / extra reference"
+            /></a>
+            <figcaption>Figma / extra reference</figcaption>
+          </figure>
+          <figure>
+            <a href="references/linear-product-docs.jpg"
+              ><img
+                src="references/linear-product-docs.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Linear / official product capture"
+            /></a>
+            <figcaption>Linear / official product capture</figcaption>
+          </figure>
+          <figure>
+            <a href="references/raycast-product-preview.jpg"
+              ><img
+                src="references/raycast-product-preview.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Raycast / product demonstration"
+            /></a>
+            <figcaption>Raycast / product demonstration</figcaption>
+          </figure>
+          <figure>
+            <a href="references/github-diff.jpg"
+              ><img
+                src="references/github-diff.jpg"
+                loading="lazy"
+                alt="Reference screenshot: GitHub / live diff"
+            /></a>
+            <figcaption>GitHub / live diff</figcaption>
+          </figure>
+          <figure>
+            <a href="references/github-branches.jpg"
+              ><img
+                src="references/github-branches.jpg"
+                loading="lazy"
+                alt="Reference screenshot: GitHub / live branches"
+            /></a>
+            <figcaption>GitHub / live branches</figcaption>
+          </figure>
+          <figure>
+            <a href="references/kraken-product.jpg"
+              ><img
+                src="references/kraken-product.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Kraken / live market UI"
+            /></a>
+            <figcaption>Kraken / live market UI</figcaption>
+          </figure>
+          <figure>
+            <a href="references/hyperliquid-product.jpg"
+              ><img
+                src="references/hyperliquid-product.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Hyperliquid / live market UI"
+            /></a>
+            <figcaption>Hyperliquid / live market UI</figcaption>
+          </figure>
+          <figure>
+            <a href="references/zora-discovery.jpg"
+              ><img
+                src="references/zora-discovery.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Zora / live discovery"
+            /></a>
+            <figcaption>Zora / live discovery</figcaption>
+          </figure>
+          <figure>
+            <a href="references/kronos-mobile.jpg"
+              ><img
+                src="references/kronos-mobile.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Kronos / 390px"
+            /></a>
+            <figcaption>Kronos / 390px</figcaption>
+          </figure>
+          <figure>
+            <a href="references/aquanow-mobile.jpg"
+              ><img
+                src="references/aquanow-mobile.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Aquanow / 390px"
+            /></a>
+            <figcaption>Aquanow / 390px</figcaption>
+          </figure>
+          <figure>
+            <a href="references/linear-mobile.jpg"
+              ><img
+                src="references/linear-mobile.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Linear / 390px"
+            /></a>
+            <figcaption>Linear / 390px</figcaption>
+          </figure>
+          <figure>
+            <a href="references/raycast-mobile.jpg"
+              ><img
+                src="references/raycast-mobile.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Raycast / 390px"
+            /></a>
+            <figcaption>Raycast / 390px</figcaption>
+          </figure>
+          <figure>
+            <a href="references/kraken-mobile.jpg"
+              ><img
+                src="references/kraken-mobile.jpg"
+                loading="lazy"
+                alt="Reference screenshot: Kraken / 390px"
+            /></a>
+            <figcaption>Kraken / 390px</figcaption>
+          </figure>
+        </div>
+        <p class="bounds">
+          Primary desktop and available 390px marketing captures are saved
+          locally. <a href="references/captures.json">Reference inventory</a>.
+          The Vercel URL led to an existing login surface and was excluded from
+          the marketing comparison; no login or deployment was attempted.
+          Performance budgets below are FORK targets, not measured scores for
+          reference sites.
+        </p>
+      </section>
+
+      <section id="directions">
+        <h2>04 / Two credible directions — landing + application</h2>
+        <p>
+          These static boards are proposed compositions,
+          <strong
+            >not application screenshots or implemented landing pages</strong
+          >. They use the genuine #1 → #2 parameters. System fonts stand in for
+          the specified self-hosted fonts; no font package or design library was
+          installed. Both preserve the FORK branch identity.
+        </p>
+        <div class="columns" id="concepts">
+          <article class="board board-a">
+            <div class="brand">
+              <strong>FORK.</strong><span>Explore ↗</span>
+            </div>
+            <div class="eyebrow" style="margin-top: 32px">
+              A / Precision Social · Product First
+            </div>
+            <h3>Trading ideas<br />evolve here.</h3>
+            <p class="deck">
+              Publish an idea. Fork a better one.<br />Build its history.
+            </p>
+            <span class="mock-cta">Explore FORK ↗</span
+            ><span class="mock-secondary">See how it works ↓</span>
+            <div class="node">
+              <small>ORIGINAL #1 · USER A</small><strong>ETH · Long</strong>
+              <p>
+                Target <span class="num">$4,200</span> · Leverage
+                <span class="num">2×</span>
+              </p>
+            </div>
+            <svg
+              class="connector"
+              viewBox="0 0 400 56"
+              aria-label="Fork #2 descends from original #1"
+              role="img"
+            >
+              <path
+                d="M40 0V24Q40 36 52 36H90"
+                fill="none"
+                stroke="#b1d6ac"
+                stroke-width="1.5"
+              />
+              <circle cx="90" cy="36" r="3" fill="#b1d6ac" />
+              <text
+                x="107"
+                y="40"
+                fill="#a5ada7"
+                font-size="12"
+                font-family="monospace"
+              >
+                Target + leverage changed
+              </text>
+            </svg>
+            <div class="node selected">
+              <small>FORK #2 · USER B</small
+              ><strong>A different perspective.</strong>
+              <p class="diff">$4,200 → $4,400 &nbsp; / &nbsp; 2× → 3×</p>
+              <p>Invalidation stays $3,600.</p>
+            </div>
+            <p class="proof">
+              Real Monad Testnet lineage. No execution claimed.
+            </p>
+          </article>
+          <article class="board board-b">
+            <div class="brand">
+              <strong>FORK.</strong><span>The network ↗</span>
+            </div>
+            <div class="eyebrow" style="margin-top: 32px">
+              B / Market Editorial · Financial
+            </div>
+            <h3>Trading ideas<br /><em>evolve</em> here.</h3>
+            <p class="deck">
+              Publish an idea. Fork a better one.<br />Build its history.
+            </p>
+            <span class="mock-cta">Explore FORK ↗</span
+            ><span class="mock-secondary">See how it works ↓</span>
+            <div class="ledger">
+              <div class="ledger-authors">
+                <div class="ledger-author">
+                  <b>01</b><strong>THE ORIGINAL</strong
+                  ><small>#1 · USER A · ETH LONG</small>
+                </div>
+                <div class="ledger-author">
+                  <b>02</b><strong>THE CONTRIBUTION</strong
+                  ><small>#2 · USER B · ETH LONG</small>
+                </div>
+              </div>
+              <svg
+                viewBox="0 0 500 28"
+                width="100%"
+                height="28"
+                role="img"
+                aria-label="Original number 1 leads to fork number 2"
+              >
+                <path
+                  d="M8 14H480M470 7L480 14L470 21"
+                  fill="none"
+                  stroke="#456855"
+                  stroke-width="1.5"
+                />
+              </svg>
+              <div class="ledger-row">
+                <span>ORIGINAL TARGET<strong>$4,200</strong></span
+                ><span>FORK TARGET<strong>$4,400</strong></span>
+              </div>
+              <div class="ledger-row">
+                <span>ORIGINAL LEVERAGE<strong>2×</strong></span
+                ><span>FORK LEVERAGE<strong>3×</strong></span>
+              </div>
+              <p class="ledger-footer">
+                Same $3,600 invalidation. Distinct author. Public history.
+              </p>
+            </div>
+            <p class="proof" style="color: #52665a">
+              A record of authorship, not a performance claim.
+            </p>
+          </article>
+        </div>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Criterion</th>
+                <th>A — Precision Social</th>
+                <th>B — Market Editorial</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Distinctiveness</td>
+                <td>
+                  Moderate from palette/type alone; high when real lineage/diff
+                  becomes its signature.
+                </td>
+                <td>
+                  Strong warm-paper/serif identity; risks resembling a financial
+                  publication unless real lineage stays central.
+                </td>
+              </tr>
+              <tr>
+                <td>Product clarity</td>
+                <td>
+                  Direct: landing preview and application share the same
+                  node/diff grammar.
+                </td>
+                <td>
+                  More narrative; must keep operational controls explicit and
+                  avoid decorative diagrams.
+                </td>
+              </tr>
+              <tr>
+                <td>Perceived quality</td>
+                <td>
+                  Depends on exact spacing, reliable fonts and excellent
+                  interaction states.
+                </td>
+                <td>
+                  Depends on editorial typography and disciplined composition;
+                  attractive but easier to overdesign.
+                </td>
+              </tr>
+              <tr>
+                <td>Implementation time</td>
+                <td>
+                  Approximately 16–22 focused engineering hours including
+                  QA/submission packaging.
+                </td>
+                <td>
+                  Approximately 22–30 hours: more surface/type retuning across
+                  every application page.
+                </td>
+              </tr>
+              <tr>
+                <td>Technical risk</td>
+                <td>
+                  Lower: evolve existing dark CSS/native tree without a new
+                  framework.
+                </td>
+                <td>
+                  Medium: additional font and contrast work, new light surface
+                  treatment across auth/forms.
+                </td>
+              </tr>
+              <tr>
+                <td>Mobile</td>
+                <td>
+                  Readable native-width lineage and familiar functional
+                  controls.
+                </td>
+                <td>
+                  Editorial headline has more presence; preserve body density
+                  and avoid giant content-free heroes.
+                </td>
+              </tr>
+              <tr>
+                <td>App/README consistency</td>
+                <td>
+                  Strong immediately; genuine Tree image serves all three
+                  surfaces.
+                </td>
+                <td>
+                  Strong only after broader product retuning; screenshots
+                  currently clash with the proposed paper identity.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>A application:</strong> bounded social reading column, compact
+          contextual rail, selectable functional nodes and inline before/after
+          fields. <strong>B application:</strong> editorial reading column,
+          unboxed post rows divided by fine rules, serif idea headlines, and an
+          architectural comparison ledger for lineage. Both retain the same
+          functional navigation and honest data; B is a materially different
+          composition, not just A with a light theme.
+        </p>
+        <h3>05 / Decisive recommendation</h3>
+        <p>
+          <strong>Choose A.</strong> Add only editorial composition: oversized
+          left-aligned hero, numbered section rhythm and a calm two-author
+          lineage plate. Do not add B’s serif/light palette just to mix styles.
+          The product is already dark and functional; the deadline favors a
+          coherent refinement with a signature FORK object over a complete
+          reskin. B remains a credible alternative if deliberately selected, not
+          a second concurrent brand.
+        </p>
+      </section>
+
+      <section id="tokens">
+        <h2>06 / Exact shared design system proposal</h2>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>A / recommended value</th>
+                <th>Purpose / rule</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Canvas</td>
+                <td>
+                  <span class="swatch" style="--swatch: #0b0d10"></span>#0B0D10
+                </td>
+                <td>Landing and app background; preserve existing base.</td>
+              </tr>
+              <tr>
+                <td>Surface / elevated / hover</td>
+                <td>#12161B / #191F25 / #20272E</td>
+                <td>
+                  Only three levels; no blur, gradients or nested card stacks.
+                </td>
+              </tr>
+              <tr>
+                <td>Text / secondary</td>
+                <td>#F2F4F2 / #A5ADA7</td>
+                <td>
+                  Body and metadata; secondary must remain legible on all
+                  surfaces.
+                </td>
+              </tr>
+              <tr>
+                <td>Border / control border</td>
+                <td>#303731 / #66756C</td>
+                <td>
+                  Quiet decorative rules versus visible input boundaries. Do not
+                  rely on the quiet rule to identify a control.
+                </td>
+              </tr>
+              <tr>
+                <td>Brand / selected tint</td>
+                <td>
+                  <span class="swatch" style="--swatch: #b1d6ac"></span>#B1D6AC
+                  / #1B2920
+                </td>
+                <td>
+                  Fork CTA and selected lineage. CTA ink #132014. Hover #C0E1BA.
+                  Never a profit claim.
+                </td>
+              </tr>
+              <tr>
+                <td>Link / informational proof</td>
+                <td>#B8D4EE</td>
+                <td>
+                  Onchain registry/Envio links and “Onchain anchored.” Must name
+                  the scope of proof.
+                </td>
+              </tr>
+              <tr>
+                <td>Long / Short / warning</td>
+                <td>#9FD2B4 / #F0A7B1 / #E5C58D</td>
+                <td>
+                  Always accompanied by labels/icons. Long/Short are idea
+                  direction, not success/failure.
+                </td>
+              </tr>
+              <tr>
+                <td>Error / muted unavailable</td>
+                <td>#F0A7B1 / #A5ADA7</td>
+                <td>
+                  Invalid input with recovery; unavailable execution remains
+                  neutral. No green dot next to Not executed.
+                </td>
+              </tr>
+              <tr>
+                <td>Focus</td>
+                <td>2px #B1D6AC; 3px offset</td>
+                <td>
+                  Every link/button/node; focus previews equal hover previews.
+                  Selection and focus must be distinguishable.
+                </td>
+              </tr>
+              <tr>
+                <td>Primary type</td>
+                <td>Geist Sans, weights 400/500/600</td>
+                <td>
+                  Load explicitly using existing Next font tooling; self-host.
+                  Set the variable on landing and app after isolating overrides.
+                  Fall back to system-ui.
+                </td>
+              </tr>
+              <tr>
+                <td>Numeric type</td>
+                <td>Geist Mono 400/500 + tabular-nums</td>
+                <td>
+                  Targets, leverage, counts, IDs and diff values. Prose stays
+                  proportional.
+                </td>
+              </tr>
+              <tr>
+                <td>Type scale</td>
+                <td>
+                  Landing 88/88px at 1440; 72/76 at 1280; 46/48 at 390. App H1
+                  32/38; H2 24/30; card title 20/26; body 16/25; controls 14/20;
+                  metadata 12/18.
+                </td>
+                <td>
+                  Headline tracking −.045em; app −.025em; body normal. No
+                  essential text below 12px. Form inputs 16px on mobile.
+                </td>
+              </tr>
+              <tr>
+                <td>Spacing / geometry</td>
+                <td>
+                  4, 8, 12, 16, 20, 24, 32, 48, 64, 96px. Control radius 6px;
+                  idea/node 10px; popover 12px; avatars round.
+                </td>
+                <td>
+                  One scale, no miscellaneous 17/23px spacing. No excessive
+                  rounded feature rectangles.
+                </td>
+              </tr>
+              <tr>
+                <td>Buttons / icons</td>
+                <td>44px control height; icon 16/20/24px; stroke 1.75px.</td>
+                <td>
+                  Use existing branch icon set; unify it. Icon-only target
+                  ≥44×44. Keep Fork label explicit. Disabled is not-allowed;
+                  wait cursor only while pending.
+                </td>
+              </tr>
+              <tr>
+                <td>Desktop grid</td>
+                <td>
+                  Landing max 1200px, 12 columns, 24px gaps. App sidebar 216px;
+                  reading column 640–720px; contextual rail 256px; 32px main
+                  inset.
+                </td>
+                <td>
+                  At 1280 rail collapses before text becomes narrow. Tree uses
+                  remaining width; prose remains bounded.
+                </td>
+              </tr>
+              <tr>
+                <td>Responsive</td>
+                <td>
+                  ≥1280 expanded; 768–1279 compact shell/no persistent context
+                  rail; &lt;768 single column/20px inset.
+                </td>
+                <td>
+                  At 390 content width 350px; nav includes safe-area inset and
+                  content clearance. Bottom CTA never covers focused input.
+                </td>
+              </tr>
+              <tr>
+                <td>Motion</td>
+                <td>
+                  Hover 120ms; selection/diff 160ms; purposeful reveal ≤400ms.
+                  ease: cubic-bezier(.2,.8,.2,1).
+                </td>
+                <td>
+                  Opacity/transform only where useful. Reduced motion: no
+                  drawing/reveal/translation; content visible immediately.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Direction B alternative tokens:</strong> canvas #F1EEE6,
+          surface #FAF8F2, ink #152B25, secondary #52665A, decorative rule
+          #B5B8AC, control border #617367, brand #174C3C, selected #E4EADF, link
+          #225878, warning #795B19, error #9B3D49. Source Serif 4 at 400/500 for
+          editorial headings; Geist Sans and Mono for body/controls/numbers.
+          Radius 3px controls/6px nodes; same spacing and semantic meanings. Do
+          not use the dark Direction A semantic hexes untested on paper
+          surfaces.
+        </p>
+        <p>
+          <strong>Interaction states:</strong> default → hover → focus-visible →
+          pressed → disabled/pending are explicit. Pending publish says “Confirm
+          in wallet,” “Publishing…” then “Waiting for indexer,” with recovery
+          from cancellation/timeouts and no duplicate submission. Existing
+          underlying security/transaction logic stays intact. Semantic contrast
+          must pass automated and manual checks during Stage B; these are
+          proposed tokens, not a completed conformance claim.
+        </p>
+      </section>
+
+      <section id="tree">
+        <h2>07 / Signature Idea Tree redesign plan</h2>
+        <p>
+          <strong>The first view should answer:</strong> whose idea was first,
+          who contributed, and what changed. Today the selected Tree node routes
+          to another Tree URL; this can reload/reframe the canvas. Long
+          reasoning paragraphs occupy node space while real numeric differences
+          are absent.
+        </p>
+        <ol>
+          <li>
+            <strong>Two-node desktop:</strong> fit the genuine #1 → #2 pair to a
+            compact central lineage region, not an oversized empty graph. Root
+            at the left, child at the right; each node 264–288px with ID,
+            author, ETH/Long and concise parameter row. One connector names
+            “Target + leverage”; a detail pane carries full reasoning and
+            old/new values.
+          </li>
+          <li>
+            <strong>Selection:</strong> click/Enter selects locally, announces
+            “Fork #2, by …, from #1,” updates a stable detail pane and retains
+            graph position. Separate “Open thesis” link preserves real /t/2
+            navigation; optional URL replacement uses existing /t/2/tree only
+            after history behavior is tested. No API contract change is
+            necessary.
+          </li>
+          <li>
+            <strong>Diff:</strong> target $4,200 → $4,400; leverage 2× → 3×;
+            invalidation $3,600 unchanged. Reasoning has changed too: show two
+            labeled excerpts or a disclosed comparison. Numeric increases do not
+            mean an objectively better or profitable idea.
+          </li>
+          <li>
+            <strong>Progressive disclosure:</strong> node preview is concise; a
+            visible affordance opens reasoning and provenance. Hover only
+            supplements click/focus. Root, parent, selected node and ancestor
+            path use geometry/labels as well as color.
+          </li>
+          <li>
+            <strong>Mobile:</strong> native-width vertical root → child
+            timeline, no tiny panned canvas. Put numerical diffs between nodes;
+            selected details follow in normal flow. Keep author links and
+            Fork/Open thesis controls reachable without hover.
+          </li>
+          <li>
+            <strong>Larger trees:</strong> preserve existing server
+            cap/truncated-tree messaging and selected ancestry. Show immediate
+            ancestors/children first; collapse other branches. Memoize child
+            lookup and selection. Add explicit “Show branches” rather than
+            rendering 250 dense text nodes. Use synthetic large-tree tests only
+            in the test environment; never invent activity in the public graph.
+          </li>
+        </ol>
+        <p>
+          <strong>React Flow decision: do not add it for P0.</strong> Existing
+          tree data and read-only DOM/CSS connectors already work. Redesign node
+          hierarchy and selection first, using small SVG paths if necessary. A
+          framework introduces viewport/layout/accessibility/state work that
+          does not solve missing diffs. Reconsider P1/P2 only when real branch
+          density requires pan/zoom, fit-to-view and spatial navigation. If
+          adopted: lazy-load only the Tree route, immutable node identities,
+          memoized components/handlers, narrow subscriptions, collapsed branches
+          and a keyboard/list fallback. These constraints follow
+          <a href="https://reactflow.dev/learn/advanced-use/performance"
+            >React Flow’s performance guidance</a
+          >
+          and
+          <a href="https://reactflow.dev/learn/advanced-use/accessibility"
+            >accessibility documentation</a
+          >.
+        </p>
+      </section>
+
+      <section id="pages">
+        <h2>08 / Specific page-by-page audit and changes</h2>
+        <p>
+          Each row covers unfinished/generic treatment, inconsistency,
+          hierarchy, interaction roughness, what to remove/redesign and what to
+          retain. P0 changes target comprehension and usability; no new social
+          feature is proposed.
+        </p>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Surface</th>
+                <th>Observed issue</th>
+                <th>Remove / redesign / interaction</th>
+                <th>Keep / acceptance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Feed</td>
+                <td>
+                  Two generic outlined post cards dominate; root/fork
+                  distinction is a small badge. Repeated display handle and
+                  @handle add noise. Smart Signal has a green dot although it
+                  currently uses social signals only. Typography and action hit
+                  areas are small.
+                </td>
+                <td>
+                  Put “Fork #2 · from #1” beside author and a concise numeric
+                  diff above reasoning. Keep Fresh/Most Forked; hide or relabel
+                  Smart Signal to its actual social mode. Remove sidebar
+                  manifesto and filler. Consolidate metric/action geometry; add
+                  accessible named actions and parent/tree links.
+                </td>
+                <td>
+                  Real post order, author links, reasoning, bounded rank
+                  explanation, Agree/comment counts and explicit Fork. Within
+                  first card, reader recognizes parent and changed field without
+                  opening detail.
+                </td>
+              </tr>
+              <tr>
+                <td>Explore</td>
+                <td>
+                  Four equally large market cards include three empty topics. At
+                  390 they take roughly the first 700px and push the two genuine
+                  ideas down. Contributor/window disclaimers look like backend
+                  notes rather than hierarchy.
+                </td>
+                <td>
+                  Make market filtering a compact row/list with truthful counts;
+                  emphasize active ETH conversation. Move bounded-window
+                  explanation to a readable help note. Keep empty topics
+                  discoverable, but no fake popularity. Reset filter action
+                  beside true empty results.
+                </td>
+                <td>
+                  Actual counts, topic filters, no fabricated posts; empty BTC
+                  state already offers Publish. Active ideas appear sooner on
+                  mobile and the selected filter is explicit.
+                </td>
+              </tr>
+              <tr>
+                <td>Create</td>
+                <td>
+                  Helpful guidance becomes a large generic side column;
+                  labels/units are small. Form does not visually distinguish
+                  idea composition from blockchain confirmation. Buttons and
+                  fields use inconsistent primitives.
+                </td>
+                <td>
+                  Group Market/Perspective, reasoning and setup with brief
+                  subheads. Keep a concise inline immutability note near
+                  Publish; remove long duplicated rail copy. Use one
+                  input/button system, inline validation, distinct pending
+                  signature/indexing states and cancellation recovery. Avoid a
+                  new wizard.
+                </td>
+                <td>
+                  Existing fields, draft handling, limits, user ownership and
+                  wallet publishing flow. Do not change immutable payload
+                  semantics for visual polish.
+                </td>
+              </tr>
+              <tr>
+                <td>Thesis #1 / #2</td>
+                <td>
+                  #2 has a useful numeric diff but it competes with repeated
+                  parameter rows; Tree is secondary and moves far down mobile.
+                  Large comment composer precedes important context. “Not
+                  executed” green dot conflicts with proof semantics.
+                </td>
+                <td>
+                  Put author, idea ID, parent and View Idea Tree above the fold;
+                  Fork stays hero action. Make #2 diff the primary contextual
+                  block. Compact empty comment composer until activated. Replace
+                  execution dot with neutral “Execution unavailable · Perpl
+                  approval pending.” No broken Execute link. Keep
+                  report/challenge secondary.
+                </td>
+                <td>
+                  Full original reasoning, genuine attribution, comments/Agree,
+                  anchored hashes and current diff values. “Onchain anchored”
+                  must never be abbreviated to “Verified” execution.
+                </td>
+              </tr>
+              <tr>
+                <td>Fork composer</td>
+                <td>
+                  Visually resembles Create; parent strip lacks a legible
+                  before/after comparison. Static “What changes?” guidance tells
+                  instead of showing. Initial context uses a temporary market-ID
+                  fallback. Unchanged input still looks publishable.
+                </td>
+                <td>
+                  Add live “Your changes” summary with old/new numeric fields
+                  and reasoning change state; parent stays visible. Disable
+                  unchanged publish with a specific recovery hint. Stabilize
+                  context readiness and avoid showing “Market 32” as settled
+                  text. Remove guidance rail once the real diff provides the
+                  explanation.
+                </td>
+                <td>
+                  Pre-filled parent, actual API validation and mandatory
+                  meaningful change. Same immutable authorship/signature path.
+                  P0 must not publish another fork merely to test appearance.
+                </td>
+              </tr>
+              <tr>
+                <td>Idea Tree</td>
+                <td>
+                  Large vacant canvas, 240px nodes, paragraph snippets and
+                  abstract “Changed target” tags fail to reveal the real
+                  difference. Navigation clicks can change tree route instead of
+                  selecting a preview.
+                </td>
+                <td>
+                  Apply the compact node/diff/selection plan above. Replace
+                  explanatory card stack with concise origin/selected labels. No
+                  new minimap, draggable nodes or decorative branching.
+                </td>
+                <td>
+                  Working topology, root/parent/ancestor semantics, current
+                  selection and bounded data. Two distinct authors and two
+                  actual nodes remain the full live story.
+                </td>
+              </tr>
+              <tr>
+                <td>Profiles A / B</td>
+                <td>
+                  Large decorative cover and duplicated generated handle precede
+                  evidence. Four large metric cells make empty execution credit
+                  equally prominent. Emerging is correct but requires
+                  explanation; long technical metric descriptions are difficult
+                  at small text size.
+                </td>
+                <td>
+                  Reduce cover to a 64–80px identity strip. Display public
+                  handle once if no display name exists; do not invent names.
+                  Put roots/forks/contributors before detailed metrics. Use “1
+                  root · 1 external contributor” for A with existing metrics,
+                  plus honest sample-size disclosure. Show deferred execution as
+                  secondary unavailable information, retaining zero credit.
+                </td>
+                <td>
+                  Originality/Contribution/Influence logic, wallet scope,
+                  Emerging threshold, explanations, author-owned edit and
+                  genuine activity. Do not turn sparse samples into ratings.
+                </td>
+              </tr>
+              <tr>
+                <td>Navigation</td>
+                <td>
+                  Sidebar occupies 230px; low-priority philosophical copy
+                  competes with actual navigation. Tree routes highlight Feed
+                  but do not supply a strong local breadcrumb. Mobile has tiny
+                  labels and close actions.
+                </td>
+                <td>
+                  Keep four P0 destinations. Use a quiet active marker; compact
+                  contextual breadcrumbs Feed → #1 → Tree. Remove repeated
+                  sidebar prose. Ensure ≥44px targets, safe-area clearance,
+                  visible keyboard focus and no confusing logo destination
+                  change inside the app.
+                </td>
+                <td>
+                  Feed/Explore/Create/Profile, skip link, sticky mobile
+                  navigation, all existing URL destinations. Do not add
+                  Activity, chat or a new /app URL prefix.
+                </td>
+              </tr>
+              <tr>
+                <td>Authentication</td>
+                <td>
+                  Initial full navigation can briefly show Sign in before the
+                  already authenticated profile. A generic preparation block and
+                  independent market loading can make the app feel unstable.
+                  Approved real Google and wallet proof already exists.
+                </td>
+                <td>
+                  Reserve account-control geometry while Privy is preparing.
+                  Explain “Sign in to publish or contribute” while public
+                  browsing remains open. Keep callback/return target, wallet
+                  identity and cancellation retry. Style surrounding affordance;
+                  do not replace Privy or invent unsupported email flows.
+                </td>
+                <td>
+                  Existing Google-auth scope and embedded wallet persistence,
+                  server verification, production origin + localhost. Auth modal
+                  itself is based on approved gate evidence/source, not a
+                  freshly repeated audit login.
+                </td>
+              </tr>
+              <tr>
+                <td>Loading / empty / errors</td>
+                <td>
+                  Same three-card skeleton reused on unrelated pages; temporary
+                  numeric market IDs leak into display. Missing thesis instructs
+                  Return to Feed but offers only Try again. BTC empty state is
+                  useful but far below the market grid.
+                </td>
+                <td>
+                  Structural skeleton per detail/tree/form, stable account slot,
+                  clear slow-network text. Error-specific recovery: missing idea
+                  → Back to Feed; retryable network error → Try again; auth
+                  cancellation → Reopen sign-in. Empty active filter → Clear
+                  filter and Publish. No production outage simulation.
+                </td>
+                <td>
+                  Actual error mapping, retry policy, honest empty counts,
+                  semantic labels and accessible status announcements. Initial
+                  render evidence must not be misreported as permanent failure.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="landing">
+        <h2>09 / Landing hero design specification</h2>
+        <p>
+          <strong>Hero copy:</strong> “Trading ideas evolve here.” Supporting
+          message: “Publish an idea. Fork a better one. Build its history.” This
+          is an invitation to contribute, not a claim that the demonstrated fork
+          is financially superior.
+        </p>
+        <ul>
+          <li>
+            <strong>1440:</strong> 1200px content region, 72px header, hero top
+            inset 88px and bottom inset 72px. Five columns of copy / one-column
+            breathing room / six columns of lineage. Headline 88/88, three
+            intentional lines; supporting copy 18/28, max 360px. Primary CTA
+            44px high; secondary text link with 44px target.
+          </li>
+          <li>
+            <strong>1280:</strong> 1120px usable content with 80px outer
+            margins, same 12-column logic, headline 72/76. Shrink gaps before
+            font size. Two real nodes stay readable, with a compact connector
+            and diff panel; no app chrome in the hero.
+          </li>
+          <li>
+            <strong>390:</strong> header 64px, 20px side margins, hero top inset
+            40px. Headline 46/48 over three lines, supporting copy 16/25. CTA
+            remains visible without scrolling past decorative art. Lineage
+            follows at native 350px width as #1 → diff → #2. Do not enforce a
+            100vh hero; avoid scroll traps. Keep full data visible without
+            hover.
+          </li>
+          <li>
+            <strong>Signature visual:</strong> real root #1, author A, ETH/Long,
+            $4,200/2×; real child #2, author B, $4,400/3×; shared $3,600
+            invalidation. Include public author links, root/child links and
+            “Open Idea Tree” to /t/2/tree. Caption: “Real Monad Testnet
+            lineage.” Show two nodes only. No invented users, branches, volume
+            or returns.
+          </li>
+          <li>
+            <strong>State/data:</strong> use existing validated public
+            thesis/tree reading logic and a bounded server-rendered projection.
+            Load no privileged account data into the landing. If live reads
+            fail, display an honest unavailable state with Explore FORK; an
+            archived real example is permissible only if clearly dated/labeled.
+            Never present cached or illustrative content as fresh live activity.
+          </li>
+          <li>
+            <strong>Art direction:</strong> custom SVG connector, actual HTML
+            text nodes, fine ruled frame and a quiet selected-child accent. No
+            screen-shaped generic dashboard, screenshot fabricated by AI,
+            particles, cube, candles, depth chart or trading CTA.
+          </li>
+        </ul>
+        <h3>10 / Concise page wireframe</h3>
+        <div class="wireframe">
+          <article>
+            <div class="eyebrow">01 / Hero</div>
+            <h3>Trading ideas evolve here.</h3>
+            <p>
+              Copy + real #1 → #2 lineage. Explore FORK → /feed. See how it
+              works → #how-it-works. Header: FORK, How it works, Idea lineage,
+              Explore FORK. No pricing, FAQ megamenu or forced sign-in.
+            </p>
+          </article>
+          <article id="how-it-works">
+            <div class="eyebrow">02 / Post · Fork · Improve</div>
+            <h3>One idea. More than one perspective.</h3>
+            <p>
+              Three concise steps sharing one aligned strip: actual thesis
+              reasoning crop; actual composer changed-field crop; actual #2
+              detail/diff crop. Images from the finished product after Stage B,
+              not placeholders. Mobile stacks them with labels and captions. No
+              automatic carousel.
+            </p>
+          </article>
+          <article>
+            <div class="eyebrow">03 / Idea lineage</div>
+            <h3>Keep the origin. Make your contribution visible.</h3>
+            <p>
+              Make the real #1 → #2 attribution and numeric diff larger than the
+              explanation. Link to the existing Tree and both profiles. One
+              genuine example is stronger than invented “10,000 ideas” metrics.
+              Full-page Tree image belongs here only after it is polished.
+            </p>
+          </article>
+          <article>
+            <div class="eyebrow">04 / Built on Monad</div>
+            <h3>Public authorship. Traceable history.</h3>
+            <p>
+              Three compact proof rows: Monad Testnet registry anchors
+              authorship/parent/content hash; Envio indexes registry events;
+              Privy supplies user-controlled embedded wallets and verified app
+              identity. Link existing sanitized proof. PostgreSQL owns offchain
+              social data. Do not imply reasoning is stored entirely onchain or
+              that smart-contract provenance validates an investment.
+            </p>
+          </article>
+          <article>
+            <div class="eyebrow">05 / Final CTA</div>
+            <h3>Good ideas deserve a history.</h3>
+            <p>
+              Enter FORK → /feed. Footer: product, real Idea Tree, source
+              repository once public, demo when actually recorded, Monad Testnet
+              identity. Keep unavailable links absent rather than linking
+              “Coming soon.”
+            </p>
+          </article>
+        </div>
+        <p>
+          <strong>Shared brand rule:</strong> landing uses more expressive
+          typography and 64–96px section rhythm; app uses 16–32px functional
+          rhythm. The fonts, buttons, branch mark, semantics, diff component and
+          node language are identical. README uses real imagery and the same
+          product vocabulary, not a separate illustrated mascot.
+        </p>
+        <h3>11 / Purposeful motion plan</h3>
+        <p>
+          P0 is static-first. Hover/focus emphasizes an actual node; click
+          selects its diff. Optional one-time connector drawing lasts ≤400ms
+          after both nodes are already visible, never inventing a third node. A
+          changed-field highlight lasts 160ms and has a persistent label. No
+          auto-play loops, cursor magnet, parallax, scroll-jacking, delayed
+          content reveal or view-transition dependency. With reduced motion, all
+          nodes/connectors/diffs appear immediately. Native links and the full
+          proposition remain useful with JavaScript unavailable.
+        </p>
+      </section>
+
+      <section id="routing">
+        <h2>12 / Safest landing/application routing plan</h2>
+        <p>
+          Current source: <code>apps/web/src/app/page.tsx</code> redirects / to
+          /feed. Root layout wraps all pages in ProductProviders and AppShell.
+          Merely adding landing markup there would inherit the social sidebar
+          and authentication-loading behavior.
+        </p>
+        <pre>
+src/app/layout.tsx                   one root layout; fonts, globals, metadata,
+                                    preserve server environment validation
+src/app/(marketing)/page.tsx         / — proposed landing, public/server-first
+src/app/(marketing)/layout.tsx       marketing header/footer
+src/app/(social)/layout.tsx          existing ProductProviders + AppShell
+src/app/(social)/feed/...            /feed — unchanged public URL
+src/app/(social)/explore/...         /explore
+src/app/(social)/new/...             /new
+src/app/(social)/t/[id]/...          /t/1, /t/2, /fork, /tree
+src/app/(social)/u/[handle]/...      /u/... and /u/me
+src/app/api/...                      existing APIs; unchanged</pre>
+        <p>
+          <a
+            href="https://nextjs.org/docs/app/api-reference/file-conventions/route-groups"
+            >Next.js route groups</a
+          >
+          organize layouts without adding a URL segment. Keep one root layout to
+          avoid intentional full-document reloads between multiple roots. Delete
+          the old root redirect only when adding the approved marketing root; do
+          not leave conflicting pages for /. No /app prefix, rewrites, new
+          domain, duplicate env variable or origin changes. In-app logo stays
+          /feed; landing logo stays /.
+        </p>
+        <p>
+          <strong>Regression gate:</strong> signed-out public browsing, existing
+          authenticated /feed navigation, Google return URL, reload, wallet
+          persistence, direct thesis/profile/tree/fork links, browser
+          back/forward and public evidence URLs must all survive. Provider
+          placement is the largest implementation risk: test it in a local
+          production build before release. If unexpected auth remount behavior
+          cannot be resolved within the time box, keep the provider boundary at
+          root temporarily and isolate the shell by nested route group; ship
+          correctness before bundle reduction. Caddy, DNS, HTTPS, loopback ports
+          and unrelated Cherry services require no change.
+        </p>
+      </section>
+
+      <section id="libraries">
+        <h2>
+          13 / Library decisions against current documentation and installed
+          code
+        </h2>
+        <p>
+          Direct web dependencies: Next 16.3.8, React 19.3.0, Tailwind 4.3.3,
+          TanStack Query 5.104.1 and existing Privy/viem/Drizzle. The social UI
+          uses custom SVG icons and CSS/native controls; its Button component is
+          local code. Radix/shadcn/Motion/React Flow are not direct web
+          dependencies. Lucide exists transitively at 0.554.0 in the lockfile,
+          which is not an application dependency contract.
+        </p>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Tool / current official source</th>
+                <th>Decision</th>
+                <th>Benefit and integration risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a href="https://tailwindcss.com/docs/theme"
+                    >Tailwind CSS 4</a
+                  >
+                </td>
+                <td>
+                  Keep pinned; use shared theme variables and existing CSS.
+                </td>
+                <td>
+                  Consolidate repeated hex/font/geometry values. Do not rewrite
+                  every component into utilities or upgrade the stack during
+                  final polish.
+                </td>
+              </tr>
+              <tr>
+                <td><a href="https://ui.shadcn.com/docs">shadcn/ui</a></td>
+                <td>No wholesale install or themed kit.</td>
+                <td>
+                  Useful source-owned primitive patterns. Existing native inputs
+                  and local buttons are cheaper to refine. Imported defaults
+                  could erase the brand and add dependency/style conflicts.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a
+                    href="https://www.radix-ui.com/primitives/docs/overview/accessibility"
+                    >Radix</a
+                  >
+                </td>
+                <td>
+                  Conditional only for a concrete missing modal/menu
+                  accessibility requirement.
+                </td>
+                <td>
+                  Focus/keyboard/ARIA behavior is useful; not a reason to
+                  replace working controls. Inspect existing profile/auth dialog
+                  ownership first. No new dependency during Stage A.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://motion.dev/docs/react-accessibility"
+                    >Motion</a
+                  >
+                  /
+                  <a href="https://motion.dev/docs/react-reduce-bundle-size"
+                    >bundle guidance</a
+                  >
+                </td>
+                <td>None in P0. Native CSS/SVG is sufficient.</td>
+                <td>
+                  A selection highlight and two-node connector do not justify a
+                  runtime. Reconsider only for measured complex layout
+                  transition needs; lazy feature loading still has integration
+                  cost.
+                </td>
+              </tr>
+              <tr>
+                <td><a href="https://reactflow.dev/learn">@xyflow/react</a></td>
+                <td>Defer; criteria in Tree plan.</td>
+                <td>
+                  Pan/zoom/viewport controls are real benefits for dense graphs,
+                  but do not supply readable node content or layout for free. Do
+                  not install for a marketing section.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a
+                    href="https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations"
+                    >TanStack Query</a
+                  >
+                </td>
+                <td>Keep Query; no Table/Router/Form addition.</td>
+                <td>
+                  Retain timeouts/retry mapping and bounded queries. Stable
+                  selected data/memoized transforms avoid unnecessary graph
+                  work. Existing 15s stale policy is intentional; loading polish
+                  is not a reason to add a second data layer.
+                </td>
+              </tr>
+              <tr>
+                <td><a href="https://lucide.dev/guide/react">Lucide</a></td>
+                <td>Keep/refine existing 14-icon system for P0.</td>
+                <td>
+                  Direct tree-shakeable imports would help a larger icon
+                  vocabulary. A wholesale replacement offers little benefit now;
+                  never import a transitive package without declaring it.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://nextjs.org/docs/app/getting-started/fonts"
+                    >Next font tooling</a
+                  >
+                </td>
+                <td>Use installed framework capabilities in Stage B.</td>
+                <td>
+                  Explicitly self-host Sans/Mono, subset/preload only needed
+                  fonts. No client-side third-party font fetch and no new font
+                  runtime. Official latest docs show 16.4.0; repository stays
+                  pinned to 16.3.8.
+                </td>
+              </tr>
+              <tr>
+                <td>Other libraries</td>
+                <td>
+                  No animation kits, 3D engine, graph-layout engine, new state
+                  manager or carousel.
+                </td>
+                <td>
+                  HTML, native controls, existing query state, small SVG and CSS
+                  complete this scope. Add a library only after a specific
+                  required behavior cannot be safely achieved.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="readme">
+        <h2>14 / Judge-focused README and presentation plan</h2>
+        <p>
+          Current README is a “Build Specification,” with roadmap language,
+          stale live-proof status and a Perpl-oriented core loop.
+          <code>docs/24_DEMO_SUBMISSION.md</code> still scripts future
+          Perpl/Nansen moments. Both should be corrected in Stage B; README is
+          untouched during this audit.
+        </p>
+        <ol>
+          <li>
+            <strong>Opening:</strong> FORK — trading ideas evolve in public. One
+            sentence explaining publish → discuss → fork → visible history. Link
+            canonical live product and direct Feed.
+          </li>
+          <li>
+            <strong>Signature visual:</strong> one sanitized, actual polished
+            Idea Tree screenshot with real #1 → #2 numerical diff. Use the same
+            shot in landing, demo and submission.
+          </li>
+          <li>
+            <strong>Problem/solution:</strong> timeline posts lose attribution
+            when ideas change; FORK keeps the original and shows distinct
+            contributions.
+          </li>
+          <li>
+            <strong>Try it in 90 seconds:</strong> /t/1 → /t/2 → /t/2/tree →
+            both public profiles. Browsing requires no login; publishing
+            requires Google and wallet confirmation.
+          </li>
+          <li>
+            <strong>What is live:</strong> Monad Testnet registry; Envio graph;
+            real Privy users/wallet persistence; private standard PostgreSQL
+            social state; public self-hosted HTTPS. Separate Perpl/Nansen
+            deferred limitations prominently.
+          </li>
+          <li>
+            <strong>Architecture:</strong> small diagram: browser/Privy →
+            application; wallet → FORKRegistry → Envio → application reads;
+            social API → PostgreSQL. Reasoning lives offchain and is checked
+            against its anchored hash.
+          </li>
+          <li>
+            <strong>Proof:</strong> deployed registry address, chain ID,
+            explorer links to actual root/fork transactions, Envio
+            event/namespace evidence, sanitized Google/persistence and public
+            deployment evidence. Never publish DID, tokens, credentials or
+            transfer IDs.
+          </li>
+          <li>
+            <strong>Track 3 fit:</strong> public remixing and attribution,
+            conversation and contribution, conservative reputation. Trading
+            validates ideas later; do not imply a Verified execution or eligible
+            Perpl bounty.
+          </li>
+          <li>
+            <strong>Demo/pitch:</strong> real recorded links once uploaded and
+            verified. No placeholder video URL or unrecorded sequence. Final
+            title/copy match the landing.
+          </li>
+          <li>
+            <strong>Engineering:</strong> tested scope/date and skipped cases;
+            short local PostgreSQL + committed migration setup;
+            provider-agnostic deployment/rollback links. Move long plans/spec
+            inventory beneath judge content.
+          </li>
+        </ol>
+        <p>
+          Source visibility and official portal submission are separate final
+          actions. The current local HEAD is c70a526; it is 23 commits ahead of
+          the local origin/main tracking reference. This is not a fresh remote
+          synchronization proof. Before submission, verify the intended release
+          commit is actually available to judges and the private repository is
+          deliberately made public by the user as previously planned.
+        </p>
+      </section>
+
+      <section id="judge">
+        <h2>15 / Judge’s first 90 seconds</h2>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Visible experience</th>
+                <th>What it proves</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0–12s</td>
+                <td>
+                  Landing headline + two real authors + target/leverage
+                  differences. Explore FORK is immediately visible.
+                </td>
+                <td>
+                  Ideas evolve through public contributions; FORK is
+                  social-first.
+                </td>
+              </tr>
+              <tr>
+                <td>12–30s</td>
+                <td>
+                  Open original #1, read concise reasoning, see one real
+                  comment/Agree and direct Fork/Tree actions.
+                </td>
+                <td>
+                  Existing discussion and attribution, not fixtures or a trading
+                  dashboard.
+                </td>
+              </tr>
+              <tr>
+                <td>30–50s</td>
+                <td>
+                  Open #2; inspect 4,200 → 4,400 and 2× → 3×; parent remains one
+                  click away.
+                </td>
+                <td>A fork is an attributable changed idea, not a repost.</td>
+              </tr>
+              <tr>
+                <td>50–70s</td>
+                <td>
+                  Idea Tree shows origin, child, selected diff and author links.
+                </td>
+                <td>Lineage is the signature product experience.</td>
+              </tr>
+              <tr>
+                <td>70–90s</td>
+                <td>
+                  Profiles show real contributions and honest Emerging metrics;
+                  compact infrastructure proof explains registry + Envio.
+                </td>
+                <td>
+                  Monad provides immutable authorship/lineage, Envio supplies
+                  indexed reads, and the live product is verifiable.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          A prepared video can additionally show the already proven Google
+          sign-in/wallet and original publish flow. Do not require a judge to
+          fund a wallet or submit a transaction inside the first 90 seconds.
+          Perpl unavailability is visible and honest; no execution scene is
+          staged.
+        </p>
+      </section>
+
+      <section id="sequence">
+        <h2>16 / Prioritized implementation plan and estimates</h2>
+        <p>
+          <strong>Official deadline:</strong> authenticated
+          <a href="https://hackathon.monad.xyz/dashboard">Metropolis portal</a>
+          displays <strong>14 October 2026, 06:59 GMT+3</strong>, equivalent to
+          03:59 UTC (13 October 23:59 at UTC−4).
+          <a href="deadline.json">Sanitized read-only check</a>. Treat 13
+          October as the local completion day and freeze design before the final
+          submission window.
+        </p>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Priority / reviewable stage</th>
+                <th>Time estimate</th>
+                <th>Done / stop boundary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>P0.1 — truth and submission packaging</td>
+                <td>1–2h</td>
+                <td>
+                  README/demo plan reflect actual live proof and deferred
+                  integrations. Confirm portal project/track and requirements
+                  before spending the whole deadline on polish. No fabricated
+                  video or bounty claim.
+                </td>
+              </tr>
+              <tr>
+                <td>P0.2 — common craft</td>
+                <td>2–3h</td>
+                <td>
+                  Explicit loaded typography, shared semantic tokens/control
+                  geometry, readable metadata, consistent states. One
+                  desktop/mobile review before propagating.
+                </td>
+              </tr>
+              <tr>
+                <td>P0.3 — lineage + thesis + fork</td>
+                <td>4–5h</td>
+                <td>
+                  Real numerical diff visible in detail/Tree/composer; mobile
+                  selection/timeline; no tree framework. Preserve
+                  auth/publish/ownership APIs. Screenshot and regression check.
+                </td>
+              </tr>
+              <tr>
+                <td>P0.4 — landing + route integration</td>
+                <td>4–5h</td>
+                <td>
+                  Five concise sections, real lineage visual, canonical root and
+                  unchanged social paths. Static-first, accessible SVG/HTML.
+                  Local production auth/deep-link gate passes.
+                </td>
+              </tr>
+              <tr>
+                <td>P0.5 — feed/explore/profile + state polish</td>
+                <td>2–3h</td>
+                <td>
+                  Remove filler, bring live ideas earlier, profile sample
+                  explanation, missing-thesis recovery and honest deferred
+                  execution. No new product feature.
+                </td>
+              </tr>
+              <tr>
+                <td>P0.6 — final QA / evidence / demo</td>
+                <td>3–4h</td>
+                <td>
+                  Relevant lint/types/tests + critical Playwright flows;
+                  1440/1280/390 capture set; real demo/pitch links and final
+                  submitted project verified. Production release only in the
+                  approved Stage B scope.
+                </td>
+              </tr>
+              <tr>
+                <td>P1 — if time remains</td>
+                <td>2–4h capped</td>
+                <td>
+                  Keyboard-equivalent node previews, concise OG share art,
+                  refined larger-tree collapse, micro-motion after static QA.
+                  Omit instead of delaying submission.
+                </td>
+              </tr>
+              <tr>
+                <td>P2 — after hackathon</td>
+                <td>Unscheduled</td>
+                <td>
+                  Dense-graph React Flow evaluation, advanced discovery, broader
+                  content, more reputation data. Perpl/Nansen only when
+                  explicitly resumed. No chat/token/DAO/mobile/subscription
+                  expansion.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Total A:</strong> 16–22 focused engineering hours, not a
+          guarantee of wall-clock delivery; auth/routing surprises and real
+          video recording require buffer. <strong>Total B:</strong> 22–30h. Hard
+          cap routing/provider work at 2h inside P0.4 before using the safe
+          boundary fallback. Remove motion, extra previews and visual flourishes
+          first if time slips; keep landing, readable lineage, real proof and
+          submission completeness.
+        </p>
+      </section>
+
+      <section id="qa">
+        <h2>17 / Design QA and landing screenshot plan</h2>
+        <ul>
+          <li>
+            <strong>Viewport matrix:</strong> 1440×1000 desktop, 1280×900
+            laptop, 390×844 mobile. Add 375/320px spot checks and one
+            intermediate breakpoint. Check 200% zoom, keyboard traversal and
+            actual mobile keyboard clearance where available.
+          </li>
+          <li>
+            <strong>Landing evidence:</strong> hero + full page at 1440; hero at
+            1280; hero + full page at 390; focused/selected #2 lineage detail;
+            reduced-motion static state; honest unavailable public-data state in
+            local controlled tests.
+          </li>
+          <li>
+            <strong>App evidence:</strong> Feed, Explore, /new, both theses,
+            fork composer, Tree, both profiles. Include empty/error/loading and
+            pending/cancel recovery screenshots from controlled local tests; no
+            extra production mutation just to create a screenshot.
+          </li>
+          <li>
+            <strong>Accessibility:</strong> semantic h1/section headings,
+            descriptive native links, 44px targets, focus visible/returned
+            correctly, selected-node announcement, sufficient text/control
+            contrast, no color-only diff. Reduced motion preserves meaning. All
+            user errors have an actionable recovery.
+          </li>
+          <li>
+            <strong>Performance budgets:</strong> zero visualization/animation
+            dependency additions for P0; no video/3D hero; at most two
+            self-hosted font families; responsive below-fold images with fixed
+            dimensions/lazy loading. Aim LCP &lt;2.5s, CLS &lt;0.1 and
+            interaction latency &lt;200ms under a stated mobile test profile.
+            Measure rather than claim these targets were achieved.
+          </li>
+          <li>
+            <strong>Functional regression:</strong> all existing direct routes,
+            root landing + /feed, real Privy Google identity/wallet persistence,
+            safe signed-out browsing and mutation rejection, parent/diff/Tree,
+            drafts, submission/indexing recovery, profile ownership and
+            conservative metrics. Preserve existing critical Playwright
+            coverage; add focused landing/deep-link regression only in Stage B.
+          </li>
+          <li>
+            <strong>Infrastructure/security:</strong> retain production
+            secrets/origins, localhost development origin, registry namespace,
+            server-only API data and private PostgreSQL. No change to
+            Caddy/unrelated Cherry services or exposure of 13000. Scan new
+            screenshots/artifacts for credentials and private identifiers.
+          </li>
+          <li>
+            <strong>Submission QA:</strong> real product/source/demo URLs,
+            matching canonical origin, repository access from signed-out
+            browser, actual release commit, track selection, official portal
+            submitted status. Captions distinguish anchored provenance from
+            Verified execution.
+          </li>
+        </ul>
+        <p>
+          Screenshot filenames should identify surface, width and state. Use
+          actual application captures for proof and clearly labeled concept
+          imagery only for the design proposal. The landing’s real product crops
+          should be regenerated after the chosen direction is implemented.
+        </p>
+      </section>
+
+      <section id="blockers">
+        <h2>18 / Remaining submission-critical blockers and current result</h2>
+        <ol>
+          <li>
+            <strong>Official project submission is incomplete.</strong> The live
+            dashboard says 2/5 complete and “Up next: Create your project,” with
+            track selection/submission remaining. No project was created, bounty
+            selected or submission sent during this audit. This needs its own
+            bounded authorized packaging step.
+          </li>
+          <li>
+            <strong>Judge-facing README/demo copy is stale.</strong> It must
+            distinguish proven social lineage from deferred
+            execution/intelligence before submission.
+          </li>
+          <li>
+            <strong
+              >Demo and pitch links are not yet established as completed
+              artifacts in reviewed evidence.</strong
+            >
+            Record the genuine journey and verify actual uploaded links; do not
+            stage a Perpl trade.
+          </li>
+          <li>
+            <strong
+              >Public source access/release synchronization needs
+              verification.</strong
+            >
+            Repository has been intentionally private; the user planned to make
+            it public. Local tracking state alone does not prove the judge can
+            access the release.
+          </li>
+          <li>
+            <strong>Design direction and Stage B remain unapproved.</strong>
+            Landing, readable signature Tree and associated QA are planned, not
+            implemented.
+          </li>
+          <li>
+            <strong>Perpl/Nansen limitations remain explicit.</strong> They are
+            deferred scope limitations, not reasons to block social-product
+            presentation. The Verified execution criterion is not passed; Perpl
+            bounty eligibility is not claimed.
+          </li>
+        </ol>
+        <p>
+          <strong>Stage A result:</strong> research and route/dependency audit
+          completed; two unified directions and a recommendation supplied; 27
+          settled live UI screenshots plus initial/empty/error evidence and
+          reference captures saved; D-051 records the deferral and research-only
+          boundary. No application code, routes, lockfile, contracts, README or
+          production configuration changed.
+        </p>
+        <p>
+          <strong>Validation scope:</strong> image dimensions/overflow metadata,
+          local artifact links and documentation diff are checked for this
+          audit. Prior approved public deployment baseline is 221 unit tests, 12
+          Envio tests, 28 Foundry tests, 10 live rollback constraint probes and
+          public/local production Playwright 4 passed + 1 documented obsolete
+          empty-index skip. Those are prior gate results, not newly rerun Stage
+          A tests. No functional claim is upgraded by a visual audit.
+        </p>
+        <div class="notice">
+          <strong>Next recommended action:</strong> select Direction A or B.
+          Then approve bounded Stage B implementation in the sequence above.
+          Research stops here; Perpl, Nansen and unrelated server work remain
+          deferred.
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

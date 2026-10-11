@@ -1,0 +1,214 @@
+{
+  "observedAt": "2026-10-11T11:04:11.559768+00:00",
+  "gate": "REAL PERPL EXECUTION + AUTHORITATIVE VERIFICATION",
+  "status": "BLOCKED",
+  "blocker": "provider_origin_whitelisting",
+  "canonicalOrigin": "https://forktrades.xyz",
+  "source": "https://testnet.perpl.xyz/api/v1/pub/context",
+  "chainId": 10143,
+  "instance": {
+    "ver": 272,
+    "id": 12,
+    "address": "0x1964c32f0be608e7d29302aff5e61268e72080cc",
+    "collateral_token_id": 1,
+    "min_account_open_amount": "100000000",
+    "min_deposit_amount": "10000000",
+    "min_withdraw_amount": "10000",
+    "max_account_trigger_orders": 16
+  },
+  "collateral": {
+    "id": 1,
+    "address": "0xa9012a055bd4e0edff8ce09f960291c09d5322dc",
+    "symbol": "AUSD",
+    "decimals": 6
+  },
+  "markets": [
+    {
+      "id": 16,
+      "symbol": "BTC",
+      "open": true,
+      "priceDecimals": 1,
+      "sizeDecimals": 5,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    },
+    {
+      "id": 32,
+      "symbol": "ETH",
+      "open": true,
+      "priceDecimals": 2,
+      "sizeDecimals": 3,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    },
+    {
+      "id": 48,
+      "symbol": "SOL",
+      "open": true,
+      "priceDecimals": 2,
+      "sizeDecimals": 3,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    },
+    {
+      "id": 64,
+      "symbol": "MON",
+      "open": true,
+      "priceDecimals": 5,
+      "sizeDecimals": 0,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    },
+    {
+      "id": 256,
+      "symbol": "ZEC",
+      "open": true,
+      "priceDecimals": 3,
+      "sizeDecimals": 3,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    },
+    {
+      "id": 272,
+      "symbol": "LIT",
+      "open": true,
+      "priceDecimals": 5,
+      "sizeDecimals": 1,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    },
+    {
+      "id": 320,
+      "symbol": "PUMP",
+      "open": true,
+      "priceDecimals": 6,
+      "sizeDecimals": 0,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    },
+    {
+      "id": 336,
+      "symbol": "NEAR",
+      "open": true,
+      "priceDecimals": 4,
+      "sizeDecimals": 2,
+      "minPostingAmount": "0",
+      "minSettleAmount": "0"
+    }
+  ],
+  "originChecks": {
+    "production": {
+      "observedAt": "2026-10-11T10:57:08.438104+00:00",
+      "origin": "https://forktrades.xyz",
+      "endpoint": "/api/v1/api-key/payload",
+      "method": "POST",
+      "status": 400,
+      "allowOrigin": null,
+      "originRejected": false,
+      "payloadAvailable": false,
+      "enrollmentAttempted": false,
+      "keyGenerated": false,
+      "publicError": "Bad Request"
+    },
+    "diagnosticControl": {
+      "observedAt": "2026-10-11T10:57:34.156201+00:00",
+      "origin": "https://testnet.perpl.xyz",
+      "purpose": "read-only positive control, never used for FORK enrollment",
+      "status": 200,
+      "allowOrigin": null,
+      "payloadAvailable": true,
+      "enrollmentAttempted": false,
+      "keyGenerated": false
+    },
+    "options": {
+      "status": 404,
+      "allowOrigin": null,
+      "notProofAlone": true
+    }
+  },
+  "providerContact": "https://discord.gg/perpl",
+  "credentialsGenerated": false,
+  "enrollmentAttempted": false,
+  "signaturesRequested": false,
+  "ordersSubmitted": 0,
+  "blockchainTransactionsSubmitted": 0,
+  "authoritativeReadVerified": false,
+  "executionRefV1Changed": false,
+  "relayTransportEnabled": false,
+  "tests": {
+    "selectedUnitTests": {
+      "files": 3,
+      "passed": 53,
+      "scope": [
+        "context validation",
+        "read-only relay boundary",
+        "executionRef vectors and fill adapter"
+      ]
+    },
+    "productionSmoke": {
+      "status": "passed",
+      "origin": "https://forktrades.xyz",
+      "databaseHealth": {
+        "database": "ready",
+        "migrations": "applied"
+      },
+      "feedModes": {
+        "fresh": ["1", "2"],
+        "most-forked": ["1", "2"],
+        "smart-signal": ["1", "2"]
+      },
+      "metadataTrusted": true,
+      "tree": {
+        "root": "1",
+        "child": "2",
+        "nodes": 2
+      },
+      "social": {
+        "agree": 1,
+        "visibleComments": 1
+      },
+      "profiles": {
+        "u_4dcde4749ffd": {
+          "eligibleRoots": 1,
+          "successfulRoots": 1,
+          "eligibleForks": 0,
+          "successfulForks": 0,
+          "influence": 1,
+          "executionsInspired": 0
+        },
+        "u_03572f901994": {
+          "eligibleRoots": 0,
+          "successfulRoots": 0,
+          "eligibleForks": 1,
+          "successfulForks": 0,
+          "influence": 0,
+          "executionsInspired": 0
+        }
+      },
+      "nansen": "disabled/deferred",
+      "testRoutes": 404,
+      "unauthenticatedPublish": 401,
+      "htmlScreens": 7,
+      "blockchainTransactions": 0
+    },
+    "fullCompletionSuite": "pending live gate; not rerun for documentation-only checkpoint"
+  },
+  "bounty": {
+    "status": "NOT ELIGIBLE",
+    "source": "https://hackathon.monad.xyz/tracks/best-use-of-perpl-s-api",
+    "reason": "Mandatory production-ready bot or automation with demonstrated real onchain activity is not met by manual FORK execution."
+  },
+  "sourceSnapshotsSha256": {
+    "authentication.md": "ce1e25c77259f31e1c5311b36cc3da7905272643f194de25697c59223d562c6e",
+    "guide-sdk-quickstart.md": "961131271bb6639fd48659942a485192542e684d02cbe2d6ec082b3b25c2d016",
+    "guide-sdk-concepts.md": "7b5a7aaff82a3940979cac09f240775a43e5f6ece18f2d70e125cefc2e361f1d",
+    "guide-recipes.md": "1bb3ac5c2cfba2b716164058e8888d552b9c195abb955a3af534654b85ee2887",
+    "integrations.md": "1c3583c9e7209cac0d8f4ac0b34b4da06341116290a0ce14feac933d6563ca4d",
+    "websocket.md": "e0a66f21a4ce472052a22a585b929c7f36036fe3a257e5b029f502db96fdc8ea",
+    "rest-endpoints.md": "b23d02af9cea48afcd313a5e7a7b77abcad6108fba301d9b7cd9f2e1ca439547",
+    "guide-networks-and-configuration.md": "b6c1b26ccae550c99adffaa9a3731afc50d5d5e7708cb27b29bc082f6b31a74b",
+    "guide-quickstart.md": "930bc3ddaf8616b1b04ce1fc01d89ae071df64be938dd5e1e996eef9c1d0d674",
+    "README.md": "7d6be064462ea5fccb35d810c257fbb683a21d3e187edb572b775e0e52ad9106",
+    "types.md": "643bbb1d2384f235cac9fecfe90c66e1b588908a5a5e798916a1ea858ea85f51"
+  }
+}

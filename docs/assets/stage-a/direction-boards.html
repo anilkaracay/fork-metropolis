@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FORK — proposed directions, not production</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0d10;
+        --panel: #12161b;
+        --text: #f2f4f2;
+        --muted: #a5ada7;
+        --line: #303731;
+        --accent: #b1d6ac;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          16px/1.65 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      main {
+        max-width: 1240px;
+        margin: auto;
+        padding: 56px 32px 96px;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.15;
+        letter-spacing: -0.035em;
+      }
+      h1 {
+        font-size: clamp(36px, 5vw, 66px);
+        max-width: 1000px;
+        margin: 22px 0;
+      }
+      h2 {
+        font-size: 32px;
+        margin-top: 0;
+      }
+      h3 {
+        font-size: 22px;
+      }
+      p {
+        max-width: 92ch;
+      }
+      a {
+        color: #c7dfc4;
+        text-underline-offset: 4px;
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      small,
+      .muted,
+      figcaption {
+        color: var(--muted);
+      }
+      section {
+        padding: 44px 0;
+        border-top: 1px solid var(--line);
+      }
+      header {
+        padding-bottom: 38px;
+      }
+      .eyebrow {
+        font:
+          12px/1.5 ui-monospace,
+          monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .notice {
+        border-left: 3px solid var(--accent);
+        padding: 12px 20px;
+        background: #151c16;
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+      .scroll {
+        overflow: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 14px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      th {
+        color: var(--accent);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      td:first-child {
+        font-weight: 600;
+      }
+      code,
+      pre,
+      .num {
+        font-family: ui-monospace, SFMono-Regular, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+      code {
+        font-size: 0.9em;
+      }
+      pre {
+        overflow: auto;
+        border: 1px solid var(--line);
+        padding: 20px;
+        background: #111519;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      li {
+        margin: 8px 0;
+      }
+      .board {
+        border: 1px solid var(--line);
+        padding: 30px;
+        min-height: 640px;
+      }
+      .board h3 {
+        font-size: clamp(30px, 4vw, 48px);
+        max-width: 460px;
+        margin: 42px 0 14px;
+        line-height: 1.02;
+      }
+      .board .deck {
+        font-size: 16px;
+        max-width: 350px;
+      }
+      .brand {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid currentColor;
+        padding-bottom: 18px;
+      }
+      .brand strong {
+        font-size: 24px;
+        letter-spacing: -0.06em;
+      }
+      .mock-cta {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 6px;
+        background: #b1d6ac;
+        color: #132014;
+        font-size: 14px;
+        font-weight: 600;
+        margin: 8px 8px 20px 0;
+      }
+      .mock-secondary {
+        font-size: 14px;
+      }
+      .node {
+        padding: 18px;
+        border: 1px solid #39413c;
+        border-radius: 8px;
+        background: #14191d;
+      }
+      .node small {
+        font:
+          11px/1.4 ui-monospace,
+          monospace;
+      }
+      .node strong {
+        display: block;
+        font-size: 21px;
+        margin: 8px 0;
+      }
+      .node p {
+        font-size: 14px;
+        margin: 6px 0;
+      }
+      .node.selected {
+        border-color: #b1d6ac;
+      }
+      .connector {
+        height: 56px;
+        display: block;
+        width: 100%;
+      }
+      .diff {
+        border-top: 1px solid #39413c;
+        padding-top: 8px !important;
+        color: #b1d6ac;
+        font-variant-numeric: tabular-nums;
+      }
+      .board-b {
+        color: #152b25;
+        background: #f1eee6;
+        border-color: #aaa99d;
+      }
+      .board-b .eyebrow,
+      .board-b small {
+        color: #52665a;
+      }
+      .board-b h3 {
+        font-family: Georgia, serif;
+        font-size: clamp(34px, 4vw, 52px);
+        font-weight: 400;
+        letter-spacing: -0.055em;
+        line-height: 1.06;
+      }
+      .board-b .mock-cta {
+        background: #174c3c;
+        color: #f3f0e8;
+        border-radius: 3px;
+      }
+      .board-b .node {
+        border-radius: 2px;
+        border-color: #b5b8ac;
+        background: transparent;
+      }
+      .board-b .node.selected {
+        background: #e4eadf;
+        border-color: #456855;
+      }
+      .board-b .diff {
+        color: #174c3c;
+        border-color: #adb4a8;
+      }
+      .board-b .connector {
+        color: #456855;
+      }
+      .swatch {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #566057;
+        background: var(--swatch);
+        margin-right: 8px;
+        vertical-align: middle;
+      }
+      details {
+        border: 1px solid var(--line);
+        padding: 16px;
+        margin: 14px 0;
+        border-radius: 6px;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .shots {
+        display: grid;
+        grid-template-columns: 1.2fr 1.1fr 0.5fr;
+        gap: 12px;
+        align-items: start;
+        margin-top: 18px;
+      }
+      .shots figure {
+        margin: 0;
+      }
+      .shots img {
+        width: 100%;
+        height: auto;
+        max-height: 620px;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid var(--line);
+      }
+      figcaption {
+        font-size: 12px;
+        margin-top: 8px;
+      }
+      .references {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .references figure {
+        margin: 0;
+      }
+      .references img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid var(--line);
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+        font-size: 13px;
+        padding: 22px 0;
+      }
+      .proof {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 24px;
+      }
+      .wireframe {
+        display: grid;
+        gap: 0;
+        border: 1px solid var(--line);
+      }
+      .wireframe article {
+        padding: 28px;
+        border-bottom: 1px solid var(--line);
+      }
+      .wireframe article:last-child {
+        border-bottom: 0;
+      }
+      .wireframe h3 {
+        margin: 8px 0;
+      }
+      .bounds {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      @media (max-width: 760px) {
+        main {
+          padding: 28px 20px 60px;
+        }
+        section {
+          padding: 30px 0;
+        }
+        h2 {
+          font-size: 27px;
+        }
+        .columns,
+        .references {
+          grid-template-columns: 1fr;
+        }
+        .board {
+          min-height: 0;
+          padding: 22px;
+        }
+        .shots {
+          grid-template-columns: 1fr;
+        }
+        .shots img {
+          max-height: 560px;
+        }
+        .scroll table {
+          min-width: 760px;
+        }
+        .references img {
+          height: auto;
+        }
+        .mock-cta {
+          min-height: 44px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto;
+        }
+      }
+      @media print {
+        body {
+          background: white;
+          color: #111;
+        }
+        main {
+          max-width: none;
+        }
+        section {
+          break-before: auto;
+        }
+        a {
+          color: #174c3c;
+        }
+        .notice {
+          background: #eee;
+        }
+        .board {
+          break-inside: avoid;
+        }
+        .references,
+        .shots {
+          display: block;
+        }
+        .references figure {
+          display: inline-block;
+          width: 31%;
+          margin: 1%;
+        }
+        .muted,
+        figcaption {
+          color: #444;
+        }
+      }
+
+      .ledger {
+        margin-top: 24px;
+        border-top: 1px solid #456855;
+        border-bottom: 1px solid #456855;
+      }
+      .ledger-authors {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        padding-top: 18px;
+      }
+      .ledger-author {
+        padding: 0 18px 16px 0;
+      }
+      .ledger-author + .ledger-author {
+        border-left: 1px solid #b5b8ac;
+        padding-left: 22px;
+      }
+      .ledger-author b {
+        display: block;
+        font:
+          400 60px/1.1 Georgia,
+          serif;
+        letter-spacing: -0.05em;
+        margin-bottom: 14px;
+      }
+      .ledger-author strong {
+        display: block;
+        font-size: 14px;
+        letter-spacing: 0;
+        margin-bottom: 4px;
+      }
+      .ledger-author small {
+        font:
+          12px/1.4 ui-monospace,
+          monospace;
+      }
+      .ledger-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        border-top: 1px solid #b5b8ac;
+        padding: 14px 0;
+      }
+      .ledger-row span {
+        font-size: 12px;
+      }
+      .ledger-row strong {
+        display: block;
+        font:
+          400 28px/1.3 Georgia,
+          serif;
+        letter-spacing: -0.025em;
+      }
+      .ledger-row span + span {
+        padding-left: 22px;
+      }
+      .ledger-footer {
+        font-size: 12px;
+        padding: 14px 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="eyebrow">Stage A / proposal only / genuine #1 → #2 data</div>
+      <h1 style="font-size: 36px">Two directions. One real lineage.</h1>
+      <p>
+        Visual concepts, not app screenshots. System-font proxies; exact font
+        specifications in the report. Recommendation: A.
+      </p>
+      <div class="columns" id="concepts">
+        <article class="board board-a">
+          <div class="brand"><strong>FORK.</strong><span>Explore ↗</span></div>
+          <div class="eyebrow" style="margin-top: 32px">
+            A / Precision Social · Product First
+          </div>
+          <h3>Trading ideas<br />evolve here.</h3>
+          <p class="deck">
+            Publish an idea. Fork a better one.<br />Build its history.
+          </p>
+          <span class="mock-cta">Explore FORK ↗</span
+          ><span class="mock-secondary">See how it works ↓</span>
+          <div class="node">
+            <small>ORIGINAL #1 · USER A</small><strong>ETH · Long</strong>
+            <p>
+              Target <span class="num">$4,200</span> · Leverage
+              <span class="num">2×</span>
+            </p>
+          </div>
+          <svg
+            class="connector"
+            viewBox="0 0 400 56"
+            aria-label="Fork #2 descends from original #1"
+            role="img"
+          >
+            <path
+              d="M40 0V24Q40 36 52 36H90"
+              fill="none"
+              stroke="#b1d6ac"
+              stroke-width="1.5"
+            />
+            <circle cx="90" cy="36" r="3" fill="#b1d6ac" />
+            <text
+              x="107"
+              y="40"
+              fill="#a5ada7"
+              font-size="12"
+              font-family="monospace"
+            >
+              Target + leverage changed
+            </text>
+          </svg>
+          <div class="node selected">
+            <small>FORK #2 · USER B</small
+            ><strong>A different perspective.</strong>
+            <p class="diff">$4,200 → $4,400 &nbsp; / &nbsp; 2× → 3×</p>
+            <p>Invalidation stays $3,600.</p>
+          </div>
+          <p class="proof">Real Monad Testnet lineage. No execution claimed.</p>
+        </article>
+        <article class="board board-b">
+          <div class="brand">
+            <strong>FORK.</strong><span>The network ↗</span>
+          </div>
+          <div class="eyebrow" style="margin-top: 32px">
+            B / Market Editorial · Financial
+          </div>
+          <h3>Trading ideas<br /><em>evolve</em> here.</h3>
+          <p class="deck">
+            Publish an idea. Fork a better one.<br />Build its history.
+          </p>
+          <span class="mock-cta">Explore FORK ↗</span
+          ><span class="mock-secondary">See how it works ↓</span>
+          <div class="ledger">
+            <div class="ledger-authors">
+              <div class="ledger-author">
+                <b>01</b><strong>THE ORIGINAL</strong
+                ><small>#1 · USER A · ETH LONG</small>
+              </div>
+              <div class="ledger-author">
+                <b>02</b><strong>THE CONTRIBUTION</strong
+                ><small>#2 · USER B · ETH LONG</small>
+              </div>
+            </div>
+            <svg
+              viewBox="0 0 500 28"
+              width="100%"
+              height="28"
+              role="img"
+              aria-label="Original number 1 leads to fork number 2"
+            >
+              <path
+                d="M8 14H480M470 7L480 14L470 21"
+                fill="none"
+                stroke="#456855"
+                stroke-width="1.5"
+              />
+            </svg>
+            <div class="ledger-row">
+              <span>ORIGINAL TARGET<strong>$4,200</strong></span
+              ><span>FORK TARGET<strong>$4,400</strong></span>
+            </div>
+            <div class="ledger-row">
+              <span>ORIGINAL LEVERAGE<strong>2×</strong></span
+              ><span>FORK LEVERAGE<strong>3×</strong></span>
+            </div>
+            <p class="ledger-footer">
+              Same $3,600 invalidation. Distinct author. Public history.
+            </p>
+          </div>
+          <p class="proof" style="color: #52665a">
+            A record of authorship, not a performance claim.
+          </p>
+        </article>
+      </div>
+      <p>
+        <a href="art-direction-report.html"
+          >Read the complete research and implementation proposal →</a
+        >
+      </p>
+    </main>
+  </body>
+</html>
