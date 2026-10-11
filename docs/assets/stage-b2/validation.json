@@ -1,0 +1,163 @@
+{
+  "stage": "B2",
+  "status": "complete",
+  "date": "2026-10-11",
+  "origin": "https://forktrades.xyz",
+  "deployment": {
+    "status": "passed",
+    "sourceCommit": "f9754b8",
+    "image": "fork-metropolis:b2-20261011a",
+    "imageId": "sha256:5fc9cc7b586b95863ad1f7012d0290405b9e5418c7727bd19ae6c92cac60b307",
+    "retainedImage": "fork-metropolis:b1-20261011a",
+    "rollbackConfig": "/opt/fork-metropolis/releases/pre-b2-image.env",
+    "databaseBackup": "FORK-only native backup completed",
+    "migrations": "same committed migrations applied idempotently",
+    "bind": "127.0.0.1:13000",
+    "caddyChanges": false,
+    "serverSecretsChanged": false,
+    "loopbackLanding": "real lineage rendered"
+  },
+  "quality": {
+    "format": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "unitPassed": 231,
+    "indexerPassed": 12,
+    "foundryPassed": 28,
+    "abi": "passed",
+    "build": "passed",
+    "isolatedSocialAndSignaturePassed": 8,
+    "exactImageSignaturePassed": 8,
+    "exactImageBaseline": {
+      "initialPassed": 12,
+      "initialFailed": 2,
+      "targetedRecoveryPassed": 2,
+      "skipped": 1
+    },
+    "publicBrowser": {
+      "initialPassed": 21,
+      "initialFailed": 1,
+      "skipped": 1,
+      "targetedRecoveryPassed": 1,
+      "uniqueValidated": 22,
+      "singleAllGreenRun": false
+    },
+    "visualRecapturePassed": 1
+  },
+  "availabilityLimitation": "Intermittent upstream read failures observed. Targeted recovery passed; underlying provider cause not established.",
+  "security": {
+    "status": "passed",
+    "appLoopbackOnly": true,
+    "postgresHostPorts": false,
+    "database": {
+      "migrations": 3,
+      "tables": 9,
+      "metadataRows": 2
+    },
+    "monadRead": {
+      "chainId": 10143,
+      "registryCodePresent": true
+    },
+    "appHealthy": true,
+    "postgresHealthy": true,
+    "postgresContainerUnchanged": true,
+    "publicPorts13000And5432Closed": true,
+    "envAndTestPaths": 404,
+    "httpRedirect": 308,
+    "wwwRedirect": 301,
+    "tlsValid": true,
+    "anonymousLandingSetsNoAuthCookie": true,
+    "existingHttpsResponsesUnchanged": 20
+  },
+  "serverSafety": {
+    "status": "passed",
+    "unrelatedContainersUnchanged": 14,
+    "caddyFilesUnchanged": 9,
+    "caddyPidUnchanged": true,
+    "firewallPolicyUnchanged": true,
+    "runtimeCredentialFilesByteIdentical": true
+  },
+  "browserAssets": {
+    "status": "passed",
+    "browserAssetsScanned": 208,
+    "canonicalOriginBaked": true,
+    "actualProductionCredentialsAbsent": true,
+    "privateIdentityValuesAbsent": true,
+    "serverOnlyConfigAbsent": true
+  },
+  "imageSecurity": {
+    "status": "passed",
+    "image": "fork-metropolis:b2-20261011a",
+    "imageId": "sha256:5fc9cc7b586b95863ad1f7012d0290405b9e5418c7727bd19ae6c92cac60b307",
+    "architecture": "amd64",
+    "user": "node",
+    "sizeBytes": 278711635,
+    "layersScanned": 22,
+    "filesScanned": 98029,
+    "browserFilesScanned": 208,
+    "exactConfiguredCredentialsAbsent": true,
+    "serverConfigAbsentFromBrowser": true,
+    "runtimeSecretsAbsentFromImageConfig": true,
+    "historySecretScan": "passed",
+    "excludedMaterialAbsent": true,
+    "productionFixtureStubPresent": true
+  },
+  "product": {
+    "status": "passed",
+    "origin": "https://forktrades.xyz",
+    "databaseHealth": {
+      "database": "ready",
+      "migrations": "applied"
+    },
+    "feedModes": {
+      "fresh": ["1", "2"],
+      "most-forked": ["1", "2"],
+      "smart-signal": ["1", "2"]
+    },
+    "metadataTrusted": true,
+    "tree": {
+      "root": "1",
+      "child": "2",
+      "nodes": 2
+    },
+    "social": {
+      "agree": 1,
+      "visibleComments": 1
+    },
+    "profiles": {
+      "u_4dcde4749ffd": {
+        "eligibleRoots": 1,
+        "successfulRoots": 1,
+        "eligibleForks": 0,
+        "successfulForks": 0,
+        "influence": 1,
+        "executionsInspired": 0
+      },
+      "u_03572f901994": {
+        "eligibleRoots": 0,
+        "successfulRoots": 0,
+        "eligibleForks": 1,
+        "successfulForks": 0,
+        "influence": 0,
+        "executionsInspired": 0
+      }
+    },
+    "nansen": "disabled/deferred",
+    "testRoutes": 404,
+    "unauthenticatedPublish": 401,
+    "htmlScreens": 7,
+    "blockchainTransactions": 0
+  },
+  "responsiveWidths": [1440, 1280, 1024, 768, 390, 375],
+  "visualReview": {
+    "requiredEightActuallyInspected": true,
+    "unalteredImageCount": 58,
+    "isolatedFixturesOnly": true,
+    "composerDraftSubmitted": false,
+    "freshOAuthProofClaimed": false,
+    "existingAuthenticatedSessionRestored": true
+  },
+  "b3Started": false,
+  "perplExecution": "deferred",
+  "nansen": "deferred"
+}
