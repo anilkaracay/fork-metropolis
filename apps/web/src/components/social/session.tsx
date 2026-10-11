@@ -135,7 +135,9 @@ function LocalSession({
       setAdmin(response.isAdmin);
       setError(null);
       localStorage.setItem("fork-test-session", JSON.stringify(response));
-      query.clear();
+      // Reset data without orphaning a mounted, possibly pending public query.
+      query.getMutationCache().clear();
+      void query.resetQueries();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Try again.");
     }
@@ -156,7 +158,8 @@ function LocalSession({
       setToken(null);
       setAdmin(false);
       localStorage.removeItem("fork-test-session");
-      query.clear();
+      query.getMutationCache().clear();
+      void query.resetQueries();
     },
     getToken: async () => accessToken,
     refresh: async () => {

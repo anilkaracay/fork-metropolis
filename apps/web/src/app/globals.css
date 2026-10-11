@@ -3,27 +3,27 @@
 :root {
   color-scheme: dark;
   --background: #0b0d10;
-  --foreground: #f4f6f8;
-  --card: #111419;
-  --card-foreground: #f4f6f8;
-  --popover: #171b21;
-  --popover-foreground: #f4f6f8;
-  --primary: #8be28b;
-  --primary-foreground: #0b0d10;
-  --secondary: #171b21;
-  --secondary-foreground: #f4f6f8;
-  --muted: #111419;
-  --muted-foreground: #9ca6b2;
-  --accent: #171b21;
-  --accent-foreground: #f4f6f8;
-  --destructive: #f06d78;
-  --positive: #57c78b;
-  --warning: #e8b55b;
-  --link: #8ab4ff;
-  --border: #252b33;
-  --input: #252b33;
-  --ring: #8be28b;
-  --radius: 0.75rem;
+  --foreground: #f2f4f2;
+  --card: #12161b;
+  --card-foreground: #f2f4f2;
+  --popover: #191f25;
+  --popover-foreground: #f2f4f2;
+  --primary: #b1d6ac;
+  --primary-foreground: #132014;
+  --secondary: #191f25;
+  --secondary-foreground: #f2f4f2;
+  --muted: #12161b;
+  --muted-foreground: #a5ada7;
+  --accent: #191f25;
+  --accent-foreground: #f2f4f2;
+  --destructive: #f0a7b1;
+  --positive: #9fd2b4;
+  --warning: #e5c58d;
+  --link: #b8d4ee;
+  --border: #303731;
+  --input: #66756c;
+  --ring: #b1d6ac;
+  --radius: 0.625rem;
 }
 
 @theme inline {
@@ -52,7 +52,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--geist-mono), ui-monospace, monospace;
 }
 
 @layer base {
@@ -68,10 +69,10 @@
   }
   :focus-visible {
     outline: 2px solid var(--ring);
-    outline-offset: 4px;
+    outline-offset: 3px;
   }
   ::selection {
-    background: #8be28b33;
+    background: #b1d6ac33;
   }
 }
 
@@ -117,7 +118,7 @@ button {
   color: inherit;
 }
 button:disabled {
-  cursor: wait;
+  cursor: not-allowed;
   opacity: 0.55;
 }
 button,
@@ -360,10 +361,10 @@ main {
   justify-content: center;
   gap: 9px;
   border: 1px solid transparent;
-  border-radius: 8px;
-  min-height: 40px;
-  padding: 0 16px;
-  font-size: 12px;
+  border-radius: 6px;
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
   transition:
@@ -372,10 +373,10 @@ main {
 }
 .button.primary {
   background: var(--primary);
-  color: #102015;
+  color: var(--primary-foreground);
 }
 .button.primary:hover {
-  background: #a3eba3;
+  background: #c0e1ba;
 }
 .button.secondary {
   background: #14181e;
@@ -2061,4 +2062,22 @@ li.ancestor > .tree-node {
   .report-dialog {
     padding: 22px;
   }
+}
+
+/* Explicit family scope avoids third-party body-font overrides. */
+.app-layout {
+  font-family: var(--font-sans);
+}
+.fork-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+.fork-wordmark > svg,
+.wordmark-period {
+  color: var(--primary);
 }

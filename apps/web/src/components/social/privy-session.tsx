@@ -121,7 +121,9 @@ function SessionBridge({ children }: { children: ReactNode }) {
     );
     setSession(result.session);
     setAdmin(result.isAdmin);
-    query.clear();
+    // Keep active observers connected when the primary identity changes.
+    query.getMutationCache().clear();
+    void query.resetQueries();
   }
   const value: SessionValue = {
     session:
@@ -137,7 +139,8 @@ function SessionBridge({ children }: { children: ReactNode }) {
       setSession(null);
       setAdmin(false);
       setError(null);
-      query.clear();
+      query.getMutationCache().clear();
+      void query.resetQueries();
     },
     getToken: privy.getAccessToken,
     refresh: async () => {

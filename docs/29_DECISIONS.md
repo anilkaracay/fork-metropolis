@@ -1,5 +1,14 @@
 # Decision Log
 
+## D-052 — Approved Precision Social B1 landing and shared foundation
+
+- Date: 2026-10-11
+- Decision: the user approved Direction A and authorized B1 implementation, local production-build/browser QA, then the existing isolated Cherry deployment workflow.
+- Scope: public landing at `/`, unchanged product entry `/feed`, shared restrained dark tokens, locally hosted Geist Sans/Mono, reusable controls/wordmark, and the genuine thesis #1 → fork #2 hero. One root layout and a social route group preserve all product/API URLs. Marketing reads a bounded projection of existing hash-validated public data and never initializes the simulated workspace.
+- Functional safety: identity switching exposed an active-query race with `QueryClient.clear()`. Reset queries while preserving observers and clear mutation cache; keep the existing Privy verification and wallet architecture. Verify this with the existing social Playwright journey.
+- Release gate: all required format/lint/types/unit/indexer/Foundry/ABI/build checks, production route isolation, real read smoke, six responsive widths, screenshots reviewed, secret/image scans, retained previous image and FORK-only database backup before cutover.
+- Boundary: no application Idea Tree, composer, Feed or Profile redesign; no README rewrite, contract/reputation/backend architecture change, live publication or blockchain transaction. Perpl and Nansen remain deferred. B2 requires review of B1.
+
 Add every material change as a new entry. Never silently change architecture in code.
 
 ## D-051 - Defer Perpl and audit one shared landing/product identity
