@@ -2,6 +2,19 @@
 
 Add every material change as a new entry. Never silently change architecture in code.
 
+## D-048 - Isolated private self-host preparation on cherry
+
+Status: Accepted within the explicitly approved self-host gate
+Date: 2026-10-11
+
+Retain ordinary Next.js 16 `next start` rather than adding standalone tracing to the monorepo. Build with Node 24.21.0 and pnpm 12.6.0, frozen lockfile and public build variables only; install production dependencies in a separate stage and run as the unprivileged node user. Convert the existing TS Next config into equivalent JavaScript during build; do not copy application source, test artifacts or credentials to runtime. Keep the existing database/migration readiness endpoint independent of external providers.
+
+The clean Docker build exposed an existing production import of test fixtures. Alias only that test-runtime import to a fail-closed stub during production webpack builds; development/test runtime remains unchanged. This removes fixture identities/simulated data from the production build without copying fixture files into the runtime image. One existing public market-context JSON is permitted in the builder for TypeScript checking only. An explicit empty Turbopack config retains the existing development/test compiler alongside the production webpack hook.
+
+Use `/opt/fork-metropolis`, Compose project `fork-metropolis-prod`, its own bridge network and PostgreSQL 17.11 persistent volume. Publish only the app at `127.0.0.1:13000`; PostgreSQL has no host port. Never reuse other projects' databases, credentials, volumes or networks. Compare existing container start/port/network metadata, Caddy config hashes and service PID, and UFW state before/after. Docker's own firewall additions are expected for its new isolated bridge; no manual firewall or Caddy changes are authorized.
+
+Run the same committed migrations before application startup; failure stops deployment. For real demo portability, a bounded transfer tool validates an explicit five-table manifest, anchored content hashes, ownership and namespace; excludes rate/cache/draft/provider/session data; imports only into an empty migrated database in one transaction and verifies every transferred row. Required pseudonymous Privy DID and user/wallet foreign keys remain server-only. Transport the restricted export and runtime configuration over SSH, retain mode-0600 files, and keep them outside image/source control. Public auth, DNS/Caddy/HTTPS cutover, Perpl and Nansen resumption remain separate reviewed gates.
+
 ## D-047 - Opt-in real-session social boundary verification
 
 Status: Accepted implementation within the explicitly authorized two-user safety probes

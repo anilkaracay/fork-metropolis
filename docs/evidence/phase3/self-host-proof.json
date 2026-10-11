@@ -1,0 +1,259 @@
+{
+  "date": "2026-10-11",
+  "status": "READY",
+  "image": {
+    "status": "passed",
+    "image": "fork-metropolis:selfhost-20261011b",
+    "imageId": "sha256:43abe373f8baa8de5b44fe52fdc0d1db7f829c815a85f4ed5b71b6279407154a",
+    "architecture": "amd64",
+    "user": "node",
+    "sizeBytes": 278563021,
+    "layersScanned": 22,
+    "filesScanned": 98026,
+    "browserFilesScanned": 203,
+    "exactConfiguredCredentialsAbsent": true,
+    "serverConfigAbsentFromBrowser": true,
+    "runtimeSecretsAbsentFromImageConfig": true,
+    "historySecretScan": "passed",
+    "excludedMaterialAbsent": true,
+    "productionFixtureStubPresent": true
+  },
+  "localClone": {
+    "status": "passed",
+    "migration": "same committed migrations",
+    "demoImport": {
+      "status": "passed",
+      "command": "import",
+      "exactRoundTrip": true,
+      "rows": {
+        "users": 2,
+        "wallets": 2,
+        "thesis_metadata": 2,
+        "reactions": 1,
+        "comments": 1
+      }
+    },
+    "repeatImportRefused": true,
+    "originalRowsUnchanged": true,
+    "project": "fork-metropolis-local-proof",
+    "newIsolatedPostgres": true
+  },
+  "localFinalProduct": {
+    "status": "passed",
+    "origin": "http://127.0.0.1:13000",
+    "databaseHealth": {
+      "database": "ready",
+      "migrations": "applied"
+    },
+    "feedModes": {
+      "fresh": ["1", "2"],
+      "most-forked": ["1", "2"],
+      "smart-signal": ["1", "2"]
+    },
+    "metadataTrusted": true,
+    "tree": {
+      "root": "1",
+      "child": "2",
+      "nodes": 2
+    },
+    "social": {
+      "agree": 1,
+      "visibleComments": 1
+    },
+    "profiles": {
+      "u_4dcde4749ffd": {
+        "eligibleRoots": 1,
+        "successfulRoots": 1,
+        "eligibleForks": 0,
+        "successfulForks": 0,
+        "influence": 1,
+        "executionsInspired": 0
+      },
+      "u_03572f901994": {
+        "eligibleRoots": 0,
+        "successfulRoots": 0,
+        "eligibleForks": 1,
+        "successfulForks": 0,
+        "influence": 0,
+        "executionsInspired": 0
+      }
+    },
+    "nansen": "disabled/deferred",
+    "testRoutes": 404,
+    "unauthenticatedPublish": 401,
+    "htmlScreens": 7,
+    "blockchainTransactions": 0
+  },
+  "cherry": {
+    "status": "passed",
+    "postgres": {
+      "version": "17.11 (Debian 17.11-1.pgdg12+2)",
+      "migrations": 3,
+      "tables": 9,
+      "namespaceRows": 2,
+      "constraints": 53,
+      "triggers": 4
+    },
+    "constraints": {
+      "status": "passed",
+      "rolledBack": true,
+      "checks": [
+        "wallet uniqueness",
+        "wallet ownership immutable",
+        "wallet association",
+        "metadata wallet ownership",
+        "namespace uniqueness",
+        "distinct registry namespace",
+        "reaction idempotency",
+        "comment ownership",
+        "report uniqueness",
+        "fillIdentity uniqueness"
+      ]
+    },
+    "exactDemoRows": {
+      "users": 2,
+      "wallets": 2,
+      "thesis_metadata": 2,
+      "reactions": 1,
+      "comments": 1
+    },
+    "product": {
+      "status": "passed",
+      "origin": "http://127.0.0.1:13000",
+      "databaseHealth": {
+        "database": "ready",
+        "migrations": "applied"
+      },
+      "feedModes": {
+        "fresh": ["1", "2"],
+        "most-forked": ["1", "2"],
+        "smart-signal": ["1", "2"]
+      },
+      "metadataTrusted": true,
+      "tree": {
+        "root": "1",
+        "child": "2",
+        "nodes": 2
+      },
+      "social": {
+        "agree": 1,
+        "visibleComments": 1
+      },
+      "profiles": {
+        "u_4dcde4749ffd": {
+          "eligibleRoots": 1,
+          "successfulRoots": 1,
+          "eligibleForks": 0,
+          "successfulForks": 0,
+          "influence": 1,
+          "executionsInspired": 0
+        },
+        "u_03572f901994": {
+          "eligibleRoots": 0,
+          "successfulRoots": 0,
+          "eligibleForks": 1,
+          "successfulForks": 0,
+          "influence": 0,
+          "executionsInspired": 0
+        }
+      },
+      "nansen": "disabled/deferred",
+      "testRoutes": 404,
+      "unauthenticatedPublish": 401,
+      "htmlScreens": 7,
+      "blockchainTransactions": 0
+    },
+    "restart": {
+      "healthy": true,
+      "sameVolume": "fork-metropolis-prod_postgres_data",
+      "exactDataPreserved": true,
+      "readSmokeRepeated": true
+    },
+    "backup": "created restricted PostgreSQL custom-format backup",
+    "monadRead": {
+      "status": "passed",
+      "chainId": 10143
+    }
+  },
+  "isolationAndSecurity": {
+    "status": "passed",
+    "security": {
+      "status": "passed",
+      "appUid": 1000,
+      "postgresProcessUid": 999,
+      "health": "both healthy",
+      "loopbackOnly": true,
+      "postgresHostPort": false,
+      "dedicatedNetwork": true,
+      "readOnlyRoot": true,
+      "droppedCapabilities": true,
+      "noNewPrivileges": true,
+      "privateFilesMode": "0600",
+      "logCredentialAndPrivateIdentityScan": "passed",
+      "backupMode": "0600",
+      "forbiddenRuntimeValuesAbsent": true
+    },
+    "existingContainers": 14,
+    "existingContainersAndStartedAtUnchanged": true,
+    "existingPortBindingsAndNetworksUnchanged": true,
+    "caddyConfigFilesUnchanged": 8,
+    "caddyPidAndServiceUnchanged": true,
+    "ufwRulesUnchanged": true,
+    "dockerBridgeNftMetadataChangedAsExpected": true
+  },
+  "backupAndExcludedRows": {
+    "status": "passed",
+    "backupArchiveListValidated": true,
+    "excludedDestinationRows": {
+      "rate_buckets": 0,
+      "wallet_context_cache": 0,
+      "reports": 0,
+      "execution_evidence": 0,
+      "drafts": 0
+    }
+  },
+  "quality": {
+    "format": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "test": {
+      "unit": 221,
+      "indexer": 12,
+      "contract": 28
+    },
+    "abi": "passed",
+    "build": "passed",
+    "criticalPlaywright": 5,
+    "realProductionPlaywright": 4,
+    "obsoleteEmptyIndexSkipped": 1
+  },
+  "localAuth": {
+    "productionImage": true,
+    "existingApprovedOrigin": "http://localhost:3000",
+    "realPrivySessionHydrated": true,
+    "publicProfilesReviewed": 2,
+    "newLoginOrWalletTransaction": false
+  },
+  "publicDomainAuth": "deferred to approved domain/HTTPS gate",
+  "dnsCaddyPrivyOriginChanges": false,
+  "perplActions": false,
+  "nansenActions": false,
+  "newBlockchainTransactions": 0,
+  "deployment": {
+    "image": "fork-metropolis:selfhost-20261011b",
+    "imageId": "sha256:43abe373f8baa8de5b44fe52fdc0d1db7f829c815a85f4ed5b71b6279407154a",
+    "project": "fork-metropolis-prod",
+    "bind": "127.0.0.1:13000",
+    "checkpoint": "2026-10-11",
+    "status": "READY"
+  },
+  "publicArtifactScan": {
+    "status": "passed",
+    "versionableFilesScanned": 284,
+    "configuredCredentialsAndTransferredPrivateIdentitiesAbsent": true,
+    "localEnvironmentIgnored": true,
+    "privateExportIgnored": true,
+    "deployConfigurationIgnored": true
+  },
+  "temporaryLocalProofServices": "stopped; proof volume and original local PostgreSQL preserved"
+}

@@ -20,3 +20,8 @@ indexer/.envio/
 apps/web/.next-test/
 
 .pnpm-store/
+deploy/config/
+deploy/private/
+deploy/exports/
+deploy/backups/
+deploy/image.env

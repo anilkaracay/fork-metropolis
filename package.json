@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "pnpm --filter @fork/web dev",
+    "start": "pnpm --filter @fork/web start",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit && pnpm -r typecheck",
     "test": "vitest run && pnpm --filter @fork/indexer test && pnpm test:contracts",
@@ -17,8 +18,8 @@
     "build": "pnpm --filter @fork/shared build && pnpm --filter @fork/web build && node scripts/forge.mjs build && pnpm abi:check",
     "abi:export": "node scripts/export-abi.mjs",
     "abi:check": "node scripts/export-abi.mjs --check",
-    "format": "prettier --write \"{apps,packages,indexer,scripts}/**/*.{ts,tsx,mts,mjs,json,css,yaml}\" \"*.{json,yaml,mjs}\" \".github/**/*.yml\" && node scripts/forge.mjs fmt",
-    "format:check": "prettier --check \"{apps,packages,indexer,scripts}/**/*.{ts,tsx,mts,mjs,json,css,yaml}\" \"*.{json,yaml,mjs}\" \".github/**/*.yml\" && node scripts/forge.mjs fmt --check",
+    "format": "prettier --write \"{apps,packages,indexer,scripts,deploy}/**/*.{ts,tsx,mts,mjs,json,css,yaml}\" \"*.{json,yaml,mjs}\" \".github/**/*.yml\" && node scripts/forge.mjs fmt",
+    "format:check": "prettier --check \"{apps,packages,indexer,scripts,deploy}/**/*.{ts,tsx,mts,mjs,json,css,yaml}\" \"*.{json,yaml,mjs}\" \".github/**/*.yml\" && node scripts/forge.mjs fmt --check",
     "tools:install": "node scripts/install-foundry.mjs",
     "perpl:context": "node --experimental-strip-types scripts/check-perpl-context.mts",
     "test:db": "vitest run packages/db/test",

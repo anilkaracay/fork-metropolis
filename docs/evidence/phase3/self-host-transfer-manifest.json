@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "chainId": 10143,
+  "registry": "0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+  "rows": {
+    "users": 2,
+    "wallets": 2,
+    "thesis_metadata": 2,
+    "reactions": 1,
+    "comments": 1
+  },
+  "columns": {
+    "users": [
+      "id",
+      "privy_did",
+      "handle",
+      "display_name",
+      "bio",
+      "primary_wallet",
+      "created_at",
+      "updated_at"
+    ],
+    "wallets": ["address", "user_id", "kind", "created_at", "updated_at"],
+    "thesis_metadata": [
+      "id",
+      "chain_id",
+      "registry_address",
+      "thesis_id",
+      "author_user_id",
+      "author_wallet",
+      "parent_id",
+      "intent",
+      "content_hash",
+      "reasoning",
+      "entry_note",
+      "tags",
+      "status",
+      "hidden",
+      "tx_hash",
+      "request_key",
+      "expires_at",
+      "finalized_at",
+      "created_at",
+      "updated_at"
+    ],
+    "reactions": [
+      "chain_id",
+      "registry_address",
+      "thesis_id",
+      "user_id",
+      "type",
+      "created_at"
+    ],
+    "comments": [
+      "id",
+      "chain_id",
+      "registry_address",
+      "thesis_id",
+      "author_user_id",
+      "body",
+      "status",
+      "request_key",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  "identityFields": [
+    "users.id",
+    "users.privy_did",
+    "wallets.user_id",
+    "author/user foreign keys"
+  ],
+  "excluded": [
+    "access tokens",
+    "cookies",
+    "emails",
+    "provider credentials",
+    "private keys",
+    "drafts",
+    "rate_buckets",
+    "wallet_context_cache",
+    "reports",
+    "execution_evidence"
+  ],
+  "source": "local development PostgreSQL; repeatable-read, read-only snapshot",
+  "destination": "fresh migrated fork_prod in isolated fork-metropolis-prod stack",
+  "transport": "SSH; restricted private export; no public artifact contains row values",
+  "importPolicy": "empty database only; transactional; exact-row verification; no reset or overwrite"
+}
