@@ -1,0 +1,418 @@
+{
+  "checkpoint": "2026-10-11",
+  "gate": "DOMAIN + HTTPS PUBLIC CUTOVER",
+  "status": "READY",
+  "canonicalOrigin": "https://forktrades.xyz",
+  "dns": {
+    "status": "passed",
+    "resolvers": {
+      "1.1.1.1": {
+        "forktrades.xyz": [
+          "5.199.166.2"
+        ],
+        "www.forktrades.xyz": [
+          "forktrades.xyz.",
+          "5.199.166.2"
+        ],
+        "apexAAAA": "none"
+      },
+      "8.8.8.8": {
+        "forktrades.xyz": [
+          "5.199.166.2"
+        ],
+        "www.forktrades.xyz": [
+          "forktrades.xyz.",
+          "5.199.166.2"
+        ],
+        "apexAAAA": "none"
+      }
+    },
+    "wwwCname": "forktrades.xyz.",
+    "dnsChanges": 0,
+    "cloudflareLoginRequired": false,
+    "cloudflareProxyEnabledByAgent": false
+  },
+  "tlsAndPublicSecurity": {
+    "status": "passed",
+    "origin": "https://forktrades.xyz",
+    "tls": {
+      "forktrades.xyz": {
+        "verified": true,
+        "issuer": [
+          [
+            [
+              "countryName",
+              "US"
+            ]
+          ],
+          [
+            [
+              "organizationName",
+              "Let's Encrypt"
+            ]
+          ],
+          [
+            [
+              "commonName",
+              "YE1"
+            ]
+          ]
+        ],
+        "expires": "Jan  9 08:56:41 2027 GMT",
+        "sans": [
+          "forktrades.xyz"
+        ],
+        "protocol": "TLSv1.2"
+      },
+      "www.forktrades.xyz": {
+        "verified": true,
+        "issuer": [
+          [
+            [
+              "countryName",
+              "US"
+            ]
+          ],
+          [
+            [
+              "organizationName",
+              "Let's Encrypt"
+            ]
+          ],
+          [
+            [
+              "commonName",
+              "YE2"
+            ]
+          ]
+        ],
+        "expires": "Jan  9 08:56:41 2027 GMT",
+        "sans": [
+          "www.forktrades.xyz"
+        ],
+        "protocol": "TLSv1.2"
+      }
+    },
+    "checks": {
+      "http://forktrades.xyz/t/1?proof=1": {
+        "status": 308,
+        "location": "https://forktrades.xyz/t/1?proof=1"
+      },
+      "https://www.forktrades.xyz/t/1?proof=1": {
+        "status": 301,
+        "location": "https://forktrades.xyz/t/1?proof=1"
+      },
+      "http://www.forktrades.xyz/t/1?proof=1": {
+        "status": 308,
+        "location": "https://www.forktrades.xyz/t/1?proof=1"
+      },
+      "privatePaths": "404",
+      "unauthenticatedMutations": 401,
+      "crossOriginPreflight": {
+        "status": 204,
+        "originPermissionAbsent": true
+      },
+      "anonymousCookies": "none",
+      "publicPort13000": "not reachable",
+      "publicPort5432": "not reachable"
+    }
+  },
+  "caddy": {
+    "status": "passed",
+    "validation": true,
+    "gracefulReload": true,
+    "siteFile": "/etc/caddy/conf.d/fork-metropolis.caddy",
+    "siteHash": "7cfa8f007123e1ad9f3b1e790fbf779fed496e4b48324ad71a46c5b4fdbed22a",
+    "imageId": "sha256:e94db4ea3b46e34ee5a1d887afe00d1d97f9e784b8d5f596a8e1fa5eb9394c76"
+  },
+  "image": {
+    "status": "passed",
+    "image": "fork-metropolis:public-20261011a",
+    "imageId": "sha256:e94db4ea3b46e34ee5a1d887afe00d1d97f9e784b8d5f596a8e1fa5eb9394c76",
+    "architecture": "amd64",
+    "user": "node",
+    "sizeBytes": 278529458,
+    "layersScanned": 22,
+    "filesScanned": 98026,
+    "browserFilesScanned": 203,
+    "exactConfiguredCredentialsAbsent": true,
+    "serverConfigAbsentFromBrowser": true,
+    "runtimeSecretsAbsentFromImageConfig": true,
+    "historySecretScan": "passed",
+    "excludedMaterialAbsent": true,
+    "productionFixtureStubPresent": true
+  },
+  "urlAudit": {
+    "existingVariable": "NEXT_PUBLIC_APP_URL",
+    "value": "https://forktrades.xyz",
+    "timing": "build-time",
+    "rebuilt": true,
+    "duplicateVariablesAdded": false,
+    "runtimeSecretsByteIdentical": true
+  },
+  "privy": {
+    "allowedOrigins": {
+      "allowedOrigins": [
+        "http://localhost:3000",
+        "https://forktrades.xyz"
+      ],
+      "googleEnabled": true,
+      "emailEnabled": true,
+      "enforceWalletUIs": true
+    },
+    "login": {
+      "status": "passed",
+      "origin": "https://forktrades.xyz",
+      "handle": "u_4dcde4749ffd",
+      "publicWallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+      "realPrivyTokenServerVerified": true,
+      "existingDidMatches": true,
+      "existingUserIdMatches": true,
+      "embeddedWalletMatches": true,
+      "primaryWalletMatches": true,
+      "postgresAssociationMatches": true,
+      "wrongWalletSelection": 403,
+      "wrongWalletMutation": 403,
+      "unauthenticatedMutation": 401,
+      "privateCaptureRetained": false,
+      "cookieNamesOnly": [
+        "privy-session",
+        "privy-token"
+      ],
+      "blockchainTransactions": 0,
+      "acceptedSocialMutations": 0
+    },
+    "relogin": {
+      "status": "passed",
+      "origin": "https://forktrades.xyz",
+      "handle": "u_4dcde4749ffd",
+      "publicWallet": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4",
+      "realPrivyTokenServerVerified": true,
+      "existingDidMatches": true,
+      "existingUserIdMatches": true,
+      "embeddedWalletMatches": true,
+      "primaryWalletMatches": true,
+      "postgresAssociationMatches": true,
+      "wrongWalletSelection": 403,
+      "wrongWalletMutation": 403,
+      "unauthenticatedMutation": 401,
+      "privateCaptureRetained": false,
+      "cookieNamesOnly": [],
+      "blockchainTransactions": 0,
+      "acceptedSocialMutations": 0
+    },
+    "sameExistingIdentityAndWallet": true,
+    "logout": {
+      "signedOutBrowserObserved": true,
+      "unauthenticatedMutationAfterLogout": 401
+    },
+    "providerTier": "existing development tier, unchanged",
+    "optionalHttpOnlyMode": "existing disabled setting, unchanged",
+    "sdkCookieDefaults": {
+      "source": "pinned Privy React SDK 3.47.0 cookie writer",
+      "sameSite": "Strict",
+      "secureOnCanonicalHttps": true,
+      "observedCookieNames": [
+        "privy-session",
+        "privy-token"
+      ],
+      "basis": "observed request names and inspected SDK source; no cookie values recorded"
+    },
+    "observer": {
+      "scope": "FORK loopback ingress only",
+      "boundedSeconds": 90,
+      "packetFiles": false,
+      "tokensSaved": false,
+      "stopped": true
+    }
+  },
+  "product": {
+    "status": "passed",
+    "origin": "https://forktrades.xyz",
+    "databaseHealth": {
+      "database": "ready",
+      "migrations": "applied"
+    },
+    "feedModes": {
+      "fresh": [
+        "1",
+        "2"
+      ],
+      "most-forked": [
+        "1",
+        "2"
+      ],
+      "smart-signal": [
+        "1",
+        "2"
+      ]
+    },
+    "metadataTrusted": true,
+    "tree": {
+      "root": "1",
+      "child": "2",
+      "nodes": 2
+    },
+    "social": {
+      "agree": 1,
+      "visibleComments": 1
+    },
+    "profiles": {
+      "u_4dcde4749ffd": {
+        "eligibleRoots": 1,
+        "successfulRoots": 1,
+        "eligibleForks": 0,
+        "successfulForks": 0,
+        "influence": 1,
+        "executionsInspired": 0
+      },
+      "u_03572f901994": {
+        "eligibleRoots": 0,
+        "successfulRoots": 0,
+        "eligibleForks": 1,
+        "successfulForks": 0,
+        "influence": 0,
+        "executionsInspired": 0
+      }
+    },
+    "nansen": "disabled/deferred",
+    "testRoutes": 404,
+    "unauthenticatedPublish": 401,
+    "htmlScreens": 7,
+    "blockchainTransactions": 0
+  },
+  "database": {
+    "status": "passed",
+    "postgres": {
+      "version": "17.11 (Debian 17.11-1.pgdg12+2)",
+      "migrations": 3,
+      "tables": 9,
+      "namespaceRows": 2,
+      "constraints": 53,
+      "triggers": 4
+    },
+    "constraints": {
+      "status": "passed",
+      "rolledBack": true,
+      "checks": [
+        "wallet uniqueness",
+        "wallet ownership immutable",
+        "wallet association",
+        "metadata wallet ownership",
+        "namespace uniqueness",
+        "distinct registry namespace",
+        "reaction idempotency",
+        "comment ownership",
+        "report uniqueness",
+        "fillIdentity uniqueness"
+      ]
+    },
+    "exactDemoRows": {
+      "users": 2,
+      "wallets": 2,
+      "thesis_metadata": 2,
+      "reactions": 1,
+      "comments": 1
+    },
+    "exactDemoPreserved": true,
+    "monad": {
+      "chainId": 10143,
+      "registryCodePresent": true,
+      "transactions": 0
+    },
+    "serverSecurity": {
+      "status": "passed",
+      "appUid": 1000,
+      "postgresProcessUid": 999,
+      "health": "both healthy",
+      "loopbackOnly": true,
+      "postgresHostPort": false,
+      "dedicatedNetwork": true,
+      "readOnlyRoot": true,
+      "droppedCapabilities": true,
+      "noNewPrivileges": true,
+      "privateFilesMode": "0600",
+      "logCredentialAndPrivateIdentityScan": "passed",
+      "backupMode": "0600",
+      "forbiddenRuntimeValuesAbsent": true
+    }
+  },
+  "deployedAssets": {
+    "status": "passed",
+    "browserAssetsScanned": 203,
+    "canonicalOriginBaked": true,
+    "actualProductionCredentialsAbsent": true,
+    "privateIdentityValuesAbsent": true,
+    "serverOnlyConfigAbsent": true
+  },
+  "existingServerSafety": {
+    "status": "passed",
+    "unrelatedContainersUnchanged": 14,
+    "existingCaddyFilesUnchanged": 8,
+    "caddyPidUnchanged": true,
+    "ufwUnchanged": true,
+    "runtimeSecretsByteIdentical": true,
+    "onlyAddedSite": "fork-metropolis.caddy"
+  },
+  "existingSiteRegression": {
+    "hostnamesChecked": 18,
+    "responsesMatchBaseline": true,
+    "unrelatedHostnamesOmitted": true
+  },
+  "tests": {
+    "format": "passed",
+    "lint": "passed",
+    "strictTypecheck": "passed",
+    "unit": 221,
+    "envio": 12,
+    "foundry": 28,
+    "abi": "passed",
+    "productionBuild": "passed",
+    "localProductionPlaywright": {
+      "passed": 4,
+      "skipped": 1,
+      "skipReason": "obsolete empty-index case; two actual theses exist"
+    },
+    "publicProductionPlaywright": {
+      "passed": 4,
+      "skipped": 1,
+      "sameSkipReason": true
+    },
+    "liveRollbackConstraints": 10,
+    "stagedGitleaks": "passed, no findings"
+  },
+  "screenshots": [
+    "public-auth-after.png",
+    "public-auth-before.png",
+    "public-explore.png",
+    "public-feed.png",
+    "public-privy-origins.png",
+    "public-profile-a.png",
+    "public-profile-b.png",
+    "public-signed-out.png",
+    "public-thesis-1.png",
+    "public-thesis-2.png",
+    "public-tree-mobile.png",
+    "public-tree.png"
+  ],
+  "humanActionRequired": "none",
+  "nextRecommendedGate": "Perpl real execution using the approved canonical HTTPS origin; await user review before starting",
+  "boundaries": {
+    "newTheses": 0,
+    "newForks": 0,
+    "blockchainTransactions": 0,
+    "acceptedSocialMutations": 0,
+    "cloudflareChanges": 0,
+    "nansenStarted": false,
+    "perplStarted": false,
+    "phase4Started": false
+  },
+  "versionableArtifactScan": {
+    "status": "passed",
+    "versionableFilesScanned": 299,
+    "configuredCredentialsAndTransferredPrivateIdentitiesAbsent": true,
+    "localEnvironmentIgnored": true,
+    "privateExportIgnored": true,
+    "deployConfigurationIgnored": true
+  }
+}

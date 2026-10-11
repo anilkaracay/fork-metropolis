@@ -1,6 +1,6 @@
 # Self-host preparation on cherry — READY
 
-2026-10-11. This is the completed private self-host preparation gate, not the public launch or domain-auth gate. The user's approved scope was completed with no new blockchain transaction and no Nansen, Perpl or Phase 4 work. [Machine-readable public proof](self-host-proof.json), [explicit transfer manifest](self-host-transfer-manifest.json), [operations and cutover runbook](../../../deploy/README.md).
+2026-10-11. This is the historical completed private self-host preparation gate. The later approved public HTTPS/domain-auth cutover is now documented in [the public deployment report](PUBLIC_DEPLOYMENT.md). The user's approved scope was completed with no new blockchain transaction and no Nansen, Perpl or Phase 4 work. [Machine-readable public proof](self-host-proof.json), [explicit transfer manifest](self-host-transfer-manifest.json), [operations and cutover runbook](../../../deploy/README.md).
 
 ## 1. Self-host status
 
@@ -69,7 +69,7 @@ Read-only before/after comparison passed for all **14 pre-existing containers**:
 
 ## 10. Later domain cutover
 
-The exact existing convention is `/etc/caddy/Caddyfile` importing `/etc/caddy/conf.d/*.caddy`. After separate approval: choose the domain and point DNS A to cherry; rebuild the image with that final public HTTPS app URL; authorize the exact Privy origin; add only `/etc/caddy/conf.d/fork-metropolis.caddy` with `reverse_proxy 127.0.0.1:13000`; validate the full existing config then reload Caddy; verify automatic HTTPS, redirects/headers/assets/API, fresh browser auth/wallet and secure session/origin behavior. Keep the raw port loopback-only. Perpl stable-Origin approval belongs to its later gate. [Exact runbook](../../../deploy/README.md#later-domain--caddy-cutover--not-executed). None of these public-cutover actions was executed.
+The exact existing convention is `/etc/caddy/Caddyfile` importing `/etc/caddy/conf.d/*.caddy`. After separate approval: choose the domain and point DNS A to cherry; rebuild the image with that final public HTTPS app URL; authorize the exact Privy origin; add only `/etc/caddy/conf.d/fork-metropolis.caddy` with `reverse_proxy 127.0.0.1:13000`; validate the full existing config then reload Caddy; verify automatic HTTPS, redirects/headers/assets/API, fresh browser auth/wallet and secure session/origin behavior. Keep the raw port loopback-only. Perpl stable-Origin approval belongs to its later gate. [Current runbook](../../../deploy/README.md#public-https--caddy-cutover). None of these public-cutover actions was executed.
 
 ## 11. Security
 

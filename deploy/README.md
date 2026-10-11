@@ -1,6 +1,6 @@
-# FORK private self-host operations
+# FORK self-host operations
 
-This gate runs only at `127.0.0.1:13000` on cherry. The existing Caddy, firewall and other projects remain unchanged. Nansen is deferred; Perpl enrollment/trading and public authentication require later review.
+The canonical public origin is `https://forktrades.xyz`, served by the existing Cherry Caddy instance. The application remains bound to `127.0.0.1:13000`; PostgreSQL has no published host port. Only the dedicated FORK Caddy site was added. Nansen remains deferred; Perpl enrollment/trading requires a separate gate. Current public authentication proof is recorded in [the public deployment report](../docs/evidence/phase3/PUBLIC_DEPLOYMENT.md).
 
 ## Runtime decision
 
@@ -10,7 +10,7 @@ Use standard Next.js 16.3.8 `next start`, Node 24.21.0 and pnpm 12.6.0. The [off
 
 | Variable                                            | Timing / visibility                                 | Purpose                                                                         |
 | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL`                               | Build-time public                                   | Metadata/canonical app URL; currently localhost, rebuild for final HTTPS domain |
+| `NEXT_PUBLIC_APP_URL`                               | Build-time public                                   | Metadata/canonical app URL; built as `https://forktrades.xyz` |
 | `NEXT_PUBLIC_PRIVY_APP_ID`                          | Build-time public                                   | Privy frontend configuration and corresponding server verifier app ID           |
 | `NODE_ENV`                                          | Runtime server; image defaults to production        | Enforces production behavior                                                    |
 | `PORT`, `FORK_LISTEN_HOST`                          | Runtime server; image defaults 3000 / 0.0.0.0       | Container listen address; host publishing remains loopback-only                 |
@@ -77,25 +77,25 @@ curl --fail http://127.0.0.1:13000/api/health/database
 
 App rollback: set `FORK_IMAGE` to the retained prior validated tag and run `deploy` only if that image remains schema-compatible. Database rollback is a separate explicit recovery operation, never automatic. Back up the current FORK database first, stop only the FORK app, inspect the backup with `pg_restore --list`, and restore only to a **fresh isolated recovery database/volume** after review. `pg_restore --no-owner --no-privileges --exit-on-error --single-transaction` preserves the dump's application schema/data without importing other server roles. Verify constraints and counts, then point only FORK at the recovered database. Do not use `--clean`, drop an existing database, disable constraints or delete a volume as a shortcut. Full operational backups contain FORK business data and necessary pseudonymous identity mappings; keep them restricted and off public artifacts.
 
-## Later domain / Caddy cutover — not executed
+## Public HTTPS / Caddy cutover
 
-Cherry's active Caddyfile is `/etc/caddy/Caddyfile`, importing `/etc/caddy/conf.d/*.caddy`. Preserve all existing imports/sites.
+Canonical origin: `https://forktrades.xyz`. Cloudflare apex A points to `5.199.166.2`; www CNAME points to the apex. Both remain DNS only. No Cloudflare login, proxy or DNS change was performed. Independent public resolver checks passed; no AAAA record is configured.
 
-After the user provides and approves `fork.<domain>`:
+Cherry's active `/etc/caddy/Caddyfile` imports `/etc/caddy/conf.d/*.caddy`. The only added file is `/etc/caddy/conf.d/fork-metropolis.caddy`, copied from [the reviewed site definition](caddy/fork-metropolis.caddy). Apex reverse-proxies `127.0.0.1:13000`; www returns permanent 301 to `https://forktrades.xyz{uri}`. Caddy automatic HTTPS obtains and renews certificates; automatic HTTP redirects return 308. Paths/query strings are preserved. [Automatic HTTPS](https://caddyserver.com/docs/automatic-https), [redirect syntax](https://caddyserver.com/docs/caddyfile/directives/redir), [validation/reload commands](https://caddyserver.com/docs/command-line).
 
-1. Add DNS A to `5.199.166.2`; add AAAA only after verifying the server's IPv6 route. Verify resolution.
-2. Rebuild the validated image with `NEXT_PUBLIC_APP_URL=https://fork.<domain>` and the same public Privy app ID, then update only FORK.
-3. Add that exact HTTPS origin in Privy via its official authenticated tooling and verify required auth settings.
-4. Prepare a **new** `/etc/caddy/conf.d/fork-metropolis.caddy` site file:
+Before any reload:
 
-   ```caddyfile
-   fork.<domain> {
-       reverse_proxy 127.0.0.1:13000
-   }
-   ```
+```sh
+caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile
+```
 
-5. Validate the full existing Caddy config before reloading the existing service. Keep `13000` loopback-only. Caddy supplies automatic HTTPS and forwarded host/protocol headers. Verify certificate, redirects, static assets, API routes and the intended hostname through HTTPS.
-6. Run fresh real browser login/wallet and public read smoke. Auth uses bearer tokens rather than an application auth cookie; verify Privy's secure session storage and cookie behavior on HTTPS. The app has no production cookie session requiring a new cookie flag. Test routes remain 404; JSON authenticated mutations require the real bearer/wallet, and external-site CORS must not be broadened. Review Origin handling before any future cookie-based mutation support.
-7. Request Perpl approval for the final stable HTTPS Origin only in its separate gate. No tunnel or raw private endpoint substitutes for it.
+Reload only after validation succeeds. Never replace the main Caddyfile, restart unrelated services or format other projects' files. Cutover preserved the Caddy PID, all eight original config hashes, UFW and all 14 unrelated container identities/start times/bindings/networks. All 18 original public hostname responses matched the baseline.
 
-No DNS, Caddy site, certificate, Privy production origin or Perpl action is part of the current private deployment.
+Current release: `fork-metropolis:public-20261011a`; retained pre-cutover release: `fork-metropolis:selfhost-20261011b`. Only the existing build-time `NEXT_PUBLIC_APP_URL` changed. Runtime env/password files were byte-identical before/after. Public-origin changes require a fresh build, not a duplicate runtime variable.
+
+Privy allowed web origins are exactly `http://localhost:3000` and `https://forktrades.xyz`. Google/Email and embedded-wallet settings remain unchanged; www needs no separate login origin because it redirects. The provider application remains in its existing development tier; no plan upgrade was requested. Existing optional Privy HttpOnly-cookie mode remains disabled; this cutover does not change the wallet/session architecture. The FORK application authenticates explicit bearer tokens plus linked primary wallet, not ambient application cookies. Anonymous HTTPS responses set no application auth cookie; untrusted-origin preflights receive no CORS permission. Do not add wildcard CORS. Any future cookie-authentication change requires explicit CSRF and cookie review. [Official Privy allowed-domain documentation](https://docs.privy.io/recipes/dashboard/allowed-domains).
+
+For a public-routing rollback, remove **only** the FORK site file, validate the full remaining Caddy configuration, then gracefully reload. Do not remove other sites or Caddy certificate data. For app rollback, restore the retained pre-public `image.env` from `/opt/fork-metropolis/releases/pre-public-image.env` and run only this project's `deploy` after schema compatibility review. No migration changed during this cutover; the same three committed migrations were applied idempotently. Keep database rollback separate and restricted as documented above.
+
+Public TLS/read smoke does not substitute for real Google login, unchanged DID/embedded wallet/primary wallet, production database association and logout/login persistence. See the current evidence report for completed versus pending proofs. No new thesis, fork, transaction, Perpl or Nansen activity is authorized by this runbook.

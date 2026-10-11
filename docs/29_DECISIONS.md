@@ -2,6 +2,15 @@
 
 Add every material change as a new entry. Never silently change architecture in code.
 
+## D-049 - Canonical public HTTPS cutover on cherry
+
+Status: Accepted within the explicitly approved domain/HTTPS gate
+Date: 2026-10-11
+
+The user selected `https://forktrades.xyz` as the sole canonical production origin; `www.forktrades.xyz` permanently redirects to apex while preserving path/query. DNS is independently verified to cherry IPv4 `5.199.166.2`, with no apex AAAA, and remains DNS-only. Rebuild once with the existing public `NEXT_PUBLIC_APP_URL` rather than adding a duplicate runtime URL variable; preserve all current server-only env and database credentials. Use only a dedicated `/etc/caddy/conf.d/fork-metropolis.caddy` in the existing Caddy import organization, automatic HTTPS, full validation before graceful reload, and unchanged loopback app/database isolation. Keep the previous validated image/site baseline for rollback; never change unrelated sites or firewall.
+
+After HTTPS is healthy, add only the apex origin to the existing Privy app while preserving localhost, Google/Email and user-controlled embedded EVM behavior. Prove actual existing-user Google auth, server-side identity/wallet association, logout/login persistence and normal API auth boundaries without new identity/publication/transaction. Existing explicit bearer + wallet auth remains the session mechanism; cookie/origin behavior must be observed over HTTPS before making claims. Public product/security and pre-existing-service checks and sanitized evidence are required. Do not start Perpl, resume Nansen or publish the submission in this gate.
+
 ## D-048 - Isolated private self-host preparation on cherry
 
 Status: Accepted within the explicitly approved self-host gate

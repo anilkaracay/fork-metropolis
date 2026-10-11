@@ -81,3 +81,8 @@ The user explicitly elected to continue without the remaining Email/OTP test in 
 | Quality | Final format/lint/typecheck/build/ABI pass; 194 root / 12 indexer / 28 contract tests; credentialed production smoke 3/3. Existing upstream build warnings and sandbox Foundry cache warning retained honestly. Closure changes docs only; no redundant rerun after unchanged code. |
 | Human action | None required to close the revised current gate. MON funding is needed before a later actual transaction, not to accept this gate. |
 | Next recommendation | Review the Privy result, then authorize FORKRegistry Monad Testnet deployment. It has not started; Envio/Nansen/Perpl also remain deferred. |
+
+
+## Public HTTPS Google authentication — 2026-10-11
+
+The later approved cutover is **READY** at https://forktrades.xyz. Its origin was added automatically while preserving http://localhost:3000, Google/Email and wallet settings. Real User A login and logout/login preserve the exact existing DID, embedded/primary wallet and production PostgreSQL association; real-token wrong-wallet selection/mutation return 403 and missing-token mutation returns 401. No identity, wallet, thesis, fork or transaction was created. The provider's existing development tier and disabled optional HttpOnly mode remain unchanged; no Email/OTP/private-session or HttpOnly isolation proof is claimed. [Complete sanitized public evidence](PUBLIC_DEPLOYMENT.md), [origin/settings screenshot](public-privy-origins.png), [same-wallet relogin screenshot](public-auth-after.png). Stop for review before Perpl/Nansen.
