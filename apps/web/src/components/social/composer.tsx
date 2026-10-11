@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  forkDifference,
   forkModificationSchema,
   parseFixedPoint,
   thesisCoreSchema,
@@ -15,9 +14,12 @@ import {
 import type { PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
 import { useSession } from "./session";
-import { EmptyState, ErrorState, Skeleton, Avatar } from "./common";
+import { EmptyState, ErrorState, Avatar } from "./common";
 import { marketName, price, useMarkets } from "./thesis-card";
 import { Icon } from "./icon";
+import { compareDraft } from "@/lib/draft-comparison";
+import { ForkDiff } from "./fork-diff";
+import { SignatureLoading } from "./signature-loading";
 import {
   recordPublishObservation,
   type PublishStage,
@@ -35,18 +37,29 @@ export function Composer({
     enabled: !!parentId,
     queryFn: () => api<ThesisDetail>(`theses/${parentId}`),
   });
-  if (parentId && parent.isPending) return <Skeleton cards={2} />;
+  if (parentId && parent.isPending) return <SignatureLoading kind="fork" />;
   if (parent.error)
     return (
       <ErrorState error={parent.error} retry={() => void parent.refetch()} />
     );
   if (parentId && parent.data?.metadataState !== "trusted")
     return (
-      <EmptyState
-        title="This parent’s reasoning is unavailable."
-        description="Choose an idea with intact, visible metadata before forking."
-        create={false}
-      />
+      <div className="signature">
+        <EmptyState
+          title="This parent’s reasoning is unavailable."
+          description="Choose an idea with intact, visible metadata before forking."
+          create={false}
+        />
+        <button
+          className="button secondary"
+          onClick={() => void parent.refetch()}
+        >
+          Check parent metadata again
+        </button>
+        <Link className="button secondary" href={`/t/${parentId}`}>
+          Return to parent #{parentId}
+        </Link>
+      </div>
     );
   return (
     <ComposerForm
@@ -156,16 +169,9 @@ function ComposerForm({
       });
     return { core, metadata };
   }
-  let changes: ReturnType<typeof forkDifference> = [];
-  try {
-    if (parent?.metadata) {
-      const value = parse();
-      changes = forkDifference(
-        { core: parent.graph.core, metadata: parent.metadata },
-        value,
-      );
-    }
-  } catch {}
+  const comparison = parent?.metadata
+    ? compareDraft({ core: parent.graph.core, metadata: parent.metadata }, form)
+    : null;
   const opposite = parent && form.side !== parent.graph.core.side;
   function save(value: Pending) {
     setPending(value);
@@ -330,7 +336,9 @@ function ComposerForm({
     }
   };
   return (
-    <div className="composer-layout">
+    <div
+      className={`composer-layout ${parent ? "signature fork-composer" : ""}`}
+    >
       <section>
         <Link
           href={parent ? `/t/${parent.graph.thesisId}` : "/feed"}
@@ -368,7 +376,7 @@ function ComposerForm({
             <span>
               Forking{" "}
               <Link href={`/t/${parent.graph.thesisId}`}>
-                @{parent.author.handle}’s{" "}
+                #{parent.graph.thesisId} · @{parent.author.handle}’s{" "}
                 {marketName(parent.graph.core.marketId, markets.data)} idea
               </Link>
             </span>
@@ -500,6 +508,17 @@ function ComposerForm({
               retry={() => void markets.refetch()}
             />
           )}
+          {parent && comparison && (
+            <aside className="draft-panel" id="draft-comparison">
+              <ForkDiff
+                changes={comparison.changes}
+                core={comparison.core}
+                parentId={parent.graph.thesisId}
+                invalidFields={comparison.invalidFields}
+                draft
+              />
+            </aside>
+          )}
           <div className="publish-bar">
             <div>
               <strong>{state}</strong>
@@ -591,87 +610,46 @@ function ComposerForm({
           />
         )}
       </section>
-      <aside className="composer-rail">
-        {parent ? (
-          <>
-            <span className="eyebrow">Your contribution</span>
-            <h2>What changes?</h2>
-            {changes.length ? (
-              <div className="diff-list">
-                {changes.map((c) => (
-                  <div key={c.field}>
-                    <strong>{c.label}</strong>
-                    <div>
-                      <del>
-                        {c.field.endsWith("PriceE8")
-                          ? `$${price(c.before)}`
-                          : c.field === "leverageBps"
-                            ? `${Number(c.before) / 10000}×`
-                            : c.before}
-                      </del>
-                      <Icon name="arrow" size={15} />
-                      <span>
-                        {c.field.endsWith("PriceE8")
-                          ? `$${price(c.after)}`
-                          : c.field === "leverageBps"
-                            ? `${Number(c.after) / 10000}×`
-                            : c.after}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+      {!parent && (
+        <aside className="composer-rail">
+          <span className="eyebrow">A good starting point</span>
+          <h2>
+            Make your thinking
+            <br />
+            visible.
+          </h2>
+          <ol className="writing-guide">
+            <li>
+              <span>01</span>
+              <div>
+                <strong>Say what you see.</strong>
+                <p>Explain the evidence behind the perspective.</p>
               </div>
-            ) : (
-              <p className="subtle-note">
-                Start with one meaningful change: direction, target,
-                invalidation, leverage or reasoning.
-              </p>
-            )}
-            <p className="subtle-note">
-              Notes and tags can change alongside a meaningful change.
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>Name the uncertainty.</strong>
+                <p>Show what would invalidate your idea.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>Leave room to improve.</strong>
+                <p>Another person may see a better angle.</p>
+              </div>
+            </li>
+          </ol>
+          <div className="rail-note">
+            <Icon name="tree" />
+            <p>
+              Your authorship and lineage are public. Publishing creates an
+              immutable idea record.
             </p>
-          </>
-        ) : (
-          <>
-            <span className="eyebrow">A good starting point</span>
-            <h2>
-              Make your thinking
-              <br />
-              visible.
-            </h2>
-            <ol className="writing-guide">
-              <li>
-                <span>01</span>
-                <div>
-                  <strong>Say what you see.</strong>
-                  <p>Explain the evidence behind the perspective.</p>
-                </div>
-              </li>
-              <li>
-                <span>02</span>
-                <div>
-                  <strong>Name the uncertainty.</strong>
-                  <p>Show what would invalidate your idea.</p>
-                </div>
-              </li>
-              <li>
-                <span>03</span>
-                <div>
-                  <strong>Leave room to improve.</strong>
-                  <p>Another person may see a better angle.</p>
-                </div>
-              </li>
-            </ol>
-          </>
-        )}
-        <div className="rail-note">
-          <Icon name="tree" />
-          <p>
-            Your authorship and lineage are public. Publishing creates an
-            immutable idea record.
-          </p>
-        </div>
-      </aside>
+          </div>
+        </aside>
+      )}
     </div>
   );
 }

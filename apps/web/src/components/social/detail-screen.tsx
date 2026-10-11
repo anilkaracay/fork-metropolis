@@ -5,15 +5,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ThesisDetail } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import { useSession } from "./session";
-import { Avatar, EmptyState, ErrorState, Skeleton, age } from "./common";
-import {
-  Direction,
-  Parameters,
-  marketName,
-  useMarkets,
-  price,
-} from "./thesis-card";
+import { Avatar, EmptyState, ErrorState, age } from "./common";
+import { SignatureLoading } from "./signature-loading";
+import { Direction, marketName, useMarkets } from "./thesis-card";
 import { Icon } from "./icon";
+import { ParentComparison, differenceValue } from "./fork-diff";
 
 export function DetailScreen({ id }: { id: string }) {
   const query = useQuery({
@@ -21,20 +17,39 @@ export function DetailScreen({ id }: { id: string }) {
       queryFn: () => api<ThesisDetail>(`theses/${id}`),
     }),
     context = useMarkets().data;
-  if (query.isPending) return <Skeleton cards={2} />;
+  if (query.isPending) return <SignatureLoading kind="thesis" />;
   if (query.error)
     return (
       <ErrorState error={query.error} retry={() => void query.refetch()} />
     );
   const item = query.data!;
   return (
-    <div className="detail-layout">
-      <section>
+    <div className="signature detail-layout">
+      <article className="detail-card">
         <Link href="/feed" className="back-link">
           <Icon name="back" size={16} />
           Back to Feed
         </Link>
-        <article className="detail-card">
+        <header className="thesis-heading">
+          <div className="thesis-identity">
+            <span>
+              {item.graph.parentId === "0"
+                ? "Original thesis"
+                : item.challenge
+                  ? "Challenge"
+                  : "Fork"}{" "}
+              #{id}
+            </span>
+            <Link href={`/t/${id}/tree`}>
+              {item.graph.directForkCount}{" "}
+              {item.graph.directForkCount === 1 ? "fork" : "forks"} · View
+              lineage <Icon name="tree" size={15} />
+            </Link>
+          </div>
+          <div className="market-line detail-market">
+            <h1>{marketName(item.graph.core.marketId, context)}</h1>
+            <Direction side={item.graph.core.side} />
+          </div>
           <div className="card-author">
             <Link href={`/u/${item.author.handle}`} className="identity-link">
               <Avatar
@@ -44,153 +59,143 @@ export function DetailScreen({ id }: { id: string }) {
               <span>
                 <strong>{item.author.displayName}</strong>
                 <small>
-                  @{item.author.handle} · {age(item.graph.createdAt)}
+                  @{item.author.handle} ·{" "}
+                  <time
+                    dateTime={new Date(
+                      item.graph.createdAt * 1000,
+                    ).toISOString()}
+                    title={new Date(item.graph.createdAt * 1000).toUTCString()}
+                  >
+                    {age(item.graph.createdAt)}
+                  </time>
                 </small>
               </span>
             </Link>
-            <span className={`idea-label ${item.challenge ? "challenge" : ""}`}>
-              {item.challenge
-                ? "Challenge"
-                : item.graph.parentId === "0"
-                  ? "Original idea"
-                  : "Fork"}
-            </span>
           </div>
           {item.parent && (
-            <div className="provenance detail-provenance">
+            <div className="detail-provenance">
               <Icon name="fork" size={16} />
               <span>
                 Forked from{" "}
                 <Link href={`/t/${item.parent.thesisId}`}>
-                  @{item.parent.author.handle}
+                  #{item.parent.thesisId} · @{item.parent.author.handle}
                 </Link>
               </span>
             </div>
           )}
-          <div className="market-line detail-market">
-            <h1>{marketName(item.graph.core.marketId, context)}</h1>
-            <Direction side={item.graph.core.side} />
-          </div>
-          {item.metadataState === "trusted" ? (
-            <>
-              <p className="detail-reasoning">{item.metadata?.reasoning}</p>
-              {item.metadata?.entryNote && (
-                <div className="entry-note">
-                  <span className="eyebrow">Entry note</span>
-                  <p>{item.metadata.entryNote}</p>
-                </div>
-              )}
-              <div className="tags">
-                {item.metadata?.tags.map((t) => (
-                  <Link href={`/explore?tag=${t}`} key={t}>
-                    #{t}
-                  </Link>
-                ))}
-              </div>
-              {item.changes.length > 0 && (
-                <div className="changed-panel">
-                  <h3>What changed</h3>
-                  {item.changes.map((c) => (
-                    <div key={c.field}>
-                      <span>{c.label}</span>
-                      {["targetPriceE8", "invalidationPriceE8"].includes(
-                        c.field,
-                      ) ? (
-                        <>
-                          <del>${price(c.before)}</del>
-                          <Icon name="arrow" size={14} />
-                          <strong>${price(c.after)}</strong>
-                        </>
-                      ) : c.field === "leverageBps" ? (
-                        <>
-                          <del>{Number(c.before) / 10000}×</del>
-                          <Icon name="arrow" size={14} />
-                          <strong>{Number(c.after) / 10000}×</strong>
-                        </>
-                      ) : (
-                        <strong>
-                          {c.field === "reasoning"
-                            ? "A new perspective"
-                            : c.after}
-                        </strong>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="inline-alert" role="alert">
+        </header>
+        <div className="parameters">
+          {(
+            [
+              ["targetPriceE8", "Target"],
+              ["invalidationPriceE8", "Invalidation"],
+              ["leverageBps", "Leverage"],
+            ] as const
+          ).map(([field, label]) => (
+            <div key={field}>
+              <span>{label}</span>
               <strong>
-                {item.metadataState === "hidden"
-                  ? "This content is hidden after moderation."
-                  : item.metadataState === "integrity-mismatch"
-                    ? "Content integrity check failed."
-                    : "Reasoning is not available yet."}
+                {differenceValue(field, String(item.graph.core[field]))}
               </strong>
-              <p>
-                {item.metadataState === "hidden"
-                  ? "The onchain lineage remains visible."
-                  : item.metadataState === "integrity-mismatch"
-                    ? "This metadata does not match the onchain content hash and is not shown as trusted."
-                    : "Confirmation and metadata indexing may still be catching up."}
-              </p>
-              <button
-                className="text-button"
-                onClick={() => void query.refetch()}
-              >
-                Check again
-              </button>
             </div>
-          )}
-          <Parameters item={item} />
-          {item.metadataState === "trusted" && <SocialActions item={item} />}
-          <div className="execution-note">
-            <span className="tiny-dot" />
+          ))}
+        </div>
+        {item.metadataState === "trusted" ? (
+          <>
+            <p className="detail-reasoning">{item.metadata?.reasoning}</p>
+            {item.metadata?.entryNote && (
+              <div className="entry-note">
+                <span className="eyebrow">Entry note</span>
+                <p>{item.metadata.entryNote}</p>
+              </div>
+            )}
+            <div className="tags">
+              {item.metadata?.tags.map((t) => (
+                <Link href={`/explore?tag=${encodeURIComponent(t)}`} key={t}>
+                  #{t}
+                </Link>
+              ))}
+            </div>
+            <SocialActions item={item} />
+          </>
+        ) : (
+          <div className="inline-alert" role="alert">
             <strong>
-              {item.execution.state === "not-executed"
-                ? "Not executed"
-                : item.execution.state === "attested"
-                  ? "Attested · independently unverified"
-                  : `Verified execution${item.execution.position === "unknown" ? "" : ` · ${item.execution.position}`}`}
+              {item.metadataState === "hidden"
+                ? "This content is hidden after moderation."
+                : item.metadataState === "integrity-mismatch"
+                  ? "Content integrity check failed."
+                  : "Reasoning is not available yet."}
             </strong>
-            <span>
-              {item.execution.state === "attested"
-                ? "An onchain link alone is not proof of execution."
-                : "Execution is a proof layer; the idea starts here."}
-            </span>
-          </div>
-        </article>
-        <section id="comments" className="comments-section">
-          <div className="section-title">
-            <h2>The conversation</h2>
-            <span>{item.social.comments} comments</span>
-          </div>
-          {item.metadataState === "trusted" ? (
-            <Comments item={item} />
-          ) : (
-            <p className="subtle-note">
-              Comments are unavailable while the content is hidden or untrusted.
+            <p>
+              {item.metadataState === "hidden"
+                ? "The onchain lineage remains visible."
+                : item.metadataState === "integrity-mismatch"
+                  ? "This metadata does not match its onchain hash. Open the public transaction for provenance."
+                  : "Confirmation and metadata indexing may still be catching up."}
             </p>
-          )}
-        </section>
-      </section>
+            <button
+              className="text-button"
+              onClick={() => void query.refetch()}
+            >
+              Check again
+            </button>
+          </div>
+        )}
+        <div className="execution-note">
+          <strong>
+            {item.execution.state === "not-executed"
+              ? "Not executed"
+              : item.execution.state === "attested"
+                ? "Attested · independently unverified"
+                : `Verified execution${item.execution.position === "unknown" ? "" : ` · ${item.execution.position}`}`}
+          </strong>
+          <button
+            className="button secondary"
+            disabled
+            title="Execution is deferred pending provider approval"
+          >
+            Execute unavailable
+          </button>
+          <span>
+            {item.execution.state === "attested"
+              ? "An onchain link alone is not execution proof."
+              : "Execution integration is deferred. Your idea and lineage remain public."}
+          </span>
+        </div>
+        <div className="thesis-proof">
+          <span className="eyebrow">Public provenance</span>
+          <a
+            href={`https://testnet.monadexplorer.com/tx/${item.graph.txHash}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Monad transaction <Icon name="arrow" size={14} />
+          </a>
+          <span title={item.author.wallet}>
+            {item.author.wallet.slice(0, 8)}…{item.author.wallet.slice(-6)}
+          </span>
+          <span>Envio lineage · hash-checked metadata</span>
+        </div>
+      </article>
       <aside className="detail-rail">
         <div className="rail-heading">
           <span className="eyebrow">This idea’s lineage</span>
           <Icon name="tree" />
         </div>
-        <Link href={`/t/${id}/tree`} className="tree-preview-root">
-          <span className="eyebrow">
-            {item.graph.parentId === "0" ? "The original" : "Current branch"}
+        {item.parent && (
+          <Link className="lineage-parent" href={`/t/${item.parent.thesisId}`}>
+            <span>Parent #{item.parent.thesisId}</span>
+            <strong>@{item.parent.author.handle}</strong>
+          </Link>
+        )}
+        <div className="lineage-current">
+          <span>
+            {item.graph.parentId === "0" ? "Origin" : "This perspective"} #{id}
           </span>
           <strong>@{item.author.handle}</strong>
-          <Direction side={item.graph.core.side} />
-          <span>
-            {item.graph.uniqueExternalForkers} unique external forkers
-          </span>
-        </Link>
-        {item.children.length > 0 ? (
+        </div>
+        {item.children.length ? (
           <div className="preview-branches">
             {item.children.map((child) => (
               <Link
@@ -199,39 +204,47 @@ export function DetailScreen({ id }: { id: string }) {
               >
                 <Icon name="fork" size={16} />
                 <span>
-                  <strong>@{child.author.handle}</strong>
+                  <strong>
+                    Fork #{child.graph.thesisId} · @{child.author.handle}
+                  </strong>
                   <small>
-                    {child.challenge
-                      ? "Challenge"
-                      : child.changes
-                          .map((c) => c.label)
-                          .slice(0, 2)
-                          .join(" · ") || "Fork"}
+                    {child.changes
+                      .map((c) => c.label)
+                      .slice(0, 3)
+                      .join(" · ") || "Independent perspective"}
                   </small>
                 </span>
-                <Direction side={child.graph.core.side} />
               </Link>
             ))}
           </div>
         ) : (
-          <p className="subtle-note">The next perspective could be yours.</p>
+          <p className="subtle-note">
+            No child perspectives yet. The next one could be yours.
+          </p>
         )}
         <Link className="button secondary full" href={`/t/${id}/tree`}>
           Open Idea Tree <Icon name="arrow" size={16} />
         </Link>
-        <div className="rail-note">
-          <p>
-            Graph provenance:{" "}
-            {item.provenance.graph === "envio-test"
-              ? "isolated Envio test handlers"
-              : "Envio"}
-            . Reasoning is checked against its onchain hash.
-          </p>
-        </div>
+        <ParentComparison item={item} />
       </aside>
+      <section id="comments" className="comments-section">
+        <div className="section-title">
+          <h2>The conversation</h2>
+          <span>{item.social.comments} comments</span>
+        </div>
+        {item.metadataState === "trusted" ? (
+          <Comments item={item} />
+        ) : (
+          <p className="subtle-note">
+            Comments are unavailable while the content is hidden or untrusted.
+            Check the metadata again to continue.
+          </p>
+        )}
+      </section>
     </div>
   );
 }
+
 function SocialActions({ item }: { item: ThesisDetail }) {
   const auth = useSession(),
     query = useQueryClient(),
@@ -312,6 +325,10 @@ function SocialActions({ item }: { item: ThesisDetail }) {
           {agreed.data?.agreed ? "Agreed" : "Agree"}{" "}
           <span>{item.social.agrees}</span>
         </button>
+        <Link href="#comments" className="text-button comment-action">
+          <Icon name="comment" size={16} />
+          Comment
+        </Link>
         <Link href={`/t/${id}/fork?challenge=1`} className="text-button">
           Challenge
         </Link>
