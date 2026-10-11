@@ -71,7 +71,7 @@ The retained B1 image is `fork-metropolis:b1-20261011a`; its saved image configu
 
 ## 11. GitHub sync
 
-Before synchronization, `main` was 27 commits ahead and zero behind the freshly fetched private `anilkaracay/fork-metropolis` remote. Implementation and evidence are checked for credentials and sensitive identity material before a normal non-force push. Three pre-existing generic scanner findings were individually reviewed as a document SHA-256 and two public correlation UUIDs; only their exact fingerprints were allowlisted locally. No shared history rewrite, visibility change or broad secret-scanner exemption is used. Final remote synchronization is verified after the push and reported in the completion response. The root README remains untouched.
+The source snapshot was 27 commits ahead and zero behind the freshly fetched private `anilkaracay/fork-metropolis` remote. Including evidence commit `c1ea5be`, the normal non-force push synchronized 28 commits; local/remote were verified at zero ahead / zero behind and repository visibility remained PRIVATE. All 387 unpushed blobs passed configured-credential/private-identity checking, and the reviewed history scan had no additional secret findings. Three pre-existing generic scanner findings were individually reviewed as a document SHA-256 and two public correlation UUIDs; only their exact fingerprints were allowlisted locally. No shared history rewrite, visibility change or broad secret-scanner exemption was used. There is no synchronization blocker. The root README remains untouched.
 
 ## 12. Screenshots
 
