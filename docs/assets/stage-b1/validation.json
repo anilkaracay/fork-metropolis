@@ -1,0 +1,307 @@
+{
+  "status": "READY",
+  "observedDate": "2026-10-11",
+  "sourceCommit": "8ea3506",
+  "publicOrigin": "https://forktrades.xyz",
+  "responsiveWidths": [1440, 1280, 1024, 768, 390, 375],
+  "horizontalOverflow": false,
+  "qualityCommands": "format:check lint typecheck test abi:check build all passed",
+  "tests": {
+    "webUnit": 225,
+    "indexer": 12,
+    "foundry": 28,
+    "isolatedSocialPlaywright": 5,
+    "localProduction": {
+      "passed": 14,
+      "skipped": 1
+    },
+    "exactReleaseImage": {
+      "passed": 14,
+      "skipped": 1
+    },
+    "publicProduction": {
+      "passed": 14,
+      "skipped": 1
+    },
+    "skipReason": "Empty-index case is inapplicable to the existing two-thesis live namespace"
+  },
+  "performance": {
+    "local": {
+      "origin": "http://127.0.0.1:3002",
+      "viewport": 1280,
+      "ttfbMs": 134.69999999925494,
+      "fcpMs": 184,
+      "lcpMs": 184,
+      "observedCls": 0,
+      "jsTransferBytes": 152802,
+      "externalResourceHosts": [],
+      "fontResources": 2,
+      "scope": "Single fresh-browser desktop lab observation; no CPU/network throttle, not field Core Web Vitals or Lighthouse."
+    },
+    "public": {
+      "origin": "https://forktrades.xyz",
+      "viewport": 1280,
+      "ttfbMs": 1047.199999999255,
+      "fcpMs": 1920,
+      "lcpMs": 1920,
+      "observedCls": 0,
+      "jsTransferBytes": 152801,
+      "externalResourceHosts": [],
+      "fontResources": 2,
+      "scope": "Single fresh-browser desktop lab observation; no CPU/network throttle, not field Core Web Vitals or Lighthouse."
+    }
+  },
+  "deploy": {
+    "status": "passed",
+    "sourceCommit": "8ea3506",
+    "image": "fork-metropolis:b1-20261011a",
+    "imageId": "sha256:849ae4a1416cccd8c461a388b23c610bde10c16c76b361cbb046bf34a4bb94ea",
+    "retainedImage": "fork-metropolis:public-20261011a",
+    "rollbackConfig": "/opt/fork-metropolis/releases/pre-b1-image.env",
+    "databaseBackup": "FORK-only native backup completed",
+    "migrations": "same committed migrations applied idempotently",
+    "bind": "127.0.0.1:13000",
+    "caddyChanges": false,
+    "serverSecretsChanged": false,
+    "loopbackLanding": "real lineage rendered"
+  },
+  "imageSecurity": {
+    "status": "passed",
+    "image": "fork-metropolis:b1-20261011a",
+    "imageId": "sha256:849ae4a1416cccd8c461a388b23c610bde10c16c76b361cbb046bf34a4bb94ea",
+    "architecture": "amd64",
+    "user": "node",
+    "sizeBytes": 278697972,
+    "layersScanned": 22,
+    "filesScanned": 98027,
+    "browserFilesScanned": 207,
+    "exactConfiguredCredentialsAbsent": true,
+    "serverConfigAbsentFromBrowser": true,
+    "runtimeSecretsAbsentFromImageConfig": true,
+    "historySecretScan": "passed",
+    "excludedMaterialAbsent": true,
+    "productionFixtureStubPresent": true
+  },
+  "deployedAssetSecurity": {
+    "status": "passed",
+    "browserAssetsScanned": 207,
+    "canonicalOriginBaked": true,
+    "actualProductionCredentialsAbsent": true,
+    "privateIdentityValuesAbsent": true,
+    "serverOnlyConfigAbsent": true
+  },
+  "serverSafety": {
+    "status": "passed",
+    "unrelatedContainersUnchanged": 14,
+    "caddyFilesByteIdentical": 9,
+    "caddyPidUnchanged": true,
+    "ufwUnchanged": true,
+    "forkRuntimeSecretsByteIdentical": true
+  },
+  "finalSecurity": {
+    "status": "passed",
+    "appLoopbackOnly": true,
+    "postgresHostPorts": false,
+    "database": {
+      "migrations": 3,
+      "tables": 9,
+      "metadataRows": 2
+    },
+    "monadRead": {
+      "chainId": 10143,
+      "registryCodePresent": true
+    },
+    "appHealthy": true,
+    "postgresHealthy": true,
+    "postgresContainerUnchanged": true,
+    "publicPorts13000And5432Closed": true,
+    "envAndTestPaths": 404,
+    "httpRedirect": 308,
+    "wwwRedirect": 301,
+    "tlsValid": true,
+    "anonymousLandingSetsNoAuthCookie": true,
+    "existingHttpsResponsesUnchanged": 20
+  },
+  "repositorySecurity": {
+    "status": "passed",
+    "versionableFilesScanned": 408,
+    "configuredCredentialsAndTransferredPrivateIdentitiesAbsent": true,
+    "localEnvironmentIgnored": true,
+    "privateExportIgnored": true,
+    "deployConfigurationIgnored": true
+  },
+  "auth": {
+    "existingGoogleSessionRestored": true,
+    "samePublicProfileAndEmbeddedWallet": true,
+    "freshOAuthRepeatedInB1": false,
+    "privateIdentityValuesPublished": false
+  },
+  "liveProduct": {
+    "feed": true,
+    "thesis1": true,
+    "thesis2": true,
+    "tree1To2": true,
+    "bothProfiles": true,
+    "agreeAndCommentPreserved": true,
+    "envioProvenance": "live",
+    "blockchainTransactionsCreated": 0
+  },
+  "screenshots": [
+    {
+      "file": "local-comparison-390.jpg",
+      "width": 390,
+      "height": 844,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-full-1024.jpg",
+      "width": 1024,
+      "height": 3696,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-full-1280.jpg",
+      "width": 1280,
+      "height": 3659,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-full-1440.jpg",
+      "width": 1440,
+      "height": 3659,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-full-375.jpg",
+      "width": 375,
+      "height": 4880,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-full-390.jpg",
+      "width": 390,
+      "height": 4840,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-full-768.jpg",
+      "width": 768,
+      "height": 4706,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-hero-1024.jpg",
+      "width": 1024,
+      "height": 1000,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-hero-1280.jpg",
+      "width": 1280,
+      "height": 1000,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-hero-1440.jpg",
+      "width": 1440,
+      "height": 1000,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-hero-375.jpg",
+      "width": 375,
+      "height": 844,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-hero-390.jpg",
+      "width": 390,
+      "height": 844,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-hero-768.jpg",
+      "width": 768,
+      "height": 1000,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "local-mobile-navigation.jpg",
+      "width": 390,
+      "height": 844,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-feed-transition.jpg",
+      "width": 390,
+      "height": 1277,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-full-1440.jpg",
+      "width": 1440,
+      "height": 3659,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-full-390.jpg",
+      "width": 390,
+      "height": 4840,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-hero-1280.jpg",
+      "width": 1280,
+      "height": 1000,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-hero-1440.jpg",
+      "width": 1440,
+      "height": 1000,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-lineage-original-selected.jpg",
+      "width": 1440,
+      "height": 1000,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-mobile-navigation.jpg",
+      "width": 390,
+      "height": 844,
+      "format": "JPEG",
+      "reviewed": true
+    },
+    {
+      "file": "public-profile-session.jpg",
+      "width": 1280,
+      "height": 1232,
+      "format": "JPEG",
+      "reviewed": true
+    }
+  ],
+  "next": "B2 review required; not started",
+  "deferred": ["Perpl", "Nansen"]
+}
