@@ -20,6 +20,8 @@ type Thesis {
   executionRef: String
   directForkCount: Int!
   uniqueExternalForkers: Int!
+  # Virtual: zero or one row, present once the thesis has been backed.
+  backing: [ThesisBacking!]! @derivedFrom(field: "thesis")
 }
 type ForkEdge {
   id: ID!
@@ -74,4 +76,134 @@ type ExecutionLink {
   executionRef: String!
   blockNumber: BigInt!
   txHash: String!
+}
+
+# One Backed event: a wallet backing a thesis with native MON.
+type Backing {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  backingAddress: String!
+  thesis: Thesis!
+  thesisBacking: ThesisBacking!
+  supporter: Supporter!
+  thesisId: BigInt!
+  backer: String!
+  amount: BigInt!
+  backerIndex: Int!
+  early: Boolean!
+  firstByBacker: Boolean!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  txHash: String!
+  logIndex: Int!
+}
+# One Credited event: the share of a backing recorded for one author.
+# role is 0 author, 1 parent, 2 grandparent. sourceThesis is the backed thesis,
+# creditedThesis is the thesis whose authorship earned the share.
+type Credit {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  backingAddress: String!
+  sourceThesis: Thesis!
+  creditedThesis: Thesis!
+  sourceThesisId: BigInt!
+  creditedThesisId: BigInt!
+  recipient: String!
+  role: Int!
+  amount: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  txHash: String!
+  logIndex: Int!
+}
+# One Withdrawn event: an author collecting their full claimable balance.
+type Withdrawal {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  backingAddress: String!
+  account: String!
+  amount: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  txHash: String!
+  logIndex: Int!
+}
+# Backing received by one thesis. Shares its id with the Thesis.
+# earlyBackers holds the first ten distinct backers in arrival order.
+type ThesisBacking {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  thesis: Thesis!
+  thesisId: BigInt!
+  totalBacked: BigInt!
+  backingCount: Int!
+  backerCount: Int!
+  earlyBackers: [String!]!
+  firstBackedAt: BigInt!
+  lastBackedAt: BigInt!
+  backings: [Backing!]! @derivedFrom(field: "thesisBacking")
+}
+# What one wallet has backed. thesesBacked counts distinct theses and
+# earlySupportCount the theses where the wallet is among the first ten backers.
+type Supporter {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  wallet: String!
+  totalBacked: BigInt!
+  backingCount: Int!
+  thesesBacked: Int!
+  earlySupportCount: Int!
+  firstBackedAt: BigInt!
+  lastBackedAt: BigInt!
+  backings: [Backing!]! @derivedFrom(field: "supporter")
+}
+# What one author has earned from backing, by the role that earned it.
+# earnedFromForks is credit received as parent or grandparent of a backed fork.
+# claimable is earned minus withdrawn and mirrors FORKBacking.claimable(wallet).
+type AuthorEarnings {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  wallet: String!
+  earnedAsAuthor: BigInt!
+  earnedFromForks: BigInt!
+  withdrawn: BigInt!
+  claimable: BigInt!
+  creditCount: Int!
+  lastCreditedAt: BigInt!
+}
+# Value that backing of one thesis has sent to one ancestor thesis.
+# One row per (backed thesis, ancestor thesis) pair; role is 1 parent or 2 grandparent.
+type LineageFlow {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  sourceThesis: Thesis!
+  creditedThesis: Thesis!
+  sourceThesisId: BigInt!
+  creditedThesisId: BigInt!
+  recipient: String!
+  role: Int!
+  amount: BigInt!
+  creditCount: Int!
+  lastCreditedAt: BigInt!
+}
+# Totals for one registry and its backing contract.
+type BackingTotals {
+  id: ID!
+  chainId: Int!
+  registryAddress: String!
+  backingAddress: String!
+  totalBacked: BigInt!
+  backingCount: Int!
+  supporterCount: Int!
+  thesesBacked: Int!
+  sentToAncestors: BigInt!
+  totalWithdrawn: BigInt!
+  lastActivityAt: BigInt!
 }
