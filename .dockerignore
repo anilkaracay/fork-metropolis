@@ -19,7 +19,6 @@ packages/shared/test/fixtures/**
 docs
 .tools
 .agents
-.codex
 .ssh
 .aws
 .pnpm-store

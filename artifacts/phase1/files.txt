@@ -109,7 +109,7 @@ modified: docs/17_TESTING_QA.md
 modified: docs/18_OBSERVABILITY_RUNBOOK.md
 modified: docs/19_ANALYTICS_METRICS.md
 modified: docs/20_3_DAY_EXECUTION_PLAN.md
-modified: docs/21_CODEX_TASKS.md
+modified: docs/21_TASK_QUEUE.md
 modified: docs/22_ACCEPTANCE_CRITERIA.md
 modified: docs/23_DEPLOYMENT_ENV.md
 modified: docs/24_DEMO_SUBMISSION.md

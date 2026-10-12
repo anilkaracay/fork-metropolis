@@ -1,4 +1,4 @@
-# Codex Task Queue
+# Task Queue
 
 Use this file as the ordered implementation backlog. Do not start a later P0 task when an earlier prerequisite is broken.
 
