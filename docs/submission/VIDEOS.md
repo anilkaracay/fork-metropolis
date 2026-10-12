@@ -18,8 +18,11 @@ No production transaction, wallet signature, comment or reaction was created for
 - [Pitch captions](founder-pitch.srt) and [script](founder-pitch-script.md)
 - [Deterministic renderer](render-videos.py): Pillow and ffmpeg; raw capture frames under ignored `.tools/stage-b4/raw` remain available on this machine. On other systems change the documented font path to a locally licensed Arial-compatible font.
 
-Exports must pass actual file/duration/full decode checks and scene review before release. Release checks are recorded in [validation](validation.json). No external video URL is supplied or invented: publication requires explicit user approval. Separate optional sponsor video fields have a 2-minute cap and remain empty; do not insert the 2:55 main demo there.
+Exports passed file/duration/full decode checks and scene review. User approved publication; actual HTTPS URLs, downloads, hashes, range responses and browser time progression are verified in [video-publication.json](video-publication.json). Separate optional sponsor video fields have a 2-minute cap and remain empty; do not insert the 2:55 main demo there.
 
-## Proposed publication
+## Approved public publication
 
-After approval, serve the sanitized MP4s through a dedicated static submission path on the existing FORK HTTPS domain, preserving the application's loopback proxy and PostgreSQL isolation. Prepare/validate only the FORK Caddy site and gracefully reload; no unrelated site edits. Confirm MIME type, range playback, full public retrieval, duration and browser rendering before adding actual links to the README and portal. This publishes videos externally and requires explicit approval.
+Both MP4s are live under the dedicated FORK HTTPS static submission path. The entire Caddy configuration was validated before graceful reload; only FORK's site changed. Application and PostgreSQL remain private. Both page URLs were saved in the portal draft.
+
+- https://forktrades.xyz/submission/technical-demo.html
+- https://forktrades.xyz/submission/founder-pitch.html

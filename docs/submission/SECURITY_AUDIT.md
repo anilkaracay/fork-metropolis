@@ -1,10 +1,10 @@
 # Public-release audit — October 12, 2026
 
-Current disposition: **credential/privacy checks passed; repository still PRIVATE; release approval pending**. No history was rewritten and no force push occurred.
+Current disposition: **credential/privacy checks passed; user approved release; repository PUBLIC under MIT**. No history was rewritten and no force push occurred.
 
 ## Scope and evidence
 
-- All 38 reachable commits, including `main`, `origin/main` and the distinct `origin/envio` branch. No tags. All 722 reachable blob objects scanned against actual local/production database URLs/passwords, Privy server secret, encrypted deployer password, existing official GitHub CLI token and private transferred user IDs/DIDs, without printing values. None matched.
+- Baseline at `37d0f78`: all 38 reachable commits, including `main`, `origin/main` and the distinct `origin/envio` branch. No tags. All 722 reachable blob objects scanned against actual local/production database URLs/passwords, Privy server secret, encrypted deployer password, existing official GitHub CLI token and private transferred user IDs/DIDs, without printing values. None matched.
 - Gitleaks full `--all` history scan, redacted report: three findings. Each was individually checked: a document SHA-256 and two public request-correlation UUIDs. No credentials, signing authority or authentication token. No broad exclusions added; zero unresolved scanner findings.
 - All 220 unique historical tracked raster screenshots extracted and processed with local Apple Vision OCR. Eleven contact sheets reviewed. Four OCR flags individually inspected at full size: two empty `your@email.com` placeholders; two navigation labels `API keys` with no key value. The historical secret-approval screenshot shows only the **New secret** button. No actual personal email, Privy DID, password, private key, recovery phrase or signing payload found in the reviewed images.
 - Current tree includes source, deployment scripts, env examples, CI, evidence and genuine product/design-reference assets. Ignored `.env.local`, private transfer exports, keystores/password files and deploy runtime config are absent from reachable Git paths. `.gitignore` is not relied on to protect history.
@@ -14,10 +14,10 @@ Current disposition: **credential/privacy checks passed; repository still PRIVAT
 
 ## Limits and release requirements
 
-Scanners and OCR are bounded checks, not a guarantee about unknown credentials. Exact comparison covers currently available local/production secrets; generic scanning covers common secret formats across all refs. Raster review cannot establish rights to third-party reference imagery. Owner must confirm source ownership and any pre-existing work outside Git before approving the proposed license and public publication.
+Scanners and OCR are bounded checks, not a guarantee about unknown credentials. Exact comparison covers currently available local/production secrets; generic scanning covers common secret formats across all refs. Raster review cannot establish rights to third-party reference imagery. Owner explicitly confirmed licensing rights and approved the MIT/public release. Any work outside Git remains accurately described rather than inferred from commit dates.
 
 No legitimate secret exposure was identified. If one is discovered later: pause publication, revoke/rotate first, then propose an explicit coordinated history-cleanup plan. Never silently rewrite history.
 
 ## Publication controls
 
-User approval remains required for GitHub PUBLIC visibility, external video publication and final portal submission. A proposed MIT license is prepared separately for review; it is not yet applied to the repository. No credentials or production exports are included in the submission assets. Video frames and final exports are checked separately before release.
+User approved GitHub PUBLIC visibility, external video publication and MIT licensing. The entire pre-public release history was rechecked: 40 commits / 767 blobs, no actual credential/private-identity matches; the same three independently reviewed nonsecret generic findings, no new findings. Final portal submission still requires separate approval. No credentials or production exports are included in the submission assets. Video frames and final exports are checked separately before release.

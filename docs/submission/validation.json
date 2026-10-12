@@ -1,5 +1,5 @@
 {
-  "status": "release-approved; public visibility and portal fields being verified",
+  "status": "public-release-verified; portal-logo-and-final-approval-pending",
   "observedOn": "2026-10-12",
   "productCode": "de353b7",
   "productFrozen": true,
@@ -8,18 +8,18 @@
     "deadlineIstanbul": "2026-10-14T06:59:00+03:00",
     "savedDraft": true,
     "submitted": false,
-    "lastSavedUtc": "2026-10-12T06:43:00Z",
+    "lastSavedUtc": "2026-10-12T07:57:00Z",
     "missing": [
-      "logo",
-      "technical demo URL",
-      "pitch URL"
+      "logo"
     ],
     "track": "03",
     "bounties": [
       "Envio",
       "Privy"
     ],
-    "publicVideoPromotionConsent": false
+    "publicVideoPromotionConsent": false,
+    "checklist": "5/6",
+    "videoUrlsSaved": true
   },
   "tests": {
     "cleanInstall": "passed, frozen lockfile; initial offline cache miss resolved by official registry download",
@@ -35,7 +35,10 @@
     "cleanIsolatedJourney": "1 passed; temporary free-port config, no external credentials",
     "public390pxCases": "2 passed, nine real screens; no transactions",
     "publicProductSmoke": "passed",
-    "edgeSecurity": "passed"
+    "edgeSecurity": "passed",
+    "anonymousPublicCloneInstall": "passed, pnpm install --frozen-lockfile, no credentials",
+    "postPublicationProductSmoke": "passed",
+    "postPublicationEdgeSecurity": "passed"
   },
   "gitAudit": {
     "reachableCommits": 38,
@@ -48,10 +51,15 @@
       "envio"
     ],
     "tags": 0,
-    "visibility": "private",
+    "visibility": "public",
     "ownerRightsConfirmation": "approved by user",
     "baselineHead": "37d0f78",
-    "currentTreeVersionableFiles": 583
+    "currentTreeVersionableFiles": 583,
+    "releaseAuditHead": "5e7dd35",
+    "releaseReachableCommits": 40,
+    "releaseAllRefsBlobs": 767,
+    "anonymousAccess": "passed",
+    "recognizedLicense": "MIT"
   },
   "videos": [
     {
@@ -88,5 +96,14 @@
     "publicGitHub": true,
     "videos": true,
     "finalPortalSubmission": false
+  },
+  "publicationChecks": {
+    "completeCaddyValidation": "passed",
+    "gracefulReload": "passed",
+    "httpsMediaDownloadAndHashes": "passed",
+    "mediaRange": "206",
+    "browserPlayback": "both timelines advanced; no media error",
+    "unrelatedHttpsSites": 20,
+    "unrelatedContainers": 14
   }
 }

@@ -30,5 +30,12 @@
       "durationSeconds": 109.966667,
       "fullDecode": "passed"
     }
-  ]
+  ],
+  "browserPlayback": {
+    "technicalDemoTimeAdvanced": true,
+    "pitchTimeAdvanced": true,
+    "bothReadyState": 4,
+    "resolution": "1920x1080",
+    "mediaError": null
+  }
 }

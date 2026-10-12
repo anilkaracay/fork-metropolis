@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "anonymousApi": true,
+  "visibility": "public",
+  "license": "MIT",
+  "anonymousFiles": {
+    "README.md": {
+      "status": 200,
+      "bytes": 10177
+    },
+    "LICENSE": {
+      "status": 200,
+      "bytes": 1074
+    },
+    "docs/assets/submission/idea-tree.jpg": {
+      "status": 200,
+      "bytes": 82463
+    },
+    "docs/assets/submission/architecture.svg": {
+      "status": 200,
+      "bytes": 2573
+    },
+    "apps/web/.env.example": {
+      "status": 200,
+      "bytes": 1049
+    }
+  }
+}

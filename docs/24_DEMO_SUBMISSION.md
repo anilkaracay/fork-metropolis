@@ -24,9 +24,9 @@ Landing → Feed → original #1 → independently authored fork #2 → parent c
 - [x] Judge-readable README, architecture and genuine hero image prepared.
 - [x] Current tree/all reachable history and historical screenshots audited.
 - [x] Clean install, pinned tool setup, contract/indexer/unit checks completed.
-- [ ] Owner confirms licensing rights and any pre-existing work outside Git.
-- [ ] Owner approves repository PUBLIC release; anonymous access then verified.
+- [x] Owner confirmed licensing rights and approved MIT; retained history/AI disclosure is explicit.
+- [x] Owner approved PUBLIC; anonymous clone, files and install verified.
 - [ ] Required logo upload resolves the denied browser permission.
-- [ ] Actual reviewed videos externally published with approval; working URLs saved.
+- [x] Reviewed videos published with approval; verified HTTPS URLs saved in the draft.
 - [ ] Final review and explicit final submission approval.
 - [ ] Actual submitted status, timestamp and confirmation recorded.
