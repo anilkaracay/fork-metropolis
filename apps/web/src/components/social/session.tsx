@@ -18,6 +18,7 @@ import type { PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
 import type { Confirmation } from "@/lib/confirmation";
 import { DevelopmentPublishObservation } from "./publish-observation";
+import { MotionRoot } from "@/components/ui/motion";
 
 export type SessionValue = {
   session: Session | null;
@@ -32,6 +33,9 @@ export type SessionValue = {
   refresh: () => Promise<void>;
   selectWallet: (address: string) => Promise<void>;
   submit: (intent: PublishIntent, draftId: string) => Promise<Hex>;
+  // Sends native MON to FORKBacking for one thesis, or collects the caller's credits.
+  back: (contract: string, thesisId: string, amountWei: bigint) => Promise<Hex>;
+  withdraw: (contract: string) => Promise<Hex>;
   // Resolves when this browser first sees the receipt; started is a performance.now() value.
   confirm: (txHash: Hex, started: number) => Promise<Confirmation>;
   signTypedData: (data: TypedDataDefinition) => Promise<Hex>;
@@ -82,13 +86,15 @@ export function ProductProviders({
       {process.env.NODE_ENV === "development" && !test && (
         <DevelopmentPublishObservation />
       )}
-      {test ? (
-        <LocalSession test>{children}</LocalSession>
-      ) : appId ? (
-        <RealSession appId={appId}>{children}</RealSession>
-      ) : (
-        <LocalSession test={false}>{children}</LocalSession>
-      )}
+      <MotionRoot>
+        {test ? (
+          <LocalSession test>{children}</LocalSession>
+        ) : appId ? (
+          <RealSession appId={appId}>{children}</RealSession>
+        ) : (
+          <LocalSession test={false}>{children}</LocalSession>
+        )}
+      </MotionRoot>
     </QueryClientProvider>
   );
 }
@@ -194,6 +200,23 @@ function LocalSession({
       const response = await api<{ txHash: Hex }>("test/submit", {
         method: "POST",
         body: { draftId },
+        token: accessToken,
+        wallet: session?.wallet,
+      });
+      return response.txHash;
+    },
+    back: async (_contract, thesisId, amountWei) => {
+      const response = await api<{ txHash: Hex }>("test/back", {
+        method: "POST",
+        body: { thesisId, amountWei: amountWei.toString() },
+        token: accessToken,
+        wallet: session?.wallet,
+      });
+      return response.txHash;
+    },
+    withdraw: async () => {
+      const response = await api<{ txHash: Hex }>("test/withdraw", {
+        method: "POST",
         token: accessToken,
         wallet: session?.wallet,
       });

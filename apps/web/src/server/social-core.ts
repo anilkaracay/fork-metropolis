@@ -15,6 +15,10 @@ import {
   handleSchema,
   isGeneratedHandle,
   normalizeHandle,
+  noBacking,
+  type BackingRole,
+  type BackingSummary,
+  type ThesisBackingView,
   type GraphThesis,
   type FeedThesis,
   type FeedMode,
@@ -25,6 +29,7 @@ import {
 } from "@fork/shared";
 import type { Session } from "./auth";
 import type { GraphSource } from "./graph";
+import { noEarnings, noSupport, type BackingSource } from "./backing";
 import {
   validateCreation,
   type PublishIntent,
@@ -69,6 +74,11 @@ export class SocialCore {
     public readonly namespace: { chainId: number; registryAddress: string },
     public readonly marketIds: () => Promise<number[]>,
     public readonly adminDids: ReadonlySet<string> = new Set(),
+    // Null until FORKBacking is deployed and indexed for this namespace.
+    public readonly backing: {
+      source: BackingSource;
+      address: string;
+    } | null = null,
   ) {}
   private where(id: string) {
     return and(
@@ -138,6 +148,35 @@ export class SocialCore {
           userId: null,
         };
   }
+  /** Public identities for wallets, with a short-address fallback for unknown ones. */
+  async identities(wallets: string[]) {
+    const unique = [...new Set(wallets)];
+    const rows = unique.length
+      ? await this.db
+          .select({ wallet: schema.wallets.address, user: schema.users })
+          .from(schema.wallets)
+          .innerJoin(schema.users, eq(schema.wallets.userId, schema.users.id))
+          .where(inArray(schema.wallets.address, unique))
+      : [];
+    const known = new Map(
+      rows.map(({ wallet, user }) => [
+        wallet,
+        {
+          handle: user.handle,
+          displayName: user.displayName ?? user.handle,
+          wallet,
+          userId: user.id,
+        },
+      ]),
+    );
+    return (wallet: string): AuthorIdentity =>
+      known.get(wallet) ?? {
+        handle: wallet.slice(2, 8),
+        displayName: `${wallet.slice(0, 6)}…${wallet.slice(-4)}`,
+        wallet,
+        userId: null,
+      };
+  }
   async compose(nodes: GraphThesis[]): Promise<FeedThesis[]> {
     if (!nodes.length) return [];
     assert(
@@ -194,6 +233,9 @@ export class SocialCore {
         wallet,
         userId: null,
       };
+    const backed: Map<string, BackingSummary> = this.backing
+      ? await this.backing.source.summaries(allIds)
+      : new Map();
     const [agrees, commentCounts, evidence] = await Promise.all([
       this.db
         .select({
@@ -287,6 +329,7 @@ export class SocialCore {
           agrees: agrees.find((a) => a.id === n.thesisId)?.count ?? 0,
           comments: commentCounts.find((a) => a.id === n.thesisId)?.count ?? 0,
         },
+        backing: backed.get(n.thesisId) ?? noBacking,
         execution: {
           state: verified
             ? "verified"
@@ -407,6 +450,8 @@ export class SocialCore {
       ancestors.unshift(parent);
       parent = node.parentId;
     }
+    const inTree = [...byId.keys()];
+    const flows = this.backing ? await this.backing.source.flows(inTree) : [];
     return {
       rootId: selected.rootId,
       selectedId: id,
@@ -417,6 +462,63 @@ export class SocialCore {
       ),
       ancestors,
       truncated: tree.truncated || parent !== "0",
+      flows: flows.filter(
+        (flow) =>
+          byId.has(flow.sourceThesisId) && byId.has(flow.creditedThesisId),
+      ),
+    };
+  }
+  /** Who a backing of this thesis is split between, what it has received and where it went. */
+  async backingView(id: string): Promise<ThesisBackingView> {
+    const thesis = await this.graph.get(id);
+    assert(
+      thesis,
+      "THESIS_NOT_FOUND",
+      "This idea could not be found.",
+      404,
+      "Return to Feed.",
+    );
+    const parent =
+        thesis.parentId === "0" ? null : await this.graph.get(thesis.parentId),
+      grandparent =
+        !parent || parent.parentId === "0"
+          ? null
+          : await this.graph.get(parent.parentId);
+    const source = this.backing?.source;
+    const [summaries, recent, flows] = source
+      ? await Promise.all([
+          source.summaries([id]),
+          source.recent(id, 12),
+          source.flows([id]),
+        ])
+      : [new Map<string, BackingSummary>(), [], []];
+    const summary = summaries.get(id) ?? noBacking;
+    const chain = [thesis, parent, grandparent].flatMap((node, role) =>
+      node ? [{ role: role as BackingRole, node }] : [],
+    );
+    const person = await this.identities([
+      ...chain.map(({ node }) => node.author),
+      ...summary.earlyBackers,
+      ...recent.map((event) => event.backer),
+    ]);
+    return {
+      thesisId: id,
+      contract: this.backing
+        ? { address: this.backing.address, chainId: this.namespace.chainId }
+        : null,
+      lineage: chain.map(({ role, node }) => ({
+        role,
+        thesisId: node.thesisId,
+        author: person(node.author),
+      })),
+      summary,
+      earlyBackers: summary.earlyBackers.map(person),
+      recent: recent.map((event) => ({
+        ...event,
+        backer: person(event.backer),
+      })),
+      sent: flows.filter((flow) => flow.sourceThesisId === id),
+      received: flows.filter((flow) => flow.creditedThesisId === id),
     };
   }
   async profile(handle: string): Promise<ProfileSummary> {
@@ -499,6 +601,13 @@ export class SocialCore {
         ...author.counts,
         executionsInspired: credited.size,
       }),
+      earnings: this.backing
+        ? await this.backing.source.earnings(wallet)
+        : noEarnings,
+      support: this.backing
+        ? await this.backing.source.support(wallet)
+        : noSupport,
+      backingContract: this.backing?.address ?? null,
       recent: await this.compose(author.nodes),
       scope: { ...this.namespace, wallet },
     };

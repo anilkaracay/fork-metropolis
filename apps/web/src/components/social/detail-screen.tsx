@@ -10,6 +10,7 @@ import { SignatureLoading } from "./signature-loading";
 import { Direction, marketName, useMarkets } from "./thesis-card";
 import { Icon } from "./icon";
 import { ConfirmationNote } from "./confirmation-note";
+import { BackButton, BackingPanel } from "./backing-panel";
 import { ParentComparison, differenceValue } from "./fork-diff";
 
 export function DetailScreen({ id }: { id: string }) {
@@ -118,6 +119,7 @@ export function DetailScreen({ id }: { id: string }) {
               ))}
             </div>
             <SocialActions item={item} />
+            <BackingPanel thesisId={id} />
           </>
         ) : (
           <div className="inline-alert" role="alert">
@@ -313,6 +315,7 @@ function SocialActions({ item }: { item: ThesisDetail }) {
           <Icon name="fork" size={18} />
           Fork this idea
         </Link>
+        <BackButton thesisId={id} />
         <button
           className={`button secondary ${agreed.data?.agreed ? "agreed" : ""}`}
           aria-pressed={agreed.data?.agreed ?? false}

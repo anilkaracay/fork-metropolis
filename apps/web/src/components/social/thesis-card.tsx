@@ -9,6 +9,7 @@ import {
 import { api } from "@/lib/api-client";
 import { Avatar, age } from "./common";
 import { Icon } from "./icon";
+import { formatMon } from "@/lib/mon";
 export function useMarkets() {
   return useQuery({
     queryKey: ["context"],
@@ -182,6 +183,19 @@ export function ThesisCard({ item }: { item: FeedThesis }) {
             <Icon name="agree" size={15} />
             {item.social.agrees}
           </span>
+          {item.backing.backers > 0 && (
+            <span
+              className="backed-chip"
+              title="Backed with testnet MON, split along the lineage"
+            >
+              <Icon name="stake" size={15} />
+              {formatMon(item.backing.totalWei)} MON
+              <small>
+                · {item.backing.backers}{" "}
+                {item.backing.backers === 1 ? "backer" : "backers"}
+              </small>
+            </span>
+          )}
         </div>
         <div className="card-actions">
           <Link href={`/t/${id}`} className="quiet-link">

@@ -12,6 +12,9 @@ import { Icon } from "./icon";
 import { ExternalWalletContext } from "./wallet-context";
 import { AccountWallet } from "./account-wallet";
 import { requestHandleClaim } from "./handle-claim";
+import { formatMon } from "@/lib/mon";
+import { ApiError } from "@/lib/api-client";
+import { confirmationText, type Confirmation } from "@/lib/confirmation";
 export function MyProfile() {
   const auth = useSession(),
     router = useRouter();
@@ -171,6 +174,7 @@ export function ProfileScreen({ handle }: { handle: string }) {
           <p>Independently verified executions on descendant branches</p>
         </div>
       </div>
+      <Earnings profile={p} owner={isOwner} />
       <details className="reputation-explanation">
         <summary>
           How these numbers work <Icon name="create" size={15} />
@@ -325,5 +329,112 @@ function ProfileEditor({ profile }: { profile: ProfileSummary }) {
         <ErrorState error={mutation.error} retry={() => mutation.mutate()} />
       )}
     </form>
+  );
+}
+/** What backing has brought this author, and the owner's way to collect it. */
+function Earnings({
+  profile,
+  owner,
+}: {
+  profile: ProfileSummary;
+  owner: boolean;
+}) {
+  const auth = useSession(),
+    client = useQueryClient(),
+    [step, setStep] = useState<"idle" | "wallet" | "confirming">("idle"),
+    [error, setError] = useState<unknown>(null),
+    [confirmation, setConfirmation] = useState<Confirmation | null>(null);
+  const contract = profile.backingContract;
+  if (!contract) return null;
+  const { earnings, support } = profile,
+    claimable = BigInt(earnings.claimableWei);
+  async function withdraw() {
+    setError(null);
+    setStep("wallet");
+    try {
+      const txHash = await auth.withdraw(contract!);
+      const started = performance.now();
+      setStep("confirming");
+      setConfirmation(await auth.confirm(txHash, started));
+      // The indexer follows the chain: refresh once it shows the balance as collected.
+      for (let attempt = 0; attempt < 15; attempt++) {
+        const latest = await api<ProfileSummary>(
+          `profiles/${profile.identity.handle}`,
+        ).catch(() => null);
+        if (latest?.earnings.claimableWei === "0") break;
+        await new Promise((done) => setTimeout(done, 1000));
+      }
+      await client.invalidateQueries();
+    } catch (failure) {
+      setError(failure);
+    } finally {
+      setStep("idle");
+    }
+  }
+  return (
+    <section aria-label="Backing earned and given">
+      <div className="section-title reputation-heading">
+        <h2>Value that followed the ideas.</h2>
+        <span>Testnet MON · split along each lineage</span>
+      </div>
+      <dl className="earnings">
+        <div>
+          <dt>Earned as author</dt>
+          <dd>
+            {formatMon(earnings.earnedAsAuthorWei)} <small>MON</small>
+          </dd>
+          <p>From backing of ideas this author wrote.</p>
+        </div>
+        <div>
+          <dt>Earned from forks</dt>
+          <dd>
+            {formatMon(earnings.earnedFromForksWei)} <small>MON</small>
+          </dd>
+          <p>From backing of other people’s forks of these ideas.</p>
+        </div>
+        <div>
+          <dt>Early support</dt>
+          <dd>{support.earlySupportCount}</dd>
+          <p>
+            Ideas backed among the first ten. {support.thesesBacked}{" "}
+            {support.thesesBacked === 1 ? "idea" : "ideas"} backed with{" "}
+            {formatMon(support.totalBackedWei)} MON in total.
+          </p>
+        </div>
+        <div>
+          <dt>Claimable</dt>
+          <dd>
+            {formatMon(claimable)} <small>MON</small>
+          </dd>
+          <p>{formatMon(earnings.withdrawnWei)} MON withdrawn so far.</p>
+          {owner && claimable > 0n && (
+            <button
+              className="button primary"
+              disabled={step !== "idle"}
+              onClick={() => void withdraw()}
+            >
+              {step === "wallet"
+                ? "Confirm in your wallet…"
+                : step === "confirming"
+                  ? "Waiting for Monad…"
+                  : `Withdraw ${formatMon(claimable)} MON`}
+            </button>
+          )}
+          {confirmation && (
+            <p className="confirmation-note" role="status">
+              {confirmationText(confirmation)}
+            </p>
+          )}
+          {error ? (
+            <p role="alert">
+              {error instanceof Error
+                ? error.message
+                : "The withdrawal did not go through."}{" "}
+              {error instanceof ApiError ? error.recovery : "Try again."}
+            </p>
+          ) : null}
+        </div>
+      </dl>
+    </section>
   );
 }

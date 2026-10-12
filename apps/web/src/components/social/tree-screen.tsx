@@ -9,6 +9,7 @@ import { SignatureLoading } from "./signature-loading";
 import { Direction, marketName, useMarkets } from "./thesis-card";
 import { differenceValue, ParentComparison } from "./fork-diff";
 import { Icon } from "./icon";
+import { formatMon } from "@/lib/mon";
 
 export function TreeScreen({ id }: { id: string }) {
   const query = useQuery({
@@ -58,6 +59,11 @@ export function TreeScreen({ id }: { id: string }) {
             );
     links[next]?.focus();
   }
+  // Value that backing of descendants has sent to this idea's author.
+  const arrived = (thesisId: string) =>
+    (query.data?.flows ?? [])
+      .filter((flow) => flow.creditedThesisId === thesisId)
+      .reduce((sum, flow) => sum + BigInt(flow.amountWei), 0n);
   function branch(node: FeedThesis, depth: number, path: Set<string>) {
     // Do not recurse through malformed cyclic data; valid graph traversal stays unchanged.
     if (path.has(node.graph.thesisId)) return null;
@@ -112,8 +118,21 @@ export function TreeScreen({ id }: { id: string }) {
             </div>
             <div className="node-bottom">
               <span>Depth {node.graph.depth}</span>
+              {node.backing.backers > 0 && (
+                <span className="backed-chip">
+                  {formatMon(node.backing.totalWei)} MON
+                </span>
+              )}
               {current && <b>Viewing</b>}
             </div>
+            {arrived(node.graph.thesisId) > 0n && (
+              <div
+                className="node-flow"
+                key={arrived(node.graph.thesisId).toString()}
+              >
+                +{formatMon(arrived(node.graph.thesisId))} MON from forks
+              </div>
+            )}
           </Link>
           <div className="node-actions">
             <Link
@@ -246,6 +265,7 @@ export function TreeScreen({ id }: { id: string }) {
                 )}
               </div>
             )}
+            <ValueFlow tree={tree} id={id} />
             <a className="tree-selection-shortcut" href={`#idea-node-${id}`}>
               Back to selected node <Icon name="tree" size={15} />
             </a>
@@ -279,6 +299,39 @@ export function TreeScreen({ id }: { id: string }) {
         between nodes. A fork carries a perspective, not a copied wallet
         position.
       </p>
+    </div>
+  );
+}
+/** Where the selected idea's backing went, and what its forks' backing sent back. */
+function ValueFlow({ tree, id }: { tree: ThesisTree; id: string }) {
+  const sent = tree.flows.filter((flow) => flow.sourceThesisId === id),
+    received = tree.flows.filter((flow) => flow.creditedThesisId === id),
+    handle = (wallet: string) =>
+      tree.nodes.find((node) => node.author.wallet === wallet)?.author.handle ??
+      `${wallet.slice(0, 6)}…`;
+  if (!sent.length && !received.length) return null;
+  return (
+    <div className="value-flow">
+      <span className="eyebrow">Value along the lineage</span>
+      <ul>
+        {sent.map((flow) => (
+          <li key={`out-${flow.creditedThesisId}`}>
+            <span>
+              #{id} <Icon name="arrow" size={13} /> #{flow.creditedThesisId} · @
+              {handle(flow.recipient)}
+            </span>
+            <strong>{formatMon(flow.amountWei)} MON</strong>
+          </li>
+        ))}
+        {received.map((flow) => (
+          <li key={`in-${flow.sourceThesisId}`}>
+            <span>
+              #{flow.sourceThesisId} <Icon name="arrow" size={13} /> #{id}
+            </span>
+            <strong>{formatMon(flow.amountWei)} MON</strong>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

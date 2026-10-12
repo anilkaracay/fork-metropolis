@@ -7,6 +7,7 @@ import { configuration } from "./errors";
 import { privyVerifier, type AuthVerifier } from "./auth";
 import type { Database } from "@fork/db";
 import { envioGraph } from "./graph";
+import { envioBacking } from "./backing";
 import { rpcReceipts } from "./receipt";
 import { SocialCore } from "./social-core";
 import { Faucet } from "./faucet";
@@ -82,6 +83,16 @@ export async function getRuntime(): Promise<Runtime> {
           (m) => m.id,
         ),
       account.adminDids,
+      env.FORK_BACKING_ADDRESS && !/^0x0{40}$/.test(env.FORK_BACKING_ADDRESS)
+        ? {
+            source: envioBacking(
+              env.FORK_ENVIO_URL,
+              ns.chainId,
+              ns.registryAddress,
+            ),
+            address: env.FORK_BACKING_ADDRESS,
+          }
+        : null,
     ),
     auth: account.auth,
     faucet: new Faucet(

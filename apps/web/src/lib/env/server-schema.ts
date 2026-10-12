@@ -31,6 +31,12 @@ const serverSchema = z.object({
     .regex(/^0x[0-9a-fA-F]{40}$/)
     .transform((v) => v.toLowerCase())
     .optional(),
+  // FORKBacking on Monad Testnet. Backing stays off until this is set and indexed.
+  FORK_BACKING_ADDRESS: z
+    .string()
+    .regex(/^0x[0-9a-fA-F]{40}$/)
+    .transform((v) => v.toLowerCase())
+    .optional(),
   FORK_ENVIO_URL: httpUrl.optional(),
   MONAD_RPC_URL: httpUrl.default("https://testnet-rpc.monad.xyz"),
   FORK_ADMIN_DIDS: z.string().default(""),

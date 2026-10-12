@@ -119,6 +119,29 @@ export async function handleApi(request: Request, path: string[]) {
         await runtime.reset();
         return reply({ reset: true });
       }
+      if (route === "test/back" && method === "POST") {
+        const session = await authenticate(
+          runtime.core.db,
+          runtime.auth,
+          request,
+        );
+        const v = z
+          .object({
+            thesisId: uint64IdSchema,
+            amountWei: z.string().regex(/^\d{1,30}$/),
+          })
+          .strict()
+          .parse(await body(request));
+        return reply(
+          await runtime.back(session, v.thesisId, BigInt(v.amountWei)),
+        );
+      }
+      if (route === "test/withdraw" && method === "POST")
+        return reply(
+          await runtime.withdraw(
+            await authenticate(runtime.core.db, runtime.auth, request),
+          ),
+        );
       if (route === "test/faucet" && method === "POST") {
         const v = z
           .object({ balanceWei: z.string().regex(/^\d{1,30}$/) })
@@ -188,6 +211,8 @@ export async function handleApi(request: Request, path: string[]) {
       if (route === "explore") return reply(await core.explore());
       if (path[0] === "theses" && path.length === 2)
         return reply(await core.detail(uint64IdSchema.parse(path[1])));
+      if (path[0] === "theses" && path[2] === "backing" && path.length === 3)
+        return reply(await core.backingView(uint64IdSchema.parse(path[1])));
       if (path[0] === "theses" && path[2] === "tree" && path.length === 3)
         return reply(await core.tree(uint64IdSchema.parse(path[1])));
       if (path[0] === "profiles" && path.length === 2)

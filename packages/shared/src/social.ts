@@ -11,6 +11,13 @@ import {
   addressSchema,
   uint64IdSchema,
 } from "./namespace.ts";
+import type {
+  BackingRole,
+  BackingSummary,
+  EarningsSummary,
+  LineageFlow,
+  SupportSummary,
+} from "./backing.ts";
 
 export const graphThesisSchema = thesisIdentitySchema.extend({
   parentId: z.union([z.literal("0"), uint64IdSchema]),
@@ -87,6 +94,7 @@ export type FeedThesis = {
   changes: ForkDifference[];
   challenge: boolean;
   social: { agrees: number; comments: number };
+  backing: BackingSummary;
   execution: {
     state: "not-executed" | "attested" | "verified";
     position: "unknown" | "open" | "closed";
@@ -115,6 +123,29 @@ export type ThesisTree = {
   nodes: FeedThesis[];
   truncated: boolean;
   ancestors: string[];
+  // Value that backing has sent between theses of this tree.
+  flows: LineageFlow[];
+};
+/** Everything the Back sheet and a thesis's backing panel need. */
+export type ThesisBackingView = {
+  thesisId: string;
+  // Null while backing is not live in this deployment.
+  contract: { address: string; chainId: number } | null;
+  // Who a backing of this thesis is split between, nearest first.
+  lineage: { role: BackingRole; thesisId: string; author: AuthorIdentity }[];
+  summary: BackingSummary;
+  earlyBackers: AuthorIdentity[];
+  recent: {
+    txHash: string;
+    backer: AuthorIdentity;
+    amountWei: string;
+    position: number;
+    early: boolean;
+    timestamp: number;
+  }[];
+  // Where this thesis's backing went, and what its forks' backing sent back.
+  sent: LineageFlow[];
+  received: LineageFlow[];
 };
 export type ReputationCounts = {
   eligibleRoots: number;
@@ -152,6 +183,10 @@ export type ProfileSummary = {
   identity: AuthorIdentity;
   bio: string | null;
   reputation: ReturnType<typeof reputation>;
+  earnings: EarningsSummary;
+  support: SupportSummary;
+  // Where claimable earnings are withdrawn from; null while backing is not live.
+  backingContract: string | null;
   recent: FeedThesis[];
   scope: { chainId: number; registryAddress: string; wallet: string };
 };
