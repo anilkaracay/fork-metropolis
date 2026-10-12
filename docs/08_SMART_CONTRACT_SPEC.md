@@ -1,12 +1,14 @@
 # Smart Contract Specification
 
+FORK has two contracts. `FORKRegistry.sol` records authorship and lineage and holds no assets. `FORKBacking.sol` reads that lineage and splits native MON backing along it; it is specified in [FORKBacking](#forkbacking) at the end of this document.
+
 ## Contract
 
 `FORKRegistry.sol`
 
 Purpose: canonical public provenance for trading theses and their forks.
 
-The contract is not an exchange, vault, custody layer, oracle, or PnL calculator.
+The registry is not an exchange, vault, custody layer, oracle, or PnL calculator.
 
 ## Network
 
@@ -227,3 +229,88 @@ Commit:
 - ABI JSON
 
 These values must also appear in `23_DEPLOYMENT_ENV.md` after deployment.
+
+## FORKBacking
+
+`FORKBacking.sol` (Solidity 0.8.37, MIT). Decision record: D-056.
+
+Purpose: let anyone back a thesis with native MON and split that backing along the idea's lineage, so the people who originated and improved an idea share in the value it attracts.
+
+The contract is not a token, a vault with yield, a market or a fee collector. It has no owner, no admin, no pause and no upgrade path. It holds exactly the credits that have not been withdrawn yet.
+
+### Constants and storage
+
+```solidity
+uint256 public constant MIN_BACKING = 0.001 ether;
+uint32 public constant EARLY_BACKER_LIMIT = 10;
+uint256 public constant AUTHOR_SHARE_BPS = 7_000;
+uint256 public constant PARENT_SHARE_BPS = 2_000;
+uint256 public constant GRANDPARENT_SHARE_BPS = 1_000;
+
+IFORKRegistry public immutable registry;
+mapping(address => uint256) public claimable;
+mapping(uint64 => uint32) public backerCount;
+mapping(uint64 => mapping(address => uint32)) public backerIndex; // one-based, zero = never backed
+```
+
+`constructor(address registry)` rejects an address without code. The registry is read only through `theses(uint64)`, using the author and parent fields.
+
+### Events
+
+```solidity
+event Backed(uint64 indexed thesisId, address indexed backer, uint256 amount, uint32 backerIndex, bool early);
+event Credited(address indexed recipient, uint64 indexed sourceThesisId, uint64 indexed creditedThesisId, uint8 role, uint256 amount);
+event Withdrawn(address indexed account, uint256 amount);
+```
+
+`role` is 0 author, 1 parent, 2 grandparent. `sourceThesisId` is the backed thesis. `creditedThesisId` is the thesis whose authorship earned the credit. One backing emits one `Backed` followed by one to three `Credited`, in role order.
+
+### `back(uint64 thesisId) payable`
+
+Reverts with `BackingTooSmall` below `MIN_BACKING`, `ThesisNotFound` for an unknown thesis and `SelfBacking` when the caller is the thesis author. Otherwise it records the backer's position, emits the events and adds the split to each recipient's `claimable` balance. It sends no MON.
+
+Split rules:
+
+| Lineage of the backed thesis | Thesis author | Parent author | Grandparent author |
+| --- | --- | --- | --- |
+| Root | 100% | | |
+| Fork of a root | 80% | 20% | |
+| Fork of a fork | 70% | 20% | 10% |
+
+- Depth is bounded at three registry reads. Ancestors beyond the grandparent receive nothing.
+- A missing ancestor's share stays with the thesis author.
+- The author's credit is the amount minus what is owed to a different ancestor, so rounding dust goes to the author and the credits sum to `msg.value` exactly.
+- One address in several roles is credited once, in its nearest role: an author who also wrote the parent receives one author credit; a parent author who also wrote the grandparent receives one parent credit of 30%. A self-fork therefore never produces a parent or grandparent credit.
+- An ancestor may back a descendant. Only backing your own thesis from the authoring address is rejected.
+
+Early supporters: the first backing by an address assigns it the next position for that thesis. Positions 1 to 10 are early. Repeat backings reuse the position and do not advance the counter. `isEarlyBacker(thesisId, account)` exposes the flag.
+
+### `withdraw()`
+
+Reverts with `NothingToWithdraw` on a zero balance. Otherwise it clears the caller's balance, emits `Withdrawn`, then sends the full amount to the caller and reverts with `WithdrawFailed` if the send fails. There is no partial withdrawal and no withdrawal on behalf of another address.
+
+### `previewSplit(uint64 thesisId, uint256 amount) view`
+
+Returns exactly the credits `back` would record, from the same internal function, and reverts the same way for an unknown thesis or a too small amount. The product uses it to show who receives what before the user signs.
+
+### Security properties
+
+- Pull payments. `back` makes no value transfer, so a recipient that cannot receive MON cannot block a backing.
+- `withdraw` follows checks, effects, interactions. A reentrant `withdraw` finds a zero balance and reverts.
+- The only external calls are read-only registry lookups and the single send to `msg.sender` in `withdraw`.
+- No `receive` or `fallback`: plain transfers revert. MON forced into the contract by other means is ignored by the accounting and cannot be recovered by anyone.
+- Stateful invariant: the contract balance equals the sum of unwithdrawn credits.
+
+Known limits:
+
+- A contract author that rejects MON cannot withdraw; its credits remain recorded.
+- Backing totals and early supporter positions are not Sybil resistant. One person can back from several wallets, including backing their own thesis from a second address.
+- Testnet MON has no monetary value. Nothing here is a return or a reward for trading performance.
+
+### Tests
+
+`contracts/test/FORKBacking.t.sol` and `contracts/test/FORKBacking.invariant.t.sol` cover every branch and revert, split conservation and merging under fuzzing, reentrancy on `withdraw`, a rejecting recipient, forced balance, the early supporter boundary and the balance invariant. Results, coverage and gas are in [FORKBACKING_COVERAGE.md](FORKBACKING_COVERAGE.md).
+
+### Deployment artifact
+
+`contracts/deployments/10143.backing.json` uses the same fields as the registry artifact, with `backingAddress` and the `registryAddress` constructor argument. It is written once by `node scripts/backing-deploy.mjs record` after the deployment has been checked against the reviewed build. See `23_DEPLOYMENT_ENV.md`.

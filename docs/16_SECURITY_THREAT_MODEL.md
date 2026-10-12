@@ -9,6 +9,7 @@
 5. Offchain metadata tampering is detectable through the onchain content hash.
 6. Sponsor API keys remain server-side.
 7. Social abuse does not take down the product.
+8. Backed MON can only leave FORKBacking to the address it was credited to.
 
 ## Assets
 
@@ -21,6 +22,7 @@
 - Envio API token
 - thesis metadata integrity
 - reputation integrity
+- unwithdrawn backing credits held by FORKBacking
 
 ## Threats and mitigations
 
@@ -108,7 +110,7 @@ Product policy:
 
 ### T10 - malicious contract inputs
 
-Contract validates existence/bounds. No external calls, no custody, no upgradeability.
+FORKRegistry validates existence/bounds. No external calls, no custody, no upgradeability.
 
 ### T11 - compromised server secret
 
@@ -119,6 +121,22 @@ Mitigations:
 - rotate before submission if exposed
 - never print environment dumps
 - `.env*` ignored
+
+### T12 - backing funds and lineage credits
+
+FORKBacking holds native MON between `back` and `withdraw`. It has no owner, admin, fee or upgrade path, so there is no privileged key to steal.
+
+Risks and mitigations:
+
+- Reentrancy on withdrawal: the balance is cleared before the send. A nested `withdraw` reverts with `NothingToWithdraw`; tests cover the uncaught and the caught case with other authors' credits present.
+- A recipient that rejects MON: payments are pull based, so it cannot block a backing or another author's withdrawal. Only its own credits stay unclaimed.
+- Accounting drift: the author's credit is the remainder, so credits sum to the amount sent. A stateful invariant checks that the contract balance equals the sum of unwithdrawn credits.
+- Wrong lineage: authorship and ancestry come only from the immutable registry address fixed at deployment. The deployment script checks that address against the recorded registry code before sending.
+- Unbounded work: at most three registry reads per backing, no loops over user data.
+- Forced MON: there is no `receive`. MON forced in by other means never enters the accounting and is not recoverable.
+- Sybil backing: one person can back from several wallets, including their own thesis from a second address, and can fill the ten early positions cheaply because the value returns to them as author. Totals and early status are presented as volume and chronology, not as independent endorsement, and never feed reputation metrics.
+- Self-fork farming: an address in several roles of one lineage is credited once in its nearest role, so forking your own idea does not create income labelled as earned from forks.
+- Regulatory framing: testnet MON has no monetary value. Product copy must not describe backing as an investment or promise a return.
 
 ## Privacy
 
@@ -154,7 +172,7 @@ Before final deploy:
 
 ## Smart contract review checklist
 
-- no external call
+- no external call in FORKRegistry; in FORKBacking only read-only registry lookups and one send to the caller in `withdraw`, after its balance is cleared
 - no delegatecall
 - no owner backdoor
 - input bounds
