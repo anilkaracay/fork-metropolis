@@ -12,6 +12,7 @@ Deadline: **October 14, 2026, 06:59 Europe/Istanbul** (October 13, 23:59 ET).
 | Source | https://github.com/anilkaracay/fork-metropolis, public, MIT |
 | The story a reader follows top to bottom | [`README.md`](../README.md) |
 | Portal text, ready to paste | [`submission/portal-copy.json`](submission/portal-copy.json): name, one line, description, go to market, access instructions, Envio and Privy responses |
+| Video scripts and shot lists | [`submission/VIDEO_SCRIPTS.md`](submission/VIDEO_SCRIPTS.md): the technical demo and two optional sponsor cuts. The founder pitch is written separately |
 | Measured Monad timing | [`MONAD_PERFORMANCE.md`](MONAD_PERFORMANCE.md) |
 | Design checks | [`DESIGN_QUALITY.md`](DESIGN_QUALITY.md) |
 | Logo | [`assets/submission/logo.png`](assets/submission/logo.png) |
@@ -32,6 +33,7 @@ Entered: Social, Attention & Culture as the track, with the Envio and Privy spon
 - [x] README rewritten around the current product
 - [x] Portal copy drafted
 - [x] Architecture diagram shows both contracts
+- [x] Video scripts and shot lists written
 - [x] `FORKBacking` deployed from main and verified, with its address, transaction and block recorded
 - [x] Indexer redeployed over both contracts, with the new GraphQL endpoint recorded
 - [ ] Production deployed with the new migration, the backing address and the faucet key
