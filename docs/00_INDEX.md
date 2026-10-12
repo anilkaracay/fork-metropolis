@@ -47,7 +47,7 @@ This folder is the source of truth for product, design, engineering, hackathon c
 How the product was built, kept as a record. These are process documents, not the current specification: where they disagree with the files above or with the decision log, the decision log wins.
 
 - [20_3_DAY_EXECUTION_PLAN.md](build-log/20_3_DAY_EXECUTION_PLAN.md): the original three-day plan
-- [21_CODEX_TASKS.md](build-log/21_CODEX_TASKS.md): the original ordered task queue
+- [21_TASK_QUEUE.md](build-log/21_TASK_QUEUE.md): the original ordered task queue
 - [31_PHASE1_FOUNDATION.md](build-log/31_PHASE1_FOUNDATION.md): foundation scope and checks
 - [32_PHASE2_SOCIAL_CORE.md](build-log/32_PHASE2_SOCIAL_CORE.md): the social core, its trust boundaries and tests
 - [33_PHASE3_LIVE_INTEGRATION.md](build-log/33_PHASE3_LIVE_INTEGRATION.md): live integration preparation and observations

@@ -510,7 +510,7 @@ User approved B3 and froze product design/development. Prioritize the actual Met
 
 ## D-056: Backing, native testnet MON split along the lineage
 
-Status: Accepted by explicit owner instruction; contract implemented and tested, deployment pending approval
+Status: Accepted by explicit owner instruction; contract implemented, tested and deployed on 2026-10-12 at `0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f` (block 70423451), source verified on Sourcify
 Date: 2026-10-12
 
 Decision:

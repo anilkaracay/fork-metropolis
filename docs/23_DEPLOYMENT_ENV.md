@@ -66,7 +66,7 @@ Status: implemented, not configured in production. Rolling it out needs the owne
 
 ## FORKBacking deployment
 
-Status: not deployed. Deployment waits for the owner's approval (D-056).
+Status: deployed on 2026-10-12 from main commit `9d5c411` at `0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f`, transaction `0xb4cf544e5b0e534ea3f71ec863b4fc4c3d88d1901d34e22d65c9bf753f9a5660`, block 70423451. Sourcify reports an exact match. The record is `contracts/deployments/10143.backing.json`.
 
 FORKBacking takes the canonical registry address from `contracts/deployments/10143.json` as its only constructor argument and uses the same dedicated testnet deployer as the registry. One guarded script covers the four steps, each tied to the reviewed commit that contains the contract:
 

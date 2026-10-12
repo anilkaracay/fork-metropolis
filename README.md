@@ -60,20 +60,21 @@ _The landing page above shows the live graph. The other screenshots come from th
 
 ## What lives onchain and why
 
-Two small contracts on Monad Testnet (chain 10143). Neither has an owner, an admin, a fee or an upgrade path.
+Two small contracts on Monad Testnet (chain 10143), both source verified on Sourcify. Neither has an owner, an admin, a fee or an upgrade path.
 
 | Contract | Address | What it holds |
 | --- | --- | --- |
 | `FORKRegistry` | [`0x1889a7216b1ecad9a44910dd0996834d0894b9e1`](https://testnet.monadvision.com/address/0x1889a7216b1ecad9a44910dd0996834d0894b9e1) | Every thesis: author, parent, market, direction, target, invalidation, leverage, creation time and the hash of its written reasoning |
-| `FORKBacking` | Not deployed yet. The address is recorded here at deployment | Backing of a thesis, the split along its lineage, early supporter positions and each author's claimable balance |
+| `FORKBacking` | [`0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f`](https://testnet.monadvision.com/address/0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f) | Backing of a thesis, the split along its lineage, early supporter positions and each author's claimable balance |
 
-<!-- PENDING: FORKBacking address, deployment transaction, block and first backing transaction -->
+<!-- PENDING: first backing transaction -->
 
 | Transaction | Hash |
 | --- | --- |
 | Registry deployment | [`0xc1ba5d4f…5fbf4a86`](https://testnet.monadvision.com/tx/0xc1ba5d4fc31bc0a45e973ec8a63c0583a3fb4f643c0f46053a7ee5dd5fbf4a86) |
 | Thesis #1 published | [`0xbcbfa028…630a090f`](https://testnet.monadvision.com/tx/0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f) |
 | Thesis #2 forks #1 | [`0xe5fbf9c8…8ab6b192`](https://testnet.monadvision.com/tx/0xe5fbf9c835109a566be8afebd5c2d146731d1f998851ea1875798e328ab6b192) |
+| Backing deployment, block 70423451 | [`0xb4cf544e…3f9a5660`](https://testnet.monadvision.com/tx/0xb4cf544e5b0e534ea3f71ec863b4fc4c3d88d1901d34e22d65c9bf753f9a5660) |
 
 **The split.** `back(thesisId)` reads the lineage from the registry, at most three entries, and credits:
 
@@ -208,7 +209,7 @@ pnpm dev
 | `NEXT_PUBLIC_PRIVY_APP_ID`, `PRIVY_APP_SECRET` | Your Privy app, with `http://localhost:3000` as an allowed origin |
 | `FORK_REGISTRY_ADDRESS` | The registry address above |
 | `FORK_ENVIO_URL` | The GraphQL endpoint above |
-| `FORK_BACKING_ADDRESS` | The `FORKBacking` address. Without it the product runs with backing switched off |
+| `FORK_BACKING_ADDRESS` | The `FORKBacking` address above. Without it the product runs with backing switched off |
 | `FORK_FAUCET_PRIVATE_KEY` | Optional. A testnet-only key for the welcome drip. Without it the product says the drip is not set up |
 
 Publishing needs testnet MON and a wallet approval. Never place a server secret in a `NEXT_PUBLIC_*` variable. See the [environment example](apps/web/.env.example), the [testing guide](docs/17_TESTING_QA.md) and the [deployment guide](docs/23_DEPLOYMENT_ENV.md).
