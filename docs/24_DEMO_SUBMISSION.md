@@ -35,7 +35,7 @@ Entered: Social, Attention & Culture as the track, with the Envio and Privy spon
 - [x] Architecture diagram shows both contracts
 - [x] Video scripts and shot lists written
 - [x] `FORKBacking` deployed from main and verified, with its address, transaction and block recorded
-- [ ] Indexer redeployed over both contracts, with the new GraphQL endpoint recorded
+- [x] Indexer redeployed over both contracts, with the new GraphQL endpoint recorded
 - [ ] Production deployed with the new migration, the backing address and the faucet key
 - [ ] Measurement run recorded in `MONAD_PERFORMANCE.md`
 - [ ] Pending values filled in the README and the portal copy
