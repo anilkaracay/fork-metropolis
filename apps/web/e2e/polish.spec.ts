@@ -161,11 +161,15 @@ test("read errors offer recovery and failed refreshes retain explicitly labeled 
   page.on("request", (r) => {
     if (new URL(r.url()).pathname === "/api/explore") explored++;
   });
+  // Feed and Explore both list two ideas, so wait for each route before counting reads.
   await page.getByRole("link", { name: "Explore", exact: true }).click();
+  await expect(page).toHaveURL(/\/explore$/);
   await expect(page.locator(".thesis-card")).toHaveCount(2);
   await page.getByRole("link", { name: "Feed", exact: true }).click();
+  await expect(page).toHaveURL(/\/feed$/);
   await expect(page.locator(".thesis-card")).toHaveCount(2);
   await page.getByRole("link", { name: "Explore", exact: true }).click();
+  await expect(page).toHaveURL(/\/explore$/);
   await expect(page.locator(".thesis-card")).toHaveCount(2);
   expect(explored).toBe(1);
 });

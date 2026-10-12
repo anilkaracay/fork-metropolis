@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./node_modules/envio/evm.schema.json
 name: fork-social-graph
-description: Immutable FORK idea lineage and exact external-wallet participation.
+description: FORK idea lineage, external-wallet participation and the backing that flows along it.
 address_format: lowercase
 field_selection:
   transaction_fields:
@@ -11,6 +11,12 @@ contracts:
     events:
       - event: ThesisCreated
       - event: ExecutionLinked
+  - name: FORKBacking
+    abi_file_path: ./abi/FORKBacking.json
+    events:
+      - event: Backed
+      - event: Credited
+      - event: Withdrawn
 chains:
   - id: 10143
     start_block: ${ENVIO_FORK_START_BLOCK:-0}
@@ -18,3 +24,7 @@ chains:
     contracts:
       - name: FORKRegistry
         address: "${ENVIO_FORK_REGISTRY_ADDRESS:-0x0000000000000000000000000000000000000000}"
+      # Each FORKBacking reads one registry. List them in the same order as the registries above.
+      - name: FORKBacking
+        address: "${ENVIO_FORK_BACKING_ADDRESS:-0x0000000000000000000000000000000000000000}"
+        start_block: ${ENVIO_FORK_BACKING_START_BLOCK:-0}

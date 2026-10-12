@@ -1,7 +1,7 @@
 # Isolated synthetic events only; never use this file for a live indexer.
 # yaml-language-server: $schema=./node_modules/envio/evm.schema.json
 name: fork-isolated-handler-tests
-description: Immutable FORK idea lineage and exact external-wallet participation.
+description: FORK idea lineage, external-wallet participation and the backing that flows along it.
 address_format: lowercase
 field_selection:
   transaction_fields:
@@ -12,6 +12,12 @@ contracts:
     events:
       - event: ThesisCreated
       - event: ExecutionLinked
+  - name: FORKBacking
+    abi_file_path: ./abi/FORKBacking.json
+    events:
+      - event: Backed
+      - event: Credited
+      - event: Withdrawn
 chains:
   - id: 10143
     start_block: 0
@@ -21,3 +27,8 @@ chains:
         address:
           - "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
           - "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      # Paired by position with the registries above.
+      - name: FORKBacking
+        address:
+          - "0xcccccccccccccccccccccccccccccccccccccccc"
+          - "0xdddddddddddddddddddddddddddddddddddddddd"
