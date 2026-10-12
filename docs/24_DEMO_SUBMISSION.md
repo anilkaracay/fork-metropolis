@@ -1,32 +1,47 @@
-# Demo and submission — current social MVP
+# Demo and submission
 
-B4 supersedes the earlier execution-focused demo plan. Product design is frozen after approved B3. **Perpl and Nansen remain deferred.** No new blockchain transaction is needed to review or record this submission.
+What the Monad Metropolis submission consists of, where each piece lives and what is still open. Only the owner edits the portal and submits.
 
-- Live product: https://forktrades.xyz
-- Track: 03 — Social, Attention & Culture
-- Actual proof: two real Privy users, root #1, fork #2, independent wallet authors, target 4200→4400, leverage 2×→3×, Monad transactions, Envio-backed lineage, Agree/comment and Emerging reputation.
-- [Official portal requirements and saved draft](submission/README.md)
-- [Exact portal copy](submission/portal-copy.json)
-- [Videos and scripts](submission/VIDEOS.md)
-- [Public-release security audit](submission/SECURITY_AUDIT.md)
+Deadline: **October 14, 2026, 06:59 Europe/Istanbul** (October 13, 23:59 ET).
 
-Deadline: **14 October 2026, 06:59 Europe/Istanbul**. Technical demo ≤3 minutes; founder pitch ≤2 minutes. Real working video URLs, logo and public licensed source are required before readiness. Existing source ownership/pre-existing work outside Git is a human attestation. Public GitHub, external video publication and final portal submission require explicit owner approval. Draft ≠ submitted.
+## The pieces
 
-## Judge path
+| Piece | Where |
+| --- | --- |
+| Live product | https://forktrades.xyz |
+| Source | https://github.com/anilkaracay/fork-metropolis, public, MIT |
+| The story a reader follows top to bottom | [`README.md`](../README.md) |
+| Portal text, ready to paste | [`submission/portal-copy.json`](submission/portal-copy.json): name, one line, description, go to market, access instructions, Envio and Privy responses |
+| Measured Monad timing | [`MONAD_PERFORMANCE.md`](MONAD_PERFORMANCE.md) |
+| Design checks | [`DESIGN_QUALITY.md`](DESIGN_QUALITY.md) |
+| Logo | [`assets/submission/logo.png`](assets/submission/logo.png) |
 
-Landing → Feed → original #1 → independently authored fork #2 → parent comparison → Idea Tree → contributor profiles → existing social state → actual Monad receipts and Envio-backed reads. No invented user activity, execution footage or PnL.
+The portal fields are: track, logo, name (120 characters), one line (200), description (8000), go to market (8000), repository, live product, technical demo of at most 3 minutes, pitch of at most 2 minutes, optional access instructions (8000), and a written response for each sponsor entered. Videos are hosted on YouTube, Loom or Vimeo.
 
-## Final checklist
+Entered: Social, Attention & Culture as the track, with the Envio and Privy sponsor entries. Perpl and Nansen are not entered: neither integration is part of the product.
 
-- [x] Actual portal and official requirements inspected; deadline checked.
-- [x] FORK draft created and verified text/Track 03 saved.
-- [x] Envio and Privy eligibility checked and required responses saved.
-- [x] Judge-readable README, architecture and genuine hero image prepared.
-- [x] Current tree/all reachable history and historical screenshots audited.
-- [x] Clean install, pinned tool setup, contract/indexer/unit checks completed.
-- [x] Owner confirmed licensing rights and approved MIT; retained history/AI disclosure is explicit.
-- [x] Owner approved PUBLIC; anonymous clone, files and install verified.
-- [ ] Required logo upload resolves the denied browser permission.
-- [x] Reviewed videos published with approval; verified HTTPS URLs saved in the draft.
-- [ ] Final review and explicit final submission approval.
-- [ ] Actual submitted status, timestamp and confirmation recorded.
+## Rules for everything in the submission
+
+- No invented users, activity, metrics or partnerships. The live graph is early and small and includes the team's own test activity, and the copy says so.
+- Every number comes from a recorded measurement or from a command the reader can run.
+- Timing is reported as confirmation time and gas units, never as a cost in money.
+- Markers of the form `[[PENDING: ...]]` in the portal copy, and `PENDING` comments in the README, mark values that exist only after the steps below. Nothing is submitted while one remains.
+
+## Open steps
+
+- [x] README rewritten around the current product
+- [x] Portal copy drafted
+- [x] Architecture diagram shows both contracts
+- [ ] `FORKBacking` deployed from main and verified, with its address, transaction and block recorded
+- [ ] Indexer redeployed over both contracts, with the new GraphQL endpoint recorded
+- [ ] Production deployed with the new migration, the backing address and the faucet key
+- [ ] Measurement run recorded in `MONAD_PERFORMANCE.md`
+- [ ] Pending values filled in the README and the portal copy
+- [ ] Live screenshots replace the test workspace ones in the README
+- [ ] Technical demo and founder pitch recorded and uploaded
+- [ ] Logo uploaded in the portal
+- [ ] Portal updated and the entry submitted by the owner
+
+## Earlier package
+
+The first submission package, prepared on October 12, 2026 before backing existed, is kept as a record in [`build-log/submission/`](build-log/submission/): its portal notes, video scripts, captions, release audit and hosting files. It describes the product as it was then.

@@ -136,17 +136,17 @@ Only official documentation/repos and installed SDK declarations were used for i
 
 No new Nansen or hackathon eligibility claims were made during this implementation phase. The semantic HTML/CSS tree needs no additional tree library.
 
-## Phase 3 verification — 2026-10-04
+## Phase 3 verification: 2026-10-04
 
-- Neon Connect: https://neon.com/docs/connect/connect-from-any-app — development connection acquisition; no live database accessed.
-- Privy React/Node setup: https://docs.privy.io/basics/react/setup and https://docs.privy.io/basics/nodeJS-node/setup — existing pinned SDK setup; authenticated wallet testing pending.
-- Monad Foundry: https://docs.monad.xyz/guides/deploy-smart-contract/foundry — chain 10143, Monad-compatible Foundry; no deployment yet.
-- Envio hosted deployment: https://docs.envio.dev/docs/HyperIndex/hosted-service-deployment — project-root/config selection, pnpm 10.32.0 and ENVIO_ custom variables. Standalone compatibility tested.
-- Perpl integration/auth/REST/types: https://github.com/PerplFoundation/api-docs — fresh public context observed separately in build-log/evidence/phase3/public-readiness.json. README collateral differs from current context. Public onboarding funding guide names mainnet routes; no Testnet AUSD funding method established. Official UI links https://discord.gg/perpl for human sponsor coordination. Do not assume a faucet or approval timeline.
-- Nansen redistribution: https://docs.nansen.ai/guides/redistribution-guide — PnL/PnL Summary permitted; labels/Smart Money excluded.
-- Nansen schema: https://docs.nansen.ai/api/profiler/address-pnl-and-trade-performance — wallet_address request, Monad mainnet, flat scalar summary.
-- Nansen credits: https://docs.nansen.ai/getting-started/credits — pnl-summary 1 Pro / 10 Free; conservative reservation implemented.
-- Gitleaks: https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1 — official Darwin arm64 archive verified SHA-256 b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5, local ignored scanner.
+- Neon Connect: https://neon.com/docs/connect/connect-from-any-app: development connection acquisition; no live database accessed.
+- Privy React/Node setup: https://docs.privy.io/basics/react/setup and https://docs.privy.io/basics/nodeJS-node/setup: existing pinned SDK setup; authenticated wallet testing pending.
+- Monad Foundry: https://docs.monad.xyz/guides/deploy-smart-contract/foundry: chain 10143, Monad-compatible Foundry; no deployment yet.
+- Envio hosted deployment: https://docs.envio.dev/docs/HyperIndex/hosted-service-deployment: project-root/config selection, pnpm 10.32.0 and ENVIO_ custom variables. Standalone compatibility tested.
+- Perpl integration/auth/REST/types: https://github.com/PerplFoundation/api-docs: fresh public context observed separately in build-log/evidence/phase3/public-readiness.json. README collateral differs from current context. Public onboarding funding guide names mainnet routes; no Testnet AUSD funding method established. Official UI links https://discord.gg/perpl for human sponsor coordination. Do not assume a faucet or approval timeline.
+- Nansen redistribution: https://docs.nansen.ai/guides/redistribution-guide: PnL/PnL Summary permitted; labels/Smart Money excluded.
+- Nansen schema: https://docs.nansen.ai/api/profiler/address-pnl-and-trade-performance: wallet_address request, Monad mainnet, flat scalar summary.
+- Nansen credits: https://docs.nansen.ai/getting-started/credits: pnl-summary 1 Pro / 10 Free; conservative reservation implemented.
+- Gitleaks: https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1: official Darwin arm64 archive verified SHA-256 b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5, local ignored scanner.
 
 Hackathon sponsor-track portal URLs could not be retrieved through the research tool. No new prize/eligibility claim is inferred. The approved Perpl automation requirement remains unsatisfied by manual execution.
 

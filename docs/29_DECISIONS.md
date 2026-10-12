@@ -1,6 +1,6 @@
 # Decision Log
 
-## D-052 — Approved Precision Social B1 landing and shared foundation
+## D-052: Approved Precision Social B1 landing and shared foundation
 
 - Date: 2026-10-11
 - Decision: the user approved Direction A and authorized B1 implementation, local production-build/browser QA, then the existing isolated Cherry deployment workflow.
@@ -16,7 +16,7 @@ Add every material change as a new entry. Never silently change architecture in 
 Status: Explicit user priority change; Stage A research only
 Date: 2026-10-11
 
-PERPL: **BLOCKED / DEFERRED — EXTERNAL ORIGIN APPROVAL PENDING**. This supersedes D-050's requirement to wait for Perpl before presentation work. Preserve its implementation and historical evidence; no new enrollment, execution, Verified claim, reputation credit or Perpl bounty eligibility is authorized. Nansen remains deferred. Unavailable execution must be represented honestly without a broken action.
+PERPL: **BLOCKED / DEFERRED: EXTERNAL ORIGIN APPROVAL PENDING**. This supersedes D-050's requirement to wait for Perpl before presentation work. Preserve its implementation and historical evidence; no new enrollment, execution, Verified claim, reputation credit or Perpl bounty eligibility is authorized. Nansen remains deferred. Unavailable execution must be represented honestly without a broken action.
 
 Stage A covers the live social application's visual audit, current official product/marketing references, two creative directions, exact shared design tokens, Idea Tree, a premium landing at the canonical root, safe route preservation, README/submission presentation and a bounded implementation plan. The landing is an addition to the same audit, not a separate brand or restarted research task. Use genuine thesis #1 and fork #2; never fabricate activity or execution.
 
@@ -209,7 +209,7 @@ Date: 2026-10-04
 
 Decision:
 
-Originality = eligible roots with at least one external fork / eligible roots. Contribution = eligible authored forks with at least one external fork / eligible authored forks. Display Emerging below three eligible roots/forks; otherwise percentage with numerator/denominator. Eligible means canonical indexed roots/forks in the active registry namespace, with no age or execution prerequisite. External means a child author different from the thesis author. Influence = distinct external wallets directly forking any thesis by the user. Executions Inspired = distinct independently verified executions on strict descendants of any thesis by the user, counted once per author across overlapping ancestor paths. Self-fork edges never improve reputation; exclude the originating author's own executions from Executions Inspired. No Sybil-resistance claim, PnL component, log-normalized score or arbitrary 0–100 score.
+Originality = eligible roots with at least one external fork / eligible roots. Contribution = eligible authored forks with at least one external fork / eligible authored forks. Display Emerging below three eligible roots/forks; otherwise percentage with numerator/denominator. Eligible means canonical indexed roots/forks in the active registry namespace, with no age or execution prerequisite. External means a child author different from the thesis author. Influence = distinct external wallets directly forking any thesis by the user. Executions Inspired = distinct independently verified executions on strict descendants of any thesis by the user, counted once per author across overlapping ancestor paths. Self-fork edges never improve reputation; exclude the originating author's own executions from Executions Inspired. No Sybil-resistance claim, PnL component, log-normalized score or arbitrary 0 to 100 score.
 
 ## D-016 - Execution status and trust
 
@@ -392,7 +392,7 @@ Use ENVIO_FORK_REGISTRY_ADDRESS and ENVIO_FORK_START_BLOCK for live indexer conf
 
 ## D-037 - Permitted Nansen profile context and bounded credit use
 
-Status: Accepted implementation choice within approved Phase 3 Gates 12–13
+Status: Accepted implementation choice within approved Phase 3 Gates 12 to 13
 Date: 2026-10-04
 
 Keep Smart Signal's existing social tuple; do not introduce unmeasured ranking enrichment. Offer separately labeled Monad mainnet PnL context on a real wallet profile, never Testnet/native reputation. Rechecked policy explicitly permits PnL/PnL Summary; strip labels and unknown payload fields. Add one dedicated shared cache table (superseding D-032's eight-table limit solely for this approved integration). Reserve Free-tier 10 credits per attempt across instances/users, default budget 20/day, one-hour success/empty cache, five-minute error cache and no billed retries. Disabled/outage states cannot break social data. Actual provider proof remains pending; fixture success is not live evidence.
@@ -489,7 +489,7 @@ T0 is observed when the real wallet adapter returns its submitted transaction ha
 Seven focused regression cases pass for replay/refresh, missing T0, wallet/registry/parent mismatch, backward clock, unexpected secret-bearing fields and production/test-workspace isolation. Format/lint/web strict typecheck pass. The actual User A session is hydrated and 5 Testnet MON is confirmed. Automatic approval review rejected the agent's prepared Publish on Monad click because it starts the real publication/wallet flow without action-specific content/payload consent; do not retry or bypass. The prepared concrete ETH LONG demo is handed to the user for that UI action, then the wallet approval remains human-controlled. No real latency is claimed until publication succeeds.
 
 
-## D-053 — Approved B2 signature product experience
+## D-053: Approved B2 signature product experience
 
 Status: Accepted, explicitly authorized B2 implementation gate
 Date: 2026-10-11
@@ -497,14 +497,14 @@ Date: 2026-10-11
 Refine Thesis Detail, the existing bounded Envio Idea Tree, canonical immediate-parent Fork Diff and the existing Fork Composer. Reuse B1 tokens/fonts and all existing trust boundaries. Use nested custom React/CSS nodes, URL-preserved selection, a contextual parent comparison and a mobile comparison shortcut rather than a new graph dependency. Draft previews use shared field schemas and forkDifference; incomplete fields remain explicitly pending without erasing other valid changes. Publication still uses the existing shared meaningful-change validation and immutable contract flow. No contracts, schema, reputation, authentication, Envio deployment or executionRef change. Perpl and Nansen remain deferred. Validate locally, review actual screenshots, preserve the B1 release for rollback, deploy only FORK on Cherry and safely synchronize the existing private remote without history rewrites. Stop before B3.
 
 
-## D-054 — Approved B3 final social product polish
+## D-054: Approved B3 final social product polish
 
 Status: Accepted, explicitly authorized timeboxed B3 implementation gate
 Date: 2026-10-12
 
 Extend B1/B2 precision typography and hierarchy to Feed, Explore, root Create and Profile. Reuse trusted server parent differences for compact Feed previews; local Explore search/type/sort operates only on the existing bounded dataset. Preserve exact ranking/reputation/publication/authentication/protocol semantics. Keep successful query data visible with explicit failure/recovery when a background refresh fails. Match GET timeout to the existing two-attempt upstream read budget, without changing mutation timeouts. No provider configuration, dependencies, contracts or schema changes. Validate all six requested widths and real public data, preserve B2 rollback and deploy only FORK. Keep GitHub private and stop before B4.
 
-## D-055 — B4 submission package; product freeze (2026-10-12)
+## D-055: B4 submission package; product freeze (2026-10-12)
 
 User approved B3 and froze product design/development. Prioritize the actual Metropolis portal, judge-readable README, complete public-release history/privacy review, genuine technical demo and separate founder pitch. Track 03 remains primary; Privy signing and Envio indexing are the supported sponsor entries. Perpl and Nansen stay deferred, no new publication/trade transactions, no UI changes. Save the private draft early. Public repo visibility, external video publication and final portal submission retain explicit approval gates. Official rules require open source/AI disclosure; a proposed MIT license awaits owner rights confirmation rather than asserting ownership outside Git. Do not route around the browser's denied logo upload.
 

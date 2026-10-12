@@ -1,8 +1,8 @@
 # Perpl Integration Specification
 
-## Current priority — 2026-10-11
+## Current priority: 2026-10-11
 
-**PERPL: BLOCKED / DEFERRED — EXTERNAL ORIGIN APPROVAL PENDING.** The user explicitly deferred this integration under D-051. Preserve the implementation and the historical preflight below. Do not wait for approval during product craft work, claim real execution/Verified status or Perpl bounty eligibility. Resume only under a later explicit decision. Unavailable Execute functionality must remain non-actionable and honest.
+**PERPL: BLOCKED / DEFERRED: EXTERNAL ORIGIN APPROVAL PENDING.** The user explicitly deferred this integration under D-051. Preserve the implementation and the historical preflight below. Do not wait for approval during product craft work, claim real execution/Verified status or Perpl bounty eligibility. Resume only under a later explicit decision. Unavailable Execute functionality must remain non-actionable and honest.
 
 ## Role in FORK
 

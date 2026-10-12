@@ -25,3 +25,4 @@ deploy/private/
 deploy/exports/
 deploy/backups/
 deploy/image.env
+apps/web/CLAUDE.md

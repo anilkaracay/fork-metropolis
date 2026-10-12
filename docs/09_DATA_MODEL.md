@@ -15,7 +15,7 @@ All thesis-related rows use `(chain_id, registry_address, thesis_id)`. Addresses
 | users | UUID, unique verified Privy DID and lowercase handle, display name, bounded bio, primary wallet, timestamps. `handle_claimed_at` records when the user chose a handle; `initial_handle` keeps the generated handle the account started with as a unique alias so old profile links still resolve. |
 | wallets | Address primary key, user FK, embedded/external kind. Composite owner/address uniqueness and immutable ownership. |
 | thesis_metadata | Author user and owned wallet FK, namespace, immutable finalized hash/reasoning/tags/note, request key, expected intent, parent ID, expiry, transaction hash, finalized timestamp, separate hidden flag. |
-| comments | Namespaced finalized metadata FK, author FK, 1–280 characters, author/request-key uniqueness, visible/hidden/deleted state and timestamps. Author and thesis association cannot be reassigned. |
+| comments | Namespaced finalized metadata FK, author FK, 1 to 280 characters, author/request-key uniqueness, visible/hidden/deleted state and timestamps. Author and thesis association cannot be reassigned. |
 | reactions | Agree only. Composite namespace/user/type primary key. PUT inserts once; DELETE reverses it. |
 | reports | Namespaced metadata FK, reporter FK, spam/abuse/misinformation/other, note up to 280 characters, one report per reporter/thesis and unique reporter/request key. |
 | execution_evidence | Namespaced metadata FK and owned wallet FK, attested/verified state, unknown/open/closed position, complete authoritative venue/fill fields required for verified rows. No HTTP writer grants verification in Phase 2. |
