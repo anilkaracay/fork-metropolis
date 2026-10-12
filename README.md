@@ -8,7 +8,7 @@ Publish a trading idea. Let someone fork it into a better one. Back the ones you
 
 <!-- PENDING: demo video, founder pitch and pitch deck links -->
 
-![The FORK landing page drawing the real lineage of thesis #1 and its fork #2 from the live graph](docs/assets/product/landing-1440.png)
+![The live section of the FORK landing page: idea #1, its fork #2 and the figures, read from the indexer](docs/assets/landing/live-1440.jpg)
 
 ## The problem
 

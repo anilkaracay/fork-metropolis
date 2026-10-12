@@ -238,7 +238,7 @@ export function Story() {
               </div>
               <ol className="diff-lines">
                 <li className="del" data-line>
-                  <i>−</i>
+                  <i>-</i>
                   <span>target</span>
                   <b>$4,200</b>
                 </li>
@@ -248,7 +248,7 @@ export function Story() {
                   <b>$4,400</b>
                 </li>
                 <li className="del" data-line>
-                  <i>−</i>
+                  <i>-</i>
                   <span>leverage</span>
                   <b>2×</b>
                 </li>
@@ -258,7 +258,7 @@ export function Story() {
                   <b>3×</b>
                 </li>
                 <li className="del" data-line>
-                  <i>−</i>
+                  <i>-</i>
                   <span>reasoning</span>
                   <b>ETH keeps its weekly range while spot demand holds.</b>
                 </li>

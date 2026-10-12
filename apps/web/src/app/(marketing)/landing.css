@@ -138,8 +138,8 @@
   animation: l-intro-out 0.3s 0.85s var(--ease) forwards;
 }
 .l-intro svg {
-  width: 112px;
-  height: 112px;
+  width: clamp(112px, 12vw, 156px);
+  height: clamp(112px, 12vw, 156px);
   overflow: visible;
 }
 .l-intro path,
@@ -1255,6 +1255,30 @@
   display: grid;
   gap: 18px;
   justify-items: start;
+  min-width: 0;
+  padding: clamp(18px, 2.6vw, 28px);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--tree);
+  border-radius: 24px;
+  background: var(--surface);
+}
+/* Wide screens: the real tree beside its figures. */
+@media (min-width: 1024px) {
+  .l-live-body {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .l-live-body > .l-realtree {
+    order: 1;
+  }
+  .l-live-body > .l-figures {
+    order: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-block: 0;
+  }
+  .l-live-body > .l-figures > div {
+    border-top: 1px solid var(--line);
+  }
 }
 .l-realtree .tr {
   --row: 70px;
@@ -1665,6 +1689,7 @@
 /* Final call */
 .l-finale {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(28px, 4vw, 44px);
   justify-items: start;
   padding: clamp(96px, 13vw, 190px) var(--padx);
@@ -1899,6 +1924,17 @@
   }
   .l-built-list {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .landing .l-finale h2 {
+    font-size: clamp(2.3rem, 11.6vw, 4.5rem);
+  }
+  .l-finale h2 br {
+    display: none;
+  }
+  .l-finale-faces .l-face {
+    width: 38px;
+    margin-left: -8px;
+    border-width: 3px;
   }
   .l-timeline ol {
     grid-auto-flow: row;

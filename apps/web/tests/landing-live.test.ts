@@ -38,7 +38,7 @@ vi.mock("../src/server/runtime", () => ({
     },
   }),
 }));
-import { readLandingLive } from "../src/server/landing";
+import { forgetLandingRead, readLandingLive } from "../src/server/landing";
 
 const registry = `0x${"aa".repeat(20)}`;
 // A root with two forks, a fork of the first fork, and an unrelated root.
@@ -72,6 +72,8 @@ const backed: Record<string, [wei: string, backers: number]> = {
 };
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.useRealTimers();
+  forgetLandingRead();
   untrusted.clear();
   Object.assign(runtime, { test: false, provenance: "envio", backing: true });
   // The indexer returns the newest idea first.
@@ -261,4 +263,45 @@ it("says nothing in the test workspace, off the live indexer or after an error",
   expect(await readLandingLive()).toBeNull();
   runtime.recent.mockResolvedValue({ nodes: [], bounded: false });
   expect(await readLandingLive()).toBeNull();
+});
+
+it("shares one read, refreshes quietly, and shows a held read only with its own time", async () => {
+  vi.useFakeTimers({ now: new Date("2026-10-12T18:00:00Z") });
+  const [first, second] = await Promise.all([
+    readLandingLive(),
+    readLandingLive(),
+  ]);
+  expect(first).toBe(second);
+  expect(runtime.recent).toHaveBeenCalledTimes(1);
+  expect(first!.readAt).toBe(Date.parse("2026-10-12T18:00:00Z") / 1000);
+  // Within twenty seconds nobody asks the indexer again.
+  vi.setSystemTime(new Date("2026-10-12T18:00:19Z"));
+  expect(await readLandingLive()).toBe(first);
+  expect(runtime.recent).toHaveBeenCalledTimes(1);
+  // A little later the visitor is served at once and a newer read is fetched behind them.
+  vi.setSystemTime(new Date("2026-10-12T18:00:30Z"));
+  expect(await readLandingLive()).toBe(first);
+  expect(runtime.recent).toHaveBeenCalledTimes(2);
+  await vi.waitFor(async () =>
+    expect((await readLandingLive())!.readAt).toBe(
+      Date.parse("2026-10-12T18:00:30Z") / 1000,
+    ),
+  );
+  // After a quiet spell the read is awaited. If the indexer does not answer, the last
+  // read stands, with its own time.
+  vi.setSystemTime(new Date("2026-10-12T18:03:00Z"));
+  runtime.recent.mockRejectedValue(new Error("rate limited"));
+  const heldRead = await readLandingLive();
+  expect(heldRead!.readAt).toBe(Date.parse("2026-10-12T18:00:30Z") / 1000);
+  // A read older than five minutes is not shown at all.
+  vi.setSystemTime(new Date("2026-10-12T18:05:31Z"));
+  expect(await readLandingLive()).toBeNull();
+  // The next answer replaces it.
+  runtime.recent.mockResolvedValue({
+    nodes: [...nodes].reverse(),
+    bounded: false,
+  });
+  expect((await readLandingLive())!.readAt).toBe(
+    Date.parse("2026-10-12T18:05:31Z") / 1000,
+  );
 });

@@ -16,6 +16,14 @@ const MARKETS: Record<number, "BTC" | "ETH" | "SOL" | "MON"> = {
 };
 const EVENT_LIMIT = 12;
 const TREE_LIMIT = 9;
+// The hosted indexer allows a limited number of requests a minute, shared by every visitor,
+// and a read takes several queries. So one read serves everyone for a short while; a read
+// that is a little older is served at once while a newer one is fetched for the next
+// visitor; and a recent read stands in when the indexer does not answer. The page prints
+// the time of the read it shows, so a held read is never passed off as a new one.
+const FRESH_MS = 20_000;
+const QUIET_MS = 90_000;
+const HELD_MS = 5 * 60_000;
 
 export type LandingEvent = {
   kind: "published" | "forked" | "backed";
@@ -98,9 +106,33 @@ function preorder(nodes: GraphThesis[], rootId: string) {
   return ordered;
 }
 
+let held: { at: number; value: LandingLive } | null = null;
+let reading: Promise<LandingLive | null> | null = null;
+/** Drops the held read. For tests. */
+export function forgetLandingRead() {
+  held = null;
+  reading = null;
+}
 export async function readLandingLive(): Promise<LandingLive | null> {
   // The landing page must never initialize or display the simulated workspace.
   if (testMode()) return null;
+  const age = held ? Date.now() - held.at : Infinity;
+  if (held && age < FRESH_MS) return held.value;
+  // Visitors arriving together share one read.
+  reading ??= readIndexer()
+    .then((value) => {
+      if (value) held = { at: Date.now(), value };
+      return value;
+    })
+    .finally(() => {
+      reading = null;
+    });
+  if (held && age < QUIET_MS) return held.value;
+  const value = await reading;
+  if (value) return value;
+  return held && Date.now() - held.at < HELD_MS ? held.value : null;
+}
+async function readIndexer(): Promise<LandingLive | null> {
   try {
     const { core } = await getRuntime();
     if (core.graph.provenance !== "envio") return null;

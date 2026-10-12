@@ -9,6 +9,7 @@ import { treeStyle } from "./story";
 
 const EXPLORER = "https://testnet.monadexplorer.com";
 const GITHUB = "https://github.com/anilkaracay/fork-metropolis";
+const clock = (at: number) => new Date(at * 1000).toISOString().slice(11, 19);
 function ago(at: number, now: number) {
   const seconds = Math.max(0, now - at);
   if (seconds < 90) return "just now";
@@ -197,8 +198,10 @@ export function LiveGraph({ live }: { live: LandingLive | null }) {
           What the graph holds right now.
         </h2>
         <p>
-          Read from the FORK indexer when this page loaded. It is early and
-          small, and it includes the team’s own test activity.
+          {live
+            ? `Read from the FORK indexer at ${clock(live.readAt)} UTC. `
+            : ""}
+          It is early and small, and it includes the team’s own test activity.
         </p>
       </header>
       {live ? (
@@ -309,8 +312,8 @@ export function LiveGraph({ live }: { live: LandingLive | null }) {
       ) : (
         <div className="l-unavailable">
           <p>
-            The live graph could not be read just now. The numbers are never
-            filled in from memory.
+            The live graph could not be read just now. Nothing is shown in its
+            place.
           </p>
           {/* A full reload retries the server-side read. */}
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
@@ -634,8 +637,7 @@ export function Finale() {
         ))}
       </div>
       <h2 id="finale-title">
-        Good ideas deserve
-        <br />
+        Good ideas deserve <br />
         <span className="l-grad-text">a history.</span>
       </h2>
       <Link
