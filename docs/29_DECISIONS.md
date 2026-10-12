@@ -584,3 +584,29 @@ Rules for every public sentence about Monad in this repository:
 
 This replaces the earlier README position (before D-056) that the prototype claimed no latency figures at all: it now reports exactly what it measured and how.
 
+## D-059: One product language for the landing page and the app, with backing in it
+
+Status: Accepted by explicit owner instruction; implemented, production rollout pending approval
+Date: 2026-10-12
+
+Decision:
+
+The landing page is rebuilt around the real lineage of thesis #1 and fork #2. The hero draws that lineage: the origin appears, a branch grows, and the fork's target and leverage move away from its parent's. Four steps follow, Publish, Fork, Back and Lineage, each built from the same real data, with a rail that tracks the step being read. A live section counts what the indexer holds at request time. When a read fails the page says so and shows no number.
+
+In the app, a thesis offers Fork and Back side by side. The Back sheet has presets of 0.05, 0.1 and 0.25 MON and a custom amount, shows exactly who receives what before the user signs, and ends on the confirmation time measured for that transaction and the backer's position among the first ten. A thesis shows what it has received, its early supporters and where the value went; feed cards and tree nodes carry the summary; the tree shows value arriving at ancestors; a profile shows earned as author, earned from forks, early support and a claimable balance with Withdraw.
+
+Identity is kept: dark base, the existing green accent, Geist and Geist Mono, the fork glyph. The layout relies on type scale, an asymmetric twelve-column grid and hairlines.
+
+Engineering choices:
+
+- Motion uses the `motion` library at exact version 14.1.0 (MIT), loaded through `LazyMotion` with the DOM animation feature set only. Reduced motion is honored everywhere, and without JavaScript every animated element is simply visible.
+- A feed card's title travels to its thesis page with React's `ViewTransition`, which the installed Next.js supports without configuration. The thesis page starts from what the card already showed and refreshes itself.
+- Pages no longer wait for the sign-in SDK. They render at once with a signed-out, not-yet-ready session; the provider mounts beside the page when it has loaded and its session replaces the pending one through context. The Privy session logic itself is unchanged.
+- Backing stays off until `FORK_BACKING_ADDRESS` is configured, so the app can ship before the contract and the new indexer are live.
+- The split preview is computed by a shared function that mirrors the contract and is tested against the same cases as the Solidity suite.
+- The execution placeholder is removed from the thesis page and the profile. The data model and server boundary for execution evidence stay in place, unused, and Perpl remains deferred.
+
+Product wording: no internal stage names, provider jargon or deferred concepts in the interface, one footnote where it matters (testnet MON has no monetary value; ideas are opinions, not financial advice), and no dashes as separators.
+
+Verification is recorded in `docs/DESIGN_QUALITY.md`: Lighthouse runs, the page by width overflow check, and the end to end and smoke suites.
+
