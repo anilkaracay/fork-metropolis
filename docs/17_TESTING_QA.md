@@ -10,6 +10,8 @@ The three-day build cannot have perfect coverage, but every path used in the jud
 
 Required tests listed in `08_SMART_CONTRACT_SPEC.md`.
 
+FORKBacking adds unit, fuzz, reentrancy and stateful invariant tests. `pnpm test:contracts` runs everything, `pnpm test:contracts:coverage` prints source coverage and `pnpm contracts:snapshot` refreshes `contracts/.gas-snapshot`. The recorded results are in `FORKBACKING_COVERAGE.md`.
+
 Gate: 100% of contract tests pass before any deployment address is used by the frontend.
 
 ### Unit tests - web/shared

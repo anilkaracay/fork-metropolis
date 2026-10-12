@@ -12,7 +12,8 @@ if (!existsSync(forge) || !existsSync(solc)) {
   process.exit(1);
 }
 const args = process.argv.slice(2);
-if (["build", "test", "snapshot"].includes(args[0])) args.push("--use", solc);
+if (["build", "test", "snapshot", "coverage"].includes(args[0]))
+  args.push("--use", solc);
 const result = spawnSync(forge, args, {
   cwd: `${root}contracts`,
   stdio: "inherit",

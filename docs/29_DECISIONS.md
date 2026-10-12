@@ -507,3 +507,33 @@ Extend B1/B2 precision typography and hierarchy to Feed, Explore, root Create an
 ## D-055 — B4 submission package; product freeze (2026-10-12)
 
 User approved B3 and froze product design/development. Prioritize the actual Metropolis portal, judge-readable README, complete public-release history/privacy review, genuine technical demo and separate founder pitch. Track 03 remains primary; Privy signing and Envio indexing are the supported sponsor entries. Perpl and Nansen stay deferred, no new publication/trade transactions, no UI changes. Save the private draft early. Public repo visibility, external video publication and final portal submission retain explicit approval gates. Official rules require open source/AI disclosure; a proposed MIT license awaits owner rights confirmation rather than asserting ownership outside Git. Do not route around the browser's denied logo upload.
+
+## D-056: Backing, native testnet MON split along the lineage
+
+Status: Accepted by explicit owner instruction; contract implemented and tested, deployment pending approval
+Date: 2026-10-12
+
+Decision:
+
+Anyone can back a thesis with native testnet MON through a second contract, FORKBacking. Each backing is split along the idea's lineage: 70% to the thesis author, 20% to the parent author, 10% to the grandparent author. The lineage is read from the existing FORKRegistry through its public `theses(uint64)` getter, at most three entries per backing. A missing ancestor's share stays with the thesis author, rounding dust goes to the thesis author, and the credits of one backing always sum to the amount sent. An address that holds several roles in one lineage is credited once, in its nearest role, so a self-fork never produces income labelled as earned from forks. This matches D-015, where self-fork edges never improve reputation.
+
+The first ten distinct backers of a thesis are recorded as early supporters. A repeat backing keeps the backer's original position. The minimum backing is 0.01 MON and a thesis author cannot back their own thesis from the authoring address.
+
+Credits are pull payments: `back` only records balances, `withdraw` sends the caller's full balance after clearing it. The contract has no owner, no admin, no pause, no fee and no upgrade path. FORK takes nothing from a backing.
+
+Scope and boundaries:
+
+- This supersedes D-012 (creator royalty deferred) and reopens the product freeze in D-055, both on the owner's instruction of 2026-10-12.
+- No project token, no points, no NFT badge, no governance. The asset is the chain's native testnet MON, which has no monetary value. Backing is a signal of support, not an investment, and no return is promised or implied.
+- FORKRegistry is unchanged and stays the only source of authorship and lineage. Existing theses #1 and #2 are untouched.
+- FORKBacking is the first FORK contract that holds value. It holds exactly the credits that have not been withdrawn yet. `docs/08_SMART_CONTRACT_SPEC.md` and `docs/16_SECURITY_THREAT_MODEL.md` describe this precisely; earlier statements that FORK contracts hold no assets now apply to the registry only.
+- Early supporter status and backing totals are not Sybil resistant: one person can back from several wallets. They are shown as chronology and volume, never as proof of independent endorsement.
+- Mainnet is out of scope for the hackathon build.
+
+Rationale:
+
+A fork credits the original author in the graph, but until now nobody who originated or improved an idea shared in the attention it attracted. Splitting each backing across the lineage makes the graph carry value as well as credit, and makes the chain do work that an application database cannot: authorship, ancestry and the split are enforced by the same public record. Native MON avoids inventing a token. Pull payments and a fixed depth of three keep every backing bounded in gas and remove any dependence on recipients being able to receive.
+
+Verification: 40 Foundry tests for the contract, including four fuzz tests, three reentrancy tests and a stateful invariant that the contract balance equals the sum of unwithdrawn credits; 100% line, statement, branch and function coverage of the source. Details and method are in `docs/FORKBACKING_COVERAGE.md`.
+
+Deployment: a guarded script (`scripts/backing-deploy.mjs`) ties the deployment to one reviewed commit, sends exactly one transaction and records a proof artifact in `contracts/deployments/10143.backing.json`. Deployment to Monad Testnet, the indexer redeploy and any production change each wait for the owner's approval.

@@ -15,6 +15,8 @@
     "test": "vitest run && pnpm --filter @fork/indexer test && pnpm test:contracts",
     "test:unit": "vitest run",
     "test:contracts": "node scripts/forge.mjs test -vv",
+    "test:contracts:coverage": "node scripts/forge.mjs coverage --report summary --no-match-coverage test/",
+    "contracts:snapshot": "node scripts/forge.mjs snapshot --match-test testGas",
     "build": "pnpm --filter @fork/shared build && pnpm --filter @fork/web build && node scripts/forge.mjs build && pnpm abi:check",
     "abi:export": "node scripts/export-abi.mjs",
     "abi:check": "node scripts/export-abi.mjs --check",

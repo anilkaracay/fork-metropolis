@@ -54,6 +54,27 @@ node scripts/registry-proof.mjs REAL_DEPLOYMENT_TX_HASH REVIEWED_FULL_GIT_COMMIT
 
 This read-only tool checks reviewed source/config, compiled source hash/settings/ABI, chain, transaction, canonical receipt/block and exact creation/runtime bytecode before exclusively writing contracts/deployments/10143.json. It never signs/broadcasts or overwrites existing evidence. Explorer verification is initially not-attempted; update only after actual verification. The real canonical artifact now records successful official Sourcify exact_match verification, and FORK_REGISTRY_ADDRESS is configured in ignored server-side .env.local. Do not rerun deployment; Envio now consumes this canonical artifact.
 
+## FORKBacking deployment
+
+Status: not deployed. Deployment waits for the owner's approval (D-056).
+
+FORKBacking takes the canonical registry address from `contracts/deployments/10143.json` as its only constructor argument and uses the same dedicated testnet deployer as the registry. One guarded script covers the four steps, each tied to the reviewed commit that contains the contract:
+
+```sh
+pnpm build
+node scripts/backing-deploy.mjs preflight REVIEWED_FULL_GIT_COMMIT
+node scripts/backing-deploy.mjs broadcast REVIEWED_FULL_GIT_COMMIT
+node scripts/backing-deploy.mjs record REAL_DEPLOYMENT_TX_HASH REVIEWED_FULL_GIT_COMMIT
+node scripts/backing-deploy.mjs verify
+```
+
+- `preflight` is read-only and touches no key. It checks that the source, compiler settings and ABI match the reviewed commit, that the registry code on chain matches the recorded registry deployment, that the deployer is a plain account with enough testnet MON and that the predicted address is empty. It prints the exact plan: nonce, predicted address, gas limit and maximum cost.
+- `broadcast` repeats the preflight, compares a signed Foundry preview with the reviewed creation bytecode, writes a local attempt journal and then sends exactly one transaction. Any later run refuses to send, including after a timeout. An uncertain result is reconciled against the chain, never resubmitted.
+- `record` is read-only. It checks the transaction, the canonical block, the creation bytecode with its registry argument, the runtime bytecode with the registry immutable in place and the `registry()` getter, then writes `contracts/deployments/10143.backing.json` once.
+- `verify` submits the source to the official Monad Sourcify endpoint and marks the artifact verified only when Sourcify reports an exact match.
+
+Monad charges the full gas limit, so the script sets the limit 15% above the live estimate and fixes the legacy gas price at 200 gwei. The whole flow was rehearsed against a local throwaway chain with a development key before the real deployment; that rehearsal is not a deployment.
+
 ## Envio Cloud
 
 Use the [official Cloud CLI](https://docs.envio.dev/docs/HyperIndex/envio-cloud-cli), installed locally under ignored .tools/envio-cloud-cli. The user-approved repository App is restricted to anilkaracay/fork-metropolis. One development indexer fork-social-indexer runs deployment d98ed3a, dedicated branch envio, root indexer, config.yaml and auto-deploy=false. Avoid unrelated pushes triggering reindexes or unnecessary versions. The real deployment uses canonical ENVIO_FORK_REGISTRY_ADDRESS / ENVIO_FORK_START_BLOCK derived from contracts/deployments/10143.json; never deploy config.test.yaml.
