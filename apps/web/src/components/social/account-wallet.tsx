@@ -6,9 +6,9 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { formatEther } from "viem";
 import { monadTestnet } from "@fork/shared";
 import { api } from "@/lib/api-client";
+import { formatMon } from "@/lib/mon";
 import type { DripView } from "@/server/faucet";
 import { useSession } from "./session";
 
@@ -21,12 +21,6 @@ export const walletKey = (wallet: string | undefined) => [
   "account-wallet",
   wallet,
 ];
-/** Up to four decimals, without trailing zeros: 0.2, 1.0345, 0. */
-export function formatMon(wei: string | bigint) {
-  const [whole, fraction = ""] = formatEther(BigInt(wei)).split(".");
-  const shown = fraction.slice(0, 4).replace(/0+$/, "");
-  return shown ? `${whole}.${shown}` : whole!;
-}
 const FAUCET_URL = "https://faucet.monad.xyz";
 
 const arrivedKey = (wallet: string | undefined) => [

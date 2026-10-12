@@ -185,9 +185,6 @@ test("root, unavailable metadata and unknown identities keep honest recovery sta
   await expect(
     page.getByText("No child perspectives yet.", { exact: false }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Execute unavailable" }),
-  ).toBeDisabled();
   await page.route("**/api/theses/" + root, async (route) => {
     const response = await route.fetch();
     const value = await response.json();

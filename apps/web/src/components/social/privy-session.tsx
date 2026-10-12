@@ -21,7 +21,12 @@ import type { Session } from "@/server/auth";
 import { walletError } from "@/lib/wallet-error";
 import { api, ApiError } from "@/lib/api-client";
 import { RECEIPT_POLL_MS } from "@/lib/confirmation";
-import { creationCalldata, type PublishIntent } from "@fork/shared";
+import {
+  backCalldata,
+  creationCalldata,
+  withdrawCalldata,
+  type PublishIntent,
+} from "@fork/shared";
 
 // Read-only client for receipts, independent of the wallet provider.
 const monad = createPublicClient({
@@ -181,6 +186,31 @@ function SessionBridge({ children }: { children: ReactNode }) {
         ).sendTransaction({
           to: intent.registryAddress as Address,
           data: creationCalldata(intent),
+        });
+      } catch (error) {
+        throw walletError(error);
+      }
+    },
+    back: async (contract, thesisId, amountWei) => {
+      try {
+        return await (
+          await signer()
+        ).sendTransaction({
+          to: contract as Address,
+          data: backCalldata(thesisId),
+          value: amountWei,
+        });
+      } catch (error) {
+        throw walletError(error);
+      }
+    },
+    withdraw: async (contract) => {
+      try {
+        return await (
+          await signer()
+        ).sendTransaction({
+          to: contract as Address,
+          data: withdrawCalldata(),
         });
       } catch (error) {
         throw walletError(error);

@@ -198,7 +198,7 @@ function ComposerForm({
       return undefined;
     } catch {
       return field === "reasoning"
-        ? "Explain your perspective in 10–500 characters."
+        ? "Explain your perspective in 10 to 500 characters."
         : field === "leverage"
           ? "Use positive leverage with at most 4 decimal places."
           : "Use a positive USD price with at most 8 decimal places.";

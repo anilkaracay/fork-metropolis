@@ -9,3 +9,4 @@ export * from "./registry.ts";
 export * from "./social.ts";
 export * from "./publish.ts";
 export * from "./handle.ts";
+export * from "./backing.ts";

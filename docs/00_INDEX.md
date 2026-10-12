@@ -16,6 +16,7 @@ This folder is the source of truth for product, design, engineering, hackathon c
 - `07_TECH_ARCHITECTURE.md` - system architecture and ownership boundaries
 - `08_SMART_CONTRACT_SPEC.md` - FORKRegistry and FORKBacking contracts and event models
 - `FORKBACKING_COVERAGE.md` - FORKBacking test results, coverage, gas and method
+- `DESIGN_QUALITY.md` - Lighthouse runs, width checks and automated flows for the redesign
 - `09_DATA_MODEL.md` - Postgres and derived entity models
 - `10_BACKEND_API.md` - HTTP API contracts and auth model
 - `11_FRONTEND_SPEC.md` - frontend architecture and screen-level requirements

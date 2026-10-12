@@ -1,14 +1,17 @@
 "use client";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { ViewTransition } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   formatFixedPoint,
   type FeedThesis,
   type MvpContext,
+  type ThesisDetail,
 } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import { Avatar, age } from "./common";
 import { Icon } from "./icon";
+import { formatMon } from "@/lib/mon";
 export function useMarkets() {
   return useQuery({
     queryKey: ["context"],
@@ -57,12 +60,33 @@ export function Parameters({ item }: { item: FeedThesis }) {
     </div>
   );
 }
-export function ThesisCard({ item }: { item: FeedThesis }) {
+export function ThesisCard({
+  item,
+  index = 0,
+}: {
+  item: FeedThesis;
+  index?: number;
+}) {
   const markets = useMarkets(),
+    client = useQueryClient(),
     context = markets.data,
     id = item.graph.thesisId;
+  // Opening an idea starts from what the card already shows; the full page then refreshes
+  // itself. Marked stale so comments and forks are fetched at once.
+  function warm() {
+    if (client.getQueryData(["detail", id])) return;
+    client.setQueryData<ThesisDetail>(
+      ["detail", id],
+      { ...item, comments: [], commentsHasMore: false, children: [] },
+      { updatedAt: 0 },
+    );
+  }
   return (
-    <article className="thesis-card" data-thesis-id={id}>
+    <article
+      className="thesis-card"
+      data-thesis-id={id}
+      style={{ "--card-index": Math.min(index, 8) } as React.CSSProperties}
+    >
       <div className="card-author">
         <Link href={`/u/${item.author.handle}`} className="identity-link">
           <Avatar name={item.author.displayName} wallet={item.author.wallet} />
@@ -102,13 +126,24 @@ export function ThesisCard({ item }: { item: FeedThesis }) {
           </span>
         </div>
       )}
-      <Link href={`/t/${id}`} className="card-body">
-        <div className="market-line">
-          <span className="market-symbol">
-            {marketName(item.graph.core.marketId, context)}
-          </span>
-          <Direction side={item.graph.core.side} />
-        </div>
+      <Link
+        href={`/t/${id}`}
+        className="card-body"
+        onPointerDown={warm}
+        onFocus={warm}
+      >
+        <ViewTransition
+          name={`thesis-title-${id}`}
+          share="morph"
+          default="none"
+        >
+          <div className="market-line">
+            <span className="market-symbol">
+              {marketName(item.graph.core.marketId, context)}
+            </span>
+            <Direction side={item.graph.core.side} />
+          </div>
+        </ViewTransition>
       </Link>
       {markets.error && !context && (
         <div className="market-label-state" role="status">
@@ -182,6 +217,19 @@ export function ThesisCard({ item }: { item: FeedThesis }) {
             <Icon name="agree" size={15} />
             {item.social.agrees}
           </span>
+          {item.backing.backers > 0 && (
+            <span
+              className="backed-chip"
+              title="Backed with testnet MON, split along the lineage"
+            >
+              <Icon name="stake" size={15} />
+              {formatMon(item.backing.totalWei)} MON
+              <small>
+                · {item.backing.backers}{" "}
+                {item.backing.backers === 1 ? "backer" : "backers"}
+              </small>
+            </span>
+          )}
         </div>
         <div className="card-actions">
           <Link href={`/t/${id}`} className="quiet-link">

@@ -20,7 +20,7 @@ const mono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(clientEnv.NEXT_PUBLIC_APP_URL),
-  title: { default: "FORK — Ideas evolve in public", template: "%s | FORK" },
+  title: { default: "FORK · Ideas evolve in public", template: "%s | FORK" },
   description:
     "A social network for collaborative trading ideas. Publish a thesis, fork a perspective, and keep the lineage visible.",
 };

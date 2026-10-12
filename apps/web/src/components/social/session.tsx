@@ -3,7 +3,9 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
+  type ComponentType,
   type ReactNode,
 } from "react";
 import {
@@ -11,13 +13,13 @@ import {
   QueryClientProvider,
   useQueryClient,
 } from "@tanstack/react-query";
-import dynamic from "next/dynamic";
 import type { Hex, TypedDataDefinition } from "viem";
 import type { Session } from "@/server/auth";
 import type { PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
 import type { Confirmation } from "@/lib/confirmation";
 import { DevelopmentPublishObservation } from "./publish-observation";
+import { MotionRoot } from "@/components/ui/motion";
 
 export type SessionValue = {
   session: Session | null;
@@ -32,6 +34,9 @@ export type SessionValue = {
   refresh: () => Promise<void>;
   selectWallet: (address: string) => Promise<void>;
   submit: (intent: PublishIntent, draftId: string) => Promise<Hex>;
+  // Sends native MON to FORKBacking for one thesis, or collects the caller's credits.
+  back: (contract: string, thesisId: string, amountWei: bigint) => Promise<Hex>;
+  withdraw: (contract: string) => Promise<Hex>;
   // Resolves when this browser first sees the receipt; started is a performance.now() value.
   confirm: (txHash: Hex, started: number) => Promise<Confirmation>;
   signTypedData: (data: TypedDataDefinition) => Promise<Hex>;
@@ -47,14 +52,111 @@ export const useSession = () => {
   if (!c) throw new Error("Session provider missing.");
   return c;
 };
-const RealSession = dynamic(() => import("./privy-session"), {
-  ssr: false,
-  loading: () => (
-    <div className="state-box" role="status">
-      Preparing sign-in…
-    </div>
-  ),
-});
+const loading = () =>
+  new ApiError(
+    "SIGN_IN_LOADING",
+    "Sign-in is still loading.",
+    "Try again in a moment.",
+    409,
+  );
+// What the product sees until the sign-in provider has loaded: signed out, not ready.
+const pendingSession: SessionValue = {
+  session: null,
+  ready: false,
+  test: false,
+  isAdmin: false,
+  wallets: [],
+  error: null,
+  login: () => {},
+  logout: () => {},
+  getToken: async () => null,
+  refresh: async () => {},
+  selectWallet: async () => {},
+  submit: async () => Promise.reject(loading()),
+  back: async () => Promise.reject(loading()),
+  withdraw: async () => Promise.reject(loading()),
+  confirm: async () => Promise.reject(loading()),
+  signTypedData: async () => Promise.reject(loading()),
+  sendSelfTransaction: async () => Promise.reject(loading()),
+  exportWallet: null,
+  linkEmail: null,
+  linkGoogle: null,
+};
+const ReportSession = createContext<((value: SessionValue) => void) | null>(
+  null,
+);
+// Sits inside the sign-in provider and hands its session up to the page.
+function SessionReporter() {
+  const value = useSession(),
+    report = useContext(ReportSession);
+  useEffect(() => report?.(value), [value, report]);
+  return null;
+}
+/**
+ * Pages render at once, signed out, while the sign-in provider downloads. The provider
+ * then mounts beside the page and its session replaces the pending one, so nothing the
+ * user is looking at is unmounted.
+ */
+function RealSession({
+  appId,
+  children,
+}: {
+  appId: string;
+  children: ReactNode;
+}) {
+  const [value, setValue] = useState(pendingSession),
+    [Provider, setProvider] = useState<ComponentType<{
+      appId: string;
+      children: ReactNode;
+    }> | null>(null),
+    [wantsLogin, setWantsLogin] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    import("./privy-session").then(
+      (module) => mounted && setProvider(() => module.default),
+      () =>
+        mounted &&
+        setValue({
+          ...pendingSession,
+          error: "Sign-in could not load. Reload the page to try again.",
+        }),
+    );
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  // A stable element: the page re-rendering never re-renders the provider.
+  const provider = useMemo(
+    () =>
+      Provider ? (
+        <Provider appId={appId}>
+          <SessionReporter />
+        </Provider>
+      ) : null,
+    [Provider, appId],
+  );
+  // A "Sign in" pressed before the provider was ready opens it as soon as it is.
+  const { ready, login } = value;
+  useEffect(() => {
+    if (!wantsLogin || !ready) return;
+    login();
+    const reset = setTimeout(() => setWantsLogin(false), 0);
+    return () => clearTimeout(reset);
+  }, [wantsLogin, ready, login]);
+  const shared = useMemo(
+    () =>
+      value.ready ? value : { ...value, login: () => setWantsLogin(true) },
+    [value],
+  );
+  return (
+    <ReportSession.Provider value={setValue}>
+      {provider}
+      <SessionContext.Provider value={shared}>
+        {children}
+      </SessionContext.Provider>
+    </ReportSession.Provider>
+  );
+}
 export function ProductProviders({
   children,
   test,
@@ -82,13 +184,15 @@ export function ProductProviders({
       {process.env.NODE_ENV === "development" && !test && (
         <DevelopmentPublishObservation />
       )}
-      {test ? (
-        <LocalSession test>{children}</LocalSession>
-      ) : appId ? (
-        <RealSession appId={appId}>{children}</RealSession>
-      ) : (
-        <LocalSession test={false}>{children}</LocalSession>
-      )}
+      <MotionRoot>
+        {test ? (
+          <LocalSession test>{children}</LocalSession>
+        ) : appId ? (
+          <RealSession appId={appId}>{children}</RealSession>
+        ) : (
+          <LocalSession test={false}>{children}</LocalSession>
+        )}
+      </MotionRoot>
     </QueryClientProvider>
   );
 }
@@ -199,6 +303,23 @@ function LocalSession({
       });
       return response.txHash;
     },
+    back: async (_contract, thesisId, amountWei) => {
+      const response = await api<{ txHash: Hex }>("test/back", {
+        method: "POST",
+        body: { thesisId, amountWei: amountWei.toString() },
+        token: accessToken,
+        wallet: session?.wallet,
+      });
+      return response.txHash;
+    },
+    withdraw: async () => {
+      const response = await api<{ txHash: Hex }>("test/withdraw", {
+        method: "POST",
+        token: accessToken,
+        wallet: session?.wallet,
+      });
+      return response.txHash;
+    },
     // The test workspace has no chain: a submitted transaction is confirmed at once.
     confirm: async (txHash, started) => ({
       txHash,
@@ -209,7 +330,7 @@ function LocalSession({
       throw new ApiError(
         "TEST_SIGNING_UNAVAILABLE",
         "Typed-data signing requires a real wallet.",
-        "Use the configured Privy wallet in the next integration phase.",
+        "Sign in with a real wallet to sign typed data.",
         409,
       );
     },

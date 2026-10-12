@@ -59,9 +59,6 @@ test("real fork detail compares its direct parent and preserves honest execution
     "$4,400",
   );
   await expect(page.locator(".unchanged-list")).toContainText("$3,600");
-  await expect(
-    page.getByRole("button", { name: "Execute unavailable" }),
-  ).toBeDisabled();
   await page.getByRole("link", { name: "Open Idea Tree", exact: true }).click();
   await expectRealScreen(page, ".selected-perspective");
   await expect(page.locator(".selected-perspective")).toContainText(

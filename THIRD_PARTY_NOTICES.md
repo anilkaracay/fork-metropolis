@@ -10,6 +10,7 @@ FORK application code, registry, indexer handlers and product imagery were creat
 | viem | EVM reads and wallet transactions | https://github.com/wevm/viem |
 | Drizzle / node-postgres | Standard PostgreSQL data access and migrations | https://github.com/drizzle-team/drizzle-orm · https://github.com/brianc/node-postgres |
 | TanStack Query / Zod | Client data state and validation | https://github.com/TanStack/query · https://github.com/colinhacks/zod |
+| Motion | Interface animation | https://github.com/motiondivision/motion |
 | Tailwind / clsx / tailwind-merge | Styling | https://github.com/tailwindlabs/tailwindcss · https://github.com/lukeed/clsx · https://github.com/dcastil/tailwind-merge |
 | Foundry / Solidity | Contract toolchain | https://github.com/foundry-rs/foundry · https://github.com/ethereum/solidity |
 | Playwright / Vitest / PGlite | Browser, unit and isolated database tests | https://github.com/microsoft/playwright · https://github.com/vitest-dev/vitest · https://github.com/electric-sql/pglite |

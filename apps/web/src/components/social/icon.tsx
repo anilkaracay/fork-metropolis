@@ -16,7 +16,9 @@ export function Icon({
     | "tree"
     | "back"
     | "more"
-    | "check";
+    | "check"
+    | "close"
+    | "stake";
   size?: number;
   style?: CSSProperties;
 }) {
@@ -72,6 +74,14 @@ export function Icon({
       </>
     ),
     check: <path d="m5 12 4 4L19 6" />,
+    close: <path d="M6 6l12 12M18 6 6 18" />,
+    stake: (
+      <>
+        <ellipse cx="12" cy="6.5" rx="7" ry="2.75" />
+        <path d="M5 6.5v5.25c0 1.5 3.1 2.75 7 2.75s7-1.25 7-2.75V6.5" />
+        <path d="M5 11.75V17c0 1.5 3.1 2.75 7 2.75s7-1.25 7-2.75v-5.25" />
+      </>
+    ),
   };
   return (
     <svg

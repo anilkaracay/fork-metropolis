@@ -88,16 +88,12 @@ export function normalizeGraph(input: unknown): GraphThesis {
     },
   });
 }
-export function envioGraph(
-  endpoint: string,
-  chainId: number,
-  registryAddress: string,
-): GraphSource {
-  const base = {
-    chainId: { _eq: chainId },
-    registryAddress: { _eq: registryAddress },
-  };
-  async function query(query: string, variables: Record<string, unknown>) {
+/** Posts one GraphQL query to the Envio endpoint and returns its data, or fails closed. */
+export function envioQuery(endpoint: string) {
+  return async function query(
+    query: string,
+    variables: Record<string, unknown>,
+  ) {
     const response = z
       .object({
         data: z.record(z.string(), z.unknown()).optional(),
@@ -118,7 +114,18 @@ export function envioGraph(
         "Retry after the indexer recovers.",
       );
     return response.data;
-  }
+  };
+}
+export function envioGraph(
+  endpoint: string,
+  chainId: number,
+  registryAddress: string,
+): GraphSource {
+  const base = {
+    chainId: { _eq: chainId },
+    registryAddress: { _eq: registryAddress },
+  };
+  const query = envioQuery(endpoint);
   async function nodes(where: Record<string, unknown>, limit: number) {
     const r = await query(
       `query Nodes($where: Thesis_bool_exp!, $limit: Int!) { Thesis(where: $where, order_by: [{createdAt: desc}, {thesisId: desc}], limit: $limit) { ${fields} } }`,

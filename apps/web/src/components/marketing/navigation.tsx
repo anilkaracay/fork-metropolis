@@ -45,16 +45,16 @@ export function MarketingNavigation() {
         <Link href="/feed" prefetch={false} onClick={() => setOpen(false)}>
           Product
         </Link>
-        <a href="#how-it-works" onClick={() => setOpen(false)}>
+        <a href="#how" onClick={() => setOpen(false)}>
           How it works
         </a>
-        <a href="#lineage" onClick={() => setOpen(false)}>
-          Idea lineage
+        <a href="#live" onClick={() => setOpen(false)}>
+          Live graph
         </a>
       </nav>
       <div className="marketing-header-actions">
         <Link href="/feed" prefetch={false} className="button secondary">
-          Enter FORK <Icon name="arrow" size={16} />
+          Open FORK <Icon name="arrow" size={16} />
         </Link>
         <button
           ref={toggle}
