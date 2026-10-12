@@ -138,10 +138,21 @@ const server = createServer(async (req, res) => {
     return;
   }
   try {
-    if (req.method === "GET" && req.url === "/graph") {
-      const snapshot = {
+    // Bigint columns travel as decimal strings.
+    const send = (value: unknown) =>
+      res.end(
+        JSON.stringify(value, (_, v) =>
+          typeof v === "bigint" ? v.toString() : v,
+        ),
+      );
+    if (req.method === "GET" && req.url === "/graph")
+      return send({
         nodes: await graph.Thesis.getAll(),
         stats: await graph.AuthorStats.getAll(),
+      });
+    // Kept apart from /graph so ordinary thesis reads stay as light as before.
+    if (req.method === "GET" && req.url === "/backing")
+      return send({
         thesisBackings: await graph.ThesisBacking.getAll(),
         backings: await graph.Backing.getAll(),
         credits: await graph.Credit.getAll(),
@@ -150,14 +161,7 @@ const server = createServer(async (req, res) => {
         earnings: await graph.AuthorEarnings.getAll(),
         flows: await graph.LineageFlow.getAll(),
         totals: await graph.BackingTotals.getAll(),
-      };
-      res.end(
-        JSON.stringify(snapshot, (_, v) =>
-          typeof v === "bigint" ? v.toString() : v,
-        ),
-      );
-      return;
-    }
+      });
     let body = "";
     for await (const chunk of req) {
       body += String(chunk);
