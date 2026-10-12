@@ -521,3 +521,14 @@
     animation: none;
   }
 }
+
+/* A card's footer wraps instead of pushing its actions out when the backing chip is present. */
+.card-bottom {
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+.social-counts {
+  flex-wrap: wrap;
+  row-gap: 8px;
+  min-width: 0;
+}
