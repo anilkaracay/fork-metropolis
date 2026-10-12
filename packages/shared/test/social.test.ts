@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   forkDifference,
+  noBacking,
   rankFeed,
   reputation,
   recentExternalForkers,
@@ -63,6 +64,7 @@ function item(graph: GraphThesis): FeedThesis {
     changes: [],
     challenge: false,
     social: { agrees: 0, comments: 0 },
+    backing: noBacking,
     execution: { state: "not-executed", position: "unknown" },
     provenance: {
       graph: "envio-test",

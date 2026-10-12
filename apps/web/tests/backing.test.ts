@@ -21,7 +21,10 @@ import {
   type BackingSource,
 } from "../src/server/backing";
 
-const ns = { chainId: 10143, registryAddress: `0x${"aa".repeat(20)}` };
+const ns = {
+  chainId: 10143,
+  registryAddress: `0x${"aa".repeat(20)}` as `0x${string}`,
+};
 const backingAddress = `0x${"cc".repeat(20)}`;
 const wallet = (n: number) => `0x${String(n).repeat(40)}`;
 const [alice, bob, carol, dana] = [wallet(1), wallet(2), wallet(3), wallet(4)];
