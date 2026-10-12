@@ -127,6 +127,10 @@ test("publish → second identity forks → Agree/comment → tree/profile, with
   await page.getByRole("button", { name: "Publish on Monad" }).click();
   await expect(page).toHaveURL(/\/t\/1$/);
   await expect(page.getByText("Not executed", { exact: true })).toBeVisible();
+  // The page a transaction lands on shows the confirmation time measured for it.
+  await expect(
+    page.getByText(/^Confirmed in the test workspace in \d+(\.\d)? s$/),
+  ).toBeVisible();
   await select(page, "bob");
   await page.getByRole("link", { name: "Fork this idea", exact: true }).click();
   await expect(

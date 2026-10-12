@@ -13,6 +13,11 @@ import {
 } from "@fork/shared";
 import type { PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
+import {
+  confirmationText,
+  saveConfirmation,
+  type Confirmation,
+} from "@/lib/confirmation";
 import { useSession } from "./session";
 import { EmptyState, ErrorState, Avatar } from "./common";
 import { marketName, price, useMarkets } from "./thesis-card";
@@ -126,6 +131,7 @@ function ComposerForm({
     [error, setError] = useState<unknown>(null),
     [pending, setPending] = useState<Pending | null>(null),
     [busy, setBusy] = useState(false),
+    [confirmation, setConfirmation] = useState<Confirmation | null>(null),
     [recoveryHash, setRecoveryHash] = useState(""),
     [touched, setTouched] = useState<string[]>([]),
     requestKey = useRef<string | null>(null),
@@ -339,6 +345,16 @@ function ComposerForm({
       setState("Awaiting wallet");
       observe(p, "Awaiting wallet");
       const hash = await auth.submit(draft.intent, draft.draftId);
+      // Time this transaction from the hash to its first observed receipt.
+      // The measurement is shown when available and never blocks publishing.
+      const started = performance.now();
+      void auth
+        .confirm(hash, started)
+        .then((measured) => {
+          saveConfirmation(measured);
+          setConfirmation(measured);
+        })
+        .catch(() => undefined);
       const sent = { ...p, txHash: hash };
       save(sent);
       setState("Submitted");
@@ -626,9 +642,11 @@ function ComposerForm({
             <div role="status" aria-live="polite">
               <strong>{state}</strong>
               <small>
-                {auth.session
-                  ? `Publishing as @${auth.session.handle}`
-                  : "Sign in to publish through your wallet"}
+                {confirmation
+                  ? confirmationText(confirmation)
+                  : auth.session
+                    ? `Publishing as @${auth.session.handle}`
+                    : "Sign in to publish through your wallet"}
               </small>
             </div>
             <button

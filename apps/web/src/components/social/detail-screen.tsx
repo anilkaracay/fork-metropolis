@@ -9,6 +9,7 @@ import { Avatar, EmptyState, ErrorState, age } from "./common";
 import { SignatureLoading } from "./signature-loading";
 import { Direction, marketName, useMarkets } from "./thesis-card";
 import { Icon } from "./icon";
+import { ConfirmationNote } from "./confirmation-note";
 import { ParentComparison, differenceValue } from "./fork-diff";
 
 export function DetailScreen({ id }: { id: string }) {
@@ -176,6 +177,7 @@ export function DetailScreen({ id }: { id: string }) {
             {item.author.wallet.slice(0, 8)}…{item.author.wallet.slice(-6)}
           </span>
           <span>Envio lineage · hash-checked metadata</span>
+          <ConfirmationNote txHash={item.graph.txHash} />
         </div>
       </article>
       <aside className="detail-rail">

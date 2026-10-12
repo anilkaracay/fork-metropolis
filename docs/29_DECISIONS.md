@@ -565,3 +565,22 @@ Rationale: an embedded wallet with no gas is a dead end for a first visit. A cap
 
 Verification: 10 faucet tests and 7 handle tests on real PostgreSQL semantics, 7 shared rule tests, and an end to end spec for first sign-in, claim, drip and the empty-faucet state. The threat model is T13 in `16_SECURITY_THREAT_MODEL.md`.
 
+## D-058: Show measured confirmation time, and say nothing about money
+
+Status: Accepted by explicit owner instruction; in-product measurement implemented, the recorded benchmark waits for the FORKBacking deployment
+Date: 2026-10-12
+
+Decision:
+
+When a user publishes, forks or backs, the product shows how long that transaction took to confirm: "Confirmed on Monad in 0.9 s". The value is measured for that transaction in that browser, from the moment the wallet returns the transaction hash to the first receipt the browser sees, polling every 100 ms. It is shown on the confirmation state and on the page the transaction lands on, for the tab that sent it. In the isolated test workspace the same line names the test workspace instead of Monad, because no chain is involved.
+
+A separate script, `scripts/measure-backing.mjs`, sends real backing transactions one by one from a dedicated team test wallet and records, per transaction, the time for the RPC to accept it, the time from hash to first receipt, the time from receipt to the row being readable from Envio, and the gas used. Results are written as raw JSON under `docs/monad-performance/` and summarized in `docs/MONAD_PERFORMANCE.md` with median and p95 (nearest rank).
+
+Rules for every public sentence about Monad in this repository:
+
+- Use only numbers from those recorded runs or from a transaction's own measurement, and say they are team test activity.
+- Speak about confirmation time and gas units. Never describe transactions as cheap, nearly free or low cost in money terms: testnet MON has no price.
+- These are wall-clock observations from one machine and one RPC endpoint. They are not consensus, finality or throughput figures and are never presented as such.
+
+This replaces the earlier README position (before D-056) that the prototype claimed no latency figures at all: it now reports exactly what it measured and how.
+
