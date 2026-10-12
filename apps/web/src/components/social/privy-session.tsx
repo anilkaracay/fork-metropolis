@@ -1,6 +1,11 @@
 "use client";
 import { useEffect, useState, type ReactNode } from "react";
-import { PrivyProvider, usePrivy, useWallets } from "@privy-io/react-auth";
+import {
+  PrivyProvider,
+  useExportWallet,
+  usePrivy,
+  useWallets,
+} from "@privy-io/react-auth";
 import {
   createWalletClient,
   custom,
@@ -46,6 +51,7 @@ export default function PrivySession({
 function SessionBridge({ children }: { children: ReactNode }) {
   const privy = usePrivy(),
     connected = useWallets(),
+    { exportWallet } = useExportWallet(),
     query = useQueryClient(),
     [session, setSession] = useState<Session | null>(null),
     [isAdmin, setAdmin] = useState(false),
@@ -125,6 +131,13 @@ function SessionBridge({ children }: { children: ReactNode }) {
     query.getMutationCache().clear();
     void query.resetQueries();
   }
+  // Only a Privy embedded wallet has a key the user can export.
+  const embedded = privy.user?.linkedAccounts.some(
+    (account) =>
+      account.type === "wallet" &&
+      account.walletClientType === "privy" &&
+      account.address.toLowerCase() === session?.wallet,
+  );
   const value: SessionValue = {
     session:
       privy.authenticated && session?.did === privy.user?.id ? session : null,
@@ -191,6 +204,12 @@ function SessionBridge({ children }: { children: ReactNode }) {
         throw walletError(error);
       }
     },
+    exportWallet:
+      session && embedded
+        ? () => void exportWallet({ address: session.wallet })
+        : null,
+    linkEmail: privy.user && !privy.user.email ? privy.linkEmail : null,
+    linkGoogle: privy.user && !privy.user.google ? privy.linkGoogle : null,
   };
   return (
     <SessionContext.Provider value={value}>{children}</SessionContext.Provider>

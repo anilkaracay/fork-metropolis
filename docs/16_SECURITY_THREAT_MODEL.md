@@ -10,6 +10,7 @@
 6. Sponsor API keys remain server-side.
 7. Social abuse does not take down the product.
 8. Backed MON can only leave FORKBacking to the address it was credited to.
+9. The only server-held key is the testnet welcome faucet; it never signs for users and never for another network.
 
 ## Assets
 
@@ -137,6 +138,24 @@ Risks and mitigations:
 - Sybil backing: one person can back from several wallets, including their own thesis from a second address, and can fill the ten early positions at no net cost beyond gas because the value returns to them as author. Totals and early status are presented as volume and chronology, not as independent endorsement, and never feed reputation metrics.
 - Self-fork farming: an address in several roles of one lineage is credited once in its nearest role, so forking your own idea does not create income labelled as earned from forks.
 - Regulatory framing: testnet MON has no monetary value. Product copy must not describe backing as an investment or promise a return.
+
+### T13 - welcome faucet
+
+The server holds one hot key: a dedicated Monad Testnet account that sends each new user one welcome drip of 0.2 testnet MON (D-057). It is the only signing key the server has. It is not a user key, it has no role in any contract and it cannot move user funds.
+
+Assets at risk: the testnet MON in the faucet account, and the availability of onboarding without a public faucet visit. Testnet MON has no monetary value.
+
+Risks and mitigations:
+
+- Key disclosure: the key is read only from the server environment (`FORK_FAUCET_PRIVATE_KEY`), is absent from the browser schema, is never logged and is never returned by any route. The log line for a drip carries the user id, wallet, state and transaction hash only. Exposure loses at most the balance of that one account; recovery is to move the remaining MON, generate a new key and redeploy the variable.
+- Wrong network: the signer checks the RPC's chain id and signs only for chain 10143, whatever `MONAD_RPC_URL` says. The key must never be reused on another network.
+- Draining by one person: a drip requires a Privy-verified session and the session's primary wallet. One row per user and one row per wallet are enforced by unique constraints, wallets cannot change owner, and a wallet that already holds 0.2 MON gets nothing. Creating many accounts still needs a distinct verified identity each time and is bounded by the daily cap.
+- Draining by many: at most 15 drips are reserved per UTC day, counted under a database advisory lock so concurrent requests cannot exceed it. The most the faucet can send in a day is about 3.04 MON.
+- Double payment: the signed transfer is stored before it is broadcast. Retries, concurrent requests and crashes can only resend the same transfer. A second transfer is signed only after the first is proven dead (reverted, or its nonce consumed by another transaction).
+- Partial failure: nothing is signed unless the faucet covers the drip plus its gas. An empty faucet returns a stated "empty" state with the public faucet as the way forward; publishing then fails with the existing gas guidance, never silently.
+- Request floods: the drip route is behind the same authentication as every mutation and a per-user limit of 6 requests per hour. Status reads send nothing.
+- Nonce races: sends are serialized in the single application process. Running several application instances against one faucet key is not supported and would need a shared lock first.
+- Griefing the cap: verified accounts created only to use up the day's 15 drips deny the drip to later users that day. They still get the stated daily-limit message and the public faucet link. This is accepted for a testnet build.
 
 ## Privacy
 

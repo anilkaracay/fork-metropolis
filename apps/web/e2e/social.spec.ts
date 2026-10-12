@@ -372,7 +372,7 @@ test("root-only, one child, depth four, and twenty descendants remain navigable 
       await request.post("/api/profile", {
         headers: headers(bob),
         data: {
-          handle: "perspective_builder_long",
+          handle: "perspective_build_xl",
           displayName: "A contributor with a deliberately long display name",
           bio: "Ideas evolve through discussion.",
         },

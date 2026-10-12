@@ -27,7 +27,10 @@ Bare route IDs resolve within the configured chain/registry namespace. Corrupted
 | --- | --- |
 | POST /session | `{wallet}`; verified linked-wallet association and explicit primary selection. |
 | GET /session | Returns synchronized application Session and server-derived isAdmin. |
-| POST /profile | `{handle,displayName,bio?}`; lowercase 3–24 handle, reserved-name/uniqueness checks, name 1–60, bio ≤160. |
+| POST /profile | `{handle,displayName?,bio?}`. Keeping the current handle is always allowed. A new handle is a claim: 3 to 20 lowercase letters, digits or underscores, reserved words and generated-form handles rejected, uniqueness decided by the database index with a 409 `HANDLE_UNAVAILABLE` for the loser of a race. Name up to 60, bio up to 160. |
+| GET /handles/:handle | Whether the signed-in user could claim this handle now: `{handle,available,problem}`. |
+| GET /account/wallet | The session wallet's MON balance and welcome drip state: `{wallet,balanceWei,drip:{state,amountWei,txHash,message,recovery}}`. Sends nothing. |
+| POST /account/drip | Requests the one welcome drip for this user and wallet. Idempotent; returns the same shape. States: `sent`, `confirmed`, `funded`, `empty`, `daily-limit`, `unavailable`. |
 | POST /theses/draft | `{parentId,core:{marketId,side,targetPriceE8,invalidationPriceE8,leverageBps},metadata:{reasoning,entryNote?,tags},requestKey}`. Returns `{draftId,contentHash,intent,expiresAt}`. Canonical metadata hash, server-owned namespace and author, validated parent and inherited market, meaningful-change requirement. |
 | POST /theses/finalize | `{draftId,txHash}`. Thesis ID comes from the validated receipt event, never the caller. Checks chain, target/author/exact calldata, success, canonical block, one matching event, hash/core/parent and draft timing. Returns `{thesisId,state}` with Published only for a matching indexed hash/transaction; otherwise Confirmed / indexing. |
 | GET /theses/:id/agree | Personal agreement state. |
@@ -40,11 +43,11 @@ Bare route IDs resolve within the configured chain/registry namespace. Corrupted
 | PUT /moderation/:id | `{hidden:boolean}`; hide/unhide finalized Postgres metadata, update report state; canonical graph unchanged. |
 | POST /executions/relay | Strict proof/request boundary; returns 501 RELAY_NOT_ENABLED. No authenticated Perpl request, trade, enrollment or verified evidence write. |
 
-Persistent atomic database limits: draft 20/hour; finalization 60/minute; Agree 60/minute; comments 10/minute and 50/hour; reports 10/hour; profile updates 10/hour; relay preparation 10/minute. Database statements have timeouts; failed mutations use explicit idempotent recovery rather than blind transport replay.
+Persistent atomic database limits: draft 20/hour; finalization 60/minute; Agree 60/minute; comments 10/minute and 50/hour; reports 10/hour; profile updates 10/hour; welcome drip requests 6/hour, plus the global cap of 15 drips per UTC day; relay preparation 10/minute. Database statements have timeouts; failed mutations use explicit idempotent recovery rather than blind transport replay.
 
 ## Test-only routes
 
-`test/identity`, `test/submit` and `test/reset` exist only for the explicit development test workspace on loopback, with same-origin browser access. Submitted synthetic confirmations pass through normal draft/finalization/composition code and actual Envio test handlers. Production rejects test configuration and returns 404 for test routes. Tests never grant production reputation credit.
+`test/identity`, `test/submit`, `test/faucet` and `test/reset` exist only for the explicit development test workspace on loopback, with same-origin browser access. Submitted synthetic confirmations pass through normal draft/finalization/composition code and actual Envio test handlers. Production rejects test configuration and returns 404 for test routes. Tests never grant production reputation credit.
 
 ## Phase 3 readiness endpoints
 

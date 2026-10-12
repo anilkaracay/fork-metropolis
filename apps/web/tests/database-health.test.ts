@@ -31,7 +31,7 @@ describe("database health recovery", () => {
   it("reports ready only after all committed migrations are present", async () => {
     mocks.execute
       .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [{ count: 3 }] });
+      .mockResolvedValueOnce({ rows: [{ count: 4 }] });
     expect(await databaseHealth()).toEqual({
       database: "ready",
       migrations: "applied",
@@ -41,7 +41,7 @@ describe("database health recovery", () => {
   it("an incomplete migration set fails with recovery", async () => {
     mocks.execute
       .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [{ count: 2 }] });
+      .mockResolvedValueOnce({ rows: [{ count: 3 }] });
     await expect(databaseHealth()).rejects.toMatchObject({
       code: "DATABASE_UNAVAILABLE",
       status: 503,

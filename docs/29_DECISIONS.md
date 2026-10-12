@@ -537,3 +537,31 @@ A fork credits the original author in the graph, but until now nobody who origin
 Verification: 40 Foundry tests for the contract, including four fuzz tests, three reentrancy tests and a stateful invariant that the contract balance equals the sum of unwithdrawn credits; 100% line, statement, branch and function coverage of the source. Details and method are in `docs/FORKBACKING_COVERAGE.md`.
 
 Deployment: a guarded script (`scripts/backing-deploy.mjs`) ties the deployment to one reviewed commit, sends exactly one transaction and records a proof artifact in `contracts/deployments/10143.backing.json`. Deployment to Monad Testnet, the indexer redeploy and any production change each wait for the owner's approval.
+
+## D-057: Welcome drip, chosen handles and a visible wallet
+
+Status: Accepted by explicit owner instruction; implemented and tested, production rollout pending approval
+Date: 2026-10-12
+
+Decision:
+
+A new user must be able to sign in and publish without visiting a faucet. After a server-verified Privy sign-in, the server sends one welcome drip of 0.2 testnet MON to the user's primary wallet from a dedicated faucet hot wallet. One drip per verified user and per wallet, at most 15 drips per UTC day, and nothing is sent unless the faucet can cover the full drip and its gas. When the faucet is empty, not configured or at its daily limit, the product says so and points to the public Monad faucet.
+
+The drip is idempotent by construction: the transfer is signed, its hash and raw bytes are stored, and only then is it broadcast. A repeated or concurrent request can only resend that same signed transfer. A fresh transfer is signed only when the first can never arrive, because it reverted or its nonce was used by another transaction.
+
+After the first sign-in the user chooses a handle: 3 to 20 characters, lowercase letters, digits and underscores, unique, with reserved words and the generated starting form blocked. The display name is optional. Two people claiming the same handle at once are decided by the unique index, and the loser gets a clear retry message. Accounts that still have a generated handle are prompted to claim one. A link to the generated handle an account started with keeps resolving to its profile.
+
+The signed-in wallet is visible in the product: address, live MON balance, the welcome drip state, a link to the explorer, key export for embedded wallets and linking a second sign-in method. Sign-in offers Google and email, both through Privy.
+
+Scope and boundaries:
+
+- The faucet key is testnet-only, server-only and never touches user wallets. The signer refuses any chain other than Monad Testnet 10143. Losing the key loses at most the testnet MON in that one account.
+- No paid service is involved. Privy's sponsored transactions were not adopted for this build; the SDK path (`useSendTransaction` with `sponsor`) is noted in `14_PRIVY_INTEGRATION.md` for later.
+- No email address or other personal detail is stored. The server still keeps only the Privy DID, wallet addresses and the public profile.
+- The database length rule for handles stays at 24 so existing rows and tools are untouched; the 20 character rule for chosen handles is enforced by the shared validation used by both server and browser.
+- Supersedes the profile editing rules in D-032 for handle format and uniqueness handling. D-040's storage boundary is unchanged.
+
+Rationale: an embedded wallet with no gas is a dead end for a first visit. A capped, idempotent drip removes that step for the user, with a bounded and known draw on the faucet: 15 drips of 0.2 MON plus gas is about 3.04 MON for a full day. A chosen handle gives authorship a human name without weakening wallet-based provenance.
+
+Verification: 10 faucet tests and 7 handle tests on real PostgreSQL semantics, 7 shared rule tests, and an end to end spec for first sign-in, claim, drip and the empty-faucet state. The threat model is T13 in `16_SECURITY_THREAT_MODEL.md`.
+

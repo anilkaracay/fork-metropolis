@@ -33,6 +33,10 @@ export type SessionValue = {
   submit: (intent: PublishIntent, draftId: string) => Promise<Hex>;
   signTypedData: (data: TypedDataDefinition) => Promise<Hex>;
   sendSelfTransaction: () => Promise<Hex>;
+  // Account actions the sign-in provider offers for this user; null when not applicable.
+  exportWallet: (() => void) | null;
+  linkEmail: (() => void) | null;
+  linkGoogle: (() => void) | null;
 };
 export const SessionContext = createContext<SessionValue | null>(null);
 export const useSession = () => {
@@ -208,6 +212,9 @@ function LocalSession({
         409,
       );
     },
+    exportWallet: null,
+    linkEmail: null,
+    linkGoogle: null,
   };
   return (
     <SessionContext.Provider value={value}>
@@ -227,6 +234,7 @@ function LocalSession({
               <option value="alice">Alice</option>
               <option value="bob">Bora</option>
               <option value="carol">Carol · moderator</option>
+              <option value="dana">Dana · new account</option>
             </select>
           </label>
         </div>

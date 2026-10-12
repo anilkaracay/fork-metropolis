@@ -8,11 +8,11 @@ Envio owns canonical graph fields, edges and onchain aggregates. Postgres owns a
 
 All thesis-related rows use `(chain_id, registry_address, thesis_id)`. Addresses are lowercase checked hexadecimal text; thesis IDs use `numeric(20,0)` and checked uint64 bounds, never JavaScript numbers. Public `/t/:id` routes resolve within the server-configured chain and registry. Graph readers enforce the same namespace.
 
-## Nine tables
+## Ten tables
 
 | Table | Responsibility and constraints |
 | --- | --- |
-| users | UUID, unique verified Privy DID and lowercase handle, display name, bounded bio, primary wallet, timestamps. |
+| users | UUID, unique verified Privy DID and lowercase handle, display name, bounded bio, primary wallet, timestamps. `handle_claimed_at` records when the user chose a handle; `initial_handle` keeps the generated handle the account started with as a unique alias so old profile links still resolve. |
 | wallets | Address primary key, user FK, embedded/external kind. Composite owner/address uniqueness and immutable ownership. |
 | thesis_metadata | Author user and owned wallet FK, namespace, immutable finalized hash/reasoning/tags/note, request key, expected intent, parent ID, expiry, transaction hash, finalized timestamp, separate hidden flag. |
 | comments | Namespaced finalized metadata FK, author FK, 1–280 characters, author/request-key uniqueness, visible/hidden/deleted state and timestamps. Author and thesis association cannot be reassigned. |
@@ -21,6 +21,8 @@ All thesis-related rows use `(chain_id, registry_address, thesis_id)`. Addresses
 | execution_evidence | Namespaced metadata FK and owned wallet FK, attested/verified state, unknown/open/closed position, complete authoritative venue/fill fields required for verified rows. No HTTP writer grants verification in Phase 2. |
 | rate_buckets | User/action/window primary key, atomic conditional upsert, persistent across server instances. Indexed by window for later retention cleanup. |
 | wallet_context_cache | Owned wallet FK, chain/wallet/window cache key, normalized permitted external summary, expiration and short refresh lease. No FORK-native metrics or raw upstream payload. |
+
+| faucet_drips | One welcome drip per user (unique user FK) and per wallet (unique wallet FK): amount, state (reserved, signed, sent, confirmed, failed), UTC reservation day for the daily cap, nonce, transaction hash and the signed raw transfer. A signed or later state must carry hash, raw transfer and nonce. |
 
 The primary-wallet ownership FK is deferrable to permit atomic identity synchronization. Finalized content can only change its moderation flag and update timestamp; new reasoning requires another thesis. Drafts expire after 24 hours, assessed against canonical transaction creation time. Recovery after expiry still accepts a transaction created within its valid draft window.
 
@@ -39,3 +41,5 @@ Phase 2 browser fixtures create no verified evidence. Unit integration fixtures 
 `0002_windy_red_ghost.sql` adds the permitted external-context cache only. All three migrations are required by `/api/health/database`. The Phase 3 development smoke check executes real constraint assertions in one transaction and always rolls back its rows. It neither drops tables nor resets production data. See [migration and smoke commands](23_DEPLOYMENT_ENV.md).
 
 `pnpm test:db` exercises uniqueness, ownership, case normalization, namespaces, receipt/request idempotency, comments, Agree, reports, NULL checks and fill reuse using real PostgreSQL constraints. `pnpm db:migrate` is an explicit live operation requiring the intended DATABASE_URL; it was not run in this phase.
+
+`0003_welcome_drip_and_claimed_handles.sql` adds `faucet_drips` and the two `users` columns, with a hand-written backfill that marks handles not of the generated form as already chosen (D-057). `/api/health/database` now requires all four migrations.

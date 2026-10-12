@@ -2081,3 +2081,120 @@ li.ancestor > .tree-node {
 .wordmark-period {
   color: var(--primary);
 }
+
+/* Account: handle claim and wallet */
+.handle-claim-lead {
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: -12px 0 22px;
+  overflow-wrap: anywhere;
+}
+.handle-claim {
+  margin: auto;
+}
+.handle-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 9px 0 8px;
+}
+.handle-field > span {
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+}
+.handle-field input {
+  flex: 1;
+  min-width: 0;
+}
+.handle-status {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.45;
+  min-height: 18px;
+  margin: 0 0 20px;
+}
+/* Signed in, the account and wallet take the place of the decorative note. */
+.sidebar {
+  overflow-y: auto;
+}
+.sidebar.signed-in .sidebar-note {
+  display: none;
+}
+/* The sidebar is hidden on phones, so the owner's profile carries the wallet there. */
+.profile-account {
+  display: none;
+}
+@media (max-width: 680px) {
+  .profile-account {
+    display: block;
+    margin: 0 0 22px;
+  }
+}
+.handle-status.valid {
+  color: var(--positive);
+}
+.handle-status.invalid {
+  color: var(--destructive);
+}
+.account-wallet {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 11px;
+}
+.account-wallet-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 10px;
+}
+.wallet-address {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--foreground);
+}
+.wallet-address span {
+  color: var(--muted-foreground);
+}
+.wallet-address:hover span,
+.wallet-address:focus-visible span {
+  color: var(--primary);
+}
+.wallet-balance {
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.wallet-balance .wallet-amount {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.wallet-note {
+  color: var(--muted-foreground);
+  line-height: 1.45;
+  margin-top: 10px;
+}
+.wallet-note a {
+  color: var(--link);
+  text-decoration: underline;
+}
+.account-wallet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 10px;
+}
+.account-wallet-actions a,
+.account-wallet-actions button {
+  color: var(--muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.account-wallet-actions a:hover,
+.account-wallet-actions button:hover {
+  color: var(--foreground);
+}

@@ -35,6 +35,9 @@ export const users = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     privyDid: text("privy_did").notNull().unique(),
     handle: text("handle").notNull().unique(),
+    // The generated handle a user had before claiming one. Links to it keep resolving.
+    initialHandle: text("initial_handle").unique(),
+    handleClaimedAt: date("handle_claimed_at"),
     displayName: text("display_name"),
     bio: text("bio"),
     primaryWallet: text("primary_wallet"),
@@ -322,3 +325,46 @@ export const walletContext = pgTable("wallet_context_cache", {
   leaseExpiresAt: date("lease_expires_at"),
   ...audit(),
 });
+
+// One welcome drip of testnet MON per verified user and per wallet. The signed
+// transaction is stored before it is broadcast, so a retry can only resend the same one.
+export const faucetDrips = pgTable(
+  "faucet_drips",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .unique()
+      .references(() => users.id),
+    wallet: text("wallet")
+      .notNull()
+      .unique()
+      .references(() => wallets.address),
+    amountWei: numeric("amount_wei", { precision: 30, scale: 0 }).notNull(),
+    status: text("status").notNull(),
+    reservedDay: text("reserved_day").notNull(),
+    nonce: bigint("nonce", { mode: "number" }),
+    txHash: text("tx_hash").unique(),
+    rawTransaction: text("raw_transaction"),
+    ...audit(),
+  },
+  (t) => [
+    check(
+      "faucet_status",
+      sql`${t.status} IN ('reserved', 'signed', 'sent', 'confirmed', 'failed')`,
+    ),
+    check(
+      "faucet_day_format",
+      sql`${t.reservedDay} ~ '^\\d{4}-\\d{2}-\\d{2}$'`,
+    ),
+    check(
+      "faucet_tx_hash_format",
+      sql`${t.txHash} IS NULL OR ${t.txHash} ~ '^0x[0-9a-f]{64}$'`,
+    ),
+    check(
+      "faucet_signed_fields",
+      sql`${t.status} IN ('reserved', 'failed') OR (${t.txHash} IS NOT NULL AND ${t.rawTransaction} IS NOT NULL AND ${t.nonce} IS NOT NULL)`,
+    ),
+    index("faucet_day_idx").on(t.reservedDay),
+  ],
+);

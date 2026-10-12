@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
 import { useSession } from "./social/session";
 import { Icon } from "./social/icon";
 import { Avatar } from "./social/common";
+import { AccountWallet, WelcomeDrip } from "./social/account-wallet";
+import { HandleClaim, requestHandleClaim } from "./social/handle-claim";
 const navigation = [
   { name: "Feed", href: "/feed", icon: "feed" },
   { name: "Explore", href: "/explore", icon: "explore" },
@@ -26,7 +28,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-      <aside className="sidebar">
+      <aside className={`sidebar ${auth.session ? "signed-in" : ""}`}>
         <Link className="brand" href="/feed" aria-label="FORK home">
           <span className="brand-mark">
             <Icon name="fork" size={28} />
@@ -72,9 +74,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <small>@{auth.session.handle}</small>
                 </span>
               </Link>
-              <button className="text-button" onClick={auth.logout}>
-                Sign out
-              </button>
+              {!auth.session.handleClaimed && (
+                <button className="text-button" onClick={requestHandleClaim}>
+                  Claim your handle
+                </button>
+              )}
+              <AccountWallet />
             </>
           ) : (
             <button className="button secondary full" onClick={auth.login}>
@@ -127,6 +132,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           Ideas are perspectives, not promises. Keep your reasoning visible.
         </footer>
       </div>
+      {auth.session && <WelcomeDrip key={auth.session.userId} />}
+      <HandleClaim />
     </div>
   );
 }

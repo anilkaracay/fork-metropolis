@@ -9,7 +9,14 @@ import type { Database } from "@fork/db";
 import { envioGraph } from "./graph";
 import { rpcReceipts } from "./receipt";
 import { SocialCore } from "./social-core";
-export type Runtime = { core: SocialCore; auth: AuthVerifier; test: boolean };
+import { Faucet } from "./faucet";
+import { rpcBalances, rpcFaucet } from "./faucet-chain";
+export type Runtime = {
+  core: SocialCore;
+  auth: AuthVerifier;
+  faucet: Faucet;
+  test: boolean;
+};
 let live: Runtime | undefined;
 export type IdentityRuntime = {
   db: Database;
@@ -77,6 +84,13 @@ export async function getRuntime(): Promise<Runtime> {
       account.adminDids,
     ),
     auth: account.auth,
+    faucet: new Faucet(
+      account.db,
+      rpcBalances(env.MONAD_RPC_URL),
+      env.FORK_FAUCET_PRIVATE_KEY
+        ? rpcFaucet(env.FORK_FAUCET_PRIVATE_KEY, env.MONAD_RPC_URL)
+        : undefined,
+    ),
     test: false,
   };
   return live;
