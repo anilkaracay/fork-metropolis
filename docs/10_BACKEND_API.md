@@ -1,4 +1,4 @@
-# Backend API — implemented Phase 2
+# Backend API: implemented Phase 2
 
 Next App Router Node route handlers expose `/api`. Product UI depends on typed internal models, not raw Envio GraphQL. This document describes implemented endpoints; live execution, Nansen enrichment, search and a multi-service health claim are not implemented.
 
@@ -36,7 +36,7 @@ Bare route IDs resolve within the configured chain/registry namespace. Corrupted
 | GET /theses/:id/agree | Personal agreement state. |
 | PUT /theses/:id/agree | Idempotent Agree. |
 | DELETE /theses/:id/agree | Reverse Agree. |
-| POST /theses/:id/comments | `{body,requestKey}`; flat safe text, 1–280 characters, idempotent. |
+| POST /theses/:id/comments | `{body,requestKey}`; flat safe text, 1 to 280 characters, idempotent. |
 | DELETE /comments/:uuid | Comment author only; soft delete. |
 | POST /theses/:id/report | `{reason,note?,requestKey}`; one report per reporter/thesis, bounded text, rejects request-key reuse for another thesis. |
 | GET /moderation | Server-authorized admin DIDs only, latest 100 open reports. |

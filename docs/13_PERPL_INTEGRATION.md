@@ -1,8 +1,8 @@
 # Perpl Integration Specification
 
-## Current priority — 2026-10-11
+## Current priority: 2026-10-11
 
-**PERPL: BLOCKED / DEFERRED — EXTERNAL ORIGIN APPROVAL PENDING.** The user explicitly deferred this integration under D-051. Preserve the implementation and the historical preflight below. Do not wait for approval during product craft work, claim real execution/Verified status or Perpl bounty eligibility. Resume only under a later explicit decision. Unavailable Execute functionality must remain non-actionable and honest.
+**PERPL: BLOCKED / DEFERRED: EXTERNAL ORIGIN APPROVAL PENDING.** The user explicitly deferred this integration under D-051. Preserve the implementation and the historical preflight below. Do not wait for approval during product craft work, claim real execution/Verified status or Perpl bounty eligibility. Resume only under a later explicit decision. Unavailable Execute functionality must remain non-actionable and honest.
 
 ## Role in FORK
 
@@ -40,7 +40,7 @@ Do not hardcode the market list in UI logic. Load `/v1/pub/context` and map supp
 
 Current instance is 12. Collateral is 6-decimal AUSD; account creation requires at least 100 AUSD and a subsequent deposit at least 10 AUSD. These are runtime values. Current official [Networks & Configuration](https://docs.perpl.xyz/resources/for-developers/networks-and-configuration) agrees with context; the API README's older collateral entry does not. Funding has not been proven for the selected wallet.
 
-The 2026-10-11 live gate is blocked on provider approval for `https://forktrades.xyz`. See [preflight evidence](evidence/phase3/PERPL.md). No enrollment or trade occurred.
+The 2026-10-11 live gate is blocked on provider approval for `https://forktrades.xyz`. See [preflight evidence](build-log/evidence/phase3/PERPL.md). No enrollment or trade occurred.
 
 ## Three separate setup requirements
 

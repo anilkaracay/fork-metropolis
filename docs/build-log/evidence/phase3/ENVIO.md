@@ -8,7 +8,7 @@ Status: READY for the user-approved Cloud gate, observed 2026-10-09. One actual 
 - GitHub repository: private anilkaracay/fork-metropolis; only this repository was selected for the user-approved GitHub App installation.
 - Deployment commit: d98ed3a138f46fe7937830bc6bb0c63000c342a8; dedicated envio branch, root indexer, config.yaml, auto-deploy disabled.
 - HyperIndex 3.12.1; official Cloud CLI 1.0.0 is separate, pinned under ignored .tools. No application dependency upgrade.
-- Canonical target: chain 10143, registry 0x1889a7216b1ecad9a44910dd0996834d0894b9e1, inclusive start block 69535255, derived from [deployment artifact](../../../contracts/deployments/10143.json).
+- Canonical target: chain 10143, registry 0x1889a7216b1ecad9a44910dd0996834d0894b9e1, inclusive start block 69535255, derived from [deployment artifact](../../../../contracts/deployments/10143.json).
 - GraphQL: https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql. Discovered through official deployment endpoint CLI, not a guessed hostname. This is a public development deployment endpoint, not a promoted production endpoint.
 - Build succeeded in 33.17 seconds; runtime error/warning query returned no entries. CLI and GraphQL _meta independently report HyperSync, correct chain/start block and caught-up head. Live baseline at 13:06:49Z: progress/source block 69547051, isReady=true, zero processed events. Dashboard shows Active / Synced 100%.
 

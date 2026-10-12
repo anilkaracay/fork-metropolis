@@ -1,5 +1,7 @@
 # Metropolis submission package
 
+> Record of the first submission package, prepared on October 12, 2026, before backing existed. The current state is in [24_DEMO_SUBMISSION.md](../../24_DEMO_SUBMISSION.md), and `portal-copy.json` has since been rewritten: the text saved to the portal at that time is in this file's Git history.
+
 Product frozen at B3 implementation `de353b7`; B4 changes documentation and submission artifacts only. Live: https://forktrades.xyz. Current state is a saved draft with public source and two public videos, not a submitted entry.
 
 ## Official requirements checked on October 12, 2026
@@ -17,9 +19,9 @@ Actual authenticated [portal](https://hackathon.monad.xyz/project?tab=submission
 
 ## Actual portal state
 
-FORK did not exist in the authenticated workspace. A private project draft was created, Track 03 selected, and verified copy saved. Envio and Privy were added after reading their actual requirements; required responses were saved. See [exact saved copy](portal-copy.json).
+FORK did not exist in the authenticated workspace. A private project draft was created, Track 03 selected, and verified copy saved. Envio and Privy were added after reading their actual requirements; required responses were saved. See [exact saved copy](../../submission/portal-copy.json).
 
-Logo upload was denied by the browser's user permission decision. No alternate upload route was attempted. Prepared [logo](../assets/submission/logo.png) is ready; fresh upload permission is required. Both verified public video page URLs were saved at October 12, 07:57 UTC. No final submission click or terms acceptance occurred. The incomplete review shows a Complete Entry control returning to remaining fields; a final complete-entry confirmation state is not yet observable. Before any last save that makes the entry judging-ready, obtain explicit final submission approval.
+Logo upload was denied by the browser's user permission decision. No alternate upload route was attempted. Prepared [logo](../../assets/submission/logo.png) is ready; fresh upload permission is required. Both verified public video page URLs were saved at October 12, 07:57 UTC. No final submission click or terms acceptance occurred. The incomplete review shows a Complete Entry control returning to remaining fields; a final complete-entry confirmation state is not yet observable. Before any last save that makes the entry judging-ready, obtain explicit final submission approval.
 
 ## Sponsor decisions
 

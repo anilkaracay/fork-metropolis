@@ -4,7 +4,7 @@
 
 The product must be submission-ready at the end of Day 2. Day 3 is for integration hardening, polish, traction, and recording. Do not plan to finish the core product in the final hours.
 
-Assume one strong developer using Codex heavily. Parallelize research and code generation, but keep one person accountable for integration decisions.
+Assume one strong developer. Parallelize research and code generation, but keep one person accountable for integration decisions.
 
 ## Day 1 - Core social product and onchain provenance
 

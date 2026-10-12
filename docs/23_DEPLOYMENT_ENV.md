@@ -1,6 +1,6 @@
 # Deployment and Environment
 
-Current checkpoint, 2026-10-11: **DOMAIN + HTTPS PUBLIC CUTOVER — READY** at **https://forktrades.xyz**, with permanent www → apex redirection, trusted automatic Caddy TLS, real existing Google identity/embedded and primary wallet persistence across logout/login, server-side DID/wallet/PostgreSQL verification, actual public social reads and wrong-wallet/unauthenticated rejection. Only FORK's dedicated Caddy site and public-origin image changed; all unrelated Cherry services and runtime secrets are preserved. App remains `127.0.0.1:13000`; dedicated standard PostgreSQL 17.11 has no host port; the same three committed migrations pass. Privy retains localhost plus the canonical HTTPS origin and its existing development tier/session settings. See [public deployment proof](evidence/phase3/PUBLIC_DEPLOYMENT.md) and the [operations/rollback runbook](../deploy/README.md). Development remains local PostgreSQL / `http://localhost:3000`. Stop for review before Perpl. Nansen stays deferred; no Phase 4.
+Current checkpoint, 2026-10-11: **DOMAIN + HTTPS PUBLIC CUTOVER: READY** at **https://forktrades.xyz**, with permanent www → apex redirection, trusted automatic Caddy TLS, real existing Google identity/embedded and primary wallet persistence across logout/login, server-side DID/wallet/PostgreSQL verification, actual public social reads and wrong-wallet/unauthenticated rejection. Only FORK's dedicated Caddy site and public-origin image changed; all unrelated Cherry services and runtime secrets are preserved. App remains `127.0.0.1:13000`; dedicated standard PostgreSQL 17.11 has no host port; the same three committed migrations pass. Privy retains localhost plus the canonical HTTPS origin and its existing development tier/session settings. See [public deployment proof](build-log/evidence/phase3/PUBLIC_DEPLOYMENT.md) and the [operations/rollback runbook](../deploy/README.md). Development remains local PostgreSQL / `http://localhost:3000`. Stop for review before Perpl. Nansen stays deferred; no Phase 4.
 
 ## Credentials and implemented variables
 
@@ -44,7 +44,7 @@ GET /api/health/database runs SELECT 1 and checks the migration journal. Missing
 
 ## Contract deployment and proof
 
-Run pnpm test:contracts before deployment. Pinned Foundry 1.8.4/solc 0.8.37 use Monad network mode, Prague and optimizer 200. FORKRegistry has no constructor arguments or owner/admin role. Confirm chain 10143 and sufficient MON at the human-held public deployer address. Follow the [official Monad Foundry guide](https://docs.monad.xyz/guides/deploy-smart-contract/foundry); signing stays in a human-held wallet/encrypted keystore. Gas MON comes from the current [official Monad Testnet faucet](https://faucet.monad.xyz). The dedicated local Testnet deployer and funding checkpoint are recorded in [Monad evidence](evidence/phase3/MONAD.md) and D-044.
+Run pnpm test:contracts before deployment. Pinned Foundry 1.8.4/solc 0.8.37 use Monad network mode, Prague and optimizer 200. FORKRegistry has no constructor arguments or owner/admin role. Confirm chain 10143 and sufficient MON at the human-held public deployer address. Follow the [official Monad Foundry guide](https://docs.monad.xyz/guides/deploy-smart-contract/foundry); signing stays in a human-held wallet/encrypted keystore. Gas MON comes from the current [official Monad Testnet faucet](https://faucet.monad.xyz). The dedicated local Testnet deployer and funding checkpoint are recorded in [Monad evidence](build-log/evidence/phase3/MONAD.md) and D-044.
 
 After successful direct deployment:
 
@@ -66,7 +66,7 @@ Status: implemented, not configured in production. Rolling it out needs the owne
 
 ## FORKBacking deployment
 
-Status: not deployed. Deployment waits for the owner's approval (D-056).
+Status: deployed on 2026-10-12 from main commit `9d5c411` at `0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f`, transaction `0xb4cf544e5b0e534ea3f71ec863b4fc4c3d88d1901d34e22d65c9bf753f9a5660`, block 70423451. Sourcify reports an exact match. The record is `contracts/deployments/10143.backing.json`.
 
 FORKBacking takes the canonical registry address from `contracts/deployments/10143.json` as its only constructor argument and uses the same dedicated testnet deployer as the registry. One guarded script covers the four steps, each tied to the reviewed commit that contains the contract:
 
@@ -87,13 +87,13 @@ Monad charges the full gas limit, so the script sets the limit 15% above the liv
 
 ## Envio Cloud
 
-Pending change, not deployed: the indexer in this repository now also indexes FORKBacking (see `indexer/README.md`). The live Cloud deployment described below still indexes the registry only. Deploying the new version needs the owner's approval and two more Cloud variables, `ENVIO_FORK_BACKING_ADDRESS` and `ENVIO_FORK_BACKING_START_BLOCK`, taken from `contracts/deployments/10143.backing.json`. A new deployment gets a new GraphQL endpoint, so `FORK_ENVIO_URL` changes with it.
+Current deployment, 2026-10-12: commit `d2edd20` indexes FORKRegistry and FORKBacking and serves `https://indexer.dev.hyperindex.xyz/18ce77d/v1/graphql`. It was deployed from the `envio` branch with two more Cloud variables, `ENVIO_FORK_BACKING_ADDRESS` and `ENVIO_FORK_BACKING_START_BLOCK`, taken from `contracts/deployments/10143.backing.json`. On its first read it was caught up to the chain head and returned theses #1 and #2 exactly as the previous deployment does. Every new deployment gets a new GraphQL endpoint, so `FORK_ENVIO_URL` changes with it: production keeps reading the previous deployment (`d98ed3a`, registry only) until its own approved deploy switches the variable. The paragraphs below record the first deployment.
 
 Use the [official Cloud CLI](https://docs.envio.dev/docs/HyperIndex/envio-cloud-cli), installed locally under ignored .tools/envio-cloud-cli. The user-approved repository App is restricted to anilkaracay/fork-metropolis. One development indexer fork-social-indexer runs deployment d98ed3a, dedicated branch envio, root indexer, config.yaml and auto-deploy=false. Avoid unrelated pushes triggering reindexes or unnecessary versions. The real deployment uses canonical ENVIO_FORK_REGISTRY_ADDRESS / ENVIO_FORK_START_BLOCK derived from contracts/deployments/10143.json; never deploy config.test.yaml.
 
 Cloud uses Node 24/pnpm 10.32.0. Standalone frozen install, typecheck and 12 handler tests pass; web retains pnpm 12.6.0. Cloud manages its own HyperSync credentials. No separately generated token is required. Official deployment endpoint discovery returned https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql, securely configured as server-only FORK_ENVIO_URL in ignored mode-0600 .env.local. It is public development GraphQL, requires no account token and is not a promoted static production endpoint. Future private-tier authentication needs reviewed server-only headers; never send an account login credential as endpoint authorization.
 
-[Actual Cloud proof](evidence/phase3/ENVIO.md) records exact chain/address/start block, sync metadata, schema and empty real application reads. Future read-only observation, only after real publication is approved:
+[Actual Cloud proof](build-log/evidence/phase3/ENVIO.md) records exact chain/address/start block, sync metadata, schema and empty real application reads. Future read-only observation, only after real publication is approved:
 
 ```sh
 pnpm indexer:latency REAL_THESIS_TRANSACTION_HASH
@@ -103,7 +103,7 @@ This verifies the canonical successful creation receipt/event and matching scope
 
 ## Local development and later self-hosting
 
-Vercel is removed from the critical path. GitHub origin is private anilkaracay/fork-metropolis; the user will make it public before submission. No Vercel login/project/deployment is required. Use http://localhost:3000 now. Privy's current official documentation supports this exact localhost origin including its port; verified settings, secure credential status, real Google signing/persistence and the user-deferred Email test are in [Privy evidence](evidence/phase3/PRIVY.md).
+Vercel is removed from the critical path. GitHub origin is private anilkaracay/fork-metropolis; the user will make it public before submission. No Vercel login/project/deployment is required. Use http://localhost:3000 now. Privy's current official documentation supports this exact localhost origin including its port; verified settings, secure credential status, real Google signing/persistence and the user-deferred Email test are in [Privy evidence](build-log/evidence/phase3/PRIVY.md).
 
 Final architecture: HTTPS domain → reverse proxy → standard Node.js Next.js application → standard PostgreSQL and existing Envio/Monad/Privy/Nansen/Perpl services. Docker plus Caddy/Nginx may be prepared later, without deploying the user's server. No Edge-only API, proprietary hosting feature, Redis, queue or Kubernetes is required. Self-host readiness will add/verify root pnpm start alongside pnpm build; this new readiness check has not run yet. Existing web start is standard next start, and the local production runner has passed prior smoke.
 
@@ -133,7 +133,7 @@ Start that production server separately. Live mode requires actual health/data a
 
 The [official integration instructions](https://github.com/PerplFoundation/api-docs/blob/main/integrations.md) require Origin whitelisting for payload/enroll. After selecting the stable origin, request registration from the Perpl team via [official Discord](https://discord.gg/perpl), supplying exact HTTPS origin, public Testnet wallet, chain/instance/exchange and account ID if already created. No secret/signature is required for that support request. Enrollment depends on team approval; no published timeline was found.
 
-[Observed public context](evidence/phase3/public-readiness.json) specifies six-decimal Testnet AUSD, 100 AUSD opening collateral and 10 AUSD minimum deposit. API README collateral differs; fetch fresh context before approval/deposit. No official Testnet AUSD faucet was established in the inspected public UI/onboarding guides. Ask the Perpl team for its exact funding method for that collateral contract/public wallet. Do not substitute mainnet bridges/onramps. Monad faucet supplies gas MON, not AUSD.
+[Observed public context](build-log/evidence/phase3/public-readiness.json) specifies six-decimal Testnet AUSD, 100 AUSD opening collateral and 10 AUSD minimum deposit. API README collateral differs; fetch fresh context before approval/deposit. No official Testnet AUSD faucet was established in the inspected public UI/onboarding guides. Ask the Perpl team for its exact funding method for that collateral contract/public wallet. Do not substitute mainnet bridges/onramps. Monad faucet supplies gas MON, not AUSD.
 
 Enrollment is explicitly blocked by the final stable HTTPS Origin; real orders and verified executions are blocked by enrollment. Do not substitute a temporary tunnel or preview URL. Continue independent localhost gates first. After final Origin approval, implement/test Gate 8 browser-local scoped Ed25519 enrollment and REST/WebSocket readiness. Gate 9 independently retrieves authoritative wallet/fill evidence before exactly one manually confirmed market order. No enrollment, deposit or trade has run.
 

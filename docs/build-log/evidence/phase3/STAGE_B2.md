@@ -67,7 +67,7 @@ Implementation commit: `f9754b8`. Image: `fork-metropolis:b2-20261011a`, verifie
 
 Public URL: <https://forktrades.xyz>. Signature entry points: [root #1](https://forktrades.xyz/t/1), [fork #2](https://forktrades.xyz/t/2), [selected fork tree](https://forktrades.xyz/t/2/tree), [fork composer](https://forktrades.xyz/t/1/fork).
 
-The retained B1 image is `fork-metropolis:b1-20261011a`; its saved image configuration is `/opt/fork-metropolis/releases/pre-b2-image.env`. Schema-compatible application rollback restores only that configuration and runs the scoped deployment command documented in [the operations runbook](../../../deploy/README.md). Database recovery remains a separate reviewed operation. No rollback was necessary.
+The retained B1 image is `fork-metropolis:b1-20261011a`; its saved image configuration is `/opt/fork-metropolis/releases/pre-b2-image.env`. Schema-compatible application rollback restores only that configuration and runs the scoped deployment command documented in [the operations runbook](../../../../deploy/README.md). Database recovery remains a separate reviewed operation. No rollback was necessary.
 
 ## 11. GitHub sync
 
@@ -79,16 +79,16 @@ These eight final full-resolution public captures were actually opened and visua
 
 | Required view | Capture |
 | --- | --- |
-| Root detail desktop | [root-1440.jpg](../../assets/stage-b2/public/root-1440.jpg) |
-| Fork detail desktop | [fork-1440.jpg](../../assets/stage-b2/public/fork-1440.jpg) |
-| Idea Tree desktop | [tree-1440.jpg](../../assets/stage-b2/public/tree-1440.jpg) |
-| Selected fork with diff | [selected-fork-diff-1440.jpg](../../assets/stage-b2/public/selected-fork-diff-1440.jpg) |
-| Composer live diff | [composer-live-1440.jpg](../../assets/stage-b2/public/composer-live-1440.jpg) |
-| Root detail mobile | [root-390.jpg](../../assets/stage-b2/public/root-390.jpg) |
-| Idea Tree mobile | [tree-390.jpg](../../assets/stage-b2/public/tree-390.jpg) |
-| Composer live diff mobile | [composer-live-390.jpg](../../assets/stage-b2/public/composer-live-390.jpg) |
+| Root detail desktop | [root-1440.jpg](../../../assets/stage-b2/public/root-1440.jpg) |
+| Fork detail desktop | [fork-1440.jpg](../../../assets/stage-b2/public/fork-1440.jpg) |
+| Idea Tree desktop | [tree-1440.jpg](../../../assets/stage-b2/public/tree-1440.jpg) |
+| Selected fork with diff | [selected-fork-diff-1440.jpg](../../../assets/stage-b2/public/selected-fork-diff-1440.jpg) |
+| Composer live diff | [composer-live-1440.jpg](../../../assets/stage-b2/public/composer-live-1440.jpg) |
+| Root detail mobile | [root-390.jpg](../../../assets/stage-b2/public/root-390.jpg) |
+| Idea Tree mobile | [tree-390.jpg](../../../assets/stage-b2/public/tree-390.jpg) |
+| Composer live diff mobile | [composer-live-390.jpg](../../../assets/stage-b2/public/composer-live-390.jpg) |
 
-Additional [public](../../assets/stage-b2/public/) and [exact-image local](../../assets/stage-b2/local/) captures cover all six widths. [Isolated larger-graph captures](../../assets/stage-b2/isolated/) are clearly test evidence. Native authenticated-browser proofs: [desktop tree](../../assets/stage-b2/public/signed-in-tree.png) and [390-pixel comparison](../../assets/stage-b2/public/signed-in-mobile-comparison.png). Total: 58 unaltered captures. Composer drafts shown here were not submitted. The [sanitized validation record](../../assets/stage-b2/validation.json) accompanies the images.
+Additional [public](../../../assets/stage-b2/public/) and [exact-image local](../../../assets/stage-b2/local/) captures cover all six widths. [Isolated larger-graph captures](../../../assets/stage-b2/isolated/) are clearly test evidence. Native authenticated-browser proofs: [desktop tree](../../../assets/stage-b2/public/signed-in-tree.png) and [390-pixel comparison](../../../assets/stage-b2/public/signed-in-mobile-comparison.png). Total: 58 unaltered captures. Composer drafts shown here were not submitted. The [sanitized validation record](../../../assets/stage-b2/validation.json) accompanies the images.
 
 ## 13. Security
 

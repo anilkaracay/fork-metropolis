@@ -84,7 +84,7 @@ A pre-existing query-cache bug surfaced in isolated social regression: clearing 
 
 ## 9. Security
 
-The image scan covered 98,027 files / 22 layers, including 207 browser assets. Actual production credentials and private identity values were separately checked against all 207 deployed browser assets and were absent. Image config/history, excluded private/test material and server-only browser configuration checks passed. The final versionable-file scan is recorded in [validation.json](../../assets/stage-b1/validation.json); local env/private transfer/deploy configuration remain ignored.
+The image scan covered 98,027 files / 22 layers, including 207 browser assets. Actual production credentials and private identity values were separately checked against all 207 deployed browser assets and were absent. Image config/history, excluded private/test material and server-only browser configuration checks passed. The final versionable-file scan is recorded in [validation.json](../../../assets/stage-b1/validation.json); local env/private transfer/deploy configuration remain ignored.
 
 Production test/dev APIs and `/.env`, `/.env.local` return 404; unauthenticated publication returns 401. The app publishes only `127.0.0.1:13000`; PostgreSQL publishes no host port. Known FORK public TCP probes for 13000 and 5432 could not connect. Valid HTTPS remains active; HTTP → HTTPS is 308 and www → apex is 301. Anonymous landing responses set no app auth cookie. Existing bearer-token/primary-wallet verification and production-origin behavior were preserved.
 
@@ -109,16 +109,16 @@ No Caddy change/reload was necessary. All nine Caddy config hashes, active Caddy
 
 Full-resolution public evidence, captured in real Chrome and actually opened/reviewed:
 
-1. [Hero 1440](../../assets/stage-b1/public-hero-1440.jpg)
-2. [Full page 1440](../../assets/stage-b1/public-full-1440.jpg)
-3. [Hero 1280](../../assets/stage-b1/public-hero-1280.jpg)
-4. [Full page 390](../../assets/stage-b1/public-full-390.jpg)
-5. [Mobile navigation](../../assets/stage-b1/public-mobile-navigation.jpg)
-6. [Original node selected](../../assets/stage-b1/public-lineage-original-selected.jpg)
-7. [Landing → real Feed](../../assets/stage-b1/public-feed-transition.jpg)
-8. [Restored authenticated profile](../../assets/stage-b1/public-profile-session.jpg)
+1. [Hero 1440](../../../assets/stage-b1/public-hero-1440.jpg)
+2. [Full page 1440](../../../assets/stage-b1/public-full-1440.jpg)
+3. [Hero 1280](../../../assets/stage-b1/public-hero-1280.jpg)
+4. [Full page 390](../../../assets/stage-b1/public-full-390.jpg)
+5. [Mobile navigation](../../../assets/stage-b1/public-mobile-navigation.jpg)
+6. [Original node selected](../../../assets/stage-b1/public-lineage-original-selected.jpg)
+7. [Landing → real Feed](../../../assets/stage-b1/public-feed-transition.jpg)
+8. [Restored authenticated profile](../../../assets/stage-b1/public-profile-session.jpg)
 
-Additional local hero/full-page screenshots for 1440/1280/1024/768/390/375, mobile navigation and comparison are in `docs/assets/stage-b1/`. See [validation.json](../../assets/stage-b1/validation.json) for actual image dimensions. Browser control disconnected after screenshots and authenticated-profile verification; final open-tab handoff and viewport reset could not be confirmed. Completed public tests and saved visual evidence are unaffected.
+Additional local hero/full-page screenshots for 1440/1280/1024/768/390/375, mobile navigation and comparison are in `docs/assets/stage-b1/`. See [validation.json](../../../assets/stage-b1/validation.json) for actual image dimensions. Browser control disconnected after screenshots and authenticated-profile verification; final open-tab handoff and viewport reset could not be confirmed. Completed public tests and saved visual evidence are unaffected.
 
 ## 12. Files changed
 

@@ -1,6 +1,6 @@
 # Decision Log
 
-## D-052 — Approved Precision Social B1 landing and shared foundation
+## D-052: Approved Precision Social B1 landing and shared foundation
 
 - Date: 2026-10-11
 - Decision: the user approved Direction A and authorized B1 implementation, local production-build/browser QA, then the existing isolated Cherry deployment workflow.
@@ -16,7 +16,7 @@ Add every material change as a new entry. Never silently change architecture in 
 Status: Explicit user priority change; Stage A research only
 Date: 2026-10-11
 
-PERPL: **BLOCKED / DEFERRED — EXTERNAL ORIGIN APPROVAL PENDING**. This supersedes D-050's requirement to wait for Perpl before presentation work. Preserve its implementation and historical evidence; no new enrollment, execution, Verified claim, reputation credit or Perpl bounty eligibility is authorized. Nansen remains deferred. Unavailable execution must be represented honestly without a broken action.
+PERPL: **BLOCKED / DEFERRED: EXTERNAL ORIGIN APPROVAL PENDING**. This supersedes D-050's requirement to wait for Perpl before presentation work. Preserve its implementation and historical evidence; no new enrollment, execution, Verified claim, reputation credit or Perpl bounty eligibility is authorized. Nansen remains deferred. Unavailable execution must be represented honestly without a broken action.
 
 Stage A covers the live social application's visual audit, current official product/marketing references, two creative directions, exact shared design tokens, Idea Tree, a premium landing at the canonical root, safe route preservation, README/submission presentation and a bounded implementation plan. The landing is an addition to the same audit, not a separate brand or restarted research task. Use genuine thesis #1 and fork #2; never fabricate activity or execution.
 
@@ -35,7 +35,7 @@ Official enrollment requires a provider-whitelisted Origin for browser and backe
 
 Keep v1 domains, ABI types and fields unchanged. Docs describe `at.l` as transaction-local log index and account/order IDs as uint64 numbers; receipt correspondence and lossless parsing must be validated with real authoritative evidence after approval. Static vectors are not live verification. The relay transport remains disabled. Current official Metropolis bounty still requires a production-ready bot/automation with real onchain activity: manual FORK execution is NOT ELIGIBLE. No automation is added for eligibility.
 
-See [Perpl checkpoint](evidence/phase3/PERPL.md) for evidence and the single provider action. Resume this gate after Origin approval; final submission polish remains subsequent and unstarted.
+See [Perpl checkpoint](build-log/evidence/phase3/PERPL.md) for evidence and the single provider action. Resume this gate after Origin approval; final submission polish remains subsequent and unstarted.
 
 ## D-049 - Canonical public HTTPS cutover on cherry
 
@@ -209,7 +209,7 @@ Date: 2026-10-04
 
 Decision:
 
-Originality = eligible roots with at least one external fork / eligible roots. Contribution = eligible authored forks with at least one external fork / eligible authored forks. Display Emerging below three eligible roots/forks; otherwise percentage with numerator/denominator. Eligible means canonical indexed roots/forks in the active registry namespace, with no age or execution prerequisite. External means a child author different from the thesis author. Influence = distinct external wallets directly forking any thesis by the user. Executions Inspired = distinct independently verified executions on strict descendants of any thesis by the user, counted once per author across overlapping ancestor paths. Self-fork edges never improve reputation; exclude the originating author's own executions from Executions Inspired. No Sybil-resistance claim, PnL component, log-normalized score or arbitrary 0–100 score.
+Originality = eligible roots with at least one external fork / eligible roots. Contribution = eligible authored forks with at least one external fork / eligible authored forks. Display Emerging below three eligible roots/forks; otherwise percentage with numerator/denominator. Eligible means canonical indexed roots/forks in the active registry namespace, with no age or execution prerequisite. External means a child author different from the thesis author. Influence = distinct external wallets directly forking any thesis by the user. Executions Inspired = distinct independently verified executions on strict descendants of any thesis by the user, counted once per author across overlapping ancestor paths. Self-fork edges never improve reputation; exclude the originating author's own executions from Executions Inspired. No Sybil-resistance claim, PnL component, log-normalized score or arbitrary 0 to 100 score.
 
 ## D-016 - Execution status and trust
 
@@ -328,7 +328,7 @@ Replace the undefined Wilson/log Most Forked formula with distinct external dire
 Status: Accepted implementation choice within approved Phase 2
 Date: 2026-10-04
 
-Use Privy React 3.47.0 and current Node SDK @privy-io/node 0.35.0. Resolve the DID from verified access tokens, then fetch authoritative linked wallets; product services depend on AuthVerifier rather than SDK internals. Use Envio 3.12.1 V3 `indexer.onEvent`, autodiscovered handlers and createTestIndexer, replacing the prior generated-module examples. Keep Envio fully inside its project directory. Drizzle 0.45.3/kit 0.31.11 remain stable pinned releases; Neon 1.2.0 Pool supports the interactive identity transaction and deferrable selected-wallet ownership FK. Next 16 asynchronous route params and viem receipt/event APIs follow current official docs. Documentation references are in 32_PHASE2_SOCIAL_CORE.md.
+Use Privy React 3.47.0 and current Node SDK @privy-io/node 0.35.0. Resolve the DID from verified access tokens, then fetch authoritative linked wallets; product services depend on AuthVerifier rather than SDK internals. Use Envio 3.12.1 V3 `indexer.onEvent`, autodiscovered handlers and createTestIndexer, replacing the prior generated-module examples. Keep Envio fully inside its project directory. Drizzle 0.45.3/kit 0.31.11 remain stable pinned releases; Neon 1.2.0 Pool supports the interactive identity transaction and deferrable selected-wallet ownership FK. Next 16 asynchronous route params and viem receipt/event APIs follow current official docs. Documentation references are in build-log/32_PHASE2_SOCIAL_CORE.md.
 
 ## D-029 - Isolated PostgreSQL and real handler test workspace
 
@@ -392,7 +392,7 @@ Use ENVIO_FORK_REGISTRY_ADDRESS and ENVIO_FORK_START_BLOCK for live indexer conf
 
 ## D-037 - Permitted Nansen profile context and bounded credit use
 
-Status: Accepted implementation choice within approved Phase 3 Gates 12–13
+Status: Accepted implementation choice within approved Phase 3 Gates 12 to 13
 Date: 2026-10-04
 
 Keep Smart Signal's existing social tuple; do not introduce unmeasured ranking enrichment. Offer separately labeled Monad mainnet PnL context on a real wallet profile, never Testnet/native reputation. Rechecked policy explicitly permits PnL/PnL Summary; strip labels and unknown payload fields. Add one dedicated shared cache table (superseding D-032's eight-table limit solely for this approved integration). Reserve Free-tier 10 credits per attempt across instances/users, default budget 20/day, one-hour success/empty cache, five-minute error cache and no billed retries. Disabled/outage states cannot break social data. Actual provider proof remains pending; fixture success is not live evidence.
@@ -426,7 +426,7 @@ Use the pinned React SDK's documented Ethereum-only appearance, automatic embedd
 
 Provide an opt-in /dev/privy page restricted to non-test localhost development and returning 404 in production. It uses the existing real viem/Privy provider adapter for a harmless EIP-712 proof, public-address recovery and at most one attempted zero-value self transaction per mounted check. An empty balance reports READY / NEEDS TESTNET MON without sending. It is outside product navigation and contains no fake wallet/key, token logging, signature persistence, contract deployment or trade. Actual credentialed proof remains pending; isolated SDK JWT/database tests do not satisfy live evidence.
 
-Current official documentation describes app creation/configuration through the dashboard. The installed official Node SDK app-settings API is read-only and requires app credentials already; no documented app-bootstrap CLI/API was established. Follow the user's explicit dashboard handoff rule after completing local preparation. Sources and exact settings are recorded in [Privy evidence](evidence/phase3/PRIVY.md).
+Current official documentation describes app creation/configuration through the dashboard. The installed official Node SDK app-settings API is read-only and requires app credentials already; no documented app-bootstrap CLI/API was established. Follow the user's explicit dashboard handoff rule after completing local preparation. Sources and exact settings are recorded in [Privy evidence](build-log/evidence/phase3/PRIVY.md).
 
 ## D-041 - Development signing proof rejected before response streaming
 
@@ -462,7 +462,7 @@ Date: 2026-10-09
 
 Preserve the existing Foundry direct-deployment flow with a separate local Testnet-only deployer, rather than adding a Privy deployment UI or exporting an embedded-wallet key. The user explicitly authorized creating this wallet. Store its encrypted keystore and generated password only under ignored .tools/foundry/keystores with directory mode 0700 and file modes 0600; neither credential belongs to the application/server or git. Public address: 0x8EEACa7389758aa32fc672714565aA77503e2091. No deployment or privileged application signer is implied.
 
-Current official Monad documentation supports Foundry 1.8+, chain 10143, https://testnet-rpc.monad.xyz and the current faucet https://faucet.monad.xyz. Keep reviewed Solidity 0.8.37, Prague and optimizer 200 unchanged. Prefer the officially documented Sourcify verification endpoint after deployment without modifying bytecode for verification. At 2026-10-09T12:01:45.473Z the official RPC confirmed chain 10143, a plain deployer EOA, pending nonce 0 and balance 0 MON. Stop for one faucet funding action; recommend 1 Testnet MON. Confirm balance before any deployment. See [Monad preflight evidence](evidence/phase3/MONAD.md).
+Current official Monad documentation supports Foundry 1.8+, chain 10143, https://testnet-rpc.monad.xyz and the current faucet https://faucet.monad.xyz. Keep reviewed Solidity 0.8.37, Prague and optimizer 200 unchanged. Prefer the officially documented Sourcify verification endpoint after deployment without modifying bytecode for verification. At 2026-10-09T12:01:45.473Z the official RPC confirmed chain 10143, a plain deployer EOA, pending nonce 0 and balance 0 MON. Stop for one faucet funding action; recommend 1 Testnet MON. Confirm balance before any deployment. See [Monad preflight evidence](build-log/evidence/phase3/MONAD.md).
 
 D-044 completion: after explicit user funding confirmation, official RPC verified 5 MON. Exactly one direct deployment transaction succeeded; canonical receipt/code proof, initial-state reads and official Sourcify exact_match verification passed. The user-reviewed Solidity/config commit remains dfcc50f7b95bf6df035cf97c739b503493856797. The first verification request's native-platform compiler suffix was corrected to the same canonical compiler identifier without source/bytecode changes. Registry configuration is server-side in ignored .env.local. Stop before Envio review; see the completed Monad evidence.
 
@@ -473,7 +473,7 @@ Date: 2026-10-09
 
 Current official Envio documentation provides the separate envio-cloud CLI for browser login, indexer/repository management, ENVIO_ environment configuration and commit-based deployment. Use pinned local tooling 1.0.0 under ignored .tools rather than requiring manual dashboard configuration or upgrading HyperIndex 3.12.1. Preserve standalone pnpm 10.32.0/Node 24 compatibility. Browser login approval and any unavoidable GitHub App authorization remain human actions; never ask for pasted tokens.
 
-Use the canonical Monad deployment artifact to derive the real public registry/start-block variables. Prefer one development-tier public-event indexer, a dedicated envio branch and explicit commit deployment with auto-deploy disabled to avoid creating new indexer versions for unrelated documentation/web pushes. Confirm actual account settings before creation. Cloud indexers have provider-managed HyperSync access; do not generate an unnecessary HyperSync API token. Keep Cloud account credentials out of web environment, browser and git. No paid plan, billing change or thesis publication is authorized. Sources, preflight and pending live checks are in [Envio evidence](evidence/phase3/ENVIO.md).
+Use the canonical Monad deployment artifact to derive the real public registry/start-block variables. Prefer one development-tier public-event indexer, a dedicated envio branch and explicit commit deployment with auto-deploy disabled to avoid creating new indexer versions for unrelated documentation/web pushes. Confirm actual account settings before creation. Cloud indexers have provider-managed HyperSync access; do not generate an unnecessary HyperSync API token. Keep Cloud account credentials out of web environment, browser and git. No paid plan, billing change or thesis publication is authorized. Sources, preflight and pending live checks are in [Envio evidence](build-log/evidence/phase3/ENVIO.md).
 
 D-045 completion: user-approved OAuth and repository-only GitHub App installation succeeded. One public development EU deployment is active/synced, version d98ed3a, with canonical chain/registry/start block and provider-managed HyperSync access. The initial pre-creation push registered no commit; a later evidence push registered the branch, then explicit deployment succeeded. Preserve the existing handler/config/schema and public GraphQL reader; actual generated types match. Prepare read-only two-second receipt/visibility polling, report an honest upper bound including late starts, and do not publish until review. Evidence and full checks are in the completed Envio report.
 
@@ -489,7 +489,7 @@ T0 is observed when the real wallet adapter returns its submitted transaction ha
 Seven focused regression cases pass for replay/refresh, missing T0, wallet/registry/parent mismatch, backward clock, unexpected secret-bearing fields and production/test-workspace isolation. Format/lint/web strict typecheck pass. The actual User A session is hydrated and 5 Testnet MON is confirmed. Automatic approval review rejected the agent's prepared Publish on Monad click because it starts the real publication/wallet flow without action-specific content/payload consent; do not retry or bypass. The prepared concrete ETH LONG demo is handed to the user for that UI action, then the wallet approval remains human-controlled. No real latency is claimed until publication succeeds.
 
 
-## D-053 — Approved B2 signature product experience
+## D-053: Approved B2 signature product experience
 
 Status: Accepted, explicitly authorized B2 implementation gate
 Date: 2026-10-11
@@ -497,20 +497,20 @@ Date: 2026-10-11
 Refine Thesis Detail, the existing bounded Envio Idea Tree, canonical immediate-parent Fork Diff and the existing Fork Composer. Reuse B1 tokens/fonts and all existing trust boundaries. Use nested custom React/CSS nodes, URL-preserved selection, a contextual parent comparison and a mobile comparison shortcut rather than a new graph dependency. Draft previews use shared field schemas and forkDifference; incomplete fields remain explicitly pending without erasing other valid changes. Publication still uses the existing shared meaningful-change validation and immutable contract flow. No contracts, schema, reputation, authentication, Envio deployment or executionRef change. Perpl and Nansen remain deferred. Validate locally, review actual screenshots, preserve the B1 release for rollback, deploy only FORK on Cherry and safely synchronize the existing private remote without history rewrites. Stop before B3.
 
 
-## D-054 — Approved B3 final social product polish
+## D-054: Approved B3 final social product polish
 
 Status: Accepted, explicitly authorized timeboxed B3 implementation gate
 Date: 2026-10-12
 
 Extend B1/B2 precision typography and hierarchy to Feed, Explore, root Create and Profile. Reuse trusted server parent differences for compact Feed previews; local Explore search/type/sort operates only on the existing bounded dataset. Preserve exact ranking/reputation/publication/authentication/protocol semantics. Keep successful query data visible with explicit failure/recovery when a background refresh fails. Match GET timeout to the existing two-attempt upstream read budget, without changing mutation timeouts. No provider configuration, dependencies, contracts or schema changes. Validate all six requested widths and real public data, preserve B2 rollback and deploy only FORK. Keep GitHub private and stop before B4.
 
-## D-055 — B4 submission package; product freeze (2026-10-12)
+## D-055: B4 submission package; product freeze (2026-10-12)
 
 User approved B3 and froze product design/development. Prioritize the actual Metropolis portal, judge-readable README, complete public-release history/privacy review, genuine technical demo and separate founder pitch. Track 03 remains primary; Privy signing and Envio indexing are the supported sponsor entries. Perpl and Nansen stay deferred, no new publication/trade transactions, no UI changes. Save the private draft early. Public repo visibility, external video publication and final portal submission retain explicit approval gates. Official rules require open source/AI disclosure; a proposed MIT license awaits owner rights confirmation rather than asserting ownership outside Git. Do not route around the browser's denied logo upload.
 
 ## D-056: Backing, native testnet MON split along the lineage
 
-Status: Accepted by explicit owner instruction; contract implemented and tested, deployment pending approval
+Status: Accepted by explicit owner instruction; contract implemented, tested and deployed on 2026-10-12 at `0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f` (block 70423451), source verified on Sourcify
 Date: 2026-10-12
 
 Decision:

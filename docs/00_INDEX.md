@@ -4,63 +4,52 @@ This folder is the source of truth for product, design, engineering, hackathon c
 
 ## Product
 
-- `01_PRODUCT_BRIEF.md` - one-page product definition and positioning
-- `02_PRD.md` - complete product requirements
-- `03_TRACK3_AND_BOUNTY_STRATEGY.md` - Metropolis Track 03 and sponsor alignment
-- `04_USER_FLOWS.md` - exact user journeys and edge cases
-- `05_INFORMATION_ARCHITECTURE.md` - screens, navigation, content hierarchy
-- `06_DESIGN_SYSTEM.md` - visual system, components, interaction rules
+- `01_PRODUCT_BRIEF.md`: one-page product definition and positioning
+- `02_PRD.md`: complete product requirements
+- `03_TRACK3_AND_BOUNTY_STRATEGY.md`: Metropolis Track 03 and sponsor alignment
+- `04_USER_FLOWS.md`: exact user journeys and edge cases
+- `05_INFORMATION_ARCHITECTURE.md`: screens, navigation, content hierarchy
+- `06_DESIGN_SYSTEM.md`: visual system, components, interaction rules
 
 ## Engineering
 
-- `07_TECH_ARCHITECTURE.md` - system architecture and ownership boundaries
-- `08_SMART_CONTRACT_SPEC.md` - FORKRegistry and FORKBacking contracts and event models
-- `FORKBACKING_COVERAGE.md` - FORKBacking test results, coverage, gas and method
-- `DESIGN_QUALITY.md` - Lighthouse runs, width checks and automated flows for the redesign
-- `09_DATA_MODEL.md` - Postgres and derived entity models
-- `10_BACKEND_API.md` - HTTP API contracts and auth model
-- `11_FRONTEND_SPEC.md` - frontend architecture and screen-level requirements
-- `12_ENVIO_INDEXER.md` - HyperIndex schema, handlers, and queries
-- `13_PERPL_INTEGRATION.md` - Perpl enrollment, execution, verification, and optional automation
-- `14_PRIVY_INTEGRATION.md` - auth, embedded wallet, signing, and security
-- `15_NANSEN_INTEGRATION.md` - permitted external wallet PnL context inside discovery/profile
-- `16_SECURITY_THREAT_MODEL.md` - threats and mitigations
-- `17_TESTING_QA.md` - automated and manual test plan
-- `18_OBSERVABILITY_RUNBOOK.md` - logging, alerts, incident actions
-- `23_DEPLOYMENT_ENV.md` - environments, secrets, deployment order
+- `07_TECH_ARCHITECTURE.md`: system architecture and ownership boundaries
+- `08_SMART_CONTRACT_SPEC.md`: FORKRegistry and FORKBacking contracts and event models
+- `FORKBACKING_COVERAGE.md`: FORKBacking test results, coverage, gas and method
+- `DESIGN_QUALITY.md`: Lighthouse runs, width checks and automated flows for the redesign
+- `MONAD_PERFORMANCE.md`: what FORK measures on Monad, how, and the recorded results
+- `09_DATA_MODEL.md`: Postgres and derived entity models
+- `10_BACKEND_API.md`: HTTP API contracts and auth model
+- `11_FRONTEND_SPEC.md`: frontend architecture and screen-level requirements
+- `12_ENVIO_INDEXER.md`: HyperIndex schema, handlers, and queries
+- `13_PERPL_INTEGRATION.md`: Perpl execution design. Deferred, not part of the product
+- `14_PRIVY_INTEGRATION.md`: auth, embedded wallet, signing, and security
+- `15_NANSEN_INTEGRATION.md`: external wallet context design. Deferred, not part of the product
+- `16_SECURITY_THREAT_MODEL.md`: threats and mitigations
+- `17_TESTING_QA.md`: automated and manual test plan
+- `18_OBSERVABILITY_RUNBOOK.md`: logging, alerts, incident actions
+- `23_DEPLOYMENT_ENV.md`: environments, secrets, deployment order
 
 ## Execution
 
-- `19_ANALYTICS_METRICS.md` - product and demo metrics
-- `20_3_DAY_EXECUTION_PLAN.md` - hour-by-hour three-day plan
-- `21_CODEX_TASKS.md` - ordered implementation task queue
-- `22_ACCEPTANCE_CRITERIA.md` - feature-level pass/fail criteria
-- `24_DEMO_SUBMISSION.md` - 3-minute demo, 2-minute pitch, submission checklist
-- `25_LAUNCH_TRACTION.md` - seed users and traction plan
-- `26_RISK_REGISTER.md` - schedule, integration, product, and security risks
-- `27_ROADMAP.md` - post-hackathon roadmap
-- `28_RESEARCH_SOURCES.md` - verified source links and research notes
-- `29_DECISIONS.md` - decision log
-- `30_DEFINITION_OF_DONE.md` - final go/no-go checklist
-- `31_PHASE1_FOUNDATION.md` - implemented foundation boundaries, pinned tooling and checks
+- `19_ANALYTICS_METRICS.md`: product and demo metrics
+- `22_ACCEPTANCE_CRITERIA.md`: feature-level pass/fail criteria
+- `24_DEMO_SUBMISSION.md`: what the submission consists of, where each piece lives and what is still open
+- `25_LAUNCH_TRACTION.md`: seed users and traction plan
+- `26_RISK_REGISTER.md`: schedule, integration, product, and security risks
+- `27_ROADMAP.md`: post-hackathon roadmap
+- `28_RESEARCH_SOURCES.md`: verified source links and research notes
+- `29_DECISIONS.md`: decision log
+- `30_DEFINITION_OF_DONE.md`: final go/no-go checklist
 
-## Working order
+## Build log
 
-For implementation, read in this order:
+How the product was built, kept as a record. These are process documents, not the current specification: where they disagree with the files above or with the decision log, the decision log wins.
 
-1. Product brief
-2. PRD
-3. Architecture
-4. Contract spec
-5. Data model
-6. Integration specs
-7. Three-day plan
-8. Codex tasks
-9. Acceptance criteria
-10. Definition of done
-
-## Implementation reports
-
-- [31_PHASE1_FOUNDATION.md](31_PHASE1_FOUNDATION.md) — foundation evidence and scope
-- [32_PHASE2_SOCIAL_CORE.md](32_PHASE2_SOCIAL_CORE.md) — implemented social core, local run, trust boundaries, tests and review artifacts
-- [33_PHASE3_LIVE_INTEGRATION.md](33_PHASE3_LIVE_INTEGRATION.md) — live-integration preparation, public observations, pending human configuration and gate evidence
+- [20_3_DAY_EXECUTION_PLAN.md](build-log/20_3_DAY_EXECUTION_PLAN.md): the original three-day plan
+- [21_TASK_QUEUE.md](build-log/21_TASK_QUEUE.md): the original ordered task queue
+- [31_PHASE1_FOUNDATION.md](build-log/31_PHASE1_FOUNDATION.md): foundation scope and checks
+- [32_PHASE2_SOCIAL_CORE.md](build-log/32_PHASE2_SOCIAL_CORE.md): the social core, its trust boundaries and tests
+- [33_PHASE3_LIVE_INTEGRATION.md](build-log/33_PHASE3_LIVE_INTEGRATION.md): live integration preparation and observations
+- [evidence/phase3/](build-log/evidence/phase3/): dated checkpoint reports and their data for Privy, Monad, Envio, hosting and the design stages
+- [submission/](build-log/submission/): the first submission package of October 12, 2026, before backing existed
