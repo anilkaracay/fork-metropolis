@@ -3,13 +3,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { ProfileSummary } from "@fork/shared";
+import { HANDLE_MAX, type ProfileSummary } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import { useSession } from "./session";
 import { Avatar, EmptyState, ErrorState, Skeleton, ReadStatus } from "./common";
 import { ThesisCard } from "./thesis-card";
 import { Icon } from "./icon";
 import { ExternalWalletContext } from "./wallet-context";
+import { AccountWallet } from "./account-wallet";
+import { requestHandleClaim } from "./handle-claim";
 export function MyProfile() {
   const auth = useSession(),
     router = useRouter();
@@ -39,7 +41,13 @@ export function ProfileScreen({ handle }: { handle: string }) {
       staleTime: 30000,
     }),
     [tab, setTab] = useState<"all" | "roots" | "forks">("all"),
-    [editing, setEditing] = useState(false);
+    [editing, setEditing] = useState(false),
+    router = useRouter();
+  // A link to the handle an account started with lands on its current profile.
+  const canonical = query.data?.identity.handle;
+  useEffect(() => {
+    if (canonical && canonical !== handle) router.replace(`/u/${canonical}`);
+  }, [canonical, handle, router]);
   const [copyState, setCopyState] = useState("Copy wallet");
   async function copyWallet(wallet: string) {
     try {
@@ -86,6 +94,16 @@ export function ProfileScreen({ handle }: { handle: string }) {
         )}
       </header>
       {p.bio && <p className="profile-bio">{p.bio}</p>}
+      {isOwner && (
+        <div className="profile-account">
+          {auth.session?.handleClaimed === false && (
+            <button className="text-button" onClick={requestHandleClaim}>
+              Claim your handle
+            </button>
+          )}
+          <AccountWallet />
+        </div>
+      )}
       <div className="profile-wallet">
         <span className="network-label">
           <i />
@@ -276,7 +294,9 @@ function ProfileEditor({ profile }: { profile: ProfileSummary }) {
           value={handle}
           onChange={(e) => setHandle(e.target.value)}
           minLength={3}
-          maxLength={24}
+          maxLength={HANDLE_MAX}
+          autoCapitalize="none"
+          spellCheck={false}
           required
         />
       </label>

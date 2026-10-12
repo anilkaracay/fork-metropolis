@@ -109,7 +109,7 @@ export async function handleApi(request: Request, path: string[]) {
       const runtime = await getTestRuntime();
       if (route === "test/identity" && method === "POST") {
         const v = z
-          .object({ name: z.enum(["alice", "bob", "carol"]) })
+          .object({ name: z.enum(["alice", "bob", "carol", "dana"]) })
           .strict()
           .parse(await body(request));
         const result = await runtime.login(v.name);
@@ -118,6 +118,14 @@ export async function handleApi(request: Request, path: string[]) {
       if (route === "test/reset" && method === "POST") {
         await runtime.reset();
         return reply({ reset: true });
+      }
+      if (route === "test/faucet" && method === "POST") {
+        const v = z
+          .object({ balanceWei: z.string().regex(/^\d{1,30}$/) })
+          .strict()
+          .parse(await body(request));
+        runtime.setFaucetBalance(BigInt(v.balanceWei));
+        return reply({ balanceWei: v.balanceWei });
       }
       if (route === "test/submit" && method === "POST") {
         const session = await authenticate(
@@ -232,6 +240,25 @@ export async function handleApi(request: Request, path: string[]) {
     const session = await authenticate(core.db, runtime.auth, request);
     if (route === "profile" && method === "POST")
       return reply(await core.updateProfile(session, await body(request)));
+    if (path[0] === "handles" && path.length === 2 && method === "GET")
+      return reply(await core.handleAvailability(session, path[1]!));
+    if (route === "account/wallet" && method === "GET") {
+      const balance = await runtime.faucet.balanceOf(session.wallet);
+      return reply({
+        wallet: session.wallet,
+        balanceWei: balance.toString(),
+        drip: await runtime.faucet.status(session, balance),
+      });
+    }
+    if (route === "account/drip" && method === "POST") {
+      await core.rate(session, "welcome-drip", 6, 3600);
+      const drip = await runtime.faucet.drip(session);
+      return reply({
+        wallet: session.wallet,
+        balanceWei: (await runtime.faucet.balanceOf(session.wallet)).toString(),
+        drip,
+      });
+    }
     if (route === "theses/draft" && method === "POST")
       return reply(await core.draft(session, await body(request)));
     if (route === "theses/finalize" && method === "POST")

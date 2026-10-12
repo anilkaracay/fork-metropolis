@@ -34,6 +34,12 @@ const serverSchema = z.object({
   FORK_ENVIO_URL: httpUrl.optional(),
   MONAD_RPC_URL: httpUrl.default("https://testnet-rpc.monad.xyz"),
   FORK_ADMIN_DIDS: z.string().default(""),
+  // Testnet-only welcome faucet key. Server-only; never logged or sent to the browser.
+  FORK_FAUCET_PRIVATE_KEY: z
+    .string()
+    .regex(/^0x[0-9a-fA-F]{64}$/)
+    .transform((v) => v as `0x${string}`)
+    .optional(),
   FORK_TEST_MODE: z.enum(["1"]).optional(),
 });
 

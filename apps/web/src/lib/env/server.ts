@@ -14,6 +14,7 @@ export function getServerEnv() {
     FORK_ENVIO_URL: process.env.FORK_ENVIO_URL,
     MONAD_RPC_URL: process.env.MONAD_RPC_URL,
     FORK_ADMIN_DIDS: process.env.FORK_ADMIN_DIDS,
+    FORK_FAUCET_PRIVATE_KEY: process.env.FORK_FAUCET_PRIVATE_KEY,
     FORK_TEST_MODE: process.env.FORK_TEST_MODE,
   });
 }

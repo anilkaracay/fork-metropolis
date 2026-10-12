@@ -1,0 +1,1337 @@
+{
+  "id": "e5da9c2b-c4d2-4749-b1dc-e6a842c7e84d",
+  "prevId": "93c0cd1f-91cf-46ba-8827-94adfff98358",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.comments": {
+      "name": "comments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registry_address": {
+          "name": "registry_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thesis_id": {
+          "name": "thesis_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author_user_id": {
+          "name": "author_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'visible'"
+        },
+        "request_key": {
+          "name": "request_key",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "comment_thesis_idx": {
+          "name": "comment_thesis_idx",
+          "columns": [
+            {
+              "expression": "chain_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "registry_address",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "thesis_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "comments_author_user_id_users_id_fk": {
+          "name": "comments_author_user_id_users_id_fk",
+          "tableFrom": "comments",
+          "tableTo": "users",
+          "columnsFrom": ["author_user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "comment_thesis_fk": {
+          "name": "comment_thesis_fk",
+          "tableFrom": "comments",
+          "tableTo": "thesis_metadata",
+          "columnsFrom": ["chain_id", "registry_address", "thesis_id"],
+          "columnsTo": ["chain_id", "registry_address", "thesis_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "comment_idempotency": {
+          "name": "comment_idempotency",
+          "nullsNotDistinct": false,
+          "columns": ["author_user_id", "request_key"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "comment_length": {
+          "name": "comment_length",
+          "value": "char_length(\"comments\".\"body\") BETWEEN 1 AND 280"
+        },
+        "comment_status": {
+          "name": "comment_status",
+          "value": "\"comments\".\"status\" IN ('visible','hidden','deleted')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.execution_evidence": {
+      "name": "execution_evidence",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registry_address": {
+          "name": "registry_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thesis_id": {
+          "name": "thesis_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "wallet_address": {
+          "name": "wallet_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verification_status": {
+          "name": "verification_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'attested'"
+        },
+        "position_state": {
+          "name": "position_state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unknown'"
+        },
+        "execution_ref": {
+          "name": "execution_ref",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fill_identity": {
+          "name": "fill_identity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "exchange_address": {
+          "name": "exchange_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "instance_id": {
+          "name": "instance_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "account_id": {
+          "name": "account_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "market_id": {
+          "name": "market_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transaction_hash": {
+          "name": "transaction_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "log_index": {
+          "name": "log_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "evidence": {
+          "name": "evidence",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verified_at": {
+          "name": "verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "fill_identity_once": {
+          "name": "fill_identity_once",
+          "columns": [
+            {
+              "expression": "fill_identity",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "execution_evidence_user_id_users_id_fk": {
+          "name": "execution_evidence_user_id_users_id_fk",
+          "tableFrom": "execution_evidence",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "execution_thesis_fk": {
+          "name": "execution_thesis_fk",
+          "tableFrom": "execution_evidence",
+          "tableTo": "thesis_metadata",
+          "columnsFrom": ["chain_id", "registry_address", "thesis_id"],
+          "columnsTo": ["chain_id", "registry_address", "thesis_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "execution_wallet_fk": {
+          "name": "execution_wallet_fk",
+          "tableFrom": "execution_evidence",
+          "tableTo": "wallets",
+          "columnsFrom": ["user_id", "wallet_address"],
+          "columnsTo": ["user_id", "address"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "execution_per_thesis": {
+          "name": "execution_per_thesis",
+          "nullsNotDistinct": false,
+          "columns": ["chain_id", "registry_address", "thesis_id"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "execution_reference_format": {
+          "name": "execution_reference_format",
+          "value": "\"execution_evidence\".\"execution_ref\" IS NULL OR \"execution_evidence\".\"execution_ref\" ~ '^0x[0-9a-f]{64}$'"
+        },
+        "position_state": {
+          "name": "position_state",
+          "value": "\"execution_evidence\".\"position_state\" IN ('unknown','open','closed')"
+        },
+        "verified_evidence_required": {
+          "name": "verified_evidence_required",
+          "value": "coalesce((\"execution_evidence\".\"verification_status\" = 'attested' AND \"execution_evidence\".\"fill_identity\" IS NULL AND \"execution_evidence\".\"exchange_address\" IS NULL AND \"execution_evidence\".\"instance_id\" IS NULL AND \"execution_evidence\".\"account_id\" IS NULL AND \"execution_evidence\".\"order_id\" IS NULL AND \"execution_evidence\".\"market_id\" IS NULL AND \"execution_evidence\".\"transaction_hash\" IS NULL AND \"execution_evidence\".\"log_index\" IS NULL AND \"execution_evidence\".\"evidence\" IS NULL AND \"execution_evidence\".\"verified_at\" IS NULL AND \"execution_evidence\".\"position_state\" = 'unknown') OR (\"execution_evidence\".\"verification_status\" = 'verified' AND \"execution_evidence\".\"fill_identity\" ~ '^0x[0-9a-f]{64}$' AND \"execution_evidence\".\"exchange_address\" ~ '^0x[0-9a-f]{40}$' AND \"execution_evidence\".\"instance_id\" > 0 AND \"execution_evidence\".\"account_id\" BETWEEN 1 AND 18446744073709551615 AND \"execution_evidence\".\"order_id\" BETWEEN 1 AND 18446744073709551615 AND \"execution_evidence\".\"market_id\" > 0 AND \"execution_evidence\".\"transaction_hash\" ~ '^0x[0-9a-f]{64}$' AND \"execution_evidence\".\"log_index\" >= 0 AND \"execution_evidence\".\"execution_ref\" IS NOT NULL AND \"execution_evidence\".\"evidence\" IS NOT NULL AND \"execution_evidence\".\"verified_at\" IS NOT NULL), false)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.faucet_drips": {
+      "name": "faucet_drips",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "wallet": {
+          "name": "wallet",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_wei": {
+          "name": "amount_wei",
+          "type": "numeric(30, 0)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reserved_day": {
+          "name": "reserved_day",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nonce": {
+          "name": "nonce",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tx_hash": {
+          "name": "tx_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_transaction": {
+          "name": "raw_transaction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "faucet_day_idx": {
+          "name": "faucet_day_idx",
+          "columns": [
+            {
+              "expression": "reserved_day",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "faucet_drips_user_id_users_id_fk": {
+          "name": "faucet_drips_user_id_users_id_fk",
+          "tableFrom": "faucet_drips",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "faucet_drips_wallet_wallets_address_fk": {
+          "name": "faucet_drips_wallet_wallets_address_fk",
+          "tableFrom": "faucet_drips",
+          "tableTo": "wallets",
+          "columnsFrom": ["wallet"],
+          "columnsTo": ["address"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "faucet_drips_user_id_unique": {
+          "name": "faucet_drips_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["user_id"]
+        },
+        "faucet_drips_wallet_unique": {
+          "name": "faucet_drips_wallet_unique",
+          "nullsNotDistinct": false,
+          "columns": ["wallet"]
+        },
+        "faucet_drips_tx_hash_unique": {
+          "name": "faucet_drips_tx_hash_unique",
+          "nullsNotDistinct": false,
+          "columns": ["tx_hash"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "faucet_status": {
+          "name": "faucet_status",
+          "value": "\"faucet_drips\".\"status\" IN ('reserved', 'signed', 'sent', 'confirmed', 'failed')"
+        },
+        "faucet_day_format": {
+          "name": "faucet_day_format",
+          "value": "\"faucet_drips\".\"reserved_day\" ~ '^\\d{4}-\\d{2}-\\d{2}$'"
+        },
+        "faucet_tx_hash_format": {
+          "name": "faucet_tx_hash_format",
+          "value": "\"faucet_drips\".\"tx_hash\" IS NULL OR \"faucet_drips\".\"tx_hash\" ~ '^0x[0-9a-f]{64}$'"
+        },
+        "faucet_signed_fields": {
+          "name": "faucet_signed_fields",
+          "value": "\"faucet_drips\".\"status\" IN ('reserved', 'failed') OR (\"faucet_drips\".\"tx_hash\" IS NOT NULL AND \"faucet_drips\".\"raw_transaction\" IS NOT NULL AND \"faucet_drips\".\"nonce\" IS NOT NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.thesis_metadata": {
+      "name": "thesis_metadata",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registry_address": {
+          "name": "registry_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thesis_id": {
+          "name": "thesis_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "author_user_id": {
+          "name": "author_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author_wallet": {
+          "name": "author_wallet",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "intent": {
+          "name": "intent",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_hash": {
+          "name": "content_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reasoning": {
+          "name": "reasoning",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_note": {
+          "name": "entry_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "tx_hash": {
+          "name": "tx_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_key": {
+          "name": "request_key",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "finalized_at": {
+          "name": "finalized_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "metadata_author_idx": {
+          "name": "metadata_author_idx",
+          "columns": [
+            {
+              "expression": "author_user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "metadata_published_idx": {
+          "name": "metadata_published_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "hidden",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "finalized_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "thesis_metadata_author_user_id_users_id_fk": {
+          "name": "thesis_metadata_author_user_id_users_id_fk",
+          "tableFrom": "thesis_metadata",
+          "tableTo": "users",
+          "columnsFrom": ["author_user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "metadata_wallet_owner": {
+          "name": "metadata_wallet_owner",
+          "tableFrom": "thesis_metadata",
+          "tableTo": "wallets",
+          "columnsFrom": ["author_user_id", "author_wallet"],
+          "columnsTo": ["user_id", "address"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "metadata_namespace": {
+          "name": "metadata_namespace",
+          "nullsNotDistinct": false,
+          "columns": ["chain_id", "registry_address", "thesis_id"]
+        },
+        "draft_idempotency": {
+          "name": "draft_idempotency",
+          "nullsNotDistinct": false,
+          "columns": ["author_user_id", "request_key"]
+        },
+        "receipt_once": {
+          "name": "receipt_once",
+          "nullsNotDistinct": false,
+          "columns": ["chain_id", "registry_address", "tx_hash"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "metadata_registry": {
+          "name": "metadata_registry",
+          "value": "\"thesis_metadata\".\"chain_id\" > 0 AND \"thesis_metadata\".\"registry_address\" ~ '^0x[0-9a-f]{40}$' AND \"thesis_metadata\".\"registry_address\" <> '0x0000000000000000000000000000000000000000'"
+        },
+        "metadata_id_bounds": {
+          "name": "metadata_id_bounds",
+          "value": "(\"thesis_metadata\".\"thesis_id\" IS NULL OR \"thesis_metadata\".\"thesis_id\" BETWEEN 1 AND 18446744073709551615) AND \"thesis_metadata\".\"parent_id\" BETWEEN 0 AND 18446744073709551615"
+        },
+        "metadata_hash": {
+          "name": "metadata_hash",
+          "value": "\"thesis_metadata\".\"content_hash\" ~ '^0x[0-9a-f]{64}$'"
+        },
+        "metadata_lengths": {
+          "name": "metadata_lengths",
+          "value": "char_length(\"thesis_metadata\".\"reasoning\") BETWEEN 10 AND 500 AND (\"thesis_metadata\".\"entry_note\" IS NULL OR char_length(\"thesis_metadata\".\"entry_note\") <= 160) AND cardinality(\"thesis_metadata\".\"tags\") <= 3"
+        },
+        "metadata_state": {
+          "name": "metadata_state",
+          "value": "coalesce((\"thesis_metadata\".\"status\" = 'draft' AND \"thesis_metadata\".\"thesis_id\" IS NULL AND \"thesis_metadata\".\"tx_hash\" IS NULL AND \"thesis_metadata\".\"finalized_at\" IS NULL) OR (\"thesis_metadata\".\"status\" = 'finalized' AND \"thesis_metadata\".\"thesis_id\" IS NOT NULL AND \"thesis_metadata\".\"tx_hash\" ~ '^0x[0-9a-f]{64}$' AND \"thesis_metadata\".\"finalized_at\" IS NOT NULL), false)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.rate_buckets": {
+      "name": "rate_buckets",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "window_start": {
+          "name": "window_start",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "rate_cleanup_idx": {
+          "name": "rate_cleanup_idx",
+          "columns": [
+            {
+              "expression": "window_start",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "rate_buckets_user_id_users_id_fk": {
+          "name": "rate_buckets_user_id_users_id_fk",
+          "tableFrom": "rate_buckets",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "rate_buckets_user_id_action_window_start_pk": {
+          "name": "rate_buckets_user_id_action_window_start_pk",
+          "columns": ["user_id", "action", "window_start"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "rate_count_positive": {
+          "name": "rate_count_positive",
+          "value": "\"rate_buckets\".\"count\" > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.reactions": {
+      "name": "reactions",
+      "schema": "",
+      "columns": {
+        "chain_id": {
+          "name": "chain_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registry_address": {
+          "name": "registry_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thesis_id": {
+          "name": "thesis_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'agree'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reactions_user_id_users_id_fk": {
+          "name": "reactions_user_id_users_id_fk",
+          "tableFrom": "reactions",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reaction_thesis_fk": {
+          "name": "reaction_thesis_fk",
+          "tableFrom": "reactions",
+          "tableTo": "thesis_metadata",
+          "columnsFrom": ["chain_id", "registry_address", "thesis_id"],
+          "columnsTo": ["chain_id", "registry_address", "thesis_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "reactions_chain_id_registry_address_thesis_id_user_id_type_pk": {
+          "name": "reactions_chain_id_registry_address_thesis_id_user_id_type_pk",
+          "columns": [
+            "chain_id",
+            "registry_address",
+            "thesis_id",
+            "user_id",
+            "type"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "reaction_type": {
+          "name": "reaction_type",
+          "value": "\"reactions\".\"type\" = 'agree'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.reports": {
+      "name": "reports",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registry_address": {
+          "name": "registry_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thesis_id": {
+          "name": "thesis_id",
+          "type": "numeric(20, 0)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reporter_user_id": {
+          "name": "reporter_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
+        },
+        "request_key": {
+          "name": "request_key",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "reports_open_idx": {
+          "name": "reports_open_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "reports_reporter_user_id_users_id_fk": {
+          "name": "reports_reporter_user_id_users_id_fk",
+          "tableFrom": "reports",
+          "tableTo": "users",
+          "columnsFrom": ["reporter_user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "report_thesis_fk": {
+          "name": "report_thesis_fk",
+          "tableFrom": "reports",
+          "tableTo": "thesis_metadata",
+          "columnsFrom": ["chain_id", "registry_address", "thesis_id"],
+          "columnsTo": ["chain_id", "registry_address", "thesis_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "report_idempotency": {
+          "name": "report_idempotency",
+          "nullsNotDistinct": false,
+          "columns": ["reporter_user_id", "request_key"]
+        },
+        "report_once": {
+          "name": "report_once",
+          "nullsNotDistinct": false,
+          "columns": [
+            "chain_id",
+            "registry_address",
+            "thesis_id",
+            "reporter_user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "report_reason": {
+          "name": "report_reason",
+          "value": "\"reports\".\"reason\" IN ('spam','abuse','misinformation','other')"
+        },
+        "report_note": {
+          "name": "report_note",
+          "value": "\"reports\".\"note\" IS NULL OR char_length(\"reports\".\"note\") <= 280"
+        },
+        "report_status": {
+          "name": "report_status",
+          "value": "\"reports\".\"status\" IN ('open','reviewed','dismissed','actioned')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "privy_did": {
+          "name": "privy_did",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "handle": {
+          "name": "handle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "initial_handle": {
+          "name": "initial_handle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "handle_claimed_at": {
+          "name": "handle_claimed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bio": {
+          "name": "bio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "primary_wallet": {
+          "name": "primary_wallet",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_privy_did_unique": {
+          "name": "users_privy_did_unique",
+          "nullsNotDistinct": false,
+          "columns": ["privy_did"]
+        },
+        "users_handle_unique": {
+          "name": "users_handle_unique",
+          "nullsNotDistinct": false,
+          "columns": ["handle"]
+        },
+        "users_initial_handle_unique": {
+          "name": "users_initial_handle_unique",
+          "nullsNotDistinct": false,
+          "columns": ["initial_handle"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "handle_format": {
+          "name": "handle_format",
+          "value": "\"users\".\"handle\" ~ '^[a-z0-9_]{3,24}$'"
+        },
+        "bio_length": {
+          "name": "bio_length",
+          "value": "\"users\".\"bio\" IS NULL OR char_length(\"users\".\"bio\") <= 160"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.wallet_context_cache": {
+      "name": "wallet_context_cache",
+      "schema": "",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "wallet_address": {
+          "name": "wallet_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lease_id": {
+          "name": "lease_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lease_expires_at": {
+          "name": "lease_expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "wallet_context_cache_wallet_address_wallets_address_fk": {
+          "name": "wallet_context_cache_wallet_address_wallets_address_fk",
+          "tableFrom": "wallet_context_cache",
+          "tableTo": "wallets",
+          "columnsFrom": ["wallet_address"],
+          "columnsTo": ["address"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.wallets": {
+      "name": "wallets",
+      "schema": "",
+      "columns": {
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "wallet_user_idx": {
+          "name": "wallet_user_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "wallets_user_id_users_id_fk": {
+          "name": "wallets_user_id_users_id_fk",
+          "tableFrom": "wallets",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "wallet_owner_pair": {
+          "name": "wallet_owner_pair",
+          "nullsNotDistinct": false,
+          "columns": ["user_id", "address"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "wallet_address_format": {
+          "name": "wallet_address_format",
+          "value": "\"wallets\".\"address\" ~ '^0x[0-9a-f]{40}$' AND \"wallets\".\"address\" <> '0x0000000000000000000000000000000000000000'"
+        },
+        "wallet_kind": {
+          "name": "wallet_kind",
+          "value": "\"wallets\".\"kind\" IN ('embedded', 'external')"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

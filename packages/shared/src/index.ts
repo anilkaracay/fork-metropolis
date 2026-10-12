@@ -8,3 +8,4 @@ export * from "./execution-ref.ts";
 export * from "./registry.ts";
 export * from "./social.ts";
 export * from "./publish.ts";
+export * from "./handle.ts";

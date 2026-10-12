@@ -17,6 +17,7 @@ export type Session = {
   wallet: string;
   handle: string;
   displayName: string;
+  handleClaimed: boolean;
 };
 export function bearer(request: Request): string {
   const value = request.headers.get("authorization");
@@ -108,6 +109,7 @@ export async function synchronizeIdentity(
       wallet: selected,
       handle: user.handle,
       displayName: user.displayName ?? user.handle,
+      handleClaimed: user.handleClaimedAt !== null,
     };
   });
 }

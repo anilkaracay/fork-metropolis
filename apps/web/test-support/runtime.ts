@@ -16,6 +16,7 @@ import {
   type VerifiedIdentity,
 } from "../src/server/auth";
 import { AppError, assert } from "../src/server/errors";
+import { Faucet, TRANSFER_GAS, type FaucetChain } from "../src/server/faucet";
 
 export const testIdentities = {
   alice: {
@@ -30,12 +31,35 @@ export const testIdentities = {
     did: "did:test:carol",
     wallets: [{ address: `0x${"33".repeat(20)}`, kind: "embedded" }],
   },
+  // A first-time account: it keeps its generated handle until it claims one.
+  dana: {
+    did: "did:test:dana",
+    wallets: [{ address: `0x${"44".repeat(20)}`, kind: "embedded" }],
+  },
 } satisfies Record<string, VerifiedIdentity>;
+const profiles: Partial<
+  Record<keyof typeof testIdentities, { displayName: string; bio: string }>
+> = {
+  alice: {
+    displayName: "Alice Chen",
+    bio: "Writing ideas worth improving.",
+  },
+  bob: {
+    displayName: "Bora Kaya",
+    bio: "A better question can change the whole thesis.",
+  },
+  carol: {
+    displayName: "Carol Bennett",
+    bio: "A better question can change the whole thesis.",
+  },
+};
+const FAUCET_START = 100n * 10n ** 18n;
 type TestRuntime = Runtime & {
   login(
     name: keyof typeof testIdentities,
   ): Promise<{ session: Session; token: string }>;
   submit(session: Session, draftId: string): Promise<{ txHash: string }>;
+  setFaucetBalance(balance: bigint): void;
   reset(): Promise<void>;
   context: ReturnType<typeof resolveMvpContext>;
 };
@@ -134,6 +158,34 @@ async function create(): Promise<TestRuntime> {
     draftHashes = new Map<string, string>();
   let nextId = 1n;
   const context = resolveMvpContext(fixture);
+  // Simulated faucet account and wallet balances. A broadcast transfer lands at once.
+  const ledger = new Map<string, bigint>(),
+    transfers = new Map<string, { to: string; value: bigint; nonce: number }>(),
+    landed = new Set<string>();
+  let faucetBalance = FAUCET_START,
+    faucetNonce = 0;
+  const faucetChain: FaucetChain = {
+    balanceOf: async (address) => ledger.get(address) ?? 0n,
+    funds: async () => ({
+      balance: faucetBalance,
+      transferFee: TRANSFER_GAS * 102_000_000_000n,
+    }),
+    async sign(to, value) {
+      const hash = keccak256(stringToHex(`drip:${to}:${faucetNonce}`));
+      transfers.set(hash, { to, value, nonce: faucetNonce });
+      return { hash, raw: hash, nonce: faucetNonce };
+    },
+    async broadcast(raw) {
+      const transfer = transfers.get(raw);
+      if (!transfer || landed.has(raw)) return;
+      landed.add(raw);
+      faucetNonce = transfer.nonce + 1;
+      faucetBalance -= transfer.value;
+      ledger.set(transfer.to, (ledger.get(transfer.to) ?? 0n) + transfer.value);
+    },
+    receipt: async (hash) => (landed.has(hash) ? "success" : null),
+    minedNonce: async () => faucetNonce,
+  };
   const auth = {
     async verify(accessToken: string) {
       const name = (
@@ -176,40 +228,26 @@ async function create(): Promise<TestRuntime> {
   return {
     core,
     auth,
+    faucet: new Faucet(connection.db, faucetChain, faucetChain),
     test: true,
     context,
+    setFaucetBalance(balance) {
+      faucetBalance = balance;
+    },
     async login(name) {
-      const session = await synchronizeIdentity(
+      let session = await synchronizeIdentity(
         connection.db,
         testIdentities[name],
       );
-      if (session.handle !== name)
-        await core.updateProfile(session, {
-          handle: name,
-          displayName:
-            name === "alice"
-              ? "Alice Chen"
-              : name === "bob"
-                ? "Bora Kaya"
-                : "Carol Bennett",
-          bio:
-            name === "alice"
-              ? "Writing ideas worth improving."
-              : "A better question can change the whole thesis.",
-        });
-      return {
-        session: {
-          ...session,
-          handle: name,
-          displayName:
-            name === "alice"
-              ? "Alice Chen"
-              : name === "bob"
-                ? "Bora Kaya"
-                : "Carol Bennett",
-        },
-        token: token(name),
-      };
+      const profile = profiles[name];
+      if (profile && session.handle !== name) {
+        await core.updateProfile(session, { handle: name, ...profile });
+        session = await synchronizeIdentity(
+          connection.db,
+          testIdentities[name],
+        );
+      }
+      return { session, token: token(name) };
     },
     async submit(session, draftId) {
       const [draft] = await connection.db
@@ -247,13 +285,18 @@ async function create(): Promise<TestRuntime> {
     },
     async reset() {
       await connection.db.execute(
-        sql`TRUNCATE users, wallets, thesis_metadata, comments, reactions, reports, execution_evidence, rate_buckets CASCADE`,
+        sql`TRUNCATE users, wallets, thesis_metadata, comments, reactions, reports, execution_evidence, rate_buckets, faucet_drips CASCADE`,
       );
       await bridge("/reset", {});
       receipts.clear();
       indexed.clear();
       draftHashes.clear();
       nextId = 1n;
+      ledger.clear();
+      transfers.clear();
+      landed.clear();
+      faucetBalance = FAUCET_START;
+      faucetNonce = 0;
     },
   };
 }

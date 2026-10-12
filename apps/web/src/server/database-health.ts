@@ -12,7 +12,7 @@ export async function databaseHealth() {
     await connection.db.execute(sql`SELECT 1`);
     const result = await connection.db.execute(sql`SELECT count(*)::int AS count
       FROM drizzle.__drizzle_migrations`);
-    if (Number(result.rows[0]?.count) < 3)
+    if (Number(result.rows[0]?.count) < 4)
       throw new Error("Migrations incomplete");
     return { database: "ready", migrations: "applied" };
   } catch {

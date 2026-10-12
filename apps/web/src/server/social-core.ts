@@ -1,4 +1,4 @@
-import { and, eq, inArray, desc, sql } from "drizzle-orm";
+import { and, eq, inArray, desc, or, sql } from "drizzle-orm";
 import { schema, type Database } from "@fork/db";
 import { z } from "zod";
 import {
@@ -11,6 +11,10 @@ import {
   forkDifference,
   rankFeed,
   reputation,
+  handleProblem,
+  handleSchema,
+  isGeneratedHandle,
+  normalizeHandle,
   type GraphThesis,
   type FeedThesis,
   type FeedMode,
@@ -26,7 +30,7 @@ import {
   type PublishIntent,
   type ReceiptSource,
 } from "./receipt";
-import { assert } from "./errors";
+import { AppError, assert } from "./errors";
 
 const m = schema.metadata;
 const keySchema = z.string().uuid();
@@ -416,10 +420,17 @@ export class SocialCore {
     };
   }
   async profile(handle: string): Promise<ProfileSummary> {
-    const [user] = await this.db
+    // A link to the handle an account started with keeps resolving after a claim.
+    const matches = await this.db
       .select()
       .from(schema.users)
-      .where(eq(schema.users.handle, handle));
+      .where(
+        or(
+          eq(schema.users.handle, handle),
+          eq(schema.users.initialHandle, handle),
+        ),
+      );
+    const user = matches.find((u) => u.handle === handle) ?? matches[0];
     assert(
       user?.primaryWallet,
       "PROFILE_NOT_FOUND",
@@ -917,39 +928,76 @@ export class SocialCore {
       .where(this.socialWhere(schema.reports, id));
     return { hidden };
   }
+  /** Whether the signed-in user could claim this handle right now. */
+  async handleAvailability(session: Session, input: string) {
+    const handle = normalizeHandle(input);
+    const [owner] = await this.db
+      .select({ id: schema.users.id })
+      .from(schema.users)
+      .where(eq(schema.users.handle, handle));
+    if (owner?.id === session.userId)
+      return { handle, available: true, problem: null };
+    const problem =
+      handleProblem(handle) ?? (owner ? "This handle is already taken." : null);
+    return { handle, available: !problem, problem };
+  }
   async updateProfile(session: Session, input: unknown) {
     const v = z
       .object({
-        handle: z
-          .string()
-          .trim()
-          .toLowerCase()
-          .regex(/^[a-z0-9_]{3,24}$/)
-          .refine(
-            (v) => !["me", "admin", "fork", "api", "support"].includes(v),
-            "Choose another handle.",
-          ),
-        displayName: z.string().trim().min(1).max(60),
+        handle: z.string().max(64),
+        displayName: z.string().trim().max(60).optional(),
         bio: z.string().trim().max(160).optional(),
       })
       .strict()
       .parse(input);
-    const [taken] = await this.db
+    const [user] = await this.db
       .select()
       .from(schema.users)
-      .where(eq(schema.users.handle, v.handle));
-    assert(
-      !taken || taken.id === session.userId,
-      "HANDLE_UNAVAILABLE",
-      "This handle is already taken.",
-      409,
-      "Choose another handle and save again.",
-    );
-    await this.rate(session, "profile", 10, 3600);
-    await this.db
-      .update(schema.users)
-      .set({ ...v, updatedAt: new Date() })
       .where(eq(schema.users.id, session.userId));
-    return { handle: v.handle };
+    assert(user, "AUTH_INVALID", "Sign in again.", 401, "Sign in again.");
+    // Keeping the current handle is always allowed. A new one must pass the claim rules.
+    const handle = normalizeHandle(v.handle),
+      claiming = handle !== user.handle;
+    if (claiming) handleSchema.parse(handle);
+    await this.rate(session, "profile", 10, 3600);
+    try {
+      // The unique index decides a race between two people claiming the same handle.
+      await this.db
+        .update(schema.users)
+        .set({
+          handle,
+          displayName: v.displayName || user.displayName,
+          ...(v.bio === undefined ? {} : { bio: v.bio }),
+          ...(claiming
+            ? {
+                handleClaimedAt: user.handleClaimedAt ?? new Date(),
+                initialHandle:
+                  user.initialHandle ??
+                  (isGeneratedHandle(user.handle) ? user.handle : null),
+              }
+            : {}),
+          updatedAt: new Date(),
+        })
+        .where(eq(schema.users.id, session.userId));
+    } catch (error) {
+      if (uniqueViolation(error))
+        throw new AppError(
+          "HANDLE_UNAVAILABLE",
+          "This handle is already taken.",
+          409,
+          "Choose another handle and save again.",
+        );
+      throw error;
+    }
+    return { handle };
   }
+}
+// PostgreSQL unique_violation, wherever the driver or the query builder put it.
+function uniqueViolation(error: unknown) {
+  let current = error as { code?: unknown; cause?: unknown } | undefined;
+  for (let depth = 0; current && depth < 4; depth++) {
+    if (current.code === "23505") return true;
+    current = current.cause as typeof current;
+  }
+  return false;
 }
