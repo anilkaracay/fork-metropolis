@@ -107,7 +107,8 @@ export function HandleClaim() {
       await client.invalidateQueries();
     },
   });
-  if (!session) return null;
+  // Someone who already chose a handle never needs this dialog in the page.
+  if (!session || session.handleClaimed) return null;
   const settled = checked === handle && availability.data?.handle === handle;
   const taken = settled && !availability.data!.available;
   const status = !handle
