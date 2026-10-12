@@ -82,7 +82,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               <AccountWallet />
             </>
           ) : (
-            <button className="button secondary full" onClick={auth.login}>
+            <button
+              className="button secondary full"
+              onClick={auth.login}
+              aria-busy={!auth.ready}
+            >
               Sign in
             </button>
           )}

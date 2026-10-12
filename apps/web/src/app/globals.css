@@ -2226,3 +2226,14 @@ li.ancestor > .tree-node {
     animation: none !important;
   }
 }
+/* Links inside a sentence are underlined, so they do not depend on colour alone. */
+.provenance a,
+.detail-provenance a {
+  text-decoration: underline;
+  text-decoration-color: #56655c;
+  text-underline-offset: 3px;
+}
+.provenance a:hover,
+.detail-provenance a:hover {
+  text-decoration-color: currentColor;
+}
