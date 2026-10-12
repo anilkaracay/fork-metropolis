@@ -163,7 +163,11 @@ export function DetailScreen({ id }: { id: string }) {
           <span title={item.author.wallet}>
             {item.author.wallet.slice(0, 8)}…{item.author.wallet.slice(-6)}
           </span>
-          <span>Indexed by Envio · reasoning matches its onchain hash</span>
+          <span>
+            {item.metadataState === "trusted"
+              ? "Indexed by Envio · reasoning matches its onchain hash"
+              : "Indexed by Envio"}
+          </span>
           <ConfirmationNote txHash={item.graph.txHash} />
         </div>
       </article>

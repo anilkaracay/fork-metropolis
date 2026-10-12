@@ -185,6 +185,9 @@ test("root, unavailable metadata and unknown identities keep honest recovery sta
   await expect(
     page.getByText("No child perspectives yet.", { exact: false }),
   ).toBeVisible();
+  await expect(
+    page.getByText("reasoning matches its onchain hash", { exact: false }),
+  ).toBeVisible();
   await page.route("**/api/theses/" + root, async (route) => {
     const response = await route.fetch();
     const value = await response.json();
@@ -199,6 +202,10 @@ test("root, unavailable metadata and unknown identities keep honest recovery sta
   await expect(
     page.getByRole("button", { name: "Check again", exact: true }),
   ).toBeVisible();
+  // A hash match is only claimed for reasoning that was actually checked.
+  await expect(
+    page.getByText("reasoning matches its onchain hash", { exact: false }),
+  ).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: "Fork this idea", exact: true }),
   ).toHaveCount(0);
