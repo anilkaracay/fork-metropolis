@@ -2198,3 +2198,9 @@ li.ancestor > .tree-node {
 .account-wallet-actions button:hover {
   color: var(--foreground);
 }
+.confirmation-note {
+  color: var(--positive);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}

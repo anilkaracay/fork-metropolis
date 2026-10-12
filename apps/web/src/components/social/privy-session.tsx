@@ -7,8 +7,10 @@ import {
   useWallets,
 } from "@privy-io/react-auth";
 import {
+  createPublicClient,
   createWalletClient,
   custom,
+  http,
   type Address,
   type TypedDataDefinition,
 } from "viem";
@@ -18,8 +20,14 @@ import { SessionContext, type SessionValue } from "./session";
 import type { Session } from "@/server/auth";
 import { walletError } from "@/lib/wallet-error";
 import { api, ApiError } from "@/lib/api-client";
+import { RECEIPT_POLL_MS } from "@/lib/confirmation";
 import { creationCalldata, type PublishIntent } from "@fork/shared";
 
+// Read-only client for receipts, independent of the wallet provider.
+const monad = createPublicClient({
+  chain: monadTestnet,
+  transport: http(undefined, { timeout: 5000, retryCount: 2, retryDelay: 150 }),
+});
 export default function PrivySession({
   appId,
   children,
@@ -177,6 +185,25 @@ function SessionBridge({ children }: { children: ReactNode }) {
       } catch (error) {
         throw walletError(error);
       }
+    },
+    confirm: async (txHash, started) => {
+      const receipt = await monad.waitForTransactionReceipt({
+        hash: txHash,
+        pollingInterval: RECEIPT_POLL_MS,
+        timeout: 30000,
+      });
+      if (receipt.status !== "success")
+        throw new ApiError(
+          "TX_REVERTED",
+          "The transaction did not succeed.",
+          "Review the details and try again.",
+          409,
+        );
+      return {
+        txHash,
+        latencyMs: performance.now() - started,
+        simulated: false,
+      };
     },
     signTypedData: async (data: TypedDataDefinition) => {
       try {

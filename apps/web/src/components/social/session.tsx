@@ -16,6 +16,7 @@ import type { Hex, TypedDataDefinition } from "viem";
 import type { Session } from "@/server/auth";
 import type { PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
+import type { Confirmation } from "@/lib/confirmation";
 import { DevelopmentPublishObservation } from "./publish-observation";
 
 export type SessionValue = {
@@ -31,6 +32,8 @@ export type SessionValue = {
   refresh: () => Promise<void>;
   selectWallet: (address: string) => Promise<void>;
   submit: (intent: PublishIntent, draftId: string) => Promise<Hex>;
+  // Resolves when this browser first sees the receipt; started is a performance.now() value.
+  confirm: (txHash: Hex, started: number) => Promise<Confirmation>;
   signTypedData: (data: TypedDataDefinition) => Promise<Hex>;
   sendSelfTransaction: () => Promise<Hex>;
   // Account actions the sign-in provider offers for this user; null when not applicable.
@@ -196,6 +199,12 @@ function LocalSession({
       });
       return response.txHash;
     },
+    // The test workspace has no chain: a submitted transaction is confirmed at once.
+    confirm: async (txHash, started) => ({
+      txHash,
+      latencyMs: performance.now() - started,
+      simulated: true,
+    }),
     signTypedData: async () => {
       throw new ApiError(
         "TEST_SIGNING_UNAVAILABLE",
