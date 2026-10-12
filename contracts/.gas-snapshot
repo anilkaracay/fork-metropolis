@@ -1,3 +1,7 @@
+FORKBackingTest:testGasBackFork() (gas: 472107)
+FORKBackingTest:testGasBackRoot() (gas: 300617)
+FORKBackingTest:testGasBackThreeLevels() (gas: 643611)
+FORKBackingTest:testGasWithdraw() (gas: 342285)
 FORKRegistryTest:testGasFork() (gas: 278881)
 FORKRegistryTest:testGasLinkExecution() (gas: 210774)
 FORKRegistryTest:testGasRoot() (gas: 149417)
