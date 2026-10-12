@@ -132,3 +132,24 @@ Documentation should explain that Privy is the user account and signing layer ac
 `server/auth.ts` uses the current **@privy-io/node 0.35.0** SDK, `utils().auth().verifyAccessToken` and `users()._get` with the verified `user_id`. This supersedes older server-auth/sub examples. Product routes consume AuthVerifier and Session interfaces. SDK reads use 5-second timeout and one retry; no credentialed call has been made.
 
 The public app builds without Privy credentials. Sign-in fails with actionable configuration text when absent. Configured database/Envio public browsing does not require Privy credentials. `pnpm test:dev` exposes a separately labelled test identity adapter that production cannot enable. Perpl enrollment and linkExecution signing flows remain next-phase work; the transaction/typed-data adapter interfaces are ready.
+
+## Current implementation (D-057)
+
+What Privy does in the product today:
+
+| Capability | Where it shows up |
+| --- | --- |
+| Google sign-in | Privy modal, `loginMethods: ["email", "google"]` |
+| Email sign-in with a one-time code | Same modal |
+| Embedded EVM wallet for every user | Created on first sign-in (`createOnLogin: "all-users"`), Monad Testnet as the only chain |
+| Wallet-signed authorship | Publishing and forking are transactions from the user's embedded wallet to FORKRegistry, approved in Privy's confirmation prompt |
+| Server-side identity | `@privy-io/node` verifies the access token and reads the authoritative linked wallets on every authenticated request |
+| Key export | "Export key" in the wallet panel opens Privy's export flow for the embedded wallet; the key is shown by Privy's own frame and never reaches FORK |
+| Linking a second sign-in method | "Add email" or "Add Google" in the wallet panel, through Privy's linking flow |
+
+The wallet panel (`components/social/account-wallet.tsx`) shows the address, the live MON balance and the welcome drip state. The handle dialog (`components/social/handle-claim.tsx`) appears after the first sign-in. Neither stores anything from Privy beyond what D-040 already allows: the DID and wallet addresses.
+
+Gas for a first visit comes from the welcome drip, not from sponsored transactions. The installed SDK exposes `useSendTransaction(input, { sponsor: true })`; adopting it later means replacing the viem wallet-client send in `privy-session.tsx` and confirming on a real transaction that the registry still records the user's embedded wallet as author.
+
+Not yet proven live: email sign-in on the production origin. Google sign-in was proven live on 2026-10-11. Do not describe email as verified until a real one-time-code sign-in has been observed.
+

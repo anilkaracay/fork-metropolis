@@ -54,6 +54,16 @@ node scripts/registry-proof.mjs REAL_DEPLOYMENT_TX_HASH REVIEWED_FULL_GIT_COMMIT
 
 This read-only tool checks reviewed source/config, compiled source hash/settings/ABI, chain, transaction, canonical receipt/block and exact creation/runtime bytecode before exclusively writing contracts/deployments/10143.json. It never signs/broadcasts or overwrites existing evidence. Explorer verification is initially not-attempted; update only after actual verification. The real canonical artifact now records successful official Sourcify exact_match verification, and FORK_REGISTRY_ADDRESS is configured in ignored server-side .env.local. Do not rerun deployment; Envio now consumes this canonical artifact.
 
+## Welcome faucet
+
+Status: implemented, not configured in production. Rolling it out needs the owner's approval and a funded faucet account.
+
+`FORK_FAUCET_PRIVATE_KEY` is a server-only runtime variable holding the key of a dedicated Monad Testnet account. Without it the application runs normally and reports the welcome drip as unavailable. Never reuse this key anywhere else and never put it in a `NEXT_PUBLIC_` variable, an image or a build argument.
+
+- Create the account locally with `cast wallet new` from the pinned Foundry tools, store the key in ignored `apps/web/.env.local` for development and in the private production `config/app.env`, and fund the address from the public faucet at https://faucet.monad.xyz.
+- Budget: 15 drips of 0.2 MON plus gas is about 3.04 MON per full day at the cap.
+- The fourth migration (`0003_welcome_drip_and_claimed_handles.sql`) must be applied before the new application version starts. `/api/health/database` reports incomplete migrations until it is.
+
 ## FORKBacking deployment
 
 Status: not deployed. Deployment waits for the owner's approval (D-056).
