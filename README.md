@@ -151,10 +151,8 @@ The two contracts meet in the handlers. Backing entities live in the registry's 
 - Config: [`indexer/config.yaml`](indexer/config.yaml) · Schema: [`indexer/schema.graphql`](indexer/schema.graphql)
 - Handlers: [`indexer/src/handlers/registry.ts`](indexer/src/handlers/registry.ts) and [`indexer/src/handlers/backing.ts`](indexer/src/handlers/backing.ts)
 - Tests: 26 handler tests on Envio's own test indexer, in [`indexer/test/`](indexer/test/)
-- Public GraphQL endpoint: [`https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql`](https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql). This deployment indexes the registry. The one that adds `FORKBacking` follows the contract's deployment and replaces this link
+- Public GraphQL endpoint: [`https://indexer.dev.hyperindex.xyz/18ce77d/v1/graphql`](https://indexer.dev.hyperindex.xyz/18ce77d/v1/graphql). It indexes both contracts and needs no key
 - More detail: [`indexer/README.md`](indexer/README.md)
-
-<!-- PENDING: Envio GraphQL endpoint of the deployment that indexes both contracts -->
 
 ## Privy
 
