@@ -1,0 +1,86 @@
+{
+  "status": "blocked-on-explicit-release-and-upload-approval",
+  "observedOn": "2026-10-12",
+  "productCode": "de353b7",
+  "productFrozen": true,
+  "portal": {
+    "deadlineUtc": "2026-10-14T03:59:00Z",
+    "deadlineIstanbul": "2026-10-14T06:59:00+03:00",
+    "savedDraft": true,
+    "submitted": false,
+    "lastSavedUtc": "2026-10-12T06:43:00Z",
+    "missing": [
+      "logo",
+      "technical demo URL",
+      "pitch URL"
+    ],
+    "track": "03",
+    "bounties": [
+      "Envio",
+      "Privy"
+    ],
+    "publicVideoPromotionConsent": false
+  },
+  "tests": {
+    "cleanInstall": "passed, frozen lockfile; initial offline cache miss resolved by official registry download",
+    "cleanToolInstall": "passed, pinned official SHA-256 verification",
+    "unit": 234,
+    "indexer": 12,
+    "foundry": 28,
+    "lint": "passed, zero warnings",
+    "typecheck": "passed",
+    "build": "passed",
+    "format": "passed",
+    "abi": "passed",
+    "cleanIsolatedJourney": "1 passed; temporary free-port config, no external credentials",
+    "public390pxCases": "2 passed, nine real screens; no transactions",
+    "publicProductSmoke": "passed",
+    "edgeSecurity": "passed"
+  },
+  "gitAudit": {
+    "reachableCommits": 38,
+    "allRefsBlobs": 722,
+    "historicalRasterObjects": 220,
+    "unresolvedSecretFindings": 0,
+    "reviewedNonsecretGitleaksFindings": 3,
+    "remoteHeads": [
+      "main",
+      "envio"
+    ],
+    "tags": 0,
+    "visibility": "private",
+    "ownerRightsConfirmation": "pending",
+    "baselineHead": "37d0f78",
+    "currentTreeVersionableFiles": 583
+  },
+  "videos": [
+    {
+      "name": "technical-demo",
+      "durationSeconds": 174.966667,
+      "resolution": "1920x1080",
+      "codec": "H.264",
+      "audio": "none; caption-led",
+      "fullDecode": "passed",
+      "bytes": 4071032,
+      "externalUrl": null,
+      "sha256": "c589d49a0cb684f98a45751ade037fcff7bbdf93604e9090fcabf791aa2049bb",
+      "visualReview": "all scene samples inspected; changed tree and final close re-reviewed",
+      "browserPlayback": "readyState 4, 1920x1080, no media error"
+    },
+    {
+      "name": "founder-pitch",
+      "durationSeconds": 109.966667,
+      "resolution": "1920x1080",
+      "codec": "H.264",
+      "audio": "none; caption-led",
+      "fullDecode": "passed",
+      "bytes": 2577147,
+      "externalUrl": null,
+      "sha256": "ec94bc9054452e0ab46ef00f835422939a33099581f0d3c48151e842705591c9",
+      "visualReview": "all scene samples inspected; changed tree and final close re-reviewed",
+      "browserPlayback": "readyState 4, 1920x1080, no media error"
+    }
+  ],
+  "transactionsCreated": 0,
+  "productionChanges": 0
+}

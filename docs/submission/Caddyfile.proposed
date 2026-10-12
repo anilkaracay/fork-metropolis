@@ -1,0 +1,16 @@
+# Proposed video publication only. Not applied; approval required.
+forktrades.xyz {
+	header -Server
+	handle_path /submission/* {
+		root * /opt/fork-metropolis/submission
+		file_server
+	}
+	handle {
+		reverse_proxy 127.0.0.1:13000
+	}
+}
+
+www.forktrades.xyz {
+	header -Server
+	redir https://forktrades.xyz{uri} permanent
+}

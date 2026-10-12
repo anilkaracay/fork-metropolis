@@ -1,0 +1,35 @@
+# Founder Pitch — caption / optional human voiceover script
+
+No synthetic founder voice or fabricated action is used.
+
+00:00–00:13 / A better idea should not lose its credit.
+
+Trading conversations create useful alternatives. Timelines make it hard to follow who contributed what.
+
+00:13–00:26 / FORK / built by anilkaracay.
+
+FORK is the social network where trading ideas evolve in public. Publish an idea, fork a better one, build its history.
+
+00:26–00:40 / Give the improvement its own identity.
+
+A fork preserves the original author and parent while making the new perspective independently attributable.
+
+00:40–00:55 / The graph is the social product.
+
+Readers discover ideas. Contributors build on them. The Idea Tree turns a conversation into persistent shared knowledge.
+
+00:55–01:07 / Why Monad matters.
+
+Monad records wallet authorship and lineage beyond one database. Fast, low-cost settlement suits frequent social contributions.
+
+01:07–01:20 / Working proof, honest scale.
+
+The deployed demo has two real users, one root and one fork, embedded wallets, live indexing, profiles and social interactions.
+
+01:20–01:34 / Start with people who explain their ideas.
+
+Our next step is an invited trader-community pilot: test whether people return to contribute useful alternatives. No traction is invented.
+
+01:34–01:50 / Trading ideas evolve here.
+
+Perpl execution and Nansen enrichment are deferred. No token or rewards are live. Explore the existing idea history at forktrades.xyz.

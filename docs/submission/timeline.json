@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "format": "1920x1080 H.264 30fps, caption-led, no recorded narration",
+  "capture": "Actual production Chrome screenshots in chronological frame sequences; UI/data unaltered. Cuts and timing edited.",
+  "rawRoot": ".tools/stage-b4/raw",
+  "exportsRoot": ".tools/stage-b4/exports",
+  "technical-demo": [
+    {
+      "clip": "landing",
+      "duration": 15,
+      "title": "Trading ideas evolve here.",
+      "caption": "Trading ideas get lost in timelines and screenshots. An improvement should keep its own history.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "feed",
+      "duration": 12,
+      "title": "A network of perspectives.",
+      "caption": "FORK makes the idea the beginning of a conversation. The primary interaction is Fork, not a trade button.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "explore",
+      "duration": 10,
+      "title": "Find an idea worth improving.",
+      "caption": "Search real indexed perspectives by market, reasoning or author. This discovery window contains two ideas.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "root",
+      "duration": 16,
+      "title": "The original: thesis #1.",
+      "caption": "A real author published an ETH long idea: target $4,200, invalidation $3,600 and leverage 2\u00d7.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "fork",
+      "duration": 16,
+      "title": "Another author. Another approach.",
+      "caption": "Fork #2 keeps the original parent and author while giving the contribution independent authorship.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "comparison",
+      "duration": 18,
+      "title": "The contribution is explicit.",
+      "caption": "Target $4,200 \u2192 $4,400. Leverage 2\u00d7 \u2192 3\u00d7. Reasoning changes; invalidation and direction stay the same.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "tree",
+      "duration": 17,
+      "title": "One idea. Many perspectives.",
+      "caption": "The Idea Tree preserves the parent-child relationship. Every branch retains its author and origin.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "tree-diff",
+      "duration": 15,
+      "title": "Read the change in context.",
+      "caption": "Compare the selected fork with its immediate parent, including both versions of the reasoning.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "social",
+      "duration": 12,
+      "title": "Keep the conversation visible.",
+      "caption": "Root #1 already has one Agree and one comment. These offchain social actions are stored in PostgreSQL.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "profile-b",
+      "duration": 13,
+      "title": "Reputation you can trace.",
+      "caption": "Profiles explain Originality, Contribution and Influence. Small samples remain Emerging; no profit is implied.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "profile-a",
+      "duration": 11,
+      "title": "Privy powers wallet authorship.",
+      "caption": "This existing signed-in user retains the embedded wallet that authored thesis #1. Keys remain user-controlled.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "monad-root",
+      "duration": 9,
+      "title": "A real Monad publication.",
+      "caption": "The original transaction succeeded on Monad Testnet. This is existing proof, not a new transaction.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "monad-fork",
+      "duration": 7,
+      "title": "A real fork, indexed by Envio.",
+      "caption": "The second wallet signed createThesis with parent #1. Envio indexes these registry events into the live social graph.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "landing",
+      "duration": 4,
+      "title": "Trading ideas evolve here.",
+      "caption": "Explore forktrades.xyz. Perpl and Nansen remain deferred; no trade execution is claimed.",
+      "firstFrame": 16,
+      "lastFrame": 23
+    }
+  ],
+  "founder-pitch": [
+    {
+      "clip": "landing",
+      "duration": 13,
+      "title": "A better idea should not lose its credit.",
+      "caption": "Trading conversations create useful alternatives. Timelines make it hard to follow who contributed what.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "feed",
+      "duration": 13,
+      "title": "FORK / built by anilkaracay.",
+      "caption": "FORK is the social network where trading ideas evolve in public. Publish an idea, fork a better one, build its history.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "fork",
+      "duration": 14,
+      "title": "Give the improvement its own identity.",
+      "caption": "A fork preserves the original author and parent while making the new perspective independently attributable.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "tree",
+      "duration": 15,
+      "title": "The graph is the social product.",
+      "caption": "Readers discover ideas. Contributors build on them. The Idea Tree turns a conversation into persistent shared knowledge.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "monad-fork",
+      "duration": 12,
+      "title": "Why Monad matters.",
+      "caption": "Monad records wallet authorship and lineage beyond one database. Fast, low-cost settlement suits frequent social contributions.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "profile-a",
+      "duration": 13,
+      "title": "Working proof, honest scale.",
+      "caption": "The deployed demo has two real users, one root and one fork, embedded wallets, live indexing, profiles and social interactions.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "profile-b",
+      "duration": 14,
+      "title": "Start with people who explain their ideas.",
+      "caption": "Our next step is an invited trader-community pilot: test whether people return to contribute useful alternatives. No traction is invented.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    },
+    {
+      "clip": "landing",
+      "duration": 16,
+      "title": "Trading ideas evolve here.",
+      "caption": "Perpl execution and Nansen enrichment are deferred. No token or rewards are live. Explore the existing idea history at forktrades.xyz.",
+      "firstFrame": 0,
+      "lastFrame": 23
+    }
+  ]
+}

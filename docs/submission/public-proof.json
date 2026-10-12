@@ -1,0 +1,100 @@
+{
+  "observedAt": "2026-10-12T06:45:55Z",
+  "routes": {
+    "/": {
+      "status": 200,
+      "fixtureBannerAbsent": true
+    },
+    "/feed": {
+      "status": 200,
+      "fixtureBannerAbsent": true
+    },
+    "/t/1": {
+      "status": 200,
+      "fixtureBannerAbsent": true
+    },
+    "/t/2": {
+      "status": 200,
+      "fixtureBannerAbsent": true
+    },
+    "/t/2/tree": {
+      "status": 200,
+      "fixtureBannerAbsent": true
+    },
+    "/u/u_4dcde4749ffd": {
+      "status": 200,
+      "fixtureBannerAbsent": true
+    },
+    "/u/u_03572f901994": {
+      "status": 200,
+      "fixtureBannerAbsent": true
+    }
+  },
+  "receipts": [
+    {
+      "transaction": "0xc1ba5d4fc31bc0a45e973ec8a63c0583a3fb4f643c0f46053a7ee5dd5fbf4a86",
+      "success": true,
+      "block": 69535255,
+      "logs": 0
+    },
+    {
+      "transaction": "0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f",
+      "success": true,
+      "block": 69554661,
+      "logs": 1
+    },
+    {
+      "transaction": "0xe5fbf9c835109a566be8afebd5c2d146731d1f998851ea1875798e328ab6b192",
+      "success": true,
+      "block": 69749256,
+      "logs": 1
+    }
+  ],
+  "graph": {
+    "data": {
+      "Thesis": [
+        {
+          "id": "10143:0x1889a7216b1ecad9a44910dd0996834d0894b9e1:1",
+          "parentId": "0",
+          "author": "0xe281d002b4c2d0cf2cc2edfd1b3b57045101aba4"
+        },
+        {
+          "id": "10143:0x1889a7216b1ecad9a44910dd0996834d0894b9e1:2",
+          "parentId": "1",
+          "author": "0xd86946d01ed9de86a8a16406e73acb5b312a2d03"
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "url": "https://testnet.monadvision.com/address/0x1889a7216b1ecad9a44910dd0996834d0894b9e1",
+      "unavailable": "HTTPError"
+    },
+    {
+      "url": "https://testnet.monadvision.com/tx/0xc1ba5d4fc31bc0a45e973ec8a63c0583a3fb4f643c0f46053a7ee5dd5fbf4a86",
+      "unavailable": "HTTPError"
+    },
+    {
+      "url": "https://testnet.monadvision.com/tx/0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f",
+      "unavailable": "HTTPError"
+    },
+    {
+      "url": "https://testnet.monadvision.com/tx/0xe5fbf9c835109a566be8afebd5c2d146731d1f998851ea1875798e328ab6b192",
+      "unavailable": "HTTPError"
+    },
+    {
+      "url": "https://sourcify-api-monad.blockvision.org/verify-ui/jobs/2a55629e-c249-49ed-b562-a6c07e261713",
+      "unavailable": "HTTPError"
+    }
+  ],
+  "transactionsCreated": 0,
+  "browserLinks": {
+    "registry": "loaded actual contract",
+    "deployment": "loaded success at block 69535255",
+    "root": "loaded Success CreateThesis",
+    "fork": "loaded Success CreateThesis, decoded parent 1",
+    "sourcifyJob": "blocked by browser; no fresh verification",
+    "envioGraphqlBrowser": "blocked by browser; official public API POST read succeeded"
+  }
+}

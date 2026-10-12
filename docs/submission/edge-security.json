@@ -1,0 +1,29 @@
+{
+  "transactionsCreated": 0,
+  "http://forktrades.xyz": {
+    "code": 308,
+    "location": "https://forktrades.xyz/",
+    "setsCookie": false
+  },
+  "https://www.forktrades.xyz": {
+    "code": 301,
+    "location": "https://forktrades.xyz/",
+    "setsCookie": false
+  },
+  "https://forktrades.xyz/.env": {
+    "code": 404,
+    "location": null,
+    "setsCookie": false
+  },
+  "https://forktrades.xyz/.env.local": {
+    "code": 404,
+    "location": null,
+    "setsCookie": false
+  },
+  "13000": {
+    "publicConnect": false
+  },
+  "5432": {
+    "publicConnect": false
+  }
+}
