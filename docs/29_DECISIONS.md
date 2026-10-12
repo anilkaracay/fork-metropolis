@@ -495,3 +495,11 @@ Status: Accepted, explicitly authorized B2 implementation gate
 Date: 2026-10-11
 
 Refine Thesis Detail, the existing bounded Envio Idea Tree, canonical immediate-parent Fork Diff and the existing Fork Composer. Reuse B1 tokens/fonts and all existing trust boundaries. Use nested custom React/CSS nodes, URL-preserved selection, a contextual parent comparison and a mobile comparison shortcut rather than a new graph dependency. Draft previews use shared field schemas and forkDifference; incomplete fields remain explicitly pending without erasing other valid changes. Publication still uses the existing shared meaningful-change validation and immutable contract flow. No contracts, schema, reputation, authentication, Envio deployment or executionRef change. Perpl and Nansen remain deferred. Validate locally, review actual screenshots, preserve the B1 release for rollback, deploy only FORK on Cherry and safely synchronize the existing private remote without history rewrites. Stop before B3.
+
+
+## D-054 — Approved B3 final social product polish
+
+Status: Accepted, explicitly authorized timeboxed B3 implementation gate
+Date: 2026-10-12
+
+Extend B1/B2 precision typography and hierarchy to Feed, Explore, root Create and Profile. Reuse trusted server parent differences for compact Feed previews; local Explore search/type/sort operates only on the existing bounded dataset. Preserve exact ranking/reputation/publication/authentication/protocol semantics. Keep successful query data visible with explicit failure/recovery when a background refresh fails. Match GET timeout to the existing two-attempt upstream read budget, without changing mutation timeouts. No provider configuration, dependencies, contracts or schema changes. Validate all six requested widths and real public data, preserve B2 rollback and deploy only FORK. Keep GitHub private and stop before B4.

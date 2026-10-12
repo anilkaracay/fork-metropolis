@@ -63,6 +63,31 @@ export function Skeleton({ cards = 3 }: { cards?: number }) {
     </div>
   );
 }
+export function ReadStatus({
+  error,
+  refreshing,
+  retry,
+}: {
+  error: unknown;
+  refreshing: boolean;
+  retry: () => void;
+}) {
+  return (
+    <div className={`read-status ${error ? "read-failed" : ""}`}>
+      <p role={error ? "alert" : "status"}>
+        {error
+          ? `Showing the last loaded ideas. ${error instanceof Error ? error.message : "Refresh failed."} Retry to check for updates.`
+          : refreshing
+            ? "Checking for updates…"
+            : "Loaded from the idea graph."}
+      </p>
+      <button className="text-button" disabled={refreshing} onClick={retry}>
+        {error ? "Retry refresh" : "Refresh"}
+        <Icon name="arrow" size={14} />
+      </button>
+    </div>
+  );
+}
 export function Avatar({
   name,
   wallet,

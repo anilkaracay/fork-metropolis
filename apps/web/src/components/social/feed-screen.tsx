@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { FeedMode, FeedThesis } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import { ThesisCard } from "./thesis-card";
-import { EmptyState, ErrorState, Skeleton } from "./common";
+import { EmptyState, ErrorState, Skeleton, ReadStatus } from "./common";
 import { Icon } from "./icon";
 type Page = {
   items: FeedThesis[];
@@ -19,9 +19,10 @@ export function FeedScreen() {
   const query = useQuery({
     queryKey: ["feed", mode, offset],
     queryFn: () => api<Page>(`feed?mode=${mode}&offset=${offset}`),
+    staleTime: 30000,
   });
   return (
-    <div className="content-grid">
+    <div className="content-grid social-polish">
       <section className="feed-column">
         <div className="page-heading">
           <div>
@@ -56,15 +57,23 @@ export function FeedScreen() {
             </button>
           ))}
         </div>
-        {mode !== "fresh" && (
-          <p className="ranking-note">
-            Unique external forkers: 24h → 7d → newest.{" "}
-            {mode === "smart-signal" && "Social signals only."}
-          </p>
+        <p className="ranking-note">
+          {mode === "fresh"
+            ? "Newest indexed perspectives first."
+            : "Unique external forkers: 24h → 7d → newest."}{" "}
+          {mode === "smart-signal" &&
+            "Social signals only; no execution ranking."}
+        </p>
+        {query.data && (
+          <ReadStatus
+            error={query.error}
+            refreshing={query.isFetching}
+            retry={() => void query.refetch()}
+          />
         )}
         {query.isPending ? (
           <Skeleton />
-        ) : query.error ? (
+        ) : query.error && !query.data ? (
           <ErrorState error={query.error} retry={() => void query.refetch()} />
         ) : query.data?.items.length ? (
           <>

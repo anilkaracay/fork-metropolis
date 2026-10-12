@@ -25,6 +25,10 @@ export function marketName(id: number, context: MvpContext | undefined) {
 export function price(raw: string) {
   return formatFixedPoint(BigInt(raw), 8);
 }
+export function displayPrice(raw: string) {
+  const [whole, fraction] = price(raw).split(".");
+  return `$${whole!.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}${fraction ? `.${fraction}` : ""}`;
+}
 export function Direction({ side }: { side: string }) {
   return (
     <span className={`direction ${side}`}>
@@ -37,11 +41,11 @@ export function Parameters({ item }: { item: FeedThesis }) {
     <div className="parameters">
       <div>
         <span>Target</span>
-        <strong>${price(item.graph.core.targetPriceE8)}</strong>
+        <strong>{displayPrice(item.graph.core.targetPriceE8)}</strong>
       </div>
       <div>
         <span>Invalidation</span>
-        <strong>${price(item.graph.core.invalidationPriceE8)}</strong>
+        <strong>{displayPrice(item.graph.core.invalidationPriceE8)}</strong>
       </div>
       <div>
         <span>Leverage</span>
@@ -54,7 +58,8 @@ export function Parameters({ item }: { item: FeedThesis }) {
   );
 }
 export function ThesisCard({ item }: { item: FeedThesis }) {
-  const context = useMarkets().data,
+  const markets = useMarkets(),
+    context = markets.data,
     id = item.graph.thesisId;
   return (
     <article className="thesis-card" data-thesis-id={id}>
@@ -70,10 +75,10 @@ export function ThesisCard({ item }: { item: FeedThesis }) {
         </Link>
         <span className={`idea-label ${item.challenge ? "challenge" : ""}`}>
           {item.challenge
-            ? "Challenge"
+            ? `Challenge #${id}`
             : item.graph.parentId === "0"
-              ? "Original idea"
-              : "Fork"}
+              ? `Original #${id}`
+              : `Fork #${id}`}
         </span>
       </div>
       {item.parent && (
@@ -82,12 +87,12 @@ export function ThesisCard({ item }: { item: FeedThesis }) {
           <span>
             Forked from{" "}
             <Link href={`/t/${item.parent.thesisId}`}>
-              @{item.parent.author.handle}
+              #{item.parent.thesisId} · @{item.parent.author.handle}
             </Link>
             {item.changes.length > 0 && (
               <span className="provenance-changes">
                 {" "}
-                · Changed{" "}
+                ·{" "}
                 {item.changes
                   .map((c) => c.label.toLowerCase())
                   .slice(0, 3)
@@ -104,8 +109,48 @@ export function ThesisCard({ item }: { item: FeedThesis }) {
           </span>
           <Direction side={item.graph.core.side} />
         </div>
+      </Link>
+      {markets.error && !context && (
+        <div className="market-label-state" role="status">
+          Market label unavailable. The onchain market ID is shown.
+          <button
+            className="text-button"
+            disabled={markets.isFetching}
+            onClick={() => void markets.refetch()}
+          >
+            Retry market label
+          </button>
+        </div>
+      )}
+      <Parameters item={item} />
+      {item.metadataState === "trusted" && item.changes.length > 0 && (
+        <div className="card-change-summary" aria-label="Changes from parent">
+          {item.changes
+            .filter((c) => ["targetPriceE8", "leverageBps"].includes(c.field))
+            .map((c) => (
+              <span key={c.field}>
+                {c.label}{" "}
+                <del>
+                  {c.field === "targetPriceE8"
+                    ? displayPrice(c.before)
+                    : `${Number(c.before) / 10000}×`}
+                </del>
+                <span aria-label="changed to"> → </span>
+                <strong>
+                  {c.field === "targetPriceE8"
+                    ? displayPrice(c.after)
+                    : `${Number(c.after) / 10000}×`}
+                </strong>
+              </span>
+            ))}
+        </div>
+      )}
+      <Link href={`/t/${id}`} className="card-body">
         <p className="card-reasoning">
-          {item.metadata?.reasoning ?? "Content unavailable"}
+          {item.metadata?.reasoning ??
+            (item.metadataState === "missing"
+              ? "Reasoning is still indexing. Open the idea to check again."
+              : "Reasoning unavailable. Open the idea for its current status.")}
         </p>
       </Link>
       {!!item.metadata?.tags.length && (
@@ -117,19 +162,23 @@ export function ThesisCard({ item }: { item: FeedThesis }) {
           ))}
         </div>
       )}
-      <Parameters item={item} />
       <div className="card-bottom">
         <div className="social-counts">
           <span title="Unique external wallets directly forking this idea">
             <Icon name="fork" size={15} />
             {item.graph.uniqueExternalForkers}{" "}
-            <span className="count-label">forkers</span>
+            <span className="count-label">
+              {item.graph.uniqueExternalForkers === 1 ? "forker" : "forkers"}
+            </span>
           </span>
-          <Link href={`/t/${id}#comments`}>
+          <Link
+            href={`/t/${id}#comments`}
+            aria-label={`${item.social.comments} comments on idea #${id}`}
+          >
             <Icon name="comment" size={15} />
             {item.social.comments}
           </Link>
-          <span>
+          <span aria-label={`${item.social.agrees} agrees`}>
             <Icon name="agree" size={15} />
             {item.social.agrees}
           </span>

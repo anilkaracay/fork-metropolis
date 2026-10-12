@@ -1,0 +1,669 @@
+/* B3 extends the approved B1/B2 tokens only on the remaining social screens. */
+.social-polish {
+  min-width: 0;
+}
+.social-polish .page-heading h1 {
+  font-size: clamp(30px, 3vw, 42px);
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+.social-polish .page-heading p {
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.social-polish .feed-tabs {
+  gap: 24px;
+}
+.social-polish .feed-tabs button {
+  font-size: 13px;
+  min-height: 48px;
+  color: var(--muted-foreground);
+}
+.social-polish .feed-tabs button.selected {
+  color: var(--foreground);
+}
+.social-polish .ranking-note {
+  margin: -8px 0 10px;
+  font-size: 12px;
+}
+.social-polish .feed-list {
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+.social-polish .thesis-card {
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
+  padding: 24px 0;
+  min-width: 0;
+}
+.social-polish .card-author {
+  gap: 12px;
+  align-items: center;
+}
+.social-polish .identity-link {
+  flex: 1;
+  min-height: 44px;
+}
+.social-polish .identity-link strong {
+  font-size: 13px;
+}
+.social-polish .identity-link small {
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.social-polish .idea-label {
+  color: var(--muted-foreground);
+  border: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.social-polish .provenance {
+  background: none;
+  padding: 0;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.social-polish .provenance a {
+  color: var(--primary);
+}
+.social-polish .provenance-changes {
+  display: none;
+}
+.social-polish .market-line {
+  margin: 16px 0 12px;
+}
+.social-polish .market-symbol {
+  font-size: 25px;
+  letter-spacing: -0.035em;
+}
+.social-polish .parameters {
+  border: 0;
+  padding: 0 0 16px;
+  gap: 12px;
+}
+.social-polish .parameters strong {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--foreground);
+}
+.social-polish .parameters span {
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+.social-polish .card-reasoning {
+  color: var(--foreground);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.social-polish .card-change-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0 0 12px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted-foreground);
+}
+.social-polish .card-change-summary strong {
+  color: var(--primary);
+  font-weight: 500;
+}
+.social-polish .card-change-summary del {
+  font-family: var(--font-mono);
+}
+.social-polish .tags {
+  margin: 12px 0 4px;
+  font-size: 11px;
+  gap: 12px;
+}
+.social-polish .tags a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.social-polish .card-bottom {
+  margin-top: 4px;
+}
+.social-polish .social-counts {
+  gap: 14px;
+  font-size: 12px;
+}
+.social-polish .social-counts a {
+  min-height: 44px;
+}
+.social-polish .count-label {
+  font-size: 10px;
+}
+.social-polish .card-actions {
+  gap: 16px;
+}
+.social-polish .card-actions .quiet-link {
+  min-height: 44px;
+}
+.social-polish .fork-button {
+  min-height: 44px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  font-size: 12px;
+}
+.social-polish .fork-button:hover {
+  filter: brightness(1.07);
+}
+.read-status {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0 12px;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.read-status p {
+  margin: 0;
+}
+.read-status button {
+  flex-shrink: 0;
+  min-height: 44px;
+}
+.read-status.read-failed {
+  color: var(--warning);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.social-polish .context-rail .rail-feature {
+  padding-bottom: 24px;
+}
+.social-polish .rail-feature h2 {
+  font-size: 26px;
+}
+.social-polish .rail-section > a {
+  min-height: 56px;
+}
+.social-polish .rail-note p {
+  font-size: 12px;
+}
+.social-polish .discovery-search {
+  max-width: 640px;
+  margin-bottom: 20px;
+}
+.social-polish label {
+  font-size: 12px;
+  color: var(--foreground);
+}
+.social-polish input,
+.social-polish textarea,
+.social-polish select {
+  background: var(--background);
+  border-color: var(--input);
+  min-height: 44px;
+  font-size: 14px;
+}
+.social-polish .market-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+}
+.social-polish .market-topic {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  min-height: 48px;
+  border-radius: 6px;
+  background: none;
+}
+.social-polish .market-topic strong {
+  display: inline;
+  margin: 0;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--foreground);
+}
+.social-polish .market-topic span {
+  font-family: var(--font-mono);
+  color: var(--muted-foreground);
+  font-size: 11px;
+}
+.social-polish .market-topic.selected {
+  border-color: var(--primary);
+  background: var(--card);
+}
+.social-polish .market-topic:not(.selected):hover {
+  border-color: var(--input);
+}
+.social-polish .discovery-options {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.social-polish .discovery-options label {
+  min-width: 190px;
+}
+.social-polish .discovery-options select {
+  width: 100%;
+}
+.social-polish .topic-filter {
+  margin: 12px 0 24px;
+}
+.social-polish .topic-filter button {
+  min-height: 44px;
+}
+.social-polish .topic-filter button.selected {
+  color: var(--primary);
+  background: var(--card);
+  border-color: var(--primary);
+}
+.social-polish .section-title {
+  margin-top: 28px;
+}
+.social-polish .section-title h2 {
+  font-size: 19px;
+}
+.social-polish .section-title .quiet-link {
+  min-height: 44px;
+}
+.social-polish .discovery-count {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+.social-polish .explore-ideas,
+.social-polish .profile-ideas {
+  gap: 0 36px;
+}
+.social-polish .state-box {
+  padding: 36px 20px;
+}
+.social-polish .state-box h2 {
+  font-size: 22px;
+}
+.social-polish.profile-screen {
+  max-width: 1040px;
+}
+.social-polish .profile-header {
+  margin: 24px 0 16px;
+  align-items: center;
+  gap: 18px;
+}
+.social-polish .profile-header > .avatar {
+  width: 56px;
+  height: 56px;
+  font-size: 17px;
+  border: 1px solid var(--border);
+}
+.social-polish .profile-name {
+  min-width: 0;
+  padding: 0;
+}
+.social-polish .profile-name h1 {
+  font-size: clamp(25px, 3vw, 36px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.social-polish .profile-name > span {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.social-polish .profile-bio,
+.social-polish .profile-wallet {
+  margin-left: 0;
+}
+.social-polish .profile-wallet {
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  margin-bottom: 24px;
+}
+.social-polish .profile-wallet code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.social-polish .profile-wallet button {
+  min-height: 44px;
+}
+.social-polish .wallet-copy-fallback {
+  flex-basis: 100%;
+}
+.social-polish .wallet-copy-fallback code {
+  display: block;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.social-polish .reputation-heading {
+  margin-top: 24px;
+}
+.social-polish .reputation-grid {
+  background: none;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}
+.social-polish .reputation-grid > div {
+  padding: 20px;
+  min-width: 0;
+}
+.social-polish .reputation-grid > div:first-child {
+  padding-left: 0;
+}
+.social-polish .reputation-grid > div > span {
+  font-size: 12px;
+}
+.social-polish .reputation-grid strong {
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-family: var(--font-mono);
+  letter-spacing: -0.06em;
+}
+.social-polish .reputation-grid p {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.social-polish .reputation-explanation {
+  padding: 16px 0;
+  background: none;
+  border: 0;
+  margin-bottom: 16px;
+}
+.social-polish .reputation-explanation summary {
+  min-height: 44px;
+  font-size: 12px;
+}
+.social-polish .reputation-explanation p {
+  font-size: 12px;
+}
+.social-polish .profile-work-heading {
+  margin: 20px 0 8px;
+}
+.social-polish .profile-work-heading > span {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.social-polish.root-composer {
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 48px;
+}
+.social-polish .composer-form {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.social-polish .composer-form fieldset {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  min-width: 0;
+}
+.social-polish .composer-form input {
+  font-family: var(--font-mono);
+}
+.social-polish .composer-form label {
+  margin-bottom: 22px;
+}
+.social-polish .form-section-heading {
+  padding-bottom: 20px;
+}
+.social-polish .form-section-heading:not(:first-child) {
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.social-polish .form-section-heading p {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 8px 0 0;
+}
+.social-polish .field-hint,
+.social-polish .field-error {
+  display: block;
+  font-size: 11px;
+  line-height: 1.7;
+  margin-top: 8px;
+  font-weight: 400;
+}
+.social-polish .field-hint {
+  color: var(--muted-foreground);
+}
+.social-polish .field-error {
+  color: var(--destructive);
+}
+.social-polish [aria-invalid="true"] {
+  border-color: var(--destructive);
+}
+.social-polish .side-control button {
+  min-height: 44px;
+}
+.social-polish .publish-bar {
+  margin-top: 24px;
+  padding-top: 24px;
+}
+.social-polish .publish-bar strong {
+  color: var(--foreground);
+  font-size: 12px;
+}
+.social-polish .publish-bar small {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.social-polish .publish-context {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  line-height: 1.8;
+  margin-top: 18px;
+}
+.social-polish .composer-rail {
+  padding-top: 92px;
+}
+.social-polish .composer-rail h2 {
+  font-size: 26px;
+}
+.social-polish .writing-guide li p {
+  font-size: 12px;
+}
+.social-polish .skeleton-card {
+  background: var(--card);
+  border-color: var(--border);
+  min-height: 240px;
+  padding: 24px;
+}
+@media (max-width: 1279px) {
+  .social-polish.root-composer {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 28px;
+  }
+}
+@media (max-width: 1099px) {
+  .social-polish.root-composer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .social-polish .composer-rail {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .social-polish .reputation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .social-polish .reputation-grid > div:nth-child(2) {
+    border-right: 0;
+  }
+  .social-polish .reputation-grid > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--border);
+  }
+  .social-polish .reputation-grid > div:nth-child(3) {
+    padding-left: 0;
+  }
+}
+@media (max-width: 680px) {
+  html {
+    scroll-padding-bottom: 96px;
+  }
+  .main-nav .nav-link {
+    font-size: 10px;
+  }
+  .social-polish :is(input, textarea, select) {
+    font-size: 16px;
+  }
+  .social-polish :is(button, a, input, textarea, select) {
+    scroll-margin-block: 90px;
+  }
+  .social-polish .page-heading {
+    margin-bottom: 24px;
+  }
+  .social-polish .page-heading h1 {
+    font-size: 32px;
+  }
+  .social-polish .feed-tabs {
+    gap: 20px;
+  }
+  .social-polish .feed-tabs button {
+    font-size: 12px;
+  }
+  .social-polish .thesis-card {
+    padding: 22px 0;
+  }
+  .social-polish .card-author {
+    align-items: start;
+  }
+  .social-polish .idea-label {
+    padding-top: 8px;
+    font-size: 10px;
+  }
+  .social-polish .parameters strong {
+    font-size: 14px;
+  }
+  .social-polish .parameters {
+    grid-template-columns: 1fr 1fr 0.65fr;
+  }
+  .social-polish .card-reasoning {
+    font-size: 14px;
+  }
+  .social-polish .social-counts {
+    gap: 12px;
+  }
+  .social-polish .count-label {
+    display: none;
+  }
+  .social-polish .card-actions {
+    gap: 12px;
+  }
+  .social-polish .explore-ideas,
+  .social-polish .profile-ideas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .social-polish .market-topic {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .social-polish .discovery-options {
+    gap: 12px;
+  }
+  .social-polish .discovery-options label {
+    flex: 1;
+    min-width: 140px;
+  }
+  .social-polish .section-title {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .social-polish .profile-header {
+    margin: 20px 0 12px;
+  }
+  .social-polish .profile-header > .avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 14px;
+  }
+  .social-polish .profile-header > button {
+    margin-left: 0;
+  }
+  .social-polish .reputation-grid > div {
+    padding: 18px 12px;
+  }
+  .social-polish .reputation-grid strong {
+    font-size: 24px;
+  }
+  .social-polish .profile-wallet > span:last-child {
+    flex-basis: 100%;
+  }
+  .social-polish .composer-form fieldset {
+    padding: 18px;
+  }
+  .social-polish .form-row.three {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .social-polish .form-row.two {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .social-polish .side-control {
+    margin-bottom: 22px;
+  }
+  .social-polish .publish-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .social-polish .publish-bar .button {
+    width: 100%;
+    min-height: 48px;
+  }
+  .read-status {
+    align-items: start;
+  }
+}
+
+@media (max-width: 680px) {
+  .social-polish.explore-screen .page-heading {
+    margin-bottom: 18px;
+  }
+  .social-polish .discovery-search {
+    margin-bottom: 12px;
+  }
+  .social-polish.explore-screen .market-grid {
+    margin-bottom: 12px;
+  }
+  .social-polish.explore-screen .topic-filter {
+    margin: 8px 0 12px;
+  }
+  .social-polish.explore-screen .section-title {
+    margin: 12px 0 4px;
+    align-items: center;
+  }
+  .social-polish.explore-screen .section-title h2 {
+    font-size: 17px;
+  }
+  .social-polish.explore-screen .section-title .quiet-link {
+    font-size: 11px;
+  }
+  .social-polish.explore-screen .discovery-options label {
+    min-width: 130px;
+  }
+  .read-status {
+    align-items: center;
+    padding-bottom: 4px;
+  }
+  .social-polish .profile-work-heading {
+    align-items: center;
+  }
+}
+
+.social-polish .market-label-state {
+  color: var(--warning);
+  font-size: 11px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.social-polish .market-label-state button {
+  display: flex;
+  min-height: 44px;
+}

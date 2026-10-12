@@ -127,6 +127,7 @@ function ComposerForm({
     [pending, setPending] = useState<Pending | null>(null),
     [busy, setBusy] = useState(false),
     [recoveryHash, setRecoveryHash] = useState(""),
+    [touched, setTouched] = useState<string[]>([]),
     requestKey = useRef<string | null>(null),
     abort = useRef(false);
   const storageKey = `fork-pending:${auth.session?.wallet ?? "anonymous"}:${parent?.graph.thesisId ?? "0"}`;
@@ -173,6 +174,34 @@ function ComposerForm({
     ? compareDraft({ core: parent.graph.core, metadata: parent.metadata }, form)
     : null;
   const opposite = parent && form.side !== parent.graph.core.side;
+  function feedback(
+    field: "target" | "invalidation" | "leverage" | "reasoning",
+  ) {
+    if (parent || !touched.includes(field)) return undefined;
+    try {
+      if (field === "reasoning")
+        thesisMetadataSchema.shape.reasoning.parse(form.reasoning);
+      else if (field === "leverage")
+        thesisCoreSchema.shape.leverageBps.parse(
+          Number(parseFixedPoint(form.leverage, 4, 4294967295n)),
+        );
+      else
+        thesisCoreSchema.shape[
+          field === "target" ? "targetPriceE8" : "invalidationPriceE8"
+        ].parse(parseFixedPoint(form[field], 8).toString());
+      return undefined;
+    } catch {
+      return field === "reasoning"
+        ? "Explain your perspective in 10–500 characters."
+        : field === "leverage"
+          ? "Use positive leverage with at most 4 decimal places."
+          : "Use a positive USD price with at most 8 decimal places.";
+    }
+  }
+  const touch = (field: string) =>
+    setTouched((values) =>
+      values.includes(field) ? values : [...values, field],
+    );
   function save(value: Pending) {
     setPending(value);
     localStorage.setItem(storageKey, JSON.stringify(value));
@@ -337,7 +366,7 @@ function ComposerForm({
   };
   return (
     <div
-      className={`composer-layout ${parent ? "signature fork-composer" : ""}`}
+      className={`composer-layout ${parent ? "signature fork-composer" : "social-polish root-composer"}`}
     >
       <section>
         <Link
@@ -393,6 +422,15 @@ function ComposerForm({
           }}
         >
           <fieldset disabled={busy || !!pending?.txHash}>
+            {!parent && (
+              <div className="form-section-heading">
+                <span className="eyebrow">01 · The setup</span>
+                <p>
+                  Define the opportunity and the point where it stops making
+                  sense.
+                </p>
+              </div>
+            )}
             <div className="form-row two">
               <label>
                 Market
@@ -444,7 +482,20 @@ function ComposerForm({
                   onChange={(e) => update("target", e.target.value)}
                   placeholder="0.00"
                   required
+                  onBlur={() => touch("target")}
+                  aria-invalid={!!feedback("target")}
+                  aria-describedby={!parent ? "target-feedback" : undefined}
                 />
+                {!parent && (
+                  <small
+                    id="target-feedback"
+                    className={
+                      feedback("target") ? "field-error" : "field-hint"
+                    }
+                  >
+                    {feedback("target") ?? "Where your idea could lead."}
+                  </small>
+                )}
               </label>
               <label>
                 Invalidation <span>USD</span>
@@ -455,7 +506,23 @@ function ComposerForm({
                   onChange={(e) => update("invalidation", e.target.value)}
                   placeholder="0.00"
                   required
+                  onBlur={() => touch("invalidation")}
+                  aria-invalid={!!feedback("invalidation")}
+                  aria-describedby={
+                    !parent ? "invalidation-feedback" : undefined
+                  }
                 />
+                {!parent && (
+                  <small
+                    id="invalidation-feedback"
+                    className={
+                      feedback("invalidation") ? "field-error" : "field-hint"
+                    }
+                  >
+                    {feedback("invalidation") ??
+                      "The price that changes your view."}
+                  </small>
+                )}
               </label>
               <label>
                 Leverage <span>×</span>
@@ -465,9 +532,31 @@ function ComposerForm({
                   value={form.leverage}
                   onChange={(e) => update("leverage", e.target.value)}
                   required
+                  onBlur={() => touch("leverage")}
+                  aria-invalid={!!feedback("leverage")}
+                  aria-describedby={!parent ? "leverage-feedback" : undefined}
                 />
+                {!parent && (
+                  <small
+                    id="leverage-feedback"
+                    className={
+                      feedback("leverage") ? "field-error" : "field-hint"
+                    }
+                  >
+                    {feedback("leverage") ?? "Keep the risk explicit."}
+                  </small>
+                )}
               </label>
             </div>
+            {!parent && (
+              <div className="form-section-heading">
+                <span className="eyebrow">02 · Your perspective</span>
+                <p>
+                  Describe the evidence, the uncertainty and what you would
+                  watch next.
+                </p>
+              </div>
+            )}
             <label>
               Reasoning <span>{form.reasoning.length}/500</span>
               <textarea
@@ -479,7 +568,21 @@ function ComposerForm({
                 maxLength={500}
                 required
                 rows={6}
+                onBlur={() => touch("reasoning")}
+                aria-invalid={!!feedback("reasoning")}
+                aria-describedby={!parent ? "reasoning-feedback" : undefined}
               />
+              {!parent && (
+                <small
+                  id="reasoning-feedback"
+                  className={
+                    feedback("reasoning") ? "field-error" : "field-hint"
+                  }
+                >
+                  {feedback("reasoning") ??
+                    "A clear argument gives the next author something to build on."}
+                </small>
+              )}
             </label>
             <label>
               Entry note <span>Optional</span>
@@ -520,7 +623,7 @@ function ComposerForm({
             </aside>
           )}
           <div className="publish-bar">
-            <div>
+            <div role="status" aria-live="polite">
               <strong>{state}</strong>
               <small>
                 {auth.session
@@ -544,6 +647,12 @@ function ComposerForm({
               <Icon name={parent ? "fork" : "arrow"} size={17} />
             </button>
           </div>
+          {!parent && (
+            <p className="publish-context">
+              Publishing records your authorship on Monad Testnet. It does not
+              execute a trade. Wallet approval comes before submission.
+            </p>
+          )}
         </form>
         {pending?.txHash && (
           <div className="transaction-recovery">

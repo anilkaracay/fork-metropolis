@@ -200,8 +200,10 @@ test("publish → second identity forks → Agree/comment → tree/profile, with
   await screenshot(page, "feed-mobile.png");
   await noOverflow(page);
   await page.goto("/explore");
-  await expect(page.locator(".market-topic")).toHaveCount(4);
-  await expect(page.locator(".market-topic").first()).toContainText("3 ideas");
+  await expect(page.locator(".market-topic")).toHaveCount(5);
+  await expect(
+    page.getByRole("button", { name: "BTC 3 ideas", exact: true }),
+  ).toBeVisible();
   await page.getByRole("button", { name: /BTC/ }).click();
   await expect(page.locator(".thesis-card")).toHaveCount(3);
   await noOverflow(page);

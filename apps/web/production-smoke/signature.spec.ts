@@ -3,25 +3,25 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 const forkId = process.env.FORK_SMOKE_FORK_ID;
 test.use({ actionTimeout: 15000 });
-test.setTimeout(90000);
+test.setTimeout(150000);
 async function expectRealScreen(page: Page, selector: string) {
   const content = page.locator(selector);
   const retry = page.getByRole("button", { name: "Try again", exact: true });
-  await expect(content.or(retry)).toBeVisible({ timeout: 15000 });
+  await expect(content.or(retry)).toBeVisible({ timeout: 60000 });
   if (await retry.isVisible()) await retry.click();
-  await expect(content).toBeVisible({ timeout: 15000 });
+  await expect(content).toBeVisible({ timeout: 60000 });
 }
 async function expectParentComparison(page: Page, parentId: string) {
   const diff = page.locator(".fork-diff");
   try {
     await expect(diff).toContainText(`Changes from #${parentId}`, {
-      timeout: 15000,
+      timeout: 60000,
     });
   } catch {
     // Exercise the real recovery control; never replace unavailable data.
     await page.getByRole("button", { name: "Check parent again" }).click();
     await expect(diff).toContainText(`Changes from #${parentId}`, {
-      timeout: 15000,
+      timeout: 60000,
     });
   }
 }
@@ -79,7 +79,7 @@ test("real fork detail compares its direct parent and preserves honest execution
     .click();
   await expect(page.locator(".selected-perspective")).toContainText(
     "The original perspective",
-    { timeout: 15000 },
+    { timeout: 60000 },
   );
 });
 test("live production draft edits and reverts without creating a draft or transaction", async ({
@@ -93,7 +93,7 @@ test("live production draft edits and reverts without creating a draft or transa
   await page.goto("/t/1/fork");
   await expectRealScreen(page, ".composer-form");
   const diff = page.getByRole("region", { name: "Live draft comparison" });
-  await expect(diff).toContainText("No changes yet", { timeout: 15000 });
+  await expect(diff).toContainText("No changes yet", { timeout: 60000 });
   await page.getByLabel("Target", { exact: true }).fill("4400");
   await page.getByLabel("Leverage", { exact: true }).fill("3");
   await expect(diff.locator('[data-diff-field="targetPriceE8"]')).toContainText(
@@ -135,23 +135,23 @@ for (const width of [1440, 1280, 1024, 768, 390, 375])
       await expect(page.locator(".signature-loading")).toHaveCount(0);
       if (name === "tree")
         await expect(page.locator(".tree-node")).toHaveCount(2, {
-          timeout: 15000,
+          timeout: 60000,
         });
       else if (name === "composer") {
         await expect(page.locator(".composer-form")).toBeVisible({
-          timeout: 15000,
+          timeout: 60000,
         });
         await expect(
           page.getByRole("combobox", { name: "Market", exact: true }),
         ).toHaveValue("32", {
-          timeout: 15000,
+          timeout: 60000,
         });
         await expect(page.locator(".parent-attribution")).toContainText("ETH", {
-          timeout: 15000,
+          timeout: 60000,
         });
       } else
         await expect(page.locator(".detail-market h1")).toHaveText("ETH", {
-          timeout: 15000,
+          timeout: 60000,
         });
       if (name === "fork") await expectParentComparison(page, "1");
       expect(

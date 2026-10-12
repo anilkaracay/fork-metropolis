@@ -29,7 +29,11 @@ export async function api<T>(
         ? {}
         : { body: JSON.stringify(options.body) }),
       cache: "no-store",
-      signal: AbortSignal.timeout(10000),
+      // A read's upstream budget includes two 8-second attempts plus backoff.
+      // Keep wallet/mutation request budgets unchanged.
+      signal: AbortSignal.timeout(
+        (options.method ?? "GET") === "GET" ? 25000 : 10000,
+      ),
     });
     const result = (await response.json()) as {
       ok: boolean;

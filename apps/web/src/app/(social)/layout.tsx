@@ -4,6 +4,7 @@ import { AppShell } from "@/components/app-shell";
 import { clientEnv } from "@/lib/env/client";
 import { testMode } from "@/server/runtime";
 import "./signature.css";
+import "./polish.css";
 
 export default function SocialLayout({ children }: { children: ReactNode }) {
   return (

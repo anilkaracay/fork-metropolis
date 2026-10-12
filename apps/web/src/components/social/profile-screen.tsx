@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ProfileSummary } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import { useSession } from "./session";
-import { Avatar, EmptyState, ErrorState, Skeleton } from "./common";
+import { Avatar, EmptyState, ErrorState, Skeleton, ReadStatus } from "./common";
 import { ThesisCard } from "./thesis-card";
 import { Icon } from "./icon";
 import { ExternalWalletContext } from "./wallet-context";
@@ -36,11 +36,26 @@ export function ProfileScreen({ handle }: { handle: string }) {
     query = useQuery({
       queryKey: ["profile", handle],
       queryFn: () => api<ProfileSummary>(`profiles/${handle}`),
+      staleTime: 30000,
     }),
     [tab, setTab] = useState<"all" | "roots" | "forks">("all"),
     [editing, setEditing] = useState(false);
-  if (query.isPending) return <Skeleton cards={2} />;
-  if (query.error)
+  const [copyState, setCopyState] = useState("Copy wallet");
+  async function copyWallet(wallet: string) {
+    try {
+      await navigator.clipboard.writeText(wallet);
+      setCopyState("Copied");
+    } catch {
+      setCopyState("Select wallet to copy");
+    }
+  }
+  if (query.isPending)
+    return (
+      <div className="social-polish">
+        <Skeleton cards={2} />
+      </div>
+    );
+  if (query.error && !query.data)
     return (
       <ErrorState error={query.error} retry={() => void query.refetch()} />
     );
@@ -53,11 +68,8 @@ export function ProfileScreen({ handle }: { handle: string }) {
         (tab === "roots" ? n.graph.parentId === "0" : n.graph.parentId !== "0"),
     );
   return (
-    <div className="profile-screen">
-      <div className="profile-cover">
-        <Icon name="fork" size={96} />
-        <span>Ideas evolve in public.</span>
-      </div>
+    <div className="profile-screen social-polish">
+      <span className="eyebrow">A contributor to the idea graph</span>
       <header className="profile-header">
         <Avatar name={p.identity.displayName} wallet={p.identity.wallet} />
         <div className="profile-name">
@@ -82,8 +94,30 @@ export function ProfileScreen({ handle }: { handle: string }) {
         <code title={p.identity.wallet}>
           {p.identity.wallet.slice(0, 8)}…{p.identity.wallet.slice(-6)}
         </code>
+        <button
+          className="text-button"
+          aria-label="Copy wallet address"
+          onClick={() => void copyWallet(p.identity.wallet)}
+        >
+          {copyState}
+        </button>
+        <span className="sr-only" role="status">
+          {copyState === "Copied"
+            ? "Wallet address copied."
+            : copyState === "Select wallet to copy"
+              ? "Clipboard unavailable. Expand the wallet address below to select it."
+              : ""}
+        </span>
+        {copyState === "Select wallet to copy" && (
+          <details className="wallet-copy-fallback" open>
+            <summary>Wallet address</summary>
+            <code>{p.identity.wallet}</code>
+          </details>
+        )}
         <span>
-          {r.eligibleRoots} original ideas · {r.eligibleForks} contributions
+          {r.eligibleRoots}{" "}
+          {r.eligibleRoots === 1 ? "original idea" : "original ideas"} ·{" "}
+          {r.eligibleForks} {r.eligibleForks === 1 ? "fork" : "forks"}
         </span>
       </div>
       {editing && <ProfileEditor profile={p} />}
@@ -164,6 +198,18 @@ export function ProfileScreen({ handle }: { handle: string }) {
           Moderation queue <Icon name="arrow" size={15} />
         </Link>
       )}
+      <div className="section-title profile-work-heading">
+        <h2>Ideas & contributions</h2>
+        <span>
+          {r.eligibleRoots} {r.eligibleRoots === 1 ? "original" : "originals"} ·{" "}
+          {r.eligibleForks} {r.eligibleForks === 1 ? "fork" : "forks"}
+        </span>
+      </div>
+      <ReadStatus
+        error={query.error}
+        refreshing={query.isFetching}
+        retry={() => void query.refetch()}
+      />
       <div className="feed-tabs" role="group" aria-label="Profile activity">
         {(["all", "roots", "forks"] as const).map((t) => (
           <button
