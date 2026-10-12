@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, ViewTransition } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ThesisDetail } from "@fork/shared";
 import { api } from "@/lib/api-client";
@@ -48,10 +48,16 @@ export function DetailScreen({ id }: { id: string }) {
               lineage <Icon name="tree" size={15} />
             </Link>
           </div>
-          <div className="market-line detail-market">
-            <h1>{marketName(item.graph.core.marketId, context)}</h1>
-            <Direction side={item.graph.core.side} />
-          </div>
+          <ViewTransition
+            name={`thesis-title-${id}`}
+            share="morph"
+            default="none"
+          >
+            <div className="market-line detail-market">
+              <h1>{marketName(item.graph.core.marketId, context)}</h1>
+              <Direction side={item.graph.core.side} />
+            </div>
+          </ViewTransition>
           <div className="card-author">
             <Link href={`/u/${item.author.handle}`} className="identity-link">
               <Avatar
@@ -145,29 +151,8 @@ export function DetailScreen({ id }: { id: string }) {
             </button>
           </div>
         )}
-        <div className="execution-note">
-          <strong>
-            {item.execution.state === "not-executed"
-              ? "Not executed"
-              : item.execution.state === "attested"
-                ? "Attested · independently unverified"
-                : `Verified execution${item.execution.position === "unknown" ? "" : ` · ${item.execution.position}`}`}
-          </strong>
-          <button
-            className="button secondary"
-            disabled
-            title="Execution is deferred pending provider approval"
-          >
-            Execute unavailable
-          </button>
-          <span>
-            {item.execution.state === "attested"
-              ? "An onchain link alone is not execution proof."
-              : "Execution integration is deferred. Your idea and lineage remain public."}
-          </span>
-        </div>
         <div className="thesis-proof">
-          <span className="eyebrow">Public provenance</span>
+          <span className="eyebrow">On Monad Testnet</span>
           <a
             href={`https://testnet.monadexplorer.com/tx/${item.graph.txHash}`}
             target="_blank"
@@ -178,7 +163,7 @@ export function DetailScreen({ id }: { id: string }) {
           <span title={item.author.wallet}>
             {item.author.wallet.slice(0, 8)}…{item.author.wallet.slice(-6)}
           </span>
-          <span>Envio lineage · hash-checked metadata</span>
+          <span>Indexed by Envio · reasoning matches its onchain hash</span>
           <ConfirmationNote txHash={item.graph.txHash} />
         </div>
       </article>

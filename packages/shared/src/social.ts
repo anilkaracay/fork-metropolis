@@ -72,7 +72,7 @@ export function forkDifference(
     ],
     ["leverageBps", "Leverage", String(a.leverageBps), String(b.leverageBps)],
     ["reasoning", "Reasoning", am.reasoning, bm.reasoning],
-    ["entryNote", "Entry note", am.entryNote ?? "—", bm.entryNote ?? "—"],
+    ["entryNote", "Entry note", am.entryNote ?? "none", bm.entryNote ?? "none"],
     ["tags", "Tags", am.tags.join(", "), bm.tags.join(", ")],
   ] as const;
   return pairs

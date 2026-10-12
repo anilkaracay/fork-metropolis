@@ -144,7 +144,7 @@ export function ProfileScreen({ handle }: { handle: string }) {
       {editing && <ProfileEditor profile={p} />}
       <div className="section-title reputation-heading">
         <h2>A reputation you can trace.</h2>
-        <span>FORK-native · wallet scoped</span>
+        <span>Counted from the public graph</span>
       </div>
       <div className="reputation-grid">
         <div>
@@ -168,11 +168,6 @@ export function ProfileScreen({ handle }: { handle: string }) {
           <strong>{r.influence}</strong>
           <p>Unique external wallets directly forking authored ideas</p>
         </div>
-        <div>
-          <span>Executions Inspired</span>
-          <strong>{r.executionsInspired}</strong>
-          <p>Independently verified executions on descendant branches</p>
-        </div>
       </div>
       <Earnings profile={p} owner={isOwner} />
       <details className="reputation-explanation">
@@ -188,10 +183,7 @@ export function ProfileScreen({ handle }: { handle: string }) {
         <p>
           Influence counts each external wallet once across directly forked
           authored ideas. Self-forks and repeated wallets do not inflate success
-          or influence. Execution credit requires independently verified
-          evidence below an authored idea, deduplicated across overlapping
-          ancestors; self-owned executions and arbitrary onchain links do not
-          count.
+          or influence.
         </p>
         <p>
           Scope: chain {p.scope.chainId}, registry{" "}

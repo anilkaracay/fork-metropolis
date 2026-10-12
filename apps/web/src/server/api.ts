@@ -340,9 +340,9 @@ export async function handleApi(request: Request, path: string[]) {
       prepareReadOnlyRelay(await body(request));
       throw new AppError(
         "RELAY_NOT_ENABLED",
-        "Live execution verification is not enabled in this phase.",
+        "Execution verification is not available.",
         501,
-        "Keep the execution Attested until the reviewed live verification phase.",
+        "Nothing was sent. Your idea and its lineage are unaffected.",
       );
     }
     throw new AppError(

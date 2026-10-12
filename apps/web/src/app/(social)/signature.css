@@ -1,4 +1,4 @@
-/* B2 uses B1 tokens. Scope keeps landing, Feed, Create and Profile intact. */
+/* Thesis detail, Idea Tree, fork diff and composer. Scoped so other screens stay intact. */
 .signature {
   --signature-gap: 40px;
   min-width: 0;
@@ -147,18 +147,6 @@
 }
 .signature .detail-actions .report-button {
   margin-left: 0;
-}
-.signature .execution-note {
-  padding: 20px 0;
-  font-size: 11px;
-  justify-content: space-between;
-}
-.signature .execution-note > span:last-child {
-  margin: 0;
-  font-size: 11px;
-}
-.signature .execution-note .button {
-  font-size: 10px;
 }
 .signature .thesis-proof {
   border-top: 1px solid var(--border);

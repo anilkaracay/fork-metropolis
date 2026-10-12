@@ -232,7 +232,7 @@ function LocalSession({
       throw new ApiError(
         "TEST_SIGNING_UNAVAILABLE",
         "Typed-data signing requires a real wallet.",
-        "Use the configured Privy wallet in the next integration phase.",
+        "Sign in with a real wallet to sign typed data.",
         409,
       );
     },

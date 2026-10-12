@@ -78,8 +78,12 @@ export function FeedScreen() {
         ) : query.data?.items.length ? (
           <>
             <div className="feed-list">
-              {query.data.items.map((item) => (
-                <ThesisCard key={item.graph.thesisId} item={item} />
+              {query.data.items.map((item, index) => (
+                <ThesisCard
+                  key={item.graph.thesisId}
+                  item={item}
+                  index={index}
+                />
               ))}
             </div>
             <div className="pagination">
@@ -119,7 +123,7 @@ export function FeedScreen() {
           <Icon name="fork" size={18} />
         </div>
         <div className="rail-feature">
-          <span className="rail-number">01 — THE IDEA GRAPH</span>
+          <span className="rail-number">THE IDEA GRAPH</span>
           <h2>
             A perspective.
             <br />A new branch.

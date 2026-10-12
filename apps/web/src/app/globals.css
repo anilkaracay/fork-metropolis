@@ -858,27 +858,6 @@ main {
   margin-left: auto;
   font-size: 10px;
 }
-.execution-note {
-  font-size: 10px;
-  display: flex;
-  gap: 7px;
-  align-items: center;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
-  color: #96a29c;
-}
-.execution-note strong {
-  font-weight: 500;
-  color: #abb8ad;
-}
-.execution-note > span:last-child {
-  display: block;
-  width: 100%;
-  margin-left: 12px;
-  line-height: 1.7;
-  font-size: 9px;
-}
 .detail-rail {
   padding-top: 56px;
 }
@@ -1616,7 +1595,7 @@ li.ancestor > .tree-node {
 }
 .reputation-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--card);
@@ -2203,4 +2182,47 @@ li.ancestor > .tree-node {
   font-family: var(--font-mono);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
+}
+
+/* Motion: quiet, short, and off when the user asks for less. */
+.button,
+.fork-button,
+.text-button {
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s,
+    transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.button:active:not(:disabled),
+.fork-button:active {
+  transform: scale(0.975);
+}
+.thesis-card {
+  animation: card-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--card-index, 0) * 45ms);
+}
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.thesis-card .card-body .market-symbol {
+  transition: color 0.15s;
+}
+.thesis-card .card-body:hover .market-symbol {
+  color: var(--primary);
+}
+/* A card's title travels to the top of its thesis page. */
+::view-transition-group(.morph) {
+  animation-duration: 0.34s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
