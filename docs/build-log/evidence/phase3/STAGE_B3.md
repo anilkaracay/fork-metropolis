@@ -48,15 +48,15 @@ These ten full-resolution public captures were opened and visually inspected, al
 
 | View | Desktop | Mobile |
 | --- | --- | --- |
-| Feed | [1440](../../assets/stage-b3/public/feed-1440.jpg) | [390](../../assets/stage-b3/public/feed-390.jpg) |
-| Explore | [1440](../../assets/stage-b3/public/explore-1440.jpg) | [390](../../assets/stage-b3/public/explore-390.jpg) |
-| Create | [1440](../../assets/stage-b3/public/create-1440.jpg) | [390](../../assets/stage-b3/public/create-390.jpg) |
-| Profile A | [1440](../../assets/stage-b3/public/profile-a-1440.jpg) | [390](../../assets/stage-b3/public/profile-a-390.jpg) |
-| Profile B | [1440](../../assets/stage-b3/public/profile-b-1440.jpg) | [390](../../assets/stage-b3/public/profile-b-390.jpg) |
+| Feed | [1440](../../../assets/stage-b3/public/feed-1440.jpg) | [390](../../../assets/stage-b3/public/feed-390.jpg) |
+| Explore | [1440](../../../assets/stage-b3/public/explore-1440.jpg) | [390](../../../assets/stage-b3/public/explore-390.jpg) |
+| Create | [1440](../../../assets/stage-b3/public/create-1440.jpg) | [390](../../../assets/stage-b3/public/create-390.jpg) |
+| Profile A | [1440](../../../assets/stage-b3/public/profile-a-1440.jpg) | [390](../../../assets/stage-b3/public/profile-a-390.jpg) |
+| Profile B | [1440](../../../assets/stage-b3/public/profile-b-1440.jpg) | [390](../../../assets/stage-b3/public/profile-b-390.jpg) |
 
-The actual public journey was also captured and inspected: [Landing](../../assets/stage-b3/public/journey-landing.jpg) → [Feed](../../assets/stage-b3/public/journey-feed.jpg) → [Root #1](../../assets/stage-b3/public/journey-root.jpg) → [Fork #2](../../assets/stage-b3/public/journey-fork.jpg) → [Idea Tree](../../assets/stage-b3/public/journey-tree.jpg) → [Profile B](../../assets/stage-b3/public/journey-profile.jpg).
+The actual public journey was also captured and inspected: [Landing](../../../assets/stage-b3/public/journey-landing.jpg) → [Feed](../../../assets/stage-b3/public/journey-feed.jpg) → [Root #1](../../../assets/stage-b3/public/journey-root.jpg) → [Fork #2](../../../assets/stage-b3/public/journey-fork.jpg) → [Idea Tree](../../../assets/stage-b3/public/journey-tree.jpg) → [Profile B](../../../assets/stage-b3/public/journey-profile.jpg).
 
-All six widths are available under [public captures](../../assets/stage-b3/public/) and [local exact-image captures](../../assets/stage-b3/local/): 72 unaltered JPEGs. Review corrected mobile spacing, singular/plural copy, market-label readiness and route-transition capture synchronization. No bitmap editing was used. Historical Phase 2 images overwritten by their existing isolated tests were restored rather than replacing historical evidence. The [sanitized validation record](../../assets/stage-b3/validation.json) contains the results.
+All six widths are available under [public captures](../../../assets/stage-b3/public/) and [local exact-image captures](../../../assets/stage-b3/local/): 72 unaltered JPEGs. Review corrected mobile spacing, singular/plural copy, market-label readiness and route-transition capture synchronization. No bitmap editing was used. Historical Phase 2 images overwritten by their existing isolated tests were restored rather than replacing historical evidence. The [sanitized validation record](../../../assets/stage-b3/validation.json) contains the results.
 
 ## 10. Test results
 
@@ -81,7 +81,7 @@ The exact image's 30 unique cases were validated across the initial run and reco
 
 Release: `fork-metropolis:b3-20261012c`, implementation `de353b7`, verified image ID `sha256:ac8d2dbf7dc76ecb39869ecc1d2fe5fe56ca28a97f2e76f5c96f5c44c27a6140`. Only FORK's app image was replaced after local validation and visual review. A restricted FORK-only native PostgreSQL backup preceded deployment; the same three committed Drizzle migrations applied idempotently. Health is passing; no schema push or data reset was used.
 
-B2 remains retained as `fork-metropolis:b2-20261011a`, with `/opt/fork-metropolis/releases/pre-b3-image.env` for schema-compatible app rollback. See [operations](../../../deploy/README.md). No rollback was necessary.
+B2 remains retained as `fork-metropolis:b2-20261011a`, with `/opt/fork-metropolis/releases/pre-b3-image.env` for schema-compatible app rollback. See [operations](../../../../deploy/README.md). No rollback was necessary.
 
 Live checks retain two trusted metadata rows, lineage #1 → #2, one Agree and one visible comment on root #1, both profile reputations and zero execution credit. Monad chain 10143 and registry code remain readable. Public dev/test/env routes return 404 and unauthenticated publication returns 401. App remains `127.0.0.1:13000`; PostgreSQL publishes no host port and its identity matches the retained pre-B2 baseline. Public 13000/5432 are closed. TLS validates; HTTP is 308 and www is 301 to the apex. Anonymous landing sets no app auth cookie.
 

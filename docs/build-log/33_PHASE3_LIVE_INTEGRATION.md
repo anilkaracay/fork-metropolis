@@ -112,7 +112,7 @@ All postdeployment commands passed: format, lint, strict typecheck, test (194 ro
 
 The Monad deployment gate is complete; no funding or signing action remains. The user approved this result and authorized Envio Cloud. GitHub App approval, actual deployment and genuine empty application reads now pass. Stop for review before real thesis/fork publication, authenticated Nansen or Perpl orders. GitHub remains private, and server/domain work stays deferred. Email/OTP/private-session Privy proof remains user-deferred under D-043. Later Perpl enrollment still needs the final stable HTTPS Origin and sponsor approval.
 
-Exact commands, sources and dependency sequence are in [deployment instructions](23_DEPLOYMENT_ENV.md). Sponsor records: [Privy](evidence/phase3/PRIVY.md), [Envio](evidence/phase3/ENVIO.md), [Nansen](evidence/phase3/NANSEN.md), [Perpl](evidence/phase3/PERPL.md). [Secret scan scope](evidence/phase3/SECRET_SCAN.md).
+Exact commands, sources and dependency sequence are in [deployment instructions](../23_DEPLOYMENT_ENV.md). Sponsor records: [Privy](evidence/phase3/PRIVY.md), [Envio](evidence/phase3/ENVIO.md), [Nansen](evidence/phase3/NANSEN.md), [Perpl](evidence/phase3/PERPL.md). [Secret scan scope](evidence/phase3/SECRET_SCAN.md).
 
 Phase 4 is not started. After remaining Phase 3 proof passes, consider final UX polish, reliability, traction, demo and submission only.
 

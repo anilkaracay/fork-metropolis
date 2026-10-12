@@ -46,7 +46,7 @@ Monad's fast settlement and low-cost transactions suit small, frequent social co
 | Original #1 | [ThesisCreated transaction](https://testnet.monadvision.com/tx/0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f) |
 | Fork #2 | [ThesisCreated transaction](https://testnet.monadvision.com/tx/0xe5fbf9c835109a566be8afebd5c2d146731d1f998851ea1875798e328ab6b192) |
 | Indexed graph | [Public Envio GraphQL endpoint](https://indexer.dev.hyperindex.xyz/da86abe/v1/graphql) · [Config](indexer/config.yaml) · [Schema](indexer/schema.graphql) · [Handlers](indexer/src/handlers/registry.ts) |
-| Source verification | [Recorded Sourcify exact-match result](docs/evidence/phase3/MONAD.md#source-verification) |
+| Source verification | [Recorded Sourcify exact-match result](docs/build-log/evidence/phase3/MONAD.md#source-verification) |
 
 The [submission evidence](docs/submission/README.md) records current checks, videos and release status. Historical gate reports describe what was true at their observation time; the current product is the social MVP above.
 

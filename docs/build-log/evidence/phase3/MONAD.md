@@ -4,7 +4,7 @@ Status: READY. FORKRegistry was deployed exactly once on Monad Testnet and sourc
 
 ## Canonical public evidence
 
-- [Deployment artifact](../../../contracts/deployments/10143.json): chain/network, address, transaction/block, block timestamp, public deployer, pinned compiler/Foundry, reviewed git commit and ABI/bytecode hashes.
+- [Deployment artifact](../../../../contracts/deployments/10143.json): chain/network, address, transaction/block, block timestamp, public deployer, pinned compiler/Foundry, reviewed git commit and ABI/bytecode hashes.
 - [Independent viem read](monad-live-read.json): exact runtime code, successful receipt, empty initial state and 154 observed confirmations.
 - [Public single-attempt journal](monad-deployment-attempt.json): preflight block, nonce 0, predicted CREATE address, fixed fees and the only broadcast's confirmed hash. No raw signing material is recorded.
 - [Contract explorer](https://testnet.monadvision.com/address/0x1889a7216b1ecad9a44910dd0996834d0894b9e1).

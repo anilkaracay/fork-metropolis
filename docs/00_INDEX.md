@@ -32,8 +32,6 @@ This folder is the source of truth for product, design, engineering, hackathon c
 ## Execution
 
 - `19_ANALYTICS_METRICS.md` - product and demo metrics
-- `20_3_DAY_EXECUTION_PLAN.md` - hour-by-hour three-day plan
-- `21_CODEX_TASKS.md` - ordered implementation task queue
 - `22_ACCEPTANCE_CRITERIA.md` - feature-level pass/fail criteria
 - `24_DEMO_SUBMISSION.md` - 3-minute demo, 2-minute pitch, submission checklist
 - `25_LAUNCH_TRACTION.md` - seed users and traction plan
@@ -42,25 +40,14 @@ This folder is the source of truth for product, design, engineering, hackathon c
 - `28_RESEARCH_SOURCES.md` - verified source links and research notes
 - `29_DECISIONS.md` - decision log
 - `30_DEFINITION_OF_DONE.md` - final go/no-go checklist
-- `31_PHASE1_FOUNDATION.md` - implemented foundation boundaries, pinned tooling and checks
 
-## Working order
+## Build log
 
-For implementation, read in this order:
+How the product was built, kept as a record. These are process documents, not the current specification: where they disagree with the files above or with the decision log, the decision log wins.
 
-1. Product brief
-2. PRD
-3. Architecture
-4. Contract spec
-5. Data model
-6. Integration specs
-7. Three-day plan
-8. Codex tasks
-9. Acceptance criteria
-10. Definition of done
-
-## Implementation reports
-
-- [31_PHASE1_FOUNDATION.md](31_PHASE1_FOUNDATION.md) — foundation evidence and scope
-- [32_PHASE2_SOCIAL_CORE.md](32_PHASE2_SOCIAL_CORE.md) — implemented social core, local run, trust boundaries, tests and review artifacts
-- [33_PHASE3_LIVE_INTEGRATION.md](33_PHASE3_LIVE_INTEGRATION.md) — live-integration preparation, public observations, pending human configuration and gate evidence
+- [20_3_DAY_EXECUTION_PLAN.md](build-log/20_3_DAY_EXECUTION_PLAN.md): the original three-day plan
+- [21_CODEX_TASKS.md](build-log/21_CODEX_TASKS.md): the original ordered task queue
+- [31_PHASE1_FOUNDATION.md](build-log/31_PHASE1_FOUNDATION.md): foundation scope and checks
+- [32_PHASE2_SOCIAL_CORE.md](build-log/32_PHASE2_SOCIAL_CORE.md): the social core, its trust boundaries and tests
+- [33_PHASE3_LIVE_INTEGRATION.md](build-log/33_PHASE3_LIVE_INTEGRATION.md): live integration preparation and observations
+- [evidence/phase3/](build-log/evidence/phase3/): dated checkpoint reports and their data for Privy, Monad, Envio, hosting and the design stages

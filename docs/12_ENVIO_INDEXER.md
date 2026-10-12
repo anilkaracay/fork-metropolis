@@ -57,4 +57,4 @@ The production reader scopes GraphQL queries by chain/registry, validates scalar
 
 Standalone installation from this directory uses `pnpm --ignore-workspace install --frozen-lockfile` and the committed local lockfile; no workspace-only imports or inherited TypeScript config are required.
 
-The real public development Cloud endpoint, namespace, generated schema and empty Feed/Explore/Profile reads are proven in [Envio evidence](evidence/phase3/ENVIO.md). No handler/config/schema change was needed. The read-only `pnpm indexer:latency REAL_THESIS_TRANSACTION_HASH` tool is ready for the next gate; no real delay is claimed before an actual thesis exists.
+The real public development Cloud endpoint, namespace, generated schema and empty Feed/Explore/Profile reads are proven in [Envio evidence](build-log/evidence/phase3/ENVIO.md). No handler/config/schema change was needed. The read-only `pnpm indexer:latency REAL_THESIS_TRANSACTION_HASH` tool is ready for the next gate; no real delay is claimed before an actual thesis exists.

@@ -1,6 +1,6 @@
 # Public deployment — READY
 
-2026-10-11. The approved DOMAIN + HTTPS PUBLIC CUTOVER gate is complete: public HTTPS, real Privy Google production-origin authentication, unchanged existing identity/wallet and actual public product reads are proven. [Sanitized machine-readable proof](public-proof.json), [Caddy site](../../../deploy/caddy/fork-metropolis.caddy), [operations/rollback runbook](../../../deploy/README.md).
+2026-10-11. The approved DOMAIN + HTTPS PUBLIC CUTOVER gate is complete: public HTTPS, real Privy Google production-origin authentication, unchanged existing identity/wallet and actual public product reads are proven. [Sanitized machine-readable proof](public-proof.json), [Caddy site](../../../../deploy/caddy/fork-metropolis.caddy), [operations/rollback runbook](../../../../deploy/README.md).
 
 ## 1. PUBLIC DEPLOYMENT STATUS
 
