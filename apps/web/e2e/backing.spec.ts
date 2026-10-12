@@ -89,8 +89,11 @@ test("backing a fork shows the split, confirms, and credits the whole lineage", 
   await page.goto(`/t/${leaf}`);
   await signIn(page, "dana");
   await page.getByRole("button", { name: "Back", exact: true }).click();
-  const sheet = page.getByRole("dialog", { name: /Back @carol's idea/ });
-  await expect(sheet).toBeVisible();
+  await expect(
+    page.getByRole("dialog", { name: /Back @carol's idea/ }),
+  ).toBeVisible();
+  // The sheet's title changes once the backing is confirmed, so hold it by element.
+  const sheet = page.locator("dialog.back-sheet");
 
   // 0.1 MON is preselected: 70% to the author, 20% and 10% to the ideas it grew from.
   const rows = sheet
@@ -156,9 +159,9 @@ test("backing a fork shows the split, confirms, and credits the whole lineage", 
 
   // The feed card carries the summary.
   await page.goto("/feed");
-  await expect(page.locator(`[data-thesis-id="${leaf}"]`)).toContainText(
-    "0.1 MON · 1 backer",
-  );
+  const chip = page.locator(`[data-thesis-id="${leaf}"] .backed-chip`);
+  await expect(chip).toContainText("0.1 MON");
+  await expect(chip).toContainText("1 backer");
 });
 
 test("an author cannot back their own idea, and earnings can be withdrawn", async ({
