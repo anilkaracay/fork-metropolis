@@ -103,10 +103,10 @@ test("backing a fork shows the split, confirms, and credits the whole lineage", 
   await expect(rows.nth(1)).toContainText("0.02 MON");
   await expect(rows.nth(2)).toContainText("@alice");
   await expect(rows.nth(2)).toContainText("0.01 MON");
-  await sheet.getByText("0.05 MON", { exact: true }).click();
+  await sheet.getByRole("radio", { name: "0.05 MON" }).check();
   await expect(rows.nth(0)).toContainText("0.035 MON");
 
-  await sheet.getByText("Custom", { exact: true }).click();
+  await sheet.getByRole("radio", { name: "Custom" }).check();
   const custom = sheet.getByLabel("Custom amount in MON");
   await custom.fill("0.001");
   await expect(sheet.getByRole("alert")).toContainText(
@@ -120,7 +120,7 @@ test("backing a fork shows the split, confirms, and credits the whole lineage", 
     sheet.getByRole("button", { name: /Back with|Choose an amount/ }),
   ).toBeDisabled();
 
-  await sheet.getByText("0.1 MON", { exact: true }).click();
+  await sheet.getByRole("radio", { name: "0.1 MON" }).check();
   await sheet.getByRole("button", { name: "Back with 0.1 MON" }).click();
   await expect(
     sheet.getByRole("heading", { name: "Backed with 0.1 MON" }),

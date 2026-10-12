@@ -19,18 +19,25 @@ export function MotionRoot({ children }: { children: ReactNode }) {
   );
 }
 
-/** A number that glides to its new value. Layout never shifts: digits are tabular. */
+/**
+ * A number that glides to its new value. Layout never shifts: digits are tabular.
+ * With `from`, it also glides from that value when it first appears.
+ */
 export function Ticker({
   value,
   format,
   className,
+  from,
+  delay = 0,
 }: {
   value: number;
   format: (value: number) => string;
   className?: string;
+  from?: number;
+  delay?: number;
 }) {
   const node = useRef<HTMLSpanElement>(null),
-    shown = useRef(value),
+    shown = useRef(from ?? value),
     still = useReducedMotion();
   useEffect(() => {
     const element = node.current;
@@ -40,8 +47,10 @@ export function Ticker({
       element.textContent = format(value);
       return;
     }
+    element.textContent = format(shown.current);
     const controls = animate(shown.current, value, {
-      duration: 0.45,
+      duration: 0.6,
+      delay,
       ease: [0.2, 0.8, 0.2, 1],
       onUpdate: (current) => {
         shown.current = current;
@@ -49,7 +58,7 @@ export function Ticker({
       },
     });
     return () => controls.stop();
-  }, [value, format, still]);
+  }, [value, format, still, delay]);
   return (
     <span
       ref={node}
