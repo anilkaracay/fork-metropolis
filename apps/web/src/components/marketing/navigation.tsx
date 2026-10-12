@@ -5,79 +5,59 @@ import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/social/icon";
 import { Wordmark } from "@/components/ui/wordmark";
 
-export function MarketingNavigation() {
-  const [open, setOpen] = useState(false);
-  const root = useRef<HTMLElement>(null);
-  const toggle = useRef<HTMLButtonElement>(null);
+/**
+ * The floating bar. It tightens and gains a backdrop once the page has scrolled.
+ * `ideas` is the real count from the indexer, or null when it could not be read.
+ */
+export function MarketingNavigation({ ideas }: { ideas: number | null }) {
+  const [scrolled, setScrolled] = useState(false);
+  const sentinel = useRef<HTMLSpanElement>(null);
   useEffect(() => {
-    if (!open) return;
-    function dismiss(event: PointerEvent) {
-      if (!root.current?.contains(event.target as Node)) setOpen(false);
-    }
-    function escape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-        toggle.current?.focus();
-      }
-    }
-    document.addEventListener("pointerdown", dismiss);
-    document.addEventListener("keydown", escape);
-    return () => {
-      document.removeEventListener("pointerdown", dismiss);
-      document.removeEventListener("keydown", escape);
-    };
-  }, [open]);
+    const mark = sentinel.current;
+    if (!mark) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolled(!entry!.isIntersecting),
+      { rootMargin: "48px 0px 0px 0px" },
+    );
+    observer.observe(mark);
+    return () => observer.disconnect();
+  }, []);
   return (
-    <header className="marketing-header" ref={root}>
-      <Link
-        href="/"
-        className="marketing-logo"
-        aria-label="FORK home"
-        prefetch={false}
-      >
-        <Wordmark />
-      </Link>
-      <nav
-        id="marketing-navigation"
-        className={`marketing-nav ${open ? "is-open" : ""}`}
-        aria-label="Landing navigation"
-      >
-        <Link href="/feed" prefetch={false} onClick={() => setOpen(false)}>
-          Product
-        </Link>
-        <a href="#how" onClick={() => setOpen(false)}>
-          How it works
-        </a>
-        <a href="#live" onClick={() => setOpen(false)}>
-          Live graph
-        </a>
-      </nav>
-      <div className="marketing-header-actions">
-        <Link href="/feed" prefetch={false} className="button secondary">
-          Open FORK <Icon name="arrow" size={16} />
-        </Link>
-        <button
-          ref={toggle}
-          type="button"
-          className="marketing-menu-toggle"
-          aria-label={open ? "Close navigation" : "Open navigation"}
-          aria-expanded={open}
-          aria-controls="marketing-navigation"
-          onClick={() => setOpen(!open)}
+    <>
+      <span ref={sentinel} className="l-nav-sentinel" aria-hidden="true" />
+      <header className="l-nav" data-scrolled={scrolled}>
+        <Link
+          href="/"
+          className="l-nav-logo"
+          aria-label="FORK home"
+          prefetch={false}
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            aria-hidden="true"
+          <Wordmark />
+        </Link>
+        <nav className="l-nav-links" aria-label="Landing navigation">
+          <a href="#how">How it works</a>
+          <a href="#live">Live graph</a>
+          <a href="#built">Built on</a>
+        </nav>
+        <div className="l-nav-end">
+          <a className="l-nav-chip" href="#live">
+            <span>Monad Testnet</span>
+            {ideas !== null && (
+              <span className="l-nav-count">
+                {ideas} {ideas === 1 ? "idea" : "ideas"}
+              </span>
+            )}
+          </a>
+          <Link
+            href="/feed"
+            prefetch={false}
+            className="button primary l-nav-cta"
+            data-magnetic
           >
-            <path d={open ? "m5 5 10 10M15 5 5 15" : "M3 6h14M3 14h14"} />
-          </svg>
-        </button>
-      </div>
-    </header>
+            Open FORK <Icon name="arrow" size={16} />
+          </Link>
+        </div>
+      </header>
+    </>
   );
 }

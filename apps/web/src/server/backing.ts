@@ -30,6 +30,8 @@ export interface BackingSource {
   summaries(thesisIds: string[]): Promise<Map<string, BackingSummary>>;
   /** Latest backings of one thesis, newest first. */
   recent(thesisId: string, limit: number): Promise<BackingEvent[]>;
+  /** Latest backings across every thesis, newest first. */
+  latest(limit: number): Promise<(BackingEvent & { thesisId: string })[]>;
   /** Flows that start or end at any of these theses. */
   flows(thesisIds: string[]): Promise<LineageFlow[]>;
   earnings(wallet: string): Promise<EarningsSummary>;
@@ -90,6 +92,25 @@ export const backingRows = {
       timestamp: seconds,
     })
     .transform((row): BackingEvent => ({
+      txHash: row.txHash,
+      backer: row.backer,
+      amountWei: row.amount,
+      position: row.backerIndex,
+      early: row.early,
+      timestamp: row.timestamp,
+    })),
+  placedEvent: z
+    .object({
+      thesisId: id,
+      txHash: z.string(),
+      backer: address,
+      amount: wei,
+      backerIndex: count,
+      early: z.boolean(),
+      timestamp: seconds,
+    })
+    .transform((row): BackingEvent & { thesisId: string } => ({
+      thesisId: row.thesisId,
       txHash: row.txHash,
       backer: row.backer,
       amountWei: row.amount,
@@ -184,6 +205,13 @@ export function envioBacking(
         { where: { ...base, thesisId: { _eq: thesisId } }, limit },
       );
       return list(backingRows.event, data.Backing);
+    },
+    async latest(limit) {
+      const data = await query(
+        `query Latest($where: Backing_bool_exp!, $limit: Int!) { Backing(where: $where, order_by: [{blockNumber: desc}, {logIndex: desc}], limit: $limit) { thesisId txHash backer amount backerIndex early timestamp } }`,
+        { where: base, limit },
+      );
+      return list(backingRows.placedEvent, data.Backing);
     },
     async flows(thesisIds) {
       if (!thesisIds.length) return [];
