@@ -21,6 +21,14 @@ async function loaded(page: Page, selector: string) {
   await page.evaluate(() => document.fonts.ready);
 }
 async function capture(page: Page, name: string) {
+  if (name === "journey-root" || name === "journey-fork")
+    await expect(
+      page.getByRole("heading", { name: "ETH", exact: true }),
+    ).toBeVisible({ timeout: 60000 });
+  else if (name === "journey-feed" || name === "journey-profile")
+    await expect(page.locator(".market-symbol").first()).toHaveText("ETH", {
+      timeout: 60000,
+    });
   if (!captures) return;
   await mkdir(captures, { recursive: true });
   await page.screenshot({

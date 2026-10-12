@@ -1,0 +1,209 @@
+{
+  "stage": "B3",
+  "status": "complete",
+  "date": "2026-10-12",
+  "origin": "https://forktrades.xyz",
+  "deployment": {
+    "status": "passed",
+    "sourceCommit": "de353b7",
+    "image": "fork-metropolis:b3-20261012c",
+    "imageId": "sha256:ac8d2dbf7dc76ecb39869ecc1d2fe5fe56ca28a97f2e76f5c96f5c44c27a6140",
+    "retainedImage": "fork-metropolis:b2-20261011a",
+    "rollbackConfig": "/opt/fork-metropolis/releases/pre-b3-image.env",
+    "databaseBackup": "FORK-only native backup completed",
+    "migrations": "same committed migrations applied idempotently",
+    "bind": "127.0.0.1:13000",
+    "caddyChanges": false,
+    "serverSecretsChanged": false,
+    "loopbackLanding": "real lineage rendered"
+  },
+  "quality": {
+    "format": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "unitPassed": 234,
+    "indexerPassed": 12,
+    "foundryPassed": 28,
+    "abi": "passed",
+    "build": "passed",
+    "existingSocialAndB2Passed": 8,
+    "finalIsolatedB3Passed": 4,
+    "imageFull": {
+      "failed": 4,
+      "skipped": 1,
+      "passed": 26
+    },
+    "imageTargetedRecovery": {
+      "passed": 4
+    },
+    "imageUniqueValidated": 30,
+    "publicBrowser": {
+      "skipped": 1,
+      "passed": 30
+    }
+  },
+  "security": {
+    "status": "passed",
+    "appLoopbackOnly": true,
+    "postgresHostPorts": false,
+    "database": {
+      "migrations": 3,
+      "tables": 9,
+      "metadataRows": 2
+    },
+    "monadRead": {
+      "chainId": 10143,
+      "registryCodePresent": true
+    },
+    "appHealthy": true,
+    "postgresHealthy": true,
+    "postgresContainerUnchanged": true,
+    "publicPorts13000And5432Closed": true,
+    "envAndTestPaths": 404,
+    "httpRedirect": 308,
+    "wwwRedirect": 301,
+    "tlsValid": true,
+    "anonymousLandingSetsNoAuthCookie": true,
+    "existingHttpsResponsesUnchanged": 20
+  },
+  "serverSafety": {
+    "status": "passed",
+    "unrelatedContainersUnchanged": 14,
+    "caddyFilesUnchanged": 9,
+    "caddyPidUnchanged": true,
+    "firewallPolicyUnchanged": true,
+    "runtimeCredentialFilesByteIdentical": true
+  },
+  "browserAssets": {
+    "status": "passed",
+    "browserAssetsScanned": 209,
+    "canonicalOriginBaked": true,
+    "actualProductionCredentialsAbsent": true,
+    "privateIdentityValuesAbsent": true,
+    "serverOnlyConfigAbsent": true
+  },
+  "imageSecurity": {
+    "status": "passed",
+    "image": "fork-metropolis:b3-20261012c",
+    "imageId": "sha256:ac8d2dbf7dc76ecb39869ecc1d2fe5fe56ca28a97f2e76f5c96f5c44c27a6140",
+    "architecture": "amd64",
+    "user": "node",
+    "sizeBytes": 278703049,
+    "layersScanned": 22,
+    "filesScanned": 98030,
+    "browserFilesScanned": 209,
+    "exactConfiguredCredentialsAbsent": true,
+    "serverConfigAbsentFromBrowser": true,
+    "runtimeSecretsAbsentFromImageConfig": true,
+    "historySecretScan": "passed",
+    "excludedMaterialAbsent": true,
+    "productionFixtureStubPresent": true
+  },
+  "product": {
+    "status": "passed",
+    "origin": "https://forktrades.xyz",
+    "databaseHealth": {
+      "database": "ready",
+      "migrations": "applied"
+    },
+    "feedModes": {
+      "fresh": ["1", "2"],
+      "most-forked": ["1", "2"],
+      "smart-signal": ["1", "2"]
+    },
+    "metadataTrusted": true,
+    "tree": {
+      "root": "1",
+      "child": "2",
+      "nodes": 2
+    },
+    "social": {
+      "agree": 1,
+      "visibleComments": 1
+    },
+    "profiles": {
+      "u_4dcde4749ffd": {
+        "eligibleRoots": 1,
+        "successfulRoots": 1,
+        "eligibleForks": 0,
+        "successfulForks": 0,
+        "influence": 1,
+        "executionsInspired": 0
+      },
+      "u_03572f901994": {
+        "eligibleRoots": 0,
+        "successfulRoots": 0,
+        "eligibleForks": 1,
+        "successfulForks": 0,
+        "influence": 0,
+        "executionsInspired": 0
+      }
+    },
+    "nansen": "disabled/deferred",
+    "testRoutes": 404,
+    "unauthenticatedPublish": 401,
+    "htmlScreens": 7,
+    "blockchainTransactions": 0
+  },
+  "readObservations": {
+    "observations": [
+      {
+        "route": "/api/feed",
+        "status": 200,
+        "ok": true,
+        "elapsedMs": 1587
+      },
+      {
+        "route": "/api/explore",
+        "status": 200,
+        "ok": true,
+        "elapsedMs": 1142
+      },
+      {
+        "route": "/api/profiles/u_4dcde4749ffd",
+        "status": 200,
+        "ok": true,
+        "elapsedMs": 999
+      },
+      {
+        "route": "/api/profiles/u_03572f901994",
+        "status": 200,
+        "ok": true,
+        "elapsedMs": 1149
+      },
+      {
+        "route": "/api/theses/1",
+        "status": 200,
+        "ok": true,
+        "elapsedMs": 1327
+      },
+      {
+        "route": "/api/theses/2",
+        "status": 200,
+        "ok": true,
+        "elapsedMs": 1296
+      },
+      {
+        "route": "/api/theses/2/tree",
+        "status": 200,
+        "ok": true,
+        "elapsedMs": 1331
+      }
+    ],
+    "allPassed": true,
+    "historicalProviderCauseEstablished": false,
+    "independentBudgetMismatch": "Previous GET 10s was shorter than two upstream 8s attempts. B3 GET budget 25s; mutation budget remains 10s."
+  },
+  "responsiveWidths": [1440, 1280, 1024, 768, 390, 375],
+  "visualReview": {
+    "requiredTenActuallyInspected": true,
+    "crossProductJourneyActuallyInspected": true,
+    "imageCount": 72,
+    "screenshotsUnaltered": true,
+    "productionFixtures": false,
+    "freshOAuthClaimed": false
+  },
+  "b4Started": false,
+  "perplExecution": "deferred",
+  "nansen": "deferred"
+}
