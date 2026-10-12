@@ -1,8 +1,7 @@
-# Proposed video publication only. Not applied; approval required.
 forktrades.xyz {
 	header -Server
 	handle_path /submission/* {
-		root * /opt/fork-metropolis/submission
+		root * /var/www/fork-metropolis/submission
 		file_server
 	}
 	handle {

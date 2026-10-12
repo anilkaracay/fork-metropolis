@@ -1,0 +1,34 @@
+{
+  "observedAt": "2026-10-12T07:47:39Z",
+  "status": "passed",
+  "videos": [
+    {
+      "name": "technical-demo",
+      "pageUrl": "https://forktrades.xyz/submission/technical-demo.html",
+      "mediaUrl": "https://forktrades.xyz/submission/technical-demo.mp4",
+      "https": "valid",
+      "http": 200,
+      "mime": "video/mp4",
+      "sha256MatchesApproved": true,
+      "bytes": 4071032,
+      "rangeStatus": 206,
+      "contentRange": "bytes 0-1023/4071032",
+      "durationSeconds": 174.966667,
+      "fullDecode": "passed"
+    },
+    {
+      "name": "founder-pitch",
+      "pageUrl": "https://forktrades.xyz/submission/founder-pitch.html",
+      "mediaUrl": "https://forktrades.xyz/submission/founder-pitch.mp4",
+      "https": "valid",
+      "http": 200,
+      "mime": "video/mp4",
+      "sha256MatchesApproved": true,
+      "bytes": 2577147,
+      "rangeStatus": 206,
+      "contentRange": "bytes 0-1023/2577147",
+      "durationSeconds": 109.966667,
+      "fullDecode": "passed"
+    }
+  ]
+}

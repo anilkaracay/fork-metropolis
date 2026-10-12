@@ -1,5 +1,5 @@
 {
-  "status": "blocked-on-explicit-release-and-upload-approval",
+  "status": "release-approved; public visibility and portal fields being verified",
   "observedOn": "2026-10-12",
   "productCode": "de353b7",
   "productFrozen": true,
@@ -49,7 +49,7 @@
     ],
     "tags": 0,
     "visibility": "private",
-    "ownerRightsConfirmation": "pending",
+    "ownerRightsConfirmation": "approved by user",
     "baselineHead": "37d0f78",
     "currentTreeVersionableFiles": 583
   },
@@ -62,7 +62,7 @@
       "audio": "none; caption-led",
       "fullDecode": "passed",
       "bytes": 4071032,
-      "externalUrl": null,
+      "externalUrl": "https://forktrades.xyz/submission/technical-demo.html",
       "sha256": "c589d49a0cb684f98a45751ade037fcff7bbdf93604e9090fcabf791aa2049bb",
       "visualReview": "all scene samples inspected; changed tree and final close re-reviewed",
       "browserPlayback": "readyState 4, 1920x1080, no media error"
@@ -75,12 +75,18 @@
       "audio": "none; caption-led",
       "fullDecode": "passed",
       "bytes": 2577147,
-      "externalUrl": null,
+      "externalUrl": "https://forktrades.xyz/submission/founder-pitch.html",
       "sha256": "ec94bc9054452e0ab46ef00f835422939a33099581f0d3c48151e842705591c9",
       "visualReview": "all scene samples inspected; changed tree and final close re-reviewed",
       "browserPlayback": "readyState 4, 1920x1080, no media error"
     }
   ],
   "transactionsCreated": 0,
-  "productionChanges": 0
+  "productionChanges": "FORK Caddy site only; isolated static media root, application image and environment unchanged",
+  "publicationApproval": {
+    "mit": true,
+    "publicGitHub": true,
+    "videos": true,
+    "finalPortalSubmission": false
+  }
 }

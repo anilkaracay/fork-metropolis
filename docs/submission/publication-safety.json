@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "unrelatedContainers": 14,
+  "unrelatedCaddyFiles": 8,
+  "unchangedChecks": {
+    "existingContainers": true,
+    "existingContainerSpecs": true,
+    "caddyMainPid": true,
+    "ufwStatus": true,
+    "ufwRulesHash": true,
+    "forkPrivateFileHashes": true,
+    "unrelatedCaddyFiles": true
+  },
+  "existingHttpsSites": 20,
+  "siteRegression": "passed",
+  "forkSiteChangedOnly": true,
+  "firewall": {
+    "ufwConfigurationUnchanged": true,
+    "rawNftHashChanged": true,
+    "consecutiveNormalizedNftSnapshotsEqual": true,
+    "consecutiveRawSnapshotsEqual": false,
+    "note": "Raw nft snapshots include mutable packet counters. Baseline recorded only its raw hash; normalized pre-publication comparison is unavailable. No firewall command changed configuration."
+  }
+}

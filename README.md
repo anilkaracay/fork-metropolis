@@ -4,7 +4,7 @@
 
 The social network where trading ideas can be published, forked and improved without losing their history.
 
-[Live product](https://forktrades.xyz) · [Explore the real Idea Tree](https://forktrades.xyz/t/2/tree) · [Source](https://github.com/anilkaracay/fork-metropolis)
+[Live product](https://forktrades.xyz) · [Explore the real Idea Tree](https://forktrades.xyz/t/2/tree) · [Technical demo · 2:55](https://forktrades.xyz/submission/technical-demo.html) · [Pitch · 1:50](https://forktrades.xyz/submission/founder-pitch.html) · [Source](https://github.com/anilkaracay/fork-metropolis)
 
 ![The live FORK Idea Tree: original thesis #1, independent fork #2 and their changes](docs/assets/submission/idea-tree.jpg)
 
@@ -126,7 +126,7 @@ The live graph currently has two theses. Explore searches the latest 500 indexed
 
 Built by [anilkaracay](https://github.com/anilkaracay), the repository's sole recorded author. The retained commit history begins **October 4, 2026**, inside the Metropolis build window. No earlier FORK product or imported product code is evidenced in that history; the human owner confirms ownership and any work outside Git before final submission.
 
-OpenAI Codex assisted implementation, testing, documentation and submission preparation. The human owner directed the build and reviewed the product and infrastructure gates. Third-party frameworks, libraries, provider services and fonts retain their own licenses and attribution; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). An open-source license is pending the owner's confirmation of rights before public release.
+OpenAI Codex assisted implementation, testing, documentation and submission preparation. The human owner directed the build and reviewed the product and infrastructure gates. Third-party frameworks, libraries, provider services and fonts retain their own licenses and attribution; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). FORK source is available under the [MIT License](LICENSE). Third-party materials retain their upstream rights.
 
 ## Next
 
