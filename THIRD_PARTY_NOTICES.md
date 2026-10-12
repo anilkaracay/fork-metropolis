@@ -19,4 +19,4 @@ FORK application code, registry, indexer handlers and product imagery were creat
 
 `docs/assets/stage-a/references/` contains historical screenshots of third-party sites used for design research. They are not FORK product images, are not evidence of endorsements and remain the property of their respective owners. Any FORK source license excludes those third-party materials and preserves upstream notices. No third-party product screenshot is used as the README hero or submission product footage.
 
-OpenAI Codex provided AI assistance as disclosed in the README. Provider and hackathon names identify integrations or participation, not partnerships or endorsements.
+Provider and hackathon names identify integrations or participation, not partnerships or endorsements.
