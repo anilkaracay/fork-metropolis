@@ -89,7 +89,7 @@ All 14 unrelated containers, nine Caddy files, Caddy PID, firewall policy and ru
 
 ## 12. GitHub sync
 
-Implementation is committed on `main`; the existing `anilkaracay/fork-metropolis` repository stays private. Source, evidence and unpushed history are scanned before a normal non-force push. No ignored environment files, private exports or credentials are staged. Final local/remote equality and private visibility are independently checked after synchronization and reported in the completion response. Root README rewriting remains B4 work.
+Implementation and evidence were synchronized to `main` in the existing private `anilkaracay/fork-metropolis` repository through a normal non-force push. Before that push: two ahead, zero behind. Afterward: zero ahead / zero behind, clean working tree and PRIVATE visibility independently verified against the remote head. Source, staged evidence and all 63 unpushed blobs passed credential/private-identity checks; Gitleaks reported no new findings. No ignored environment files, private exports or credentials were staged. This final documentation update is synchronized through the same checked workflow; there is no repository blocker. Root README rewriting remains B4 work.
 
 ## 13. Known limitations
 
