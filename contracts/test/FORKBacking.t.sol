@@ -167,7 +167,7 @@ contract FORKBackingTest {
 
     function testConstantsDescribeTheSplit() public view {
         require(address(backing.registry()) == address(registry));
-        require(min == 0.001 ether && backing.EARLY_BACKER_LIMIT() == 10);
+        require(min == 0.01 ether && backing.EARLY_BACKER_LIMIT() == 10);
         require(
             backing.AUTHOR_SHARE_BPS() + backing.PARENT_SHARE_BPS()
                     + backing.GRANDPARENT_SHARE_BPS() == 10_000
@@ -328,10 +328,10 @@ contract FORKBackingTest {
         create(CAROL, 2);
         uint256 amount = min + 9;
         backAs(BACKER, 3, amount);
-        // 20% and 10% of 1e15 + 9 wei round down by 1.8 and 0.9 wei.
-        require(backing.claimable(BOB) == 0.0002 ether + 1);
-        require(backing.claimable(ALICE) == 0.0001 ether);
-        require(backing.claimable(CAROL) == 0.0007 ether + 8);
+        // 20% and 10% of 1e16 + 9 wei round down by 0.8 and 0.9 wei.
+        require(backing.claimable(BOB) == 0.002 ether + 1);
+        require(backing.claimable(ALICE) == 0.001 ether);
+        require(backing.claimable(CAROL) == 0.007 ether + 8);
         require(address(backing).balance == amount);
     }
 

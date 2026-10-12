@@ -134,7 +134,7 @@ Risks and mitigations:
 - Wrong lineage: authorship and ancestry come only from the immutable registry address fixed at deployment. The deployment script checks that address against the recorded registry code before sending.
 - Unbounded work: at most three registry reads per backing, no loops over user data.
 - Forced MON: there is no `receive`. MON forced in by other means never enters the accounting and is not recoverable.
-- Sybil backing: one person can back from several wallets, including their own thesis from a second address, and can fill the ten early positions cheaply because the value returns to them as author. Totals and early status are presented as volume and chronology, not as independent endorsement, and never feed reputation metrics.
+- Sybil backing: one person can back from several wallets, including their own thesis from a second address, and can fill the ten early positions at no net cost beyond gas because the value returns to them as author. Totals and early status are presented as volume and chronology, not as independent endorsement, and never feed reputation metrics.
 - Self-fork farming: an address in several roles of one lineage is credited once in its nearest role, so forking your own idea does not create income labelled as earned from forks.
 - Regulatory framing: testnet MON has no monetary value. Product copy must not describe backing as an investment or promise a return.
 

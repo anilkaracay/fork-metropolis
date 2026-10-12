@@ -77,7 +77,7 @@ From `forge test --gas-report` over the backing suite, in Foundry's Monad networ
 | `withdraw` | 29,457 | 40,747 | 40,747 |
 | `previewSplit` | 924 | 21,536 | 45,947 |
 
-The minimum of `back` and `withdraw` is a revert path. The maximum of `back` is a first backing of a three-level lineage with three distinct authors. The read-only deployment preflight against Monad Testnet estimated 846,280 gas for creating the contract.
+The minimum of `back` and `withdraw` is a revert path. The maximum of `back` is a first backing of a three-level lineage with three distinct authors. The read-only deployment preflight against Monad Testnet estimated 846,255 gas for creating the contract.
 
 Whole-test gas, including the thesis setup inside each test, is tracked in `contracts/.gas-snapshot`.
 

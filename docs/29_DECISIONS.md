@@ -517,7 +517,7 @@ Decision:
 
 Anyone can back a thesis with native testnet MON through a second contract, FORKBacking. Each backing is split along the idea's lineage: 70% to the thesis author, 20% to the parent author, 10% to the grandparent author. The lineage is read from the existing FORKRegistry through its public `theses(uint64)` getter, at most three entries per backing. A missing ancestor's share stays with the thesis author, rounding dust goes to the thesis author, and the credits of one backing always sum to the amount sent. An address that holds several roles in one lineage is credited once, in its nearest role, so a self-fork never produces income labelled as earned from forks. This matches D-015, where self-fork edges never improve reputation.
 
-The first ten distinct backers of a thesis are recorded as early supporters. A repeat backing keeps the backer's original position. The minimum backing is 0.001 MON and a thesis author cannot back their own thesis from the authoring address.
+The first ten distinct backers of a thesis are recorded as early supporters. A repeat backing keeps the backer's original position. The minimum backing is 0.01 MON and a thesis author cannot back their own thesis from the authoring address.
 
 Credits are pull payments: `back` only records balances, `withdraw` sends the caller's full balance after clearing it. The contract has no owner, no admin, no pause, no fee and no upgrade path. FORK takes nothing from a backing.
 

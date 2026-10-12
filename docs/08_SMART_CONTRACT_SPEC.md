@@ -241,7 +241,7 @@ The contract is not a token, a vault with yield, a market or a fee collector. It
 ### Constants and storage
 
 ```solidity
-uint256 public constant MIN_BACKING = 0.001 ether;
+uint256 public constant MIN_BACKING = 0.01 ether;
 uint32 public constant EARLY_BACKER_LIMIT = 10;
 uint256 public constant AUTHOR_SHARE_BPS = 7_000;
 uint256 public constant PARENT_SHARE_BPS = 2_000;
