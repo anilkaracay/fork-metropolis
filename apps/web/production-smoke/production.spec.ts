@@ -154,10 +154,24 @@ test("404, database recovery and real service reads have honest states", async (
   request,
   page,
 }) => {
+  test.setTimeout(120000);
   const missing = await page.goto("/this-route-does-not-exist");
   expect(missing?.status()).toBe(404);
   for (const path of ["/api/health/database", "/api/feed", "/api/explore"]) {
-    const response = await request.get(path);
+    let response = await request.get(path);
+    // The hosted indexer's per-minute limit is shared by the whole smoke run. A graph read
+    // it refused is asked again once the window has passed; the database check never is.
+    for (
+      let attempt = 0;
+      process.env.FORK_SMOKE_LIVE === "1" &&
+      path !== "/api/health/database" &&
+      response.status() === 503 &&
+      attempt < 2;
+      attempt++
+    ) {
+      await new Promise((done) => setTimeout(done, 20000));
+      response = await request.get(path);
+    }
     const body = await response.json();
     if (process.env.FORK_SMOKE_LIVE === "1") {
       expect(response.status(), path).toBe(200);
