@@ -4,9 +4,19 @@ FORK shows two kinds of timing. One is measured for each user in their own brows
 
 ## Results
 
-No run has been recorded yet. The benchmark sends real `FORKBacking.back` transactions, so it waits for that contract's deployment on Monad Testnet. When the run is recorded, this section holds its median and 95th percentile and links the raw file under `docs/monad-performance/`.
+Recorded on 2026-10-13 at 07:45 UTC: 20 backings of 0.01 MON each, sent one after another from the team test wallet to thesis #3 on Monad Testnet, through the public RPC `https://testnet-rpc.monad.xyz` and the Envio endpoint that indexes both contracts. All 20 confirmed and all 20 were indexed. Raw file: [`monad-performance/backing-2026-10-13T07-45-23-986Z.json`](monad-performance/backing-2026-10-13T07-45-23-986Z.json).
 
-Until then, no confirmation or indexing time is claimed anywhere in this repository.
+| Measure | Median | 95th percentile | Min | Max |
+| --- | --- | --- | --- | --- |
+| Confirmation: hash returned to first receipt | 417.5 ms | 423 ms | 237 ms | 427 ms |
+| Indexing: first receipt to the backing readable from Envio | 580.5 ms | 840 ms | 315 ms | 845 ms |
+| Acceptance: transaction sent to hash returned | 63.5 ms | 71 ms | 62 ms | 76 ms |
+| Gas used by `back` | 78,692 | 78,692 | 78,692 | 154,373 |
+
+- Confirmation clusters around two values, about 240 ms and about 420 ms, with nothing in between. Read the figures with the 50 ms receipt polling and the 200 ms index polling in mind: each figure can be late by up to one interval.
+- The one higher gas figure is the first backing, which creates the backer's and the thesis's records. The other 19 update them.
+- Thesis #3 is an original idea, so each backing credited its author in full and the run left 0.2 MON claimable for that author. That is the team's own test activity, not user activity.
+- The machine's load average was about 1.7 during the run.
 
 ## The recorded run
 

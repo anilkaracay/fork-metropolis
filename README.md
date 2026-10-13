@@ -67,14 +67,13 @@ Two small contracts on Monad Testnet (chain 10143), both source verified on Sour
 | `FORKRegistry` | [`0x1889a7216b1ecad9a44910dd0996834d0894b9e1`](https://testnet.monadvision.com/address/0x1889a7216b1ecad9a44910dd0996834d0894b9e1) | Every thesis: author, parent, market, direction, target, invalidation, leverage, creation time and the hash of its written reasoning |
 | `FORKBacking` | [`0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f`](https://testnet.monadvision.com/address/0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f) | Backing of a thesis, the split along its lineage, early supporter positions and each author's claimable balance |
 
-<!-- PENDING: first backing transaction -->
-
 | Transaction | Hash |
 | --- | --- |
 | Registry deployment | [`0xc1ba5d4f…5fbf4a86`](https://testnet.monadvision.com/tx/0xc1ba5d4fc31bc0a45e973ec8a63c0583a3fb4f643c0f46053a7ee5dd5fbf4a86) |
 | Thesis #1 published | [`0xbcbfa028…630a090f`](https://testnet.monadvision.com/tx/0xbcbfa028b4078a97cf1198d4ffac2f61691d8ac0607b43a006a6595b630a090f) |
 | Thesis #2 forks #1 | [`0xe5fbf9c8…8ab6b192`](https://testnet.monadvision.com/tx/0xe5fbf9c835109a566be8afebd5c2d146731d1f998851ea1875798e328ab6b192) |
 | Backing deployment, block 70423451 | [`0xb4cf544e…3f9a5660`](https://testnet.monadvision.com/tx/0xb4cf544e5b0e534ea3f71ec863b4fc4c3d88d1901d34e22d65c9bf753f9a5660) |
+| First backing, of thesis #3 | [`0x5ee9a84a…20293d88`](https://testnet.monadvision.com/tx/0x5ee9a84a55d6bbef1f4254a5bc6394c0852d786f4a36987725f51c0e20293d88) |
 
 **The split.** `back(thesisId)` reads the lineage from the registry, at most three entries, and credits:
 
@@ -105,9 +104,14 @@ Two parts of the design depend on confirmation being that quick:
 - **Small and frequent.** Backing starts at 0.01 MON, and the presets are 0.05, 0.1 and 0.25 MON. An idea is meant to collect many small backings from many people.
 - **Settled at the moment of backing.** `back` reads the lineage and credits every author in the same transaction: 99,127 gas at the median of the contract's test suite, and 217,319 gas for a first backing of a three-level lineage with three distinct authors. Nothing is batched or settled later, so the tree shows value arriving at an ancestor as soon as the backing is confirmed and indexed.
 
-**Measured on Monad Testnet.** No run has been recorded yet, because the measurement uses the deployed `FORKBacking`. The run is 20 real backings from the team's test wallet, recording for each one the time to a receipt and the time until Envio serves it. The median and 95th percentile go here, copied from the recorded file. Method and raw data: [`docs/MONAD_PERFORMANCE.md`](docs/MONAD_PERFORMANCE.md).
+**Measured on Monad Testnet.** 20 real backings from the team's test wallet, sent one after another on 2026-10-13:
 
-<!-- PENDING: measured median and p95 for confirmation and indexing, from docs/MONAD_PERFORMANCE.md -->
+| | Median | 95th percentile |
+| --- | --- | --- |
+| Hash returned to first receipt | 417.5 ms | 423 ms |
+| First receipt to the backing readable from Envio | 580.5 ms | 840 ms |
+
+So a backing is confirmed and in everyone's graph about a second after the wallet sends it. These are wall-clock figures from one machine and one public RPC, polling every 50 ms for the receipt and every 200 ms for the index. Method and every sample with its transaction hash: [`docs/MONAD_PERFORMANCE.md`](docs/MONAD_PERFORMANCE.md).
 
 ## Architecture
 
