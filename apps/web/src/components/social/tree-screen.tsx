@@ -4,9 +4,9 @@ import type { KeyboardEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { FeedThesis, ThesisTree } from "@fork/shared";
 import { api } from "@/lib/api-client";
-import { ErrorState } from "./common";
+import { Avatar, ErrorState, TokenMark } from "./common";
 import { SignatureLoading } from "./signature-loading";
-import { Direction, marketName, useMarkets } from "./thesis-card";
+import { marketName, useMarkets } from "./thesis-card";
 import { differenceValue, ParentComparison } from "./fork-diff";
 import { Icon } from "./icon";
 import { formatMon } from "@/lib/mon";
@@ -85,67 +85,70 @@ export function TreeScreen({ id }: { id: string }) {
             data-node-select
           >
             <div className="node-top">
+              <Avatar
+                size={36}
+                name={node.author.displayName}
+                wallet={node.author.wallet}
+                handle={node.author.handle}
+              />
+              <strong>@{node.author.handle}</strong>
               <span>
                 {node.graph.parentId === "0"
-                  ? "Original thesis"
+                  ? "Original"
                   : `Fork of #${node.graph.parentId}`}
               </span>
-              <span>#{node.graph.thesisId}</span>
+              <span className="node-id">#{node.graph.thesisId}</span>
             </div>
             <div className="node-market">
-              <strong>{marketName(node.graph.core.marketId, context)}</strong>
-              <Direction side={node.graph.core.side} />
-            </div>
-            <div className="node-parameters">
-              <span>
-                Target
-                <strong>
-                  {differenceValue(
-                    "targetPriceE8",
-                    node.graph.core.targetPriceE8,
-                  )}
-                </strong>
+              <TokenMark
+                symbol={marketName(node.graph.core.marketId, context)}
+                size={20}
+              />
+              <span className="sr-only">
+                {marketName(node.graph.core.marketId, context)}{" "}
+                {node.graph.core.side}, target
               </span>
-              <span>
-                Leverage
-                <strong>
-                  {differenceValue(
-                    "leverageBps",
-                    String(node.graph.core.leverageBps),
-                  )}
-                </strong>
-              </span>
-            </div>
-            <div className="node-bottom">
-              <span>Depth {node.graph.depth}</span>
-              {node.backing.backers > 0 && (
-                <span className="backed-chip">
-                  {formatMon(node.backing.totalWei)} MON
+              <strong className="node-values">
+                {differenceValue(
+                  "targetPriceE8",
+                  node.graph.core.targetPriceE8,
+                )}
+                <span aria-hidden="true"> · </span>
+                <span className="sr-only">, leverage </span>
+                {differenceValue(
+                  "leverageBps",
+                  String(node.graph.core.leverageBps),
+                )}
+              </strong>
+              {arrived(node.graph.thesisId) > 0n ? (
+                <span
+                  className="node-flow"
+                  key={arrived(node.graph.thesisId).toString()}
+                >
+                  +{formatMon(arrived(node.graph.thesisId))} MON from forks
                 </span>
-              )}
-              {current && <b>Viewing</b>}
+              ) : node.backing.backers > 0 ? (
+                <span className="backed-chip">
+                  {formatMon(node.backing.totalWei)} MON backed
+                </span>
+              ) : null}
             </div>
-            {arrived(node.graph.thesisId) > 0n && (
-              <div
-                className="node-flow"
-                key={arrived(node.graph.thesisId).toString()}
-              >
-                +{formatMon(arrived(node.graph.thesisId))} MON from forks
+            {current && (
+              <div className="node-bottom">
+                <b>Viewing</b>
               </div>
             )}
           </Link>
-          <div className="node-actions">
-            <Link
-              href={`/u/${node.author.handle}`}
-              className="node-author"
-              title={node.author.displayName}
-            >
-              @{node.author.handle}
-            </Link>
-            <Link href={`/t/${node.graph.thesisId}`}>
-              Open idea <Icon name="arrow" size={14} />
-            </Link>
-          </div>
+          {current && (
+            <div className="node-actions">
+              <Link href={`/t/${node.graph.thesisId}`}>Open idea</Link>
+              {node.metadataState === "trusted" && (
+                <Link href={`/t/${node.graph.thesisId}/fork`}>
+                  Fork this branch
+                </Link>
+              )}
+            </div>
+          )}
         </div>
         {!!children.get(node.graph.thesisId)?.length && (
           <ul className="tree-children">
@@ -165,28 +168,15 @@ export function TreeScreen({ id }: { id: string }) {
       </Link>
       <div className="page-heading">
         <div>
-          <span className="eyebrow">Idea lineage</span>
           <h1>One idea. Many perspectives.</h1>
-          <p>A shared origin. Independent authors. Every change in view.</p>
+          <p>A shared origin, independent authors, and every change in view.</p>
         </div>
         {selected?.metadataState === "trusted" && (
-          <Link href={`/t/${id}/fork`} className="button primary">
+          <Link href={`/t/${id}/fork`} className="v2-btn v2-fork">
             <Icon name="fork" size={17} />
             Fork this branch
           </Link>
         )}
-      </div>
-      <div className="tree-context">
-        <Link href={`/t/${tree.rootId}`}>
-          Origin #{tree.rootId} · @{root?.author.handle ?? "original author"}
-        </Link>
-        <span>
-          {tree.nodes.length} visible{" "}
-          {tree.nodes.length === 1 ? "idea" : "ideas"}
-        </span>
-        <span>
-          Viewing #{id} · depth {selected?.graph.depth ?? 0}
-        </span>
       </div>
       <a className="tree-selection-shortcut" href="#selected-perspective">
         Viewing #{id} ·{" "}
@@ -197,9 +187,15 @@ export function TreeScreen({ id }: { id: string }) {
       </a>
       <div className="lineage-workspace">
         <div className="lineage-board" onKeyDown={keyboard}>
-          <div className="board-heading">
-            <span className="eyebrow">The lineage</span>
-            <span>Select a perspective</span>
+          <div className="tree-context">
+            <Link href={`/t/${tree.rootId}`}>
+              Origin #{tree.rootId} by @
+              {root?.author.handle ?? "original author"}, {tree.nodes.length}{" "}
+              {tree.nodes.length === 1 ? "idea" : "ideas"}
+            </Link>
+            <span>
+              Viewing #{id}, depth {selected?.graph.depth ?? 0}
+            </span>
           </div>
           <div className="idea-tree" aria-label="Idea lineage and branches">
             <ul className="tree-root">
@@ -217,17 +213,32 @@ export function TreeScreen({ id }: { id: string }) {
             className="selected-perspective"
             aria-label="Selected perspective"
           >
-            <span className="eyebrow">Selected perspective · #{id}</span>
             <div className="selected-heading">
-              <h2>{marketName(selected.graph.core.marketId, context)}</h2>
-              <Direction side={selected.graph.core.side} />
+              <Avatar
+                size={36}
+                name={selected.author.displayName}
+                wallet={selected.author.wallet}
+                handle={selected.author.handle}
+              />
+              <div>
+                <h2>Selected: #{id}</h2>
+                <p>
+                  by{" "}
+                  <Link
+                    className="selected-author"
+                    href={`/u/${selected.author.handle}`}
+                  >
+                    @{selected.author.handle}
+                  </Link>
+                  {selected.graph.parentId !== "0" &&
+                    `, compared with #${selected.graph.parentId}`}
+                  <span className="sr-only">
+                    , {marketName(selected.graph.core.marketId, context)}{" "}
+                    {selected.graph.core.side}
+                  </span>
+                </p>
+              </div>
             </div>
-            <Link
-              className="selected-author"
-              href={`/u/${selected.author.handle}`}
-            >
-              @{selected.author.handle}
-            </Link>
             {selected.graph.parentId !== "0" && (
               <Link
                 className="parent-navigation"
@@ -269,9 +280,8 @@ export function TreeScreen({ id }: { id: string }) {
             <a className="tree-selection-shortcut" href={`#idea-node-${id}`}>
               Back to selected node <Icon name="tree" size={15} />
             </a>
-            <Link className="button secondary full" href={`/t/${id}`}>
-              Open full thesis #{id}
-              <Icon name="arrow" size={16} />
+            <Link className="v2-btn v2-ghost full" href={`/t/${id}`}>
+              Open full idea #{id}
             </Link>
           </aside>
         ) : (
@@ -295,9 +305,8 @@ export function TreeScreen({ id }: { id: string }) {
         </div>
       )}
       <p className="subtle-note">
-        Every node preserves authorship. Select with Enter; use ↑ and ↓ to move
-        between nodes. A fork carries a perspective, not a copied wallet
-        position.
+        Every node keeps its author. Select with Enter; use the arrow keys to
+        move between nodes.
       </p>
     </div>
   );
@@ -312,12 +321,12 @@ function ValueFlow({ tree, id }: { tree: ThesisTree; id: string }) {
   if (!sent.length && !received.length) return null;
   return (
     <div className="value-flow">
-      <span className="eyebrow">Value along the lineage</span>
+      <h2 className="rail-heading">Value along the lineage</h2>
       <ul>
         {sent.map((flow) => (
           <li key={`out-${flow.creditedThesisId}`}>
             <span>
-              #{id} <Icon name="arrow" size={13} /> #{flow.creditedThesisId} · @
+              #{id} <Icon name="arrow" size={13} /> #{flow.creditedThesisId}, @
               {handle(flow.recipient)}
             </span>
             <strong>{formatMon(flow.amountWei)} MON</strong>

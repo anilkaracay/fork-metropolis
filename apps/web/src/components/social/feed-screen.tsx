@@ -5,7 +5,17 @@ import { useQuery } from "@tanstack/react-query";
 import type { FeedMode, FeedThesis } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import { ThesisCard } from "./thesis-card";
-import { EmptyState, ErrorState, Skeleton, ReadStatus } from "./common";
+import {
+  Avatar,
+  EmptyState,
+  ErrorState,
+  Skeleton,
+  ReadStatus,
+  TokenMark,
+} from "./common";
+import { useSession } from "./session";
+import { useProfile } from "./withdraw";
+import { formatMon } from "@/lib/mon";
 import { Icon } from "./icon";
 type Page = {
   items: FeedThesis[];
@@ -26,41 +36,33 @@ export function FeedScreen() {
       <section className="feed-column">
         <div className="page-heading">
           <div>
-            <span className="eyebrow">The conversation starts here</span>
-            <h1>Good ideas get better.</h1>
-            <p>
-              Publish a perspective. Find a new angle. Fork what comes next.
-            </p>
+            <h1>Feed</h1>
+            <p>Good ideas get better.</p>
           </div>
-          <Link href="/new" className="button primary create-desktop">
-            <Icon name="create" size={17} />
-            New idea
-          </Link>
-        </div>
-        <div className="feed-tabs" role="group" aria-label="Feed ranking">
-          {(["fresh", "most-forked", "smart-signal"] as const).map((m) => (
-            <button
-              key={m}
-              className={mode === m ? "selected" : ""}
-              aria-pressed={mode === m}
-              onClick={() => {
-                setMode(m);
-                setOffset(0);
-              }}
-            >
-              {m === "fresh"
-                ? "Fresh"
-                : m === "most-forked"
-                  ? "Most Forked"
-                  : "Smart Signal"}
-              {m === "smart-signal" && <span className="tiny-dot" />}
-            </button>
-          ))}
+          <div className="v2-seg" role="group" aria-label="Feed ranking">
+            {(["fresh", "most-forked", "smart-signal"] as const).map((m) => (
+              <button
+                key={m}
+                className={mode === m ? "selected" : ""}
+                aria-pressed={mode === m}
+                onClick={() => {
+                  setMode(m);
+                  setOffset(0);
+                }}
+              >
+                {m === "fresh"
+                  ? "Fresh"
+                  : m === "most-forked"
+                    ? "Most forked"
+                    : "Smart signal"}
+              </button>
+            ))}
+          </div>
         </div>
         <p className="ranking-note">
           {mode === "fresh"
             ? "Newest indexed perspectives first."
-            : "Unique external forkers: 24h → 7d → newest."}{" "}
+            : "Unique external forkers: 24h, then 7d, then newest."}{" "}
           {mode === "smart-signal" &&
             "Social signals only; no execution ranking."}
         </p>
@@ -118,45 +120,96 @@ export function FeedScreen() {
         )}
       </section>
       <aside className="context-rail">
-        <div className="rail-heading">
-          <span className="eyebrow">Make room for another angle</span>
-          <Icon name="fork" size={18} />
-        </div>
-        <div className="rail-feature">
-          <span className="rail-number">THE IDEA GRAPH</span>
-          <h2>
-            A perspective.
-            <br />A new branch.
-            <br />A shared history.
-          </h2>
-          <p>
-            Every fork keeps its author, its changes and its origin in view.
-          </p>
-          <Link href="/explore" className="quiet-link">
-            Explore ideas <Icon name="arrow" size={16} />
-          </Link>
-        </div>
-        <div className="rail-section">
-          <h3>Find your conversation</h3>
-          {["BTC", "ETH", "SOL", "MON"].map((symbol, i) => (
-            <Link href={`/explore?market=${symbol}`} key={symbol}>
-              <span className={`market-coin coin-${i}`}>{symbol[0]}</span>
-              <span>
-                <strong>{symbol}</strong>
-                <small>Ideas & evolving perspectives</small>
-              </span>
-              <Icon name="arrow" size={16} />
-            </Link>
-          ))}
-        </div>
-        <div className="rail-note">
-          <span className="tiny-dot" />
-          <p>
-            Influence comes from what other people build on. Your profile shows
-            the math.
-          </p>
+        <YourEarnings />
+        <TopLineage />
+        <div className="v2-card rail-card">
+          <h2 className="rail-heading">Markets</h2>
+          <div className="rail-markets">
+            {["MON", "ETH", "BTC", "SOL"].map((symbol) => (
+              <Link
+                className="v2-chip"
+                href={`/explore?market=${symbol}`}
+                key={symbol}
+              >
+                <TokenMark symbol={symbol} size={18} />
+                {symbol}
+              </Link>
+            ))}
+          </div>
         </div>
       </aside>
+    </div>
+  );
+}
+type TopTree = {
+  rootId: string;
+  nodes: {
+    id: string;
+    depth: number;
+    handle: string;
+    backedMon: string | null;
+    arrivedMon: string | null;
+  }[];
+} | null;
+/** The largest real lineage on FORK, with what each idea received. */
+function TopLineage() {
+  const top = useQuery({
+    queryKey: ["lineage-top"],
+    queryFn: () => api<TopTree>("lineage/top"),
+    staleTime: 30000,
+  }).data;
+  if (!top) return null;
+  return (
+    <div className="v2-card rail-card">
+      <h2 className="rail-heading">Most forked lineage</h2>
+      <ol className="rail-lineage">
+        {top.nodes.slice(0, 5).map((node) => (
+          <li key={node.id} style={{ paddingLeft: `${node.depth * 18}px` }}>
+            <Avatar
+              name={node.handle}
+              wallet={node.handle}
+              handle={node.handle}
+              size={26}
+            />
+            <Link href={`/t/${node.id}`}>@{node.handle}</Link>
+            <span className="rail-id">#{node.id}</span>
+            <span className="rail-value">
+              {node.arrivedMon
+                ? `+${node.arrivedMon}`
+                : node.backedMon
+                  ? `${node.backedMon} MON`
+                  : ""}
+            </span>
+          </li>
+        ))}
+      </ol>
+      <Link href={`/t/${top.rootId}/tree`} className="rail-link">
+        Open Idea Tree <Icon name="arrow" size={15} />
+      </Link>
+    </div>
+  );
+}
+/** The signed-in author's earnings, straight from their public profile. */
+function YourEarnings() {
+  const auth = useSession(),
+    profile = useProfile(auth.session?.handle).data;
+  if (!auth.session || !profile?.backingContract) return null;
+  const { earnings } = profile;
+  return (
+    <div className="v2-card rail-card">
+      <h2 className="rail-heading">Your ideas</h2>
+      <p className="v2-k">Earned from forks</p>
+      <p className="rail-figure">
+        <span>{formatMon(earnings.earnedFromForksWei)}</span>
+        <small>MON</small>
+      </p>
+      <p className="rail-copy">
+        {formatMon(earnings.earnedAsAuthorWei)} MON more from backing of ideas
+        you wrote.
+      </p>
+      <Link href={`/u/${auth.session.handle}`} className="rail-link">
+        Open your profile <Icon name="arrow" size={15} />
+      </Link>
     </div>
   );
 }

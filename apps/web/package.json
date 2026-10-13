@@ -9,6 +9,8 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@dicebear/core": "10.7.0",
+    "@dicebear/styles": "10.6.0",
     "@fork/db": "workspace:*",
     "@fork/shared": "workspace:*",
     "@gsap/react": "2.1.2",

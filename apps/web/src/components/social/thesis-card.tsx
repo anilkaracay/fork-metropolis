@@ -9,7 +9,7 @@ import {
   type ThesisDetail,
 } from "@fork/shared";
 import { api } from "@/lib/api-client";
-import { Avatar, age } from "./common";
+import { Avatar, TokenMark, age } from "./common";
 import { Icon } from "./icon";
 import { formatMon } from "@/lib/mon";
 export function useMarkets() {
@@ -35,7 +35,7 @@ export function displayPrice(raw: string) {
 export function Direction({ side }: { side: string }) {
   return (
     <span className={`direction ${side}`}>
-      {side === "long" ? "↗" : "↘"} {side === "long" ? "LONG" : "SHORT"}
+      {side === "long" ? "LONG" : "SHORT"}
     </span>
   );
 }
@@ -81,51 +81,62 @@ export function ThesisCard({
       { updatedAt: 0 },
     );
   }
+  const symbol = marketName(item.graph.core.marketId, context);
   return (
     <article
-      className="thesis-card"
+      className={`thesis-card ${item.parent ? "is-fork" : ""}`}
       data-thesis-id={id}
       style={{ "--card-index": Math.min(index, 8) } as React.CSSProperties}
     >
       <div className="card-author">
-        <Link href={`/u/${item.author.handle}`} className="identity-link">
-          <Avatar name={item.author.displayName} wallet={item.author.wallet} />
-          <span>
-            <strong>{item.author.displayName}</strong>
-            <small>
-              @{item.author.handle} <span>· {age(item.graph.createdAt)}</span>
-            </small>
-          </span>
+        <Link
+          href={`/u/${item.author.handle}`}
+          className="identity-link"
+          aria-label={`${item.author.displayName}, @${item.author.handle}`}
+        >
+          <Avatar
+            size={40}
+            name={item.author.displayName}
+            wallet={item.author.wallet}
+            handle={item.author.handle}
+          />
         </Link>
-        <span className={`idea-label ${item.challenge ? "challenge" : ""}`}>
-          {item.challenge
-            ? `Challenge #${id}`
-            : item.graph.parentId === "0"
-              ? `Original #${id}`
-              : `Fork #${id}`}
+        <div className="card-byline">
+          <p>
+            <Link href={`/u/${item.author.handle}`}>
+              <strong>@{item.author.handle}</strong>
+            </Link>{" "}
+            <span>· {age(item.graph.createdAt)}</span>
+          </p>
+          {item.parent ? (
+            <p className="provenance">
+              <Icon name="fork" size={14} />
+              <span>
+                Forked from{" "}
+                <Link href={`/t/${item.parent.thesisId}`}>
+                  #{item.parent.thesisId} by @{item.parent.author.handle}
+                </Link>
+              </span>
+            </p>
+          ) : (
+            <p className="card-origin">
+              {item.challenge ? "Challenge" : "Original idea"}
+            </p>
+          )}
+        </div>
+        <span
+          className={`idea-label ${item.challenge ? "challenge" : ""}`}
+          title={
+            item.challenge
+              ? `Challenge #${id}`
+              : item.graph.parentId === "0"
+                ? `Original #${id}`
+                : `Fork #${id}`
+          }
+        >
+          #{id}
         </span>
       </div>
-      {item.parent && (
-        <div className="provenance">
-          <Icon name="fork" size={14} />
-          <span>
-            Forked from{" "}
-            <Link href={`/t/${item.parent.thesisId}`}>
-              #{item.parent.thesisId} · @{item.parent.author.handle}
-            </Link>
-            {item.changes.length > 0 && (
-              <span className="provenance-changes">
-                {" "}
-                ·{" "}
-                {item.changes
-                  .map((c) => c.label.toLowerCase())
-                  .slice(0, 3)
-                  .join(", ")}
-              </span>
-            )}
-          </span>
-        </div>
-      )}
       <Link
         href={`/t/${id}`}
         className="card-body"
@@ -138,9 +149,8 @@ export function ThesisCard({
           default="none"
         >
           <div className="market-line">
-            <span className="market-symbol">
-              {marketName(item.graph.core.marketId, context)}
-            </span>
+            <TokenMark symbol={symbol} />
+            <span className="market-symbol">{symbol}</span>
             <Direction side={item.graph.core.side} />
           </div>
         </ViewTransition>
@@ -164,7 +174,7 @@ export function ThesisCard({
             .filter((c) => ["targetPriceE8", "leverageBps"].includes(c.field))
             .map((c) => (
               <span key={c.field}>
-                {c.label}{" "}
+                {c.label.toLowerCase()}{" "}
                 <del>
                   {c.field === "targetPriceE8"
                     ? displayPrice(c.before)
@@ -198,13 +208,58 @@ export function ThesisCard({
         </div>
       )}
       <div className="card-bottom">
+        {item.backing.backers > 0 ? (
+          <span
+            className="backed-chip"
+            title="Backed with testnet MON, split along the lineage"
+          >
+            {!!item.firstBackers?.length && (
+              <span className="backer-faces" aria-hidden="true">
+                {item.firstBackers.map((person) => (
+                  <Avatar
+                    key={person.wallet}
+                    name={person.displayName}
+                    wallet={person.wallet}
+                    handle={person.handle}
+                    size={26}
+                  />
+                ))}
+              </span>
+            )}
+            {formatMon(item.backing.totalWei)} MON backed
+            <small>
+              {item.backing.backers}{" "}
+              {item.backing.backers === 1 ? "backer" : "backers"}
+            </small>
+          </span>
+        ) : (
+          <span className="card-unbacked">
+            No backing yet. Be the first of ten early supporters.
+          </span>
+        )}
+        {item.arrivedFromForksWei && item.arrivedFromForksWei !== "0" && (
+          <span
+            className="from-forks"
+            title="Value that backing of this idea's forks sent back to it"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 3 21 12 12 21 3 12Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+              />
+            </svg>
+            +{formatMon(item.arrivedFromForksWei)} from forks
+          </span>
+        )}
         <div className="social-counts">
-          <span title="Unique external wallets directly forking this idea">
+          <span
+            title="Unique external wallets directly forking this idea"
+            aria-label={`${item.graph.uniqueExternalForkers} ${item.graph.uniqueExternalForkers === 1 ? "forker" : "forkers"}`}
+          >
             <Icon name="fork" size={15} />
-            {item.graph.uniqueExternalForkers}{" "}
-            <span className="count-label">
-              {item.graph.uniqueExternalForkers === 1 ? "forker" : "forkers"}
-            </span>
+            {item.graph.uniqueExternalForkers}
           </span>
           <Link
             href={`/t/${id}#comments`}
@@ -217,30 +272,18 @@ export function ThesisCard({
             <Icon name="agree" size={15} />
             {item.social.agrees}
           </span>
-          {item.backing.backers > 0 && (
-            <span
-              className="backed-chip"
-              title="Backed with testnet MON, split along the lineage"
-            >
-              <Icon name="stake" size={15} />
-              {formatMon(item.backing.totalWei)} MON
-              <small>
-                · {item.backing.backers}{" "}
-                {item.backing.backers === 1 ? "backer" : "backers"}
-              </small>
-            </span>
-          )}
         </div>
         <div className="card-actions">
-          <Link href={`/t/${id}`} className="quiet-link">
-            Open <Icon name="arrow" size={14} />
-          </Link>
           {item.metadataState === "trusted" && (
             <Link href={`/t/${id}/fork`} className="button fork-button">
-              <Icon name="fork" size={16} />
+              <Icon name="fork" size={15} />
               Fork
             </Link>
           )}
+          <Link href={`/t/${id}#back`} className="button card-back-button">
+            <Icon name="diamond" size={14} />
+            Back
+          </Link>
         </div>
       </div>
     </article>

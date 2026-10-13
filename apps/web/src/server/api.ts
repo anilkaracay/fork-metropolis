@@ -169,6 +169,11 @@ export async function handleApi(request: Request, path: string[]) {
         "Return to Feed.",
       );
     }
+    if (route === "lineage/top" && method === "GET") {
+      // The largest real lineage, as the landing page reads it. Null when there is none.
+      const { readLandingLive } = await import("./landing");
+      return reply((await readLandingLive())?.tree ?? null);
+    }
     if (route === "context" && method === "GET") {
       if (testMode()) {
         const { getTestRuntime } = await import("../../test-support/runtime");

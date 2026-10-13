@@ -18,6 +18,7 @@ import {
   noBacking,
   type BackingRole,
   type BackingSummary,
+  type LineageFlow,
   type ThesisBackingView,
   type GraphThesis,
   type FeedThesis,
@@ -209,7 +210,23 @@ export class SocialCore {
         ),
       );
     const byMetadata = new Map(rows.map((row) => [row.thesisId, row]));
-    const wallets = [...new Set(all.map((n) => n.author))];
+    // Backing and the value forks sent back are read before identities, so the first
+    // backers can be shown as people rather than addresses.
+    const [backed, flows]: [Map<string, BackingSummary>, LineageFlow[]] = this
+      .backing
+      ? await Promise.all([
+          this.backing.source.summaries(allIds),
+          this.backing.source.flows(allIds),
+        ])
+      : [new Map(), []];
+    const shownBackers = (id: string) =>
+      (backed.get(id)?.earlyBackers ?? []).slice(0, 3);
+    const wallets = [
+      ...new Set([
+        ...all.map((n) => n.author),
+        ...allIds.flatMap(shownBackers),
+      ]),
+    ];
     const identities = await this.db
       .select({ wallet: schema.wallets.address, user: schema.users })
       .from(schema.wallets)
@@ -233,9 +250,11 @@ export class SocialCore {
         wallet,
         userId: null,
       };
-    const backed: Map<string, BackingSummary> = this.backing
-      ? await this.backing.source.summaries(allIds)
-      : new Map();
+    const arrived = (id: string) =>
+      flows
+        .filter((flow) => flow.creditedThesisId === id)
+        .reduce((sum, flow) => sum + BigInt(flow.amountWei), 0n)
+        .toString();
     const [agrees, commentCounts, evidence] = await Promise.all([
       this.db
         .select({
@@ -330,6 +349,8 @@ export class SocialCore {
           comments: commentCounts.find((a) => a.id === n.thesisId)?.count ?? 0,
         },
         backing: backed.get(n.thesisId) ?? noBacking,
+        firstBackers: shownBackers(n.thesisId).map(author),
+        arrivedFromForksWei: arrived(n.thesisId),
         execution: {
           state: verified
             ? "verified"
@@ -608,9 +629,34 @@ export class SocialCore {
         ? await this.backing.source.support(wallet)
         : noSupport,
       backingContract: this.backing?.address ?? null,
+      forkEarnings: await this.forkEarnings(wallet, author.nodes),
       recent: await this.compose(author.nodes),
       scope: { ...this.namespace, wallet },
     };
+  }
+  /** What backing of other people's forks paid this author, one row per fork, largest first. */
+  private async forkEarnings(wallet: string, own: GraphThesis[]) {
+    if (!this.backing || !own.length) return [];
+    const ids = new Set(own.map((n) => n.thesisId));
+    const flows = (await this.backing.source.flows([...ids])).filter(
+      (flow) => ids.has(flow.creditedThesisId) && flow.recipient === wallet,
+    );
+    if (!flows.length) return [];
+    const bySource = new Map<string, bigint>();
+    for (const flow of flows)
+      bySource.set(
+        flow.sourceThesisId,
+        (bySource.get(flow.sourceThesisId) ?? 0n) + BigInt(flow.amountWei),
+      );
+    const sources = await this.graph.getMany([...bySource.keys()]);
+    const person = await this.identities(sources.map((n) => n.author));
+    return sources
+      .map((n) => ({
+        thesisId: n.thesisId,
+        author: person(n.author),
+        amountWei: bySource.get(n.thesisId)!.toString(),
+      }))
+      .sort((a, b) => (BigInt(b.amountWei) > BigInt(a.amountWei) ? 1 : -1));
   }
   async explore() {
     const { nodes } = await this.graph.recent(),

@@ -217,8 +217,8 @@ test("public discovery and contributor filters use the real two-author dataset",
     page.locator('[data-thesis-id="2"] .card-change-summary'),
   ).toContainText("$4,400");
   for (const [label, mode] of [
-    ["Most Forked", "most-forked"],
-    ["Smart Signal", "smart-signal"],
+    ["Most forked", "most-forked"],
+    ["Smart signal", "smart-signal"],
     ["Fresh", "fresh"],
   ] as const) {
     const items = (await read<{ items: Item[] }>(request, `feed?mode=${mode}`))
@@ -282,7 +282,7 @@ test("one cross-product journey preserves the approved landing, lineage and prof
   const { fork } = await lineage(request);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
-  await loaded(page, ".l-realtree .tr-node");
+  await loaded(page, ".l3-activity .l3-event");
   await capture(page, "journey-landing");
   await page
     .getByRole("link", { name: "Open FORK", exact: true })
@@ -294,7 +294,8 @@ test("one cross-product journey preserves the approved landing, lineage and prof
   await page.goto("/t/1");
   await loaded(page, ".signature:not(.signature-loading) .detail-reasoning");
   await capture(page, "journey-root");
-  await page.getByRole("link", { name: /Fork #2/ }).click();
+  // The lineage rail links the fork by its author and number.
+  await page.locator('.detail-rail a[href="/t/2"]').first().click();
   await expect(page).toHaveURL(/\/t\/2$/);
   await expect(
     page.getByRole("main").getByText("Fork #2", { exact: true }),

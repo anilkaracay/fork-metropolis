@@ -12,10 +12,14 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const require = createRequire(`${root}package.json`);
 const out = `${root}apps/web/public/landing/`;
-const { Avatar, Style } = await import("@dicebear/core");
+// The web app owns the DiceBear packages: it renders the in-app avatars with them too.
+const web = createRequire(`${root}apps/web/package.json`);
+const { Avatar, Style } = await import(
+  pathToFileURL(web.resolve("@dicebear/core")).href
+);
 const notionists = new Style(
   JSON.parse(
-    readFileSync(require.resolve("@dicebear/styles/notionists.json"), "utf8"),
+    readFileSync(web.resolve("@dicebear/styles/notionists.json"), "utf8"),
   ),
 );
 
