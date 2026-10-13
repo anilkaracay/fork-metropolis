@@ -1,0 +1,269 @@
+{
+  "label": "Team test activity on Monad Testnet. Not user activity.",
+  "recordedAt": "2026-10-13T07:45:23.986Z",
+  "chainId": 10143,
+  "rpc": "https://testnet-rpc.monad.xyz",
+  "graphql": "https://indexer.dev.hyperindex.xyz/18ce77d/v1/graphql",
+  "backingAddress": "0x832ca98b0dbd94caa0f3d3e06ea658284cc39f8f",
+  "wallet": "0x73b4b1b1b00EAC024e12D36B52A3102A4E9f475B",
+  "thesisId": "3",
+  "amountWei": "10000000000000000",
+  "method": {
+    "receiptPollMs": 50,
+    "indexPollMs": 200,
+    "percentile": "nearest rank",
+    "note": "Wall-clock observations from one machine and one RPC endpoint, including network and polling time."
+  },
+  "summary": {
+    "acceptMs": {
+      "samples": 20,
+      "min": 62,
+      "median": 63.5,
+      "p95": 71,
+      "max": 76
+    },
+    "confirmMs": {
+      "samples": 20,
+      "min": 237,
+      "median": 417.5,
+      "p95": 423,
+      "max": 427
+    },
+    "indexMs": {
+      "samples": 20,
+      "min": 315,
+      "median": 580.5,
+      "p95": 840,
+      "max": 845
+    },
+    "gasUsed": {
+      "samples": 20,
+      "min": 78692,
+      "median": 78692,
+      "p95": 78692,
+      "max": 154373
+    }
+  },
+  "samples": [
+    {
+      "index": 1,
+      "txHash": "0x5ee9a84a55d6bbef1f4254a5bc6394c0852d786f4a36987725f51c0e20293d88",
+      "blockNumber": "70626090",
+      "gasLimit": "154373",
+      "gasUsed": "154373",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 64,
+      "confirmMs": 427,
+      "indexMs": 764
+    },
+    {
+      "index": 2,
+      "txHash": "0x3bd95dd591124ee139ed3d11b665e25abe65794fc50bec78ad06dbcc6140eb50",
+      "blockNumber": "70626095",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 76,
+      "confirmMs": 418,
+      "indexMs": 573
+    },
+    {
+      "index": 3,
+      "txHash": "0x9931b9ccf3546fdd974bcdced7e994828560821ea19b4391246fd83f560d937f",
+      "blockNumber": "70626099",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 64,
+      "confirmMs": 414,
+      "indexMs": 573
+    },
+    {
+      "index": 4,
+      "txHash": "0xef356aac0c178bbee6bfe7b29e14b5806e82c0f28c4cff00f489203841373898",
+      "blockNumber": "70626103",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 417,
+      "indexMs": 845
+    },
+    {
+      "index": 5,
+      "txHash": "0x97c31a9b409f9ab1d736433f2f592a6913f26f410a34bff9a9482dd71e1eb53a",
+      "blockNumber": "70626107",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 64,
+      "confirmMs": 239,
+      "indexMs": 832
+    },
+    {
+      "index": 6,
+      "txHash": "0x9c490b8a768c7b1ed11c855b28c358579ec480a3432b7b3ba9556647b088a581",
+      "blockNumber": "70626112",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 417,
+      "indexMs": 578
+    },
+    {
+      "index": 7,
+      "txHash": "0x49ba4578dd57bc257056f4f3372a02b4ad062d23ab7e56e4cbf1ef838e7581de",
+      "blockNumber": "70626116",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 419,
+      "indexMs": 316
+    },
+    {
+      "index": 8,
+      "txHash": "0xe2f1b5cf694cb33395fb5d96cdf360b048d119a637ccfdb9b6afea96d4b4c72a",
+      "blockNumber": "70626119",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 70,
+      "confirmMs": 417,
+      "indexMs": 840
+    },
+    {
+      "index": 9,
+      "txHash": "0x282d36142192ba39ad4abd0b23a12654dbcaf0fab8a898df39fe3e82616bf6c3",
+      "blockNumber": "70626124",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 71,
+      "confirmMs": 419,
+      "indexMs": 833
+    },
+    {
+      "index": 10,
+      "txHash": "0x030fe2cffb75ce712f8de4ede7c571fb8ac9cde7c3406ee2e760667e89c70440",
+      "blockNumber": "70626128",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 65,
+      "confirmMs": 241,
+      "indexMs": 574
+    },
+    {
+      "index": 11,
+      "txHash": "0x5e204e96ee0fd9975eb7acbf7fbd1f9ddebb107145185693bd0bce75c7b5f588",
+      "blockNumber": "70626132",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 64,
+      "confirmMs": 419,
+      "indexMs": 831
+    },
+    {
+      "index": 12,
+      "txHash": "0x6c2017d0d34db74bca82e2520c565ecff4629a8994a6f33b9a06aae5c795408e",
+      "blockNumber": "70626137",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 65,
+      "confirmMs": 419,
+      "indexMs": 833
+    },
+    {
+      "index": 13,
+      "txHash": "0x05efdd884af96cbb9164f2dc4a7575c3dea2013c033b0570ec43bc9796b75283",
+      "blockNumber": "70626142",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 421,
+      "indexMs": 835
+    },
+    {
+      "index": 14,
+      "txHash": "0xb5c2035121c34b4411aba929429f044dfbb8f12847de3eece2024277c778a4ef",
+      "blockNumber": "70626146",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 242,
+      "indexMs": 577
+    },
+    {
+      "index": 15,
+      "txHash": "0x3def6134e1702b126e373128c39e4b5ccff53af965e6343470190c2f05474e0b",
+      "blockNumber": "70626150",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 62,
+      "confirmMs": 423,
+      "indexMs": 583
+    },
+    {
+      "index": 16,
+      "txHash": "0x2293826a864636448c6efc872aee3f933f834401206165c5fc2cff55ed473807",
+      "blockNumber": "70626154",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 64,
+      "confirmMs": 422,
+      "indexMs": 590
+    },
+    {
+      "index": 17,
+      "txHash": "0x5d4f9bf8163778f08e15a61d955f6e080c16ab11278928b06115296898e4bbef",
+      "blockNumber": "70626157",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 419,
+      "indexMs": 574
+    },
+    {
+      "index": 18,
+      "txHash": "0x18160bd48692de73e01b1b2423e8efefd50c4530b923ee3a9effc8bfda2e50e3",
+      "blockNumber": "70626161",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 237,
+      "indexMs": 573
+    },
+    {
+      "index": 19,
+      "txHash": "0xc900c3e67062135e4dc9f31ae7f6c1c9e4fd85337dabc16edb1fdddea5996b14",
+      "blockNumber": "70626164",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 238,
+      "indexMs": 315
+    },
+    {
+      "index": 20,
+      "txHash": "0x1ed7a4c3e8d8af4a52b859c31a5fb2a135ff5e107dda892600aa9ae926cc3a6d",
+      "blockNumber": "70626167",
+      "gasLimit": "78692",
+      "gasUsed": "78692",
+      "effectiveGasPriceWei": "102000000000",
+      "acceptMs": 63,
+      "confirmMs": 415,
+      "indexMs": 316
+    }
+  ]
+}
