@@ -567,7 +567,7 @@ Verification: 10 faucet tests and 7 handle tests on real PostgreSQL semantics, 7
 
 ## D-058: Show measured confirmation time, and say nothing about money
 
-Status: Accepted by explicit owner instruction; in-product measurement implemented, the recorded benchmark waits for the FORKBacking deployment
+Status: Accepted by explicit owner instruction; in-product measurement implemented, benchmark recorded on 2026-10-13 (median confirmation 417.5 ms, p95 423 ms)
 Date: 2026-10-12
 
 Decision:
