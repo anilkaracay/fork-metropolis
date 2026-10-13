@@ -4,14 +4,9 @@ import { writeFile } from "node:fs/promises";
 // With FORK_SMOKE_LIVE=1 the origin has indexed ideas and the landing shows them.
 // Without it (a fresh build with no data source) the landing must say so and invent nothing.
 const live = process.env.FORK_SMOKE_LIVE === "1";
-const steps = [
-  "Put it on the record.",
-  "Disagree? Fork it.",
-  "Back what you believe in.",
-  "See how an idea grew.",
-];
-// The people in the examples. They may never appear where the page reports the real graph.
-const characters = /@(mira|theo|lena|kaan|deniz|umut|ada|emre)\b/;
+// The people in the illustrations. They may never appear where the page reports the real graph.
+const characters = /\b(mira|theo|lena|kaan|deniz|umut|ada|emre)\b/;
+const steps = ["Publish", "Fork", "Back", "Idea Tree"];
 
 test("landing is server-rendered, public, and readable without JavaScript", async ({
   request,
@@ -30,77 +25,62 @@ test("landing is server-rendered, public, and readable without JavaScript", asyn
     "Trading ideasevolve here.",
   );
   await expect(
-    page.getByRole("link", { name: "Open FORK", exact: true }).first(),
+    page.getByRole("link", { name: /^Open FORK/ }).first(),
   ).toHaveAttribute("href", "/feed");
-  // Without scripts nothing is hidden waiting for an animation.
-  await expect(page.locator(".landing.motion")).toHaveCount(0);
-  await expect(page.locator(".l-intro")).toBeHidden();
-  await expect(page.locator(".l-stage .fc-theo")).toBeVisible();
-  for (const title of steps)
-    await expect(page.getByRole("heading", { name: title })).toBeVisible();
-  await expect(page.locator(".story-panel")).toHaveCount(4);
-  for (const panel of await page.locator(".story-panel").all())
-    await expect(panel).toBeVisible();
-  // Every illustration says that it is one.
-  await expect(page.locator(".l-stage-note .l-tag")).toHaveText("Example");
-  await expect(page.locator(".l-profile-card > .l-tag")).toHaveText("Example");
-  if (live) {
-    await expect(page.locator(".l-figures")).toBeVisible();
-    await expect(page.locator(".l-realtree .tr-node").first()).toBeVisible();
-  } else {
+  for (const name of steps)
     await expect(
-      page.getByText("The live graph could not be read just now."),
+      page.getByRole("heading", { level: 3, name, exact: true }),
     ).toBeVisible();
-    await expect(page.locator(".l-figures")).toHaveCount(0);
-    await expect(page.locator(".l-activity")).toHaveCount(0);
-    await expect(page.locator(".l-nav-count")).toHaveCount(0);
-  }
-  // Timing comes only from the recorded run, with its sample count and method.
-  const timeline = page.locator(".l-timeline");
-  await expect(timeline).toContainText(
-    "Measured on Monad Testnet over 20 backings",
-  );
-  await expect(timeline).toContainText("median 417.5 ms");
+  // Every illustration says that it is one.
   await expect(
-    timeline.getByRole("link", { name: "Method and raw data" }),
-  ).toHaveAttribute("href", /docs\/MONAD_PERFORMANCE\.md$/);
-  // Sections that report the graph never contain an example character.
-  for (const selector of ["#live", ".l-activity", ".l-nav-chip"])
+    page.getByLabel("An example of one idea being forked and backed"),
+  ).toContainText("Example");
+  await expect(page.getByText("mon traders")).toBeVisible();
+  // The Monad figures are the recorded run, and nothing else.
+  const monad = page.locator("#monad");
+  await expect(monad).toContainText("417.5");
+  await expect(monad).toContainText("p95 423 ms");
+  await expect(monad).toContainText("+580.5");
+  await expect(monad).toContainText("p95 840 ms");
+  await expect(monad).toContainText("20 real backings");
+  await expect(monad.locator(".g20 > div")).toHaveCount(20);
+  if (live) {
+    await expect(page.locator(".l3-chip-count")).toBeVisible();
+    await expect(page.locator(".l3-activity")).toBeVisible();
+  } else {
+    // A failed read shows no count and no strip, never a placeholder.
+    await expect(page.locator(".l3-chip-count")).toHaveCount(0);
+    await expect(page.locator(".l3-activity")).toHaveCount(0);
+  }
+  // The parts that report the graph never contain an example character.
+  for (const selector of [".l3-chip", ".l3-activity"])
     for (const text of await page.locator(selector).allInnerTexts())
       expect(text, selector).not.toMatch(characters);
   await context.close();
 });
 
-test("the live section counts the graph and draws the real tree", async ({
+test("the live parts count the graph and link real events", async ({
   page,
+  request,
 }) => {
   test.skip(!live, "Needs an origin with indexed ideas.");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const figures = page.locator(".l-figures dd [data-ticker]");
-  const ideas = Number(await figures.nth(0).innerText());
-  expect(ideas).toBeGreaterThanOrEqual(2);
-  expect(Number(await figures.nth(1).innerText())).toBeGreaterThanOrEqual(1);
-  await expect(page.locator(".l-nav-count")).toHaveText(`${ideas} ideas`);
-  const nodes = page.locator(".l-realtree .tr-node");
-  expect(await nodes.count()).toBeGreaterThanOrEqual(2);
-  await expect(nodes.first().locator(".tr-card")).toHaveAttribute(
-    "href",
-    /^\/t\/\d+$/,
-  );
-  await expect(nodes.first().locator(".tr-tx")).toHaveAttribute(
-    "href",
-    /^https:\/\/testnet\.monadexplorer\.com\/tx\/0x[0-9a-f]{64}$/,
+  const feed = (await (await request.get("/api/explore")).json()).data.items;
+  expect(feed.length).toBeGreaterThan(0);
+  await expect(page.locator(".l3-chip-count")).toHaveText(
+    `${feed.length} ${feed.length === 1 ? "idea" : "ideas"}`,
   );
   // The strip holds real events: each one links to the idea it is about.
-  const events = page.locator(".l-activity .l-marquee-track").first();
-  for (const link of await events.getByRole("link").all())
+  const events = page.locator(".l3-activity .l3-track").first();
+  const links = await events.getByRole("link").all();
+  expect(links.length).toBeGreaterThan(0);
+  for (const link of links)
     await expect(link).toHaveAttribute("href", /^\/t\/\d+$/);
   // Fewer than six events are a still row, never a loop.
-  const count = await events.getByRole("listitem").count();
-  await expect(page.locator(".l-marquee")).toHaveAttribute(
+  await expect(page.locator(".l3-marquee")).toHaveAttribute(
     "data-loop",
-    String(count >= 6),
+    String(links.length >= 6),
   );
 });
 
@@ -116,17 +96,13 @@ for (const width of [1440, 1280, 1024, 768, 390, 375]) {
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBeLessThanOrEqual(width);
     for (const selector of [
-      ".l-hero h1",
-      ".l-stage",
-      ".l-section-head h2 >> nth=0",
-      ".l-thread",
-      ".story-panel >> nth=0",
-      ".story-panel >> nth=2",
-      ".l-profile-card",
-      ".l-audience-list",
-      ".l-built-list",
-      ".l-finale h2",
-      ".l-footer-row",
+      ".fk .h1",
+      ".fk .nav",
+      "#how",
+      "#backing .bento",
+      "#tree",
+      "#monad .g20",
+      ".fk footer",
     ]) {
       const box = await page.locator(selector).boundingBox();
       expect(box, selector).not.toBeNull();
@@ -134,7 +110,7 @@ for (const width of [1440, 1280, 1024, 768, 390, 375]) {
       expect(box!.x + box!.width, selector).toBeLessThanOrEqual(width);
     }
     const buttons = await page
-      .locator(".l-hero-actions .button, .l-nav .button, .l-finale .button")
+      .locator(".fk .btn")
       .evaluateAll((els) =>
         els
           .filter((el) => getComputedStyle(el).display !== "none")
@@ -142,11 +118,11 @@ for (const width of [1440, 1280, 1024, 768, 390, 375]) {
       );
     expect(buttons.length).toBeGreaterThanOrEqual(3);
     expect(buttons.every((height) => height >= 44)).toBe(true);
-    const links = page.getByRole("navigation", { name: "Landing navigation" });
-    if (width > 900) {
-      await links.getByRole("link", { name: "How it works" }).click();
+    const links = page.locator(".fk .nav a.l");
+    if (width > 960) {
+      await links.filter({ hasText: "How it works" }).click();
       await expect(page).toHaveURL(/#how$/);
-    } else await expect(links).toBeHidden();
+    } else await expect(links.first()).toBeHidden();
   });
 }
 
@@ -161,49 +137,33 @@ test("reduced motion gets the finished page without the animation code", async (
   });
   await page.goto("/");
   await page.waitForLoadState("networkidle");
-  await expect(page.locator(".landing.motion")).toHaveCount(0);
-  await expect(page.locator(".story.is-pinned")).toHaveCount(0);
   await expect(page.locator("html.lenis")).toHaveCount(0);
-  await expect(page.locator(".l-stage .fc-theo")).toBeVisible();
-  await expect(page.locator(".fc-earned")).toBeVisible();
+  // Static story: every step shows its own illustration inline, and the sticky frame is off.
+  await expect(page.locator(".fk .stick")).toBeHidden();
+  for (const inline of await page.locator(".fk .vis-inline").all())
+    await expect(inline).toBeVisible();
   // The animation code is one lazy chunk: it is fetched only for motion.
   const still = scripts.length;
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.reload();
-  await expect(page.locator(".landing.motion-live")).toHaveCount(1);
+  await page.waitForLoadState("networkidle");
+  await expect(page.locator("html.lenis")).toHaveCount(1);
   expect(scripts.length - still).toBeGreaterThan(still);
 });
 
-test("the pinned story moves through its four steps with the scroll", async ({
+test("with motion, How it works keeps one sticky visual beside the steps", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  await expect(page.locator(".landing.motion-live")).toHaveCount(1);
-  const story = page.locator(".story.is-pinned");
-  await expect(story).toHaveCount(1);
-  const start = await story.evaluate(
-    (element) => element.getBoundingClientRect().top + scrollY - 96,
-  );
-  const names = ["Publish", "Fork", "Back", "Idea Tree"];
-  for (const [index, name] of names.entries()) {
-    // The pin lasts 2.8 screens; each step owns a quarter of it.
-    await page.evaluate(
-      (top) => scrollTo(0, top),
-      start + ((index + 0.5) / 4) * 2.8 * 800,
-    );
-    await expect(
-      page.locator(`.story-panel[data-panel="${index}"]`),
-    ).toHaveAttribute("data-active", "");
-    await expect(page.locator(".story-panel[data-active]")).toHaveCount(1);
-    await expect(page.locator(".story-copy[data-active]")).toContainText(name);
-  }
-  // Narrow screens are never pinned: every step is in the flow.
+  await expect(page.locator(".fk .stick")).toBeVisible();
+  await expect(page.locator(".fk .stick .layer")).toHaveCount(4);
+  // Narrow screens never stick: each step carries its own illustration.
   await page.setViewportSize({ width: 390, height: 800 });
-  await expect(page.locator(".story.is-pinned")).toHaveCount(0);
-  for (const panel of await page.locator(".story-panel").all())
-    await expect(panel).toBeVisible();
+  await expect(page.locator(".fk .stick")).toBeHidden();
+  for (const inline of await page.locator(".fk .vis-inline").all())
+    await expect(inline).toBeVisible();
 });
 
 test("landing to Feed and existing product deep links preserve real social data", async ({
@@ -233,7 +193,7 @@ test("landing to Feed and existing product deep links preserve real social data"
   ]) {
     expect((await page.goto(path))?.status(), path).toBe(200);
     await expect(page.locator(".app-layout"), path).toHaveCount(1);
-    await expect(page.locator(".l-nav"), path).toHaveCount(0);
+    await expect(page.locator(".fk"), path).toHaveCount(0);
   }
   const root = (await (await request.get("/api/theses/1")).json()).data;
   const fork = (await (await request.get("/api/theses/2")).json()).data;

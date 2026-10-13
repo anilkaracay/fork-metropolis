@@ -282,7 +282,7 @@ test("one cross-product journey preserves the approved landing, lineage and prof
   const { fork } = await lineage(request);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
-  await loaded(page, ".l-realtree .tr-node");
+  await loaded(page, ".l3-chip-count");
   await capture(page, "journey-landing");
   await page
     .getByRole("link", { name: "Open FORK", exact: true })
