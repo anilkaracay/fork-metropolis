@@ -47,10 +47,17 @@ test("landing is server-rendered, public, and readable without JavaScript", asyn
   if (live) await expect(page.locator(".l3-activity")).toBeVisible();
   // A failed read shows no strip, never a placeholder.
   else await expect(page.locator(".l3-activity")).toHaveCount(0);
-  // The parts that report the graph never contain an example character.
-  for (const selector of [".l3-chip", ".l3-activity"])
-    for (const text of await page.locator(selector).allInnerTexts())
-      expect(text, selector).not.toMatch(characters);
+  // The parts that report the graph never contain an example character. A name the
+  // illustrations use may still appear when a real account on this origin holds it.
+  for (const text of await page.locator(".l3-chip").allInnerTexts())
+    expect(text, ".l3-chip").not.toMatch(characters);
+  for (const text of await page.locator(".l3-activity").allInnerTexts())
+    for (const [name] of text.matchAll(new RegExp(characters, "g"))) {
+      const profile = await request.get(`/api/profiles/${name}`);
+      expect(profile.ok(), `@${name} in .l3-activity is a real profile`).toBe(
+        true,
+      );
+    }
   await context.close();
 });
 

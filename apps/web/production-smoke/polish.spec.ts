@@ -83,7 +83,8 @@ async function loaded(page: Page, selector: string) {
     if (await content.isVisible()) break;
     if (attempt === 3) break;
     await page.waitForTimeout(20000);
-    await retry.first().click();
+    // The page may have recovered on its own while waiting.
+    if (await retry.first().isVisible()) await retry.first().click();
   }
   await expect(content).toBeVisible({ timeout: 60000 });
   await page.evaluate(() => document.fonts.ready);
