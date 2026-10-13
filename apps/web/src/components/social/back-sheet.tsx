@@ -192,7 +192,11 @@ export function BackSheet({
   const busy = step === "wallet" || step === "confirming";
 
   async function back() {
-    if (!session) return auth.login();
+    // The sheet leaves the top layer first, or it would cover the sign-in.
+    if (!session) {
+      close();
+      return auth.login();
+    }
     if (!contract || !amount || problem || own) return;
     setError(null);
     setStep("wallet");
