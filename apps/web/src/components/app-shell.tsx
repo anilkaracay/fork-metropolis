@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useSession } from "./social/session";
 import { Icon } from "./social/icon";
+import { BrandMark } from "./ui/brand-mark";
 import { Avatar, TokenMark } from "./social/common";
 import { AccountWallet, WelcomeDrip } from "./social/account-wallet";
 import { HandleClaim, requestHandleClaim } from "./social/handle-claim";
@@ -20,7 +21,7 @@ function Logo() {
   return (
     <>
       <span className="brand-mark">
-        <Icon name="fork" size={26} />
+        <BrandMark height={26} />
       </span>
       FORK<span className="brand-dot">.</span>
     </>

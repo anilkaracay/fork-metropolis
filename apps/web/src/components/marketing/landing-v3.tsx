@@ -4,6 +4,7 @@
 // read for this request and from the recorded run in docs/MONAD_PERFORMANCE.md.
 /* eslint-disable @next/next/no-img-element -- static, pre-sized artwork */
 import Link from "next/link";
+import { BrandMark } from "@/components/ui/brand-mark";
 import type { MeasuredRun } from "@/lib/measured";
 import type { LandingLive } from "@/server/landing";
 import { ActivityStrip, NavChip } from "./live-parts";
@@ -55,24 +56,7 @@ export function LandingV3({
                 color: "#F2F4F2",
               }}
             >
-              <svg
-                width="26"
-                height="26"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <g
-                  fill="none"
-                  stroke="#B1D6AC"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                >
-                  <circle cx="7" cy="4" r="2"></circle>
-                  <circle cx="17" cy="4" r="2"></circle>
-                  <circle cx="7" cy="20" r="2"></circle>
-                  <path d="M7 6v12M17 6v3a5 5 0 0 1-5 5H7"></path>
-                </g>
-              </svg>
+              <BrandMark height={28} />
               <span
                 style={{
                   fontSize: "20px",

@@ -2047,19 +2047,6 @@ li.ancestor > .tree-node {
 .app-layout {
   font-family: var(--font-sans);
 }
-.fork-wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 25px;
-  font-weight: 600;
-  letter-spacing: -0.055em;
-  line-height: 1;
-}
-.fork-wordmark > svg,
-.wordmark-period {
-  color: var(--primary);
-}
 
 /* Account: handle claim and wallet */
 .handle-claim-lead {
