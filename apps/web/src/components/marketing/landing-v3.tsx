@@ -824,7 +824,7 @@ export function LandingV3({
                   display: "flex",
                   alignItems: "flex-end",
                   gap: "12px",
-                  opacity: 0.45,
+                  opacity: 0.8,
                 }}
               >
                 <img
@@ -856,7 +856,7 @@ export function LandingV3({
                       style={{
                         fontSize: "14px",
                         fontWeight: 600,
-                        color: "#A33B66",
+                        color: "#8C2F55",
                       }}
                     >
                       umut
@@ -880,7 +880,7 @@ export function LandingV3({
                   display: "flex",
                   alignItems: "flex-end",
                   gap: "12px",
-                  opacity: 0.22,
+                  opacity: 0.7,
                 }}
               >
                 <img
@@ -912,7 +912,7 @@ export function LandingV3({
                       style={{
                         fontSize: "14px",
                         fontWeight: 600,
-                        color: "#2D7A68",
+                        color: "#1F5F50",
                       }}
                     >
                       ada
@@ -3330,7 +3330,7 @@ export function LandingV3({
                       </span>
                       <span
                         className="mono"
-                        style={{ fontSize: "20px", color: "#C2541E" }}
+                        style={{ fontSize: "20px", color: "#A3431A" }}
                       >
                         50%
                       </span>
@@ -3385,7 +3385,7 @@ export function LandingV3({
                     </span>
                   </div>
                 </div>
-                <p style={{ margin: "0", fontSize: "16px", color: "#C2541E" }}>
+                <p style={{ margin: "0", fontSize: "16px", color: "#A3431A" }}>
                   Changed by an admin, after people backed it
                 </p>
                 <div style={{ flex: 1 }}></div>
@@ -3450,7 +3450,7 @@ export function LandingV3({
                       className="mono"
                       style={{
                         fontSize: "15px",
-                        color: "#4B535B",
+                        color: "#7C858C",
                         width: "28px",
                         textAlign: "right",
                       }}
@@ -3479,7 +3479,7 @@ export function LandingV3({
                       className="mono"
                       style={{
                         fontSize: "15px",
-                        color: "#4B535B",
+                        color: "#7C858C",
                         width: "28px",
                         textAlign: "right",
                       }}
@@ -3508,7 +3508,7 @@ export function LandingV3({
                       className="mono"
                       style={{
                         fontSize: "15px",
-                        color: "#4B535B",
+                        color: "#7C858C",
                         width: "28px",
                         textAlign: "right",
                       }}
