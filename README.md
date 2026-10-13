@@ -16,14 +16,14 @@ and every backing is split onchain between everyone who shaped the idea.
   <a href="https://forktrades.xyz/t/2/tree">A real Idea Tree</a> ·
   Demo video (link pending) ·
   Founder pitch (link pending) ·
-  Pitch deck (link pending)
+  <a href="https://docsend.com/view/kw962jdfm6pc689r">Pitch deck</a>
 </p>
 
 <p align="center">
   Monad Metropolis · Track 03: Social, Attention &amp; Culture · Envio · Privy
 </p>
 
-<!-- PENDING: demo video, founder pitch and pitch deck links -->
+<!-- PENDING: demo video and founder pitch links -->
 
 ![The FORK landing page: the headline, and an example of one idea being forked and backed](docs/assets/landing/hero-1440.jpg)
 
