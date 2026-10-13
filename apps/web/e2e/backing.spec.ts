@@ -250,3 +250,53 @@ test("the Back sheet fits a phone and keeps its primary action reachable", async
     ),
   ).toBe(true);
 });
+
+test("the Back sheet leaves the top layer while the wallet asks for a signature", async ({
+  page,
+  request,
+}) => {
+  const { leaf } = await lineage(request);
+  await page.goto(`/t/${leaf}`);
+  await signIn(page, "dana");
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  const sheet = page.locator("dialog.back-sheet");
+  await expect(
+    sheet.getByRole("button", { name: "Back with 0.1 MON" }),
+  ).toBeVisible();
+  expect(await sheet.evaluate((el) => el.matches(":modal"))).toBe(true);
+
+  // Hold the signature open, the way a wallet prompt does until it is approved.
+  let release!: () => void;
+  const approved = new Promise<void>((resolve) => (release = resolve));
+  await page.route("**/api/test/back", async (route) => {
+    await approved;
+    await route.continue();
+  });
+  await sheet.getByRole("button", { name: "Back with 0.1 MON" }).click();
+  await expect(
+    sheet.getByRole("button", { name: "Confirm in your wallet…" }),
+  ).toBeVisible();
+  expect(await sheet.evaluate((el) => el.matches(":modal"))).toBe(false);
+  // A wallet prompt renders as a fixed element in the page. Nothing of ours may cover it.
+  const covered = await sheet.evaluate((el) => {
+    const prompt = document.createElement("div");
+    prompt.style.cssText =
+      "position:fixed;inset:0;z-index:999999;background:transparent";
+    document.body.append(prompt);
+    const box = el.getBoundingClientRect();
+    const hit = document.elementFromPoint(
+      box.x + box.width / 2,
+      box.y + box.height / 2,
+    );
+    prompt.remove();
+    return hit !== prompt;
+  });
+  expect(covered).toBe(false);
+
+  release();
+  await expect(
+    sheet.getByRole("heading", { name: "Backed with 0.1 MON" }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(sheet).toBeHidden();
+});

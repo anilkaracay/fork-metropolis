@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-m";
@@ -65,12 +66,51 @@ export function BackSheet({
     [step, setStep] = useState<Step>("amount"),
     [error, setError] = useState<unknown>(null),
     [outcome, setOutcome] = useState<Outcome | null>(null);
+  // The wallet's approval prompt renders in the page, below the browser's top layer. Once a
+  // signature is requested the sheet leaves the top layer (show, not showModal), or it would
+  // cover that prompt. Its own backdrop and the key handling below stand in for the modal.
+  const modal = step === "amount";
   useEffect(() => {
     const element = dialog.current;
     if (!element) return;
-    if (open && !element.open) element.showModal();
-    if (!open && element.open) element.close();
-  }, [open]);
+    if (!open) {
+      if (element.open) element.close();
+      return;
+    }
+    if (element.open && element.matches(":modal") === modal) return;
+    if (element.open) element.close();
+    if (modal) element.showModal();
+    else element.show();
+  }, [open, modal]);
+  useEffect(() => {
+    const element = dialog.current;
+    if (!open || modal || !element) return;
+    const sheet = element;
+    function onKey(event: KeyboardEvent) {
+      if (!sheet.contains(document.activeElement)) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+      }
+      if (event.key !== "Tab") return;
+      const focusable = [
+        ...sheet.querySelectorAll<HTMLElement>(
+          "a[href], button:not(:disabled), input:not(:disabled)",
+        ),
+      ];
+      const first = focusable[0],
+        last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  });
   const view = useQuery({
     queryKey: backingKey(thesisId),
     queryFn: () => api<ThesisBackingView>(`theses/${thesisId}/backing`),
@@ -165,8 +205,9 @@ export function BackSheet({
   return (
     <dialog
       ref={dialog}
-      className="back-sheet"
+      className={modal ? "back-sheet" : "back-sheet in-page"}
       aria-labelledby={title}
+      aria-modal={!modal && step !== "wallet" ? true : undefined}
       onCancel={(event) => {
         event.preventDefault();
         close();
@@ -175,6 +216,16 @@ export function BackSheet({
         if (event.target === dialog.current) close();
       }}
     >
+      {open &&
+        !modal &&
+        createPortal(
+          <div
+            className="back-sheet-backdrop"
+            aria-hidden="true"
+            onClick={close}
+          />,
+          document.body,
+        )}
       <div className="back-sheet-body">
         <header className="back-sheet-head">
           <span className="back-sheet-kicker">Idea #{thesisId}</span>
