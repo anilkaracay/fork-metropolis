@@ -14,8 +14,7 @@ and every backing is split onchain between everyone who shaped the idea.
 <p align="center">
   <a href="https://forktrades.xyz"><b>Live product</b></a> ·
   <a href="https://forktrades.xyz/t/2/tree">A real Idea Tree</a> ·
-  Demo video (link pending) ·
-  Founder pitch (link pending) ·
+  <a href="https://youtu.be/nJBhORVV8IY"><b>Demo video</b></a> ·
   <a href="https://docsend.com/view/kw962jdfm6pc689r">Pitch deck</a>
 </p>
 
@@ -23,9 +22,9 @@ and every backing is split onchain between everyone who shaped the idea.
   Monad Metropolis · Track 03: Social, Attention &amp; Culture · Envio · Privy
 </p>
 
-<!-- PENDING: demo video and founder pitch links -->
+[![The FORK landing page: the headline, and an example of one idea being forked and backed. Opens the demo video](docs/assets/landing/hero-1440.jpg)](https://youtu.be/nJBhORVV8IY)
 
-![The FORK landing page: the headline, and an example of one idea being forked and backed](docs/assets/landing/hero-1440.jpg)
+<p align="center"><a href="https://youtu.be/nJBhORVV8IY">Watch the demo video</a></p>
 
 ## FORK in one minute
 
@@ -103,35 +102,33 @@ Crypto-native traders and research groups who already explain their ideas in pub
 
 Write a thesis: market, direction, target, invalidation, leverage and your reasoning. Your wallet signs it and Monad records you as the author. The thesis page puts the two things a reader can do side by side: fork it or back it.
 
-![A thesis page with its reasoning, the Fork and Back actions and the backing it has received](docs/assets/product/thesis-backing-1440.png)
+![Fork #2 on the live product: what changed from #1, the Fork and Back actions, and the backing it received and passed on](docs/assets/product/thesis-backing-1440.png)
 
 ### Fork
 
 Disagree with the target, the leverage or the argument? Fork the thesis and change it. While you write, FORK lists exactly what differs from the parent, and the published fork keeps that link permanently.
 
-![The fork composer listing what changes against the parent: target, leverage and reasoning](docs/assets/phase2/fork-composer.png)
+![The fork composer listing what changes against the parent: target and leverage](docs/assets/product/fork-composer-1440.png)
 
 ### Back
 
 Put MON behind an idea you believe in. Before you sign, the sheet shows who receives what. After it confirms, it shows the confirmation time measured for your transaction and your place among the idea's first ten backers.
 
-![The Back sheet with amount presets and a preview of the split between the fork's author and the earlier authors](docs/assets/product/back-sheet-1440.png)
+![The Back sheet with amount presets and a preview of the split between the fork's author and the author of the idea it forks](docs/assets/product/back-sheet-1440.png)
 
 ### Idea Tree
 
 Every branch of an idea in one view: who wrote each version, what changed, what each version received, and what backing of its forks sent back to it.
 
-![The Idea Tree for a three-level lineage, with value arriving at the two earlier ideas](docs/assets/product/tree-value-1440.png)
+![The Idea Tree for #1 and its fork #2, with the backing of #2 and the value that arrived at #1](docs/assets/product/tree-value-1440.png)
 
 ### Profile
 
 A profile answers what a reputation should: how many original ideas, how many were forked by other people, what was earned as an author, what arrived from other people's forks, and which ideas this person backed early. Claimable earnings are withdrawn with one signature.
 
-![A profile with earnings as author, earnings from forks, the claimable balance and Withdraw](docs/assets/product/profile-earnings-1440.png)
+![A profile with reputation, earnings from forks with the fork that paid them, earnings as author and the claimable balance](docs/assets/product/profile-earnings-1440.png)
 
-_The four screenshots above come from the isolated test workspace, which is labelled in its top bar and uses test identities. The landing page images come from the live product._
-
-<!-- PENDING: replace the four test workspace screenshots with live captures after the demo recording -->
+_Every screenshot above is from the live product at forktrades.xyz, captured signed out on 2026-10-13. The landing page cards use example characters and say so._
 
 ## The split
 
