@@ -16,10 +16,8 @@ const LandingMotion = dynamic(
 export function MotionGate() {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    const root = document.querySelector<HTMLElement>(".landing");
+    const root = document.querySelector<HTMLElement>(".fk");
     if (!root || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // A client-side return to this page does not rerun the boot script.
-    root.classList.add("motion");
     const start = () => setReady(true);
     if ("requestIdleCallback" in window) {
       const id = requestIdleCallback(start, { timeout: 1800 });
