@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ProfileSummary } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import type { Confirmation } from "@/lib/confirmation";
+import { grantConsent } from "@/lib/consent";
 import { useSession } from "./session";
 
 /** A public profile, shared by the profile screen and the shell's earnings card. */
@@ -16,6 +17,10 @@ export function useProfile(handle: string | undefined) {
   });
 }
 
+/** "0x7ba5…cfc0": the wallet a withdrawal pays, as the consent line names it. */
+export const shortWallet = (wallet: string) =>
+  `${wallet.slice(0, 6)}…${wallet.slice(-4)}`;
+
 /** Withdraws the signed-in author's claimable MON and waits for the indexer to follow. */
 export function useWithdraw(profile: ProfileSummary | undefined) {
   const auth = useSession(),
@@ -23,7 +28,9 @@ export function useWithdraw(profile: ProfileSummary | undefined) {
     [step, setStep] = useState<"idle" | "wallet" | "confirming">("idle"),
     [error, setError] = useState<unknown>(null),
     [confirmation, setConfirmation] = useState<Confirmation | null>(null);
-  async function withdraw() {
+  /** Call from the Withdraw button's click handler, with its native event. */
+  async function withdraw(event: { isTrusted: boolean }) {
+    grantConsent("withdraw", event);
     const contract = profile?.backingContract;
     if (!profile || !contract) return;
     setError(null);
@@ -48,5 +55,5 @@ export function useWithdraw(profile: ProfileSummary | undefined) {
       setStep("idle");
     }
   }
-  return { step, error, confirmation, withdraw };
+  return { step, error, confirmation, withdraw, wallet: auth.session?.wallet };
 }

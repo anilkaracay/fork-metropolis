@@ -8,7 +8,7 @@ import { BrandMark } from "./ui/brand-mark";
 import { Avatar, TokenMark } from "./social/common";
 import { AccountWallet, WelcomeDrip } from "./social/account-wallet";
 import { HandleClaim, requestHandleClaim } from "./social/handle-claim";
-import { useProfile, useWithdraw } from "./social/withdraw";
+import { shortWallet, useProfile, useWithdraw } from "./social/withdraw";
 import { formatMon } from "@/lib/mon";
 import { ApiError } from "@/lib/api-client";
 const navigation = [
@@ -31,7 +31,7 @@ function Logo() {
 function ClaimableCard() {
   const auth = useSession(),
     profile = useProfile(auth.session?.handle).data,
-    { step, error, withdraw } = useWithdraw(profile);
+    { step, error, withdraw, wallet } = useWithdraw(profile);
   if (!profile?.backingContract) return null;
   const claimable = BigInt(profile.earnings.claimableWei);
   if (claimable === 0n && step === "idle" && !error) return null;
@@ -46,14 +46,17 @@ function ClaimableCard() {
         type="button"
         className="v2-btn v2-back v2-sm"
         disabled={step !== "idle" || claimable === 0n}
-        onClick={() => void withdraw()}
+        onClick={(event) => void withdraw(event.nativeEvent)}
       >
         {step === "wallet"
-          ? "Confirm in wallet…"
+          ? "Signing…"
           : step === "confirming"
             ? "Waiting for Monad…"
-            : "Withdraw"}
+            : `Withdraw ${formatMon(claimable)} MON`}
       </button>
+      {claimable > 0n && step === "idle" && wallet && (
+        <p className="withdraw-to">To your wallet {shortWallet(wallet)}</p>
+      )}
       {error ? (
         <p role="alert" className="claimable-error">
           {error instanceof Error

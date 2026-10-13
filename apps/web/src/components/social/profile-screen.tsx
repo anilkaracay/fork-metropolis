@@ -15,7 +15,7 @@ import { requestHandleClaim } from "./handle-claim";
 import { formatMon } from "@/lib/mon";
 import { ApiError } from "@/lib/api-client";
 import { confirmationText } from "@/lib/confirmation";
-import { useWithdraw } from "./withdraw";
+import { shortWallet, useWithdraw } from "./withdraw";
 export function MyProfile() {
   const auth = useSession(),
     router = useRouter();
@@ -318,7 +318,7 @@ function Earnings({
   profile: ProfileSummary;
   owner: boolean;
 }) {
-  const { step, error, confirmation, withdraw } = useWithdraw(profile);
+  const { step, error, confirmation, withdraw, wallet } = useWithdraw(profile);
   if (!profile.backingContract) return null;
   const { earnings, support } = profile,
     claimable = BigInt(earnings.claimableWei);
@@ -377,14 +377,20 @@ function Earnings({
             <button
               className="v2-btn v2-back"
               disabled={step !== "idle"}
-              onClick={() => void withdraw()}
+              onClick={(event) => void withdraw(event.nativeEvent)}
             >
               {step === "wallet"
-                ? "Confirm in your wallet…"
+                ? "Signing…"
                 : step === "confirming"
                   ? "Waiting for Monad…"
                   : `Withdraw ${formatMon(claimable)} MON`}
             </button>
+          )}
+          {owner && claimable > 0n && step === "idle" && wallet && (
+            <p className="withdraw-to">
+              Sends {formatMon(claimable)} MON to your wallet{" "}
+              {shortWallet(wallet)}.
+            </p>
           )}
           {confirmation && (
             <p className="confirmation-note" role="status">

@@ -18,6 +18,7 @@ import {
   saveConfirmation,
   type Confirmation,
 } from "@/lib/confirmation";
+import { grantConsent } from "@/lib/consent";
 import { useSession } from "./session";
 import { EmptyState, ErrorState, Avatar } from "./common";
 import { marketName, price, useMarkets } from "./thesis-card";
@@ -351,6 +352,7 @@ function ComposerForm({
       void auth
         .confirm(hash, started)
         .then((measured) => {
+          if (!measured) return;
           saveConfirmation(measured);
           setConfirmation(measured);
         })
@@ -434,6 +436,7 @@ function ComposerForm({
           className="composer-form"
           onSubmit={(e) => {
             e.preventDefault();
+            grantConsent("publish", e.nativeEvent);
             void submit();
           }}
         >
@@ -638,6 +641,17 @@ function ComposerForm({
               />
             </aside>
           )}
+          {auth.session &&
+            form.marketId &&
+            form.target &&
+            form.invalidation && (
+              <p className="publish-context publish-summary">
+                You sign {parent ? "this fork" : "this idea"}:{" "}
+                {marketName(Number(form.marketId), markets.data)} {form.side},
+                target ${form.target}, invalidation ${form.invalidation},{" "}
+                {form.leverage}× and your reasoning.
+              </p>
+            )}
           <div className="publish-bar">
             <div role="status" aria-live="polite">
               <strong>{state}</strong>
@@ -659,8 +673,8 @@ function ComposerForm({
                   ? "Check confirmation again"
                   : parent
                     ? opposite
-                      ? "Publish Challenge"
-                      : "Publish fork"
+                      ? "Publish challenge on Monad"
+                      : "Publish fork on Monad"
                     : "Publish on Monad"}
               <Icon name={parent ? "fork" : "arrow"} size={17} />
             </button>
@@ -668,7 +682,8 @@ function ComposerForm({
           {!parent && (
             <p className="publish-context">
               Publishing records your authorship on Monad Testnet. It does not
-              execute a trade. Wallet approval comes before submission.
+              execute a trade. Your wallet signs when you press Publish on
+              Monad.
             </p>
           )}
         </form>

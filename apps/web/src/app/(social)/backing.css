@@ -546,3 +546,8 @@
   row-gap: 8px;
   min-width: 0;
 }
+.withdraw-to {
+  margin: 8px 0 0;
+  color: var(--muted-foreground);
+  font-size: 12px;
+}

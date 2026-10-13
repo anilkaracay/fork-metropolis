@@ -273,9 +273,7 @@ test("the Back sheet leaves the top layer while the wallet asks for a signature"
     await route.continue();
   });
   await sheet.getByRole("button", { name: "Back with 0.1 MON" }).click();
-  await expect(
-    sheet.getByRole("button", { name: "Confirm in your wallet…" }),
-  ).toBeVisible();
+  await expect(sheet.getByRole("button", { name: "Signing…" })).toBeVisible();
   expect(await sheet.evaluate((el) => el.matches(":modal"))).toBe(false);
   // A wallet prompt renders as a fixed element in the page. Nothing of ours may cover it.
   const covered = await sheet.evaluate((el) => {
