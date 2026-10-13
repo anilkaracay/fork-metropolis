@@ -28,7 +28,7 @@ function EventLine({ event, now }: { event: LandingEvent; now: number }) {
             ? `idea #${event.thesisId}`
             : event.kind === "forked"
               ? `#${event.parentId} into #${event.thesisId}`
-              : `${event.amountMon} MON on #${event.thesisId}`}
+              : `${event.amountMon} MON on #${event.thesisId}${event.count > 1 ? ` in ${event.count} backings` : ""}`}
         </span>
         <time dateTime={new Date(event.at * 1000).toISOString()}>
           {ago(event.at, now)}
@@ -471,7 +471,7 @@ export function Audience() {
 }
 
 const seconds = (ms: number) =>
-  ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(1)} s`;
+  ms < 1000 ? `${ms} ms` : `${(ms / 1000).toFixed(1)} s`;
 
 export function BuiltOn({
   registry,
@@ -572,7 +572,7 @@ export function BuiltOn({
         <div className="l-timeline" data-reveal>
           <p className="l-timeline-cap">
             Measured on Monad Testnet over {measured.samples} backings by the
-            team’s test wallet
+            team’s test wallet, {measured.recordedAt.slice(0, 10)}
           </p>
           <ol>
             <li>
@@ -584,6 +584,7 @@ export function BuiltOn({
               <span>
                 median <em>{seconds(measured.confirmMedianMs)}</em>
               </span>
+              <small>95th percentile {seconds(measured.confirmP95Ms)}</small>
             </li>
             {measured.indexMedianMs !== null && (
               <li>

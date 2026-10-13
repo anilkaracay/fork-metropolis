@@ -55,6 +55,15 @@ test("landing is server-rendered, public, and readable without JavaScript", asyn
     await expect(page.locator(".l-activity")).toHaveCount(0);
     await expect(page.locator(".l-nav-count")).toHaveCount(0);
   }
+  // Timing comes only from the recorded run, with its sample count and method.
+  const timeline = page.locator(".l-timeline");
+  await expect(timeline).toContainText(
+    "Measured on Monad Testnet over 20 backings",
+  );
+  await expect(timeline).toContainText("median 417.5 ms");
+  await expect(
+    timeline.getByRole("link", { name: "Method and raw data" }),
+  ).toHaveAttribute("href", /docs\/MONAD_PERFORMANCE\.md$/);
   // Sections that report the graph never contain an example character.
   for (const selector of ["#live", ".l-activity", ".l-nav-chip"])
     for (const text of await page.locator(selector).allInnerTexts())

@@ -626,7 +626,7 @@ What is real and what is an example:
 
 - The bar's idea count, the activity strip, the figures and the Idea Tree are read from the indexer for the request. Events are listed only for ideas whose reasoning passed its hash check. Fewer than six events are shown as a still row, never a loop, because a loop would repeat them as if more had happened. Nothing is padded.
 - The eight people in the story (mira, theo, lena, kaan, deniz, umut, ada, emre) are illustrations. Each keeps one colour and one generated avatar. Every scene they appear in carries an "Example" tag, and a browser test asserts that none of their handles appears in a section that reports the graph.
-- No timing figure is shown. `apps/web/src/lib/measured.ts` holds the recorded run and is null until one exists; the confirmation timeline in "Built on" renders only from it.
+- The only timing figures are those of the recorded run in `docs/MONAD_PERFORMANCE.md`, copied into `apps/web/src/lib/measured.ts`: the confirmation timeline in "Built on" renders only from that file and shows its date and sample count. While it was null, the page showed no timing at all.
 
 Patterns taken from the reference sites, and why:
 

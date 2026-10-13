@@ -1673,6 +1673,11 @@
   color: var(--dim);
   font-size: 0.875rem;
 }
+.l-timeline small {
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
 .l-timeline em {
   color: var(--ink);
   font-family: var(--mono);

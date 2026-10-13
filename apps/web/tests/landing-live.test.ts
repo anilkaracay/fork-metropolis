@@ -168,6 +168,7 @@ it("lists real events newest first, with who did what", async () => {
     thesisId: "3",
     parentId: null,
     amountMon: "0.1",
+    count: 1,
     at: 1_700_000_900,
   });
   expect(
@@ -304,4 +305,40 @@ it("shares one read, refreshes quietly, and shows a held read only with its own 
   expect((await readLandingLive())!.readAt).toBe(
     Date.parse("2026-10-12T18:05:31Z") / 1000,
   );
+});
+
+it("folds repeated backings of one idea by one wallet into one event", async () => {
+  const one = (index: number, backer: string, thesisId = "3") => ({
+    thesisId,
+    txHash: `0x${String(index).padStart(64, "0")}`,
+    backer,
+    amountWei: "10000000000000000",
+    position: index,
+    early: index <= 10,
+    timestamp: 1_700_001_000 - index,
+  });
+  runtime.latest.mockResolvedValue([
+    ...Array.from({ length: 20 }, (_, index) =>
+      one(index + 1, `0x${"d1".repeat(20)}`),
+    ),
+    one(30, `0x${"d2".repeat(20)}`),
+    one(31, `0x${"d1".repeat(20)}`, "2"),
+  ]);
+  const backed = (await readLandingLive())!.events.filter(
+    (event) => event.kind === "backed",
+  );
+  expect(backed).toEqual([
+    {
+      kind: "backed",
+      handle: "backer_d1",
+      thesisId: "3",
+      parentId: null,
+      amountMon: "0.2",
+      count: 20,
+      at: 1_700_000_999,
+    },
+    expect.objectContaining({ handle: "backer_d2", thesisId: "3", count: 1 }),
+    expect.objectContaining({ handle: "backer_d1", thesisId: "2", count: 1 }),
+  ]);
+  expect(runtime.latest).toHaveBeenCalledWith(100);
 });

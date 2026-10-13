@@ -10,4 +10,10 @@ export type MeasuredRun = {
   confirmP95Ms: number;
   indexMedianMs: number | null;
 };
-export const MEASURED_RUN: MeasuredRun | null = null;
+export const MEASURED_RUN: MeasuredRun | null = {
+  recordedAt: "2026-10-13T07:45:23Z",
+  samples: 20,
+  confirmMedianMs: 417.5,
+  confirmP95Ms: 423,
+  indexMedianMs: 580.5,
+};

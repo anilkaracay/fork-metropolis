@@ -15,6 +15,8 @@ const MARKETS: Record<number, "BTC" | "ETH" | "SOL" | "MON"> = {
   64: "MON",
 };
 const EVENT_LIMIT = 12;
+// Backings read to build the strip. Repeated backings of one idea by one wallet become one event.
+const BACKING_READ = 100;
 const TREE_LIMIT = 9;
 // The hosted indexer allows a limited number of requests a minute, shared by every visitor,
 // and a read takes several queries. So one read serves everyone for a short while; a read
@@ -31,8 +33,10 @@ export type LandingEvent = {
   thesisId: string;
   // The idea a fork grew from.
   parentId: string | null;
-  // What a backing sent, in MON.
+  // What a backing sent, in MON. For grouped backings, their total.
   amountMon: string | null;
+  // How many backings by this wallet of this idea the event stands for.
+  count: number;
   // Unix seconds, from the block that carried the event.
   at: number;
 };
@@ -140,7 +144,7 @@ async function readIndexer(): Promise<LandingLive | null> {
     const [{ nodes, bounded }, totals, backings] = await Promise.all([
       core.graph.recent(),
       source ? source.totals() : null,
-      source ? source.latest(EVENT_LIMIT) : [],
+      source ? source.latest(BACKING_READ) : [],
     ]);
     const first = nodes[0];
     if (!first) return null;
@@ -162,6 +166,32 @@ async function readIndexer(): Promise<LandingLive | null> {
     const shown = lineage.slice(0, TREE_LIMIT);
 
     const recent = nodes.slice(0, EVENT_LIMIT);
+    // Newest first: the first backing seen for a wallet and idea carries the group's time.
+    const grouped = new Map<
+      string,
+      {
+        thesisId: string;
+        backer: string;
+        wei: bigint;
+        count: number;
+        at: number;
+      }
+    >();
+    for (const event of backings) {
+      const key = `${event.backer}:${event.thesisId}`;
+      const group = grouped.get(key);
+      if (group) {
+        group.wei += BigInt(event.amountWei);
+        group.count += 1;
+      } else
+        grouped.set(key, {
+          thesisId: event.thesisId,
+          backer: event.backer,
+          wei: BigInt(event.amountWei),
+          count: 1,
+          at: event.timestamp,
+        });
+    }
     const backedIds = backings.map((event) => event.thesisId);
     const wanted = new Map<string, GraphThesis>();
     for (const node of [...recent, ...shown]) wanted.set(node.thesisId, node);
@@ -193,17 +223,19 @@ async function readIndexer(): Promise<LandingLive | null> {
           thesisId: node.thesisId,
           parentId: node.parentId === "0" ? null : node.parentId,
           amountMon: null,
+          count: 1,
           at: node.createdAt,
         })),
-      ...backings
-        .filter((event) => readable(event.thesisId))
-        .map((event) => ({
+      ...[...grouped.values()]
+        .filter((group) => readable(group.thesisId))
+        .map((group) => ({
           kind: "backed" as const,
-          handle: identity(event.backer).handle,
-          thesisId: event.thesisId,
+          handle: identity(group.backer).handle,
+          thesisId: group.thesisId,
           parentId: null,
-          amountMon: formatMon(event.amountWei),
-          at: event.timestamp,
+          amountMon: formatMon(group.wei),
+          count: group.count,
+          at: group.at,
         })),
     ]
       .sort((a, b) => b.at - a.at)
