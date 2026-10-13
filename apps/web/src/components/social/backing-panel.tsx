@@ -65,9 +65,9 @@ export function BackingPanel({ thesisId }: { thesisId: string }) {
     sent = total(data.sent),
     received = total(data.received);
   return (
-    <section className="backing-panel" aria-label="Backing">
+    <section className="backing-panel v2-card" aria-label="Backing">
       <div className="backing-total">
-        <span className="eyebrow">Backed</span>
+        <span className="v2-label">Backing</span>
         <strong>
           <Ticker
             value={Number(formatEther(BigInt(summary.totalWei)))}
@@ -83,9 +83,8 @@ export function BackingPanel({ thesisId }: { thesisId: string }) {
       </div>
       {data.earlyBackers.length > 0 && (
         <div className="backing-early">
-          <span className="eyebrow">
-            Early supporters · {data.earlyBackers.length} of{" "}
-            {EARLY_BACKER_LIMIT}
+          <span className="v2-label">
+            Early supporters, {data.earlyBackers.length} of {EARLY_BACKER_LIMIT}
           </span>
           <ol>
             {data.earlyBackers.map((person, index) => (
@@ -99,14 +98,30 @@ export function BackingPanel({ thesisId }: { thesisId: string }) {
                   title={`@${person.handle}`}
                 >
                   <Avatar
-                    small
+                    size={30}
                     name={person.displayName}
                     wallet={person.wallet}
+                    handle={person.handle}
                   />
                   <span className="sr-only">@{person.handle}</span>
                 </Link>
               </li>
             ))}
+            {Array.from(
+              {
+                length: Math.min(
+                  3,
+                  EARLY_BACKER_LIMIT - data.earlyBackers.length,
+                ),
+              },
+              (_, index) => (
+                <li
+                  key={`open-${index}`}
+                  className="backing-open"
+                  aria-hidden="true"
+                />
+              ),
+            )}
           </ol>
         </div>
       )}

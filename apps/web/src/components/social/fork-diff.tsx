@@ -52,21 +52,22 @@ export function ForkDiff({
       aria-label={draft ? "Live draft comparison" : "Parent comparison"}
     >
       <div className="comparison-heading">
-        <span className="eyebrow">
+        <Icon name="fork" size={16} />
+        <span className="sr-only">
           {draft ? "Your contribution" : `Changes from #${parentId}`}
         </span>
         <h2>{draft ? "What changes?" : "What changed"}</h2>
-        <p>
-          Compared with <Link href={`/t/${parentId}`}>parent #{parentId}</Link>.
+        <span className="diff-from">
+          from <Link href={`/t/${parentId}`}>#{parentId}</Link>
+        </span>
+        <p className="diff-status" role="status" aria-live="polite">
+          {changes.length
+            ? `${changes.length} ${changes.length === 1 ? "change" : "changes"}${draft ? " in your draft" : ""}`
+            : draft
+              ? "No changes yet. Make this perspective your own."
+              : "No differences available."}
         </p>
       </div>
-      <p className="diff-status" role="status" aria-live="polite">
-        {changes.length
-          ? `${changes.length} ${changes.length === 1 ? "change" : "changes"}${draft ? " in your draft" : " from its parent"}`
-          : draft
-            ? "No changes yet. Make this perspective your own."
-            : "No differences available."}
-      </p>
       <div className="diff-list">
         {changes.map((c) =>
           c.field === "reasoning" ||
@@ -74,10 +75,11 @@ export function ForkDiff({
           c.field === "tags" ? (
             <details className="diff-text" key={c.field}>
               <summary>
-                <strong>{c.label}</strong>
-                <span>
-                  Modified <Icon name="arrow" size={14} />
+                <span className="diff-sign" aria-hidden="true">
+                  ~
                 </span>
+                <strong>{c.label}</strong>
+                <span>modified</span>
               </summary>
               <div className="text-comparison">
                 <div>
@@ -92,14 +94,22 @@ export function ForkDiff({
             </details>
           ) : (
             <div className="diff-row" data-diff-field={c.field} key={c.field}>
-              <strong>
-                {c.label}
-                <small>Changed</small>
-              </strong>
-              <div>
+              <div className="diff-line removed">
+                <span className="diff-sign" aria-hidden="true">
+                  −
+                </span>
+                <strong>{c.label}</strong>
                 <del>{differenceValue(c.field, c.before)}</del>
-                <Icon name="arrow" size={15} />
-                <span>{differenceValue(c.field, c.after)}</span>
+              </div>
+              <div className="diff-line added">
+                <span className="diff-sign" aria-hidden="true">
+                  +
+                </span>
+                <strong aria-hidden="true">{c.label}</strong>
+                <ins>
+                  <span className="sr-only">changed to </span>
+                  {differenceValue(c.field, c.after)}
+                </ins>
               </div>
             </div>
           ),
@@ -129,12 +139,12 @@ export function ForkDiff({
       )}
       {!!unchanged.length && (
         <div className="unchanged-list">
-          <span className="eyebrow">Unchanged</span>
+          <span className="sr-only">Unchanged</span>
           {unchanged.map(([field, label]) => (
             <div key={field}>
+              <span className="diff-sign" aria-hidden="true" />
               <span>{label}</span>
               <strong>{differenceValue(field, String(core[field]))}</strong>
-              <small>Same</small>
             </div>
           ))}
         </div>

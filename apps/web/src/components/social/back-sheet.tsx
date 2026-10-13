@@ -177,7 +177,7 @@ export function BackSheet({
     >
       <div className="back-sheet-body">
         <header className="back-sheet-head">
-          <span className="eyebrow">Idea #{thesisId}</span>
+          <span className="back-sheet-kicker">Idea #{thesisId}</span>
           <button
             type="button"
             className="back-sheet-close"
@@ -298,7 +298,10 @@ export function BackSheet({
                         checked={choice === preset}
                         onChange={() => setChoice(preset)}
                       />
-                      <span>{preset} MON</span>
+                      <span>
+                        {preset}
+                        <span className="sr-only"> MON</span>
+                      </span>
                     </label>
                   ))}
                   <label className="back-preset">
@@ -406,10 +409,10 @@ export function BackSheet({
                 {alreadyBacker
                   ? "You already back this idea. Backing again adds to your support."
                   : data && data.summary.backers < EARLY_BACKER_LIMIT && !own
-                    ? `The first ${EARLY_BACKER_LIMIT} backers are recorded as early supporters. ${data.summary.backers} so far.`
+                    ? `You will be supporter ${data.summary.backers + 1} of the first ${EARLY_BACKER_LIMIT}.`
                     : null}{" "}
-                Testnet MON has no monetary value. Ideas here are opinions, not
-                financial advice.
+                Signed with your wallet on Monad Testnet. Testnet MON has no
+                monetary value.
               </p>
             </m.form>
           )}
@@ -454,7 +457,12 @@ function SplitRow({
     name = person?.displayName ?? `${credit.recipient.slice(0, 6)}…`;
   return (
     <li className="back-split-row">
-      <Avatar small name={name} wallet={credit.recipient} />
+      <Avatar
+        size={36}
+        name={name}
+        wallet={credit.recipient}
+        handle={person?.handle}
+      />
       <span className="back-split-who">
         <strong>{person ? `@${person.handle}` : name}</strong>
         <small>{roleNote(credit, backedId)}</small>
