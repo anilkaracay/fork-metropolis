@@ -117,6 +117,7 @@ const source: BackingSource = {
           },
         ]
       : [],
+  latest: async () => [],
   flows: async (ids) =>
     flows.filter(
       (f) => ids.includes(f.sourceThesisId) || ids.includes(f.creditedThesisId),

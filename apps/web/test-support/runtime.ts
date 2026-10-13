@@ -166,6 +166,10 @@ async function create(): Promise<TestRuntime> {
         .slice(0, limit);
       return z.array(backingRows.event).parse(rows);
     },
+    async latest(limit) {
+      const rows = [...(await backed()).backings].reverse().slice(0, limit);
+      return z.array(backingRows.placedEvent).parse(rows);
+    },
     async flows(thesisIds) {
       return z
         .array(backingRows.flow)

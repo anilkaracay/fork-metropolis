@@ -176,10 +176,10 @@ test("one cross-product journey preserves the approved landing, lineage and prof
   test.skip(process.env.FORK_SMOKE_LIVE !== "1", "Real production only.");
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
-  await loaded(page, ".landing-node");
+  await loaded(page, ".l-realtree .tr-node");
   await capture(page, "journey-landing");
   await page
-    .getByRole("link", { name: "Explore FORK", exact: true })
+    .getByRole("link", { name: "Open FORK", exact: true })
     .first()
     .click();
   await loaded(page, ".thesis-card");
