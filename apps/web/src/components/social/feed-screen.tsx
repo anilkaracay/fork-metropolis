@@ -123,7 +123,7 @@ export function FeedScreen() {
         <YourEarnings />
         <TopLineage />
         <div className="v2-card rail-card">
-          <h4>Markets</h4>
+          <h2 className="rail-heading">Markets</h2>
           <div className="rail-markets">
             {["MON", "ETH", "BTC", "SOL"].map((symbol) => (
               <Link
@@ -161,7 +161,7 @@ function TopLineage() {
   if (!top) return null;
   return (
     <div className="v2-card rail-card">
-      <h4>Most forked lineage</h4>
+      <h2 className="rail-heading">Most forked lineage</h2>
       <ol className="rail-lineage">
         {top.nodes.slice(0, 5).map((node) => (
           <li key={node.id} style={{ paddingLeft: `${node.depth * 18}px` }}>
@@ -197,7 +197,7 @@ function YourEarnings() {
   const { earnings } = profile;
   return (
     <div className="v2-card rail-card">
-      <h4>Your ideas</h4>
+      <h2 className="rail-heading">Your ideas</h2>
       <p className="v2-k">Earned from forks</p>
       <p className="rail-figure">
         <span>{formatMon(earnings.earnedFromForksWei)}</span>

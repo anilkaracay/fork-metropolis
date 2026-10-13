@@ -198,7 +198,7 @@ export function DetailScreen({ id }: { id: string }) {
       <aside className="detail-rail">
         {item.metadataState === "trusted" && <BackingPanel thesisId={id} />}
         <section className="v2-card rail-card lineage-card">
-          <h4>Lineage</h4>
+          <h2 className="rail-heading">Lineage</h2>
           <ol className="lineage-list">
             {item.parent && (
               <li>

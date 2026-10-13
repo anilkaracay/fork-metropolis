@@ -321,7 +321,7 @@ function ValueFlow({ tree, id }: { tree: ThesisTree; id: string }) {
   if (!sent.length && !received.length) return null;
   return (
     <div className="value-flow">
-      <h4>Value along the lineage</h4>
+      <h2 className="rail-heading">Value along the lineage</h2>
       <ul>
         {sent.map((flow) => (
           <li key={`out-${flow.creditedThesisId}`}>

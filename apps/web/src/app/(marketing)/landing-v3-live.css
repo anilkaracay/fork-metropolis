@@ -11,11 +11,6 @@ main.l3-main {
   align-items: center;
   gap: 8px;
 }
-.fk .l3-chip-count {
-  color: #f2f4f2;
-  border-left: 1px solid #2f3540;
-  padding-left: 8px;
-}
 .fk .l3-activity {
   border-top: 1px solid #1c2026;
   border-bottom: 1px solid #1c2026;

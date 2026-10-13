@@ -44,14 +44,9 @@ test("landing is server-rendered, public, and readable without JavaScript", asyn
   await expect(monad).toContainText("p95 840 ms");
   await expect(monad).toContainText("20 real backings");
   await expect(monad.locator(".g20 > div")).toHaveCount(20);
-  if (live) {
-    await expect(page.locator(".l3-chip-count")).toBeVisible();
-    await expect(page.locator(".l3-activity")).toBeVisible();
-  } else {
-    // A failed read shows no count and no strip, never a placeholder.
-    await expect(page.locator(".l3-chip-count")).toHaveCount(0);
-    await expect(page.locator(".l3-activity")).toHaveCount(0);
-  }
+  if (live) await expect(page.locator(".l3-activity")).toBeVisible();
+  // A failed read shows no strip, never a placeholder.
+  else await expect(page.locator(".l3-activity")).toHaveCount(0);
   // The parts that report the graph never contain an example character.
   for (const selector of [".l3-chip", ".l3-activity"])
     for (const text of await page.locator(selector).allInnerTexts())
@@ -59,18 +54,12 @@ test("landing is server-rendered, public, and readable without JavaScript", asyn
   await context.close();
 });
 
-test("the live parts count the graph and link real events", async ({
-  page,
-  request,
-}) => {
+test("the activity strip links real events", async ({ page, request }) => {
   test.skip(!live, "Needs an origin with indexed ideas.");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const feed = (await (await request.get("/api/explore")).json()).data.items;
   expect(feed.length).toBeGreaterThan(0);
-  await expect(page.locator(".l3-chip-count")).toHaveText(
-    `${feed.length} ${feed.length === 1 ? "idea" : "ideas"}`,
-  );
   // The strip holds real events: each one links to the idea it is about.
   const events = page.locator(".l3-activity .l3-track").first();
   const links = await events.getByRole("link").all();

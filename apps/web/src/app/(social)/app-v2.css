@@ -676,7 +676,8 @@
   .rail-card {
     padding: 20px;
   }
-  .rail-card h4 {
+  .rail-card h4,
+  .rail-card .rail-heading {
     margin: 0 0 14px;
     font-size: 13px;
     font-weight: 500;
@@ -1868,7 +1869,8 @@
     border-top: 1px solid var(--v2-line);
     background: none;
   }
-  .value-flow h4 {
+  .value-flow h4,
+  .value-flow .rail-heading {
     margin: 0 0 10px;
     font-size: 13px;
     font-weight: 500;

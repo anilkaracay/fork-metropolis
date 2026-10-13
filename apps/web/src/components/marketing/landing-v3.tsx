@@ -27,7 +27,6 @@ export function LandingV3({
   live: LandingLive | null;
   run: MeasuredRun & { indexMedianMs: number };
 }) {
-  const ideas = live?.ideas ?? null;
   return (
     <div className="fk">
       <section
@@ -80,7 +79,7 @@ export function LandingV3({
             <a className="l" href="#monad">
               Monad
             </a>
-            <NavChip ideas={ideas} />
+            <NavChip />
             <Link
               className="btn pri"
               style={{ height: "44px", padding: "0 18px" }}

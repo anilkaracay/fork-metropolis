@@ -1,11 +1,11 @@
 import Link from "next/link";
 import type { LandingEvent } from "@/server/landing";
 
-// The two parts of the landing page that report the live graph. They render only what the
+// The part of the landing page that reports the live graph. They render only what the
 // indexer returned for this request; the example characters never appear here.
 
-/** The nav chip: the network, and the real idea count when the read succeeded. */
-export function NavChip({ ideas }: { ideas: number | null }) {
+/** The nav chip: the network the product runs on. */
+export function NavChip() {
   return (
     <span
       className="mono hideM l3-chip"
@@ -18,11 +18,6 @@ export function NavChip({ ideas }: { ideas: number | null }) {
       }}
     >
       Monad Testnet
-      {ideas !== null && (
-        <span className="l3-chip-count">
-          {ideas} {ideas === 1 ? "idea" : "ideas"}
-        </span>
-      )}
     </span>
   );
 }
