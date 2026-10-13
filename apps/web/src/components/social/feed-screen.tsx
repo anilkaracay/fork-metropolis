@@ -6,6 +6,7 @@ import type { FeedMode, FeedThesis } from "@fork/shared";
 import { api } from "@/lib/api-client";
 import { ThesisCard } from "./thesis-card";
 import {
+  Avatar,
   EmptyState,
   ErrorState,
   Skeleton,
@@ -120,6 +121,7 @@ export function FeedScreen() {
       </section>
       <aside className="context-rail">
         <YourEarnings />
+        <TopLineage />
         <div className="v2-card rail-card">
           <h4>Markets</h4>
           <div className="rail-markets">
@@ -136,6 +138,54 @@ export function FeedScreen() {
           </div>
         </div>
       </aside>
+    </div>
+  );
+}
+type TopTree = {
+  rootId: string;
+  nodes: {
+    id: string;
+    depth: number;
+    handle: string;
+    backedMon: string | null;
+    arrivedMon: string | null;
+  }[];
+} | null;
+/** The largest real lineage on FORK, with what each idea received. */
+function TopLineage() {
+  const top = useQuery({
+    queryKey: ["lineage-top"],
+    queryFn: () => api<TopTree>("lineage/top"),
+    staleTime: 30000,
+  }).data;
+  if (!top) return null;
+  return (
+    <div className="v2-card rail-card">
+      <h4>Most forked lineage</h4>
+      <ol className="rail-lineage">
+        {top.nodes.slice(0, 5).map((node) => (
+          <li key={node.id} style={{ paddingLeft: `${node.depth * 18}px` }}>
+            <Avatar
+              name={node.handle}
+              wallet={node.handle}
+              handle={node.handle}
+              size={26}
+            />
+            <Link href={`/t/${node.id}`}>@{node.handle}</Link>
+            <span className="rail-id">#{node.id}</span>
+            <span className="rail-value">
+              {node.arrivedMon
+                ? `+${node.arrivedMon}`
+                : node.backedMon
+                  ? `${node.backedMon} MON`
+                  : ""}
+            </span>
+          </li>
+        ))}
+      </ol>
+      <Link href={`/t/${top.rootId}/tree`} className="rail-link">
+        Open Idea Tree <Icon name="arrow" size={15} />
+      </Link>
     </div>
   );
 }

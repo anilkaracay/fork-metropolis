@@ -95,6 +95,10 @@ export type FeedThesis = {
   challenge: boolean;
   social: { agrees: number; comments: number };
   backing: BackingSummary;
+  // Up to three of the first backers, as people. Absent in older responses.
+  firstBackers?: AuthorIdentity[];
+  // What backing of this idea's forks has sent back to it, in wei.
+  arrivedFromForksWei?: string;
   execution: {
     state: "not-executed" | "attested" | "verified";
     position: "unknown" | "open" | "closed";
@@ -187,6 +191,12 @@ export type ProfileSummary = {
   support: SupportSummary;
   // Where claimable earnings are withdrawn from; null while backing is not live.
   backingContract: string | null;
+  // Value that backing of other people's forks sent to this author, per fork.
+  forkEarnings?: {
+    thesisId: string;
+    author: AuthorIdentity;
+    amountWei: string;
+  }[];
   recent: FeedThesis[];
   scope: { chainId: number; registryAddress: string; wallet: string };
 };

@@ -2255,3 +2255,80 @@
     }
   }
 }
+
+/* Card backing row: the first backers as people, and value that came back from forks. */
+.backed-chip .backer-faces {
+  display: inline-flex;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.backed-chip .backer-faces .avatar {
+  margin-left: -6px;
+  box-shadow: 0 0 0 2px var(--v2-card, #14171c);
+}
+.backed-chip .backer-faces .avatar:first-child {
+  margin-left: 0;
+}
+.from-forks {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--v2-back, #c5b6ff);
+  white-space: nowrap;
+}
+
+/* Profile: per-fork earnings inside the Earned from forks card. */
+.fork-earnings {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.fork-earnings li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  border-top: 1px solid #3a3166;
+}
+.fork-earnings a {
+  flex: 1;
+  color: #e6e1fb;
+  font-size: 15px;
+}
+.fork-earnings span:last-child {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--v2-back, #c5b6ff);
+}
+
+/* Feed rail: the largest real lineage. */
+.rail-lineage {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.rail-lineage li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  font-size: 14px;
+}
+.rail-lineage a {
+  color: var(--v2-text, #f2f4f2);
+}
+.rail-lineage .rail-id {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--v2-dim, #858d88);
+}
+.rail-lineage .rail-value {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--v2-back, #c5b6ff);
+}

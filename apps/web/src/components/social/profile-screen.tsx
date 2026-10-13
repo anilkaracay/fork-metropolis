@@ -332,6 +332,24 @@ function Earnings({
             {formatMon(earnings.earnedFromForksWei)} <small>MON</small>
           </dd>
           <p>Income that arrives because someone else improved these ideas.</p>
+          {!!profile.forkEarnings?.length && (
+            <ul className="fork-earnings">
+              {profile.forkEarnings.map((row) => (
+                <li key={row.thesisId}>
+                  <Avatar
+                    name={row.author.displayName}
+                    wallet={row.author.wallet}
+                    handle={row.author.handle}
+                    size={28}
+                  />
+                  <Link href={`/t/${row.thesisId}`}>
+                    via {row.author.handle}’s fork, #{row.thesisId}
+                  </Link>
+                  <span>{formatMon(row.amountWei)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div>
           <dt>Earned as author</dt>

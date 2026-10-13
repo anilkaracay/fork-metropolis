@@ -213,6 +213,19 @@ export function ThesisCard({
             className="backed-chip"
             title="Backed with testnet MON, split along the lineage"
           >
+            {!!item.firstBackers?.length && (
+              <span className="backer-faces" aria-hidden="true">
+                {item.firstBackers.map((person) => (
+                  <Avatar
+                    key={person.wallet}
+                    name={person.displayName}
+                    wallet={person.wallet}
+                    handle={person.handle}
+                    size={26}
+                  />
+                ))}
+              </span>
+            )}
             {formatMon(item.backing.totalWei)} MON backed
             <small>
               {item.backing.backers}{" "}
@@ -222,6 +235,22 @@ export function ThesisCard({
         ) : (
           <span className="card-unbacked">
             No backing yet. Be the first of ten early supporters.
+          </span>
+        )}
+        {item.arrivedFromForksWei && item.arrivedFromForksWei !== "0" && (
+          <span
+            className="from-forks"
+            title="Value that backing of this idea's forks sent back to it"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 3 21 12 12 21 3 12Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+              />
+            </svg>
+            +{formatMon(item.arrivedFromForksWei)} from forks
           </span>
         )}
         <div className="social-counts">
