@@ -21,6 +21,7 @@ import type { Session } from "@/server/auth";
 import { walletError } from "@/lib/wallet-error";
 import { api, ApiError } from "@/lib/api-client";
 import { RECEIPT_POLL_MS } from "@/lib/confirmation";
+import { takeConsent } from "@/lib/consent";
 import {
   backCalldata,
   creationCalldata,
@@ -57,6 +58,9 @@ export default function PrivySession({
         supportedChains: [monadTestnet],
         embeddedWallets: {
           ethereum: { createOnLogin: "all-users" },
+          // FORK's own buttons are the consent (D-061). Privy's screens returned the hash
+          // only after their success step, so no confirmation time could be measured.
+          showWalletUIs: false,
         },
       }}
     >
@@ -183,6 +187,7 @@ function SessionBridge({ children }: { children: ReactNode }) {
     },
     selectWallet,
     submit: async (intent: PublishIntent) => {
+      takeConsent("publish");
       try {
         return await (
           await signer()
@@ -195,6 +200,7 @@ function SessionBridge({ children }: { children: ReactNode }) {
       }
     },
     back: async (contract, thesisId, amountWei) => {
+      takeConsent("back");
       try {
         return await (
           await signer()
@@ -208,6 +214,7 @@ function SessionBridge({ children }: { children: ReactNode }) {
       }
     },
     withdraw: async (contract) => {
+      takeConsent("withdraw");
       try {
         return await (
           await signer()
@@ -239,11 +246,18 @@ function SessionBridge({ children }: { children: ReactNode }) {
       }));
     },
     confirm: async (txHash, started) => {
-      const receipt = await monad.waitForTransactionReceipt({
-        hash: txHash,
-        pollingInterval: RECEIPT_POLL_MS,
-        timeout: 30000,
-      });
+      // A receipt that already exists means the hash arrived after the block: there is
+      // nothing honest to measure, so no time is shown.
+      const early = await monad
+        .getTransactionReceipt({ hash: txHash })
+        .catch(() => null);
+      const receipt =
+        early ??
+        (await monad.waitForTransactionReceipt({
+          hash: txHash,
+          pollingInterval: RECEIPT_POLL_MS,
+          timeout: 30000,
+        }));
       if (receipt.status !== "success")
         throw new ApiError(
           "TX_REVERTED",
@@ -251,6 +265,7 @@ function SessionBridge({ children }: { children: ReactNode }) {
           "Review the details and try again.",
           409,
         );
+      if (early) return null;
       return {
         txHash,
         latencyMs: performance.now() - started,
@@ -258,6 +273,13 @@ function SessionBridge({ children }: { children: ReactNode }) {
       };
     },
     signTypedData: async (data: TypedDataDefinition) => {
+      if (process.env.NODE_ENV !== "development")
+        throw new ApiError(
+          "NOT_AVAILABLE",
+          "Development signing check is unavailable.",
+          "Return to Feed.",
+          404,
+        );
       try {
         return await (await signer()).signTypedData(data);
       } catch (error) {

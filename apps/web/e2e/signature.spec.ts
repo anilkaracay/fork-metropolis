@@ -168,7 +168,7 @@ test("fork editing shows canonical changes, revert and invalid-field recovery wi
   }
   // Unchanged publishing behavior is exercised by the existing social journey.
   await expect(
-    page.getByRole("button", { name: "Publish fork", exact: true }),
+    page.getByRole("button", { name: "Publish fork on Monad", exact: true }),
   ).toBeEnabled();
 });
 test("root, unavailable metadata and unknown identities keep honest recovery states", async ({

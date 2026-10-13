@@ -21,6 +21,7 @@ import {
   saveConfirmation,
   type Confirmation,
 } from "@/lib/confirmation";
+import { grantConsent } from "@/lib/consent";
 import { formatMon, parseMon, percentOf } from "@/lib/mon";
 import { Ticker } from "@/components/ui/motion";
 import { useSession } from "./session";
@@ -200,7 +201,7 @@ export function BackSheet({
       const started = performance.now();
       setStep("confirming");
       const confirmation = await auth.confirm(txHash, started);
-      saveConfirmation(confirmation);
+      if (confirmation) saveConfirmation(confirmation);
       setOutcome({ txHash, amount, credits, confirmation });
       setStep("done");
       // The indexer follows the chain. Refresh once it has this backing, or after a short wait.
@@ -357,6 +358,7 @@ export function BackSheet({
               transition={{ type: "spring", stiffness: 380, damping: 32 }}
               onSubmit={(event) => {
                 event.preventDefault();
+                grantConsent("back", event.nativeEvent);
                 void back();
               }}
             >
@@ -498,7 +500,7 @@ export function BackSheet({
                 {!session
                   ? "Sign in to back"
                   : step === "wallet"
-                    ? "Confirm in your wallet…"
+                    ? "Signing…"
                     : step === "confirming"
                       ? "Waiting for Monad…"
                       : amount
