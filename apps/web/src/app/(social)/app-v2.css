@@ -1784,6 +1784,11 @@
     font-weight: 600;
     color: var(--v2-text);
   }
+  .node-actions a {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
   .node-actions a + a {
     color: var(--v2-fork);
     background: #141c16;
@@ -2003,5 +2008,245 @@
   }
   .unchanged-list strong {
     font: 15px/1.5 var(--font-mono);
+  }
+}
+
+/* Profile */
+:root .app-layout {
+  .profile-screen {
+    max-width: 936px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .profile-screen .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin: 0;
+    padding: 28px;
+    background: var(--v2-card);
+    border: 1px solid var(--v2-card-line);
+    border-radius: 22px;
+  }
+  .profile-screen .profile-header > .avatar {
+    width: 88px;
+    height: 88px;
+    margin: 0;
+  }
+  .profile-name {
+    flex: 1;
+    min-width: 0;
+  }
+  .profile-screen .profile-name h1 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .profile-name > span {
+    display: block;
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--v2-dim);
+  }
+  .profile-screen .profile-bio {
+    margin: 6px 0 0;
+    padding: 0;
+    border: 0;
+    font-size: 15px;
+    color: var(--v2-muted);
+  }
+  .profile-screen .profile-wallet {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 14px 0 0;
+    padding: 0;
+    border: 0;
+    font-size: 13px;
+    color: var(--v2-dim);
+  }
+  .profile-wallet code {
+    padding: 6px 10px;
+    border: 1px solid var(--v2-ghost-line);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--v2-muted);
+  }
+  .profile-screen .profile-header > button {
+    align-self: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    background: var(--v2-card);
+    border: 1px solid var(--v2-ghost-line);
+    color: var(--v2-text);
+    font-weight: 600;
+  }
+  .profile-account {
+    padding: 16px 20px;
+    background: var(--v2-card);
+    border: 1px solid var(--v2-card-line);
+    border-radius: 22px;
+  }
+  .profile-account .account-wallet {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .reputation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    background: var(--v2-card);
+    border: 1px solid var(--v2-card-line);
+    border-radius: 22px;
+    overflow: hidden;
+  }
+  .reputation-grid > div {
+    padding: 18px 20px;
+    border: 0;
+    border-right: 1px solid var(--v2-card-line);
+  }
+  .reputation-grid > div:last-child {
+    border-right: 0;
+  }
+  .reputation-grid > div > span {
+    font-size: 12px;
+    color: var(--v2-dim);
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+  .reputation-grid strong {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--v2-text);
+  }
+  .reputation-grid p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--v2-muted);
+  }
+  .earnings {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .earnings dd small,
+  .backing-total strong small {
+    margin-left: 2px;
+  }
+  .earnings > div {
+    margin: 0;
+    padding: 20px;
+    background: var(--v2-card);
+    border: 1px solid var(--v2-card-line);
+    border-radius: 22px;
+  }
+  .earnings dt {
+    font-size: 12px;
+    color: var(--v2-dim);
+  }
+  .earnings dd {
+    margin: 6px 0 0;
+    font-family: var(--font-mono);
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    color: var(--v2-text);
+  }
+  .earnings dd small {
+    font-size: 14px;
+    color: var(--v2-dim);
+  }
+  .earnings p {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--v2-muted);
+  }
+  .earnings .earnings-forks {
+    grid-row: span 3;
+    padding: 26px;
+    background: #191433;
+    border-color: #3a3166;
+  }
+  .earnings-forks dt {
+    font-size: 13px;
+    color: var(--v2-back);
+  }
+  .earnings-forks dd {
+    font-size: 64px;
+    letter-spacing: -0.05em;
+    color: var(--v2-back);
+  }
+  .earnings-forks dd small {
+    font-size: 18px;
+    color: #a99ce0;
+  }
+  .earnings-forks p {
+    font-size: 14px;
+    color: #cfc6f5;
+  }
+  .earnings-claimable dd {
+    color: var(--v2-back);
+  }
+  .earnings-claimable .v2-btn {
+    margin-top: 12px;
+  }
+  .profile-screen .v2-seg {
+    align-self: flex-start;
+  }
+  .reputation-explanation {
+    margin: 0;
+    padding: 16px 20px;
+    border: 1px solid var(--v2-card-line);
+    border-radius: 18px;
+    background: var(--v2-card);
+    color: var(--v2-muted);
+    font-size: 13px;
+  }
+  @media (max-width: 860px) {
+    .profile-screen .profile-header {
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 16px;
+    }
+    .profile-screen .profile-header > .avatar {
+      width: 64px;
+      height: 64px;
+    }
+    .profile-screen .profile-name h1 {
+      font-size: 26px;
+    }
+    .reputation-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .reputation-grid > div {
+      border-right: 0;
+      border-bottom: 1px solid var(--v2-card-line);
+    }
+    .reputation-grid > div:last-child {
+      border-bottom: 0;
+    }
+    .earnings {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .earnings .earnings-forks {
+      grid-row: auto;
+    }
+    .earnings-forks dd {
+      font-size: 48px;
+    }
   }
 }

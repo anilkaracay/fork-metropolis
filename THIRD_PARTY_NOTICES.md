@@ -31,6 +31,10 @@ Static files under `apps/web/public/landing/`. The avatars, token marks and the 
 | Privy logo (`logos/privy.png`) | Unmodified from `public/privy-logo.png` in https://github.com/privy-io/create-next-app at commit `c38a828`. The logo is Privy's property and is used to name the service FORK is built with, under https://www.privy.io/brand-guidelines |
 | Envio logo (`logos/envio.png`) | Unmodified `logos/envio-logo-primary.png` from https://github.com/enviodev/brandkit at commit `f89b246`. Used to name the service FORK is built with, under https://envio.dev/brand-assets/LICENSE.txt |
 
+## In-app avatars
+
+Product screens show each person with a DiceBear "Notionists" avatar seeded by their handle, rendered on request by `apps/web/src/app/avatar/[seed]/route.ts` with `@dicebear/core` 10.7.0 and `@dicebear/styles` 10.6.0 (both MIT). The Notionists artwork is a remix of Notionists by Zoish, released under CC0 1.0. https://www.dicebear.com/styles/notionists/
+
 The people on the landing page (mira, theo, lena, kaan, deniz, umut, ada, emre) are illustrations. They are not users, and the page labels every scene they appear in as an example.
 
 `docs/assets/stage-a/references/` contains historical screenshots of third-party sites used for design research. They are not FORK product images, are not evidence of endorsements and remain the property of their respective owners. Any FORK source license excludes those third-party materials and preserves upstream notices. No third-party product screenshot is used as the README hero or submission product footage.
