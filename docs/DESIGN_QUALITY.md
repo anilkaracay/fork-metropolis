@@ -16,6 +16,14 @@ Lighthouse 12.8.2, default mobile emulation with simulated throttling, performan
 | 4 | 93 | 100 | 1.1 s | 3.2 s | 80 ms | 0 |
 | 5 | 93 | 100 | 1.1 s | 3.2 s | 70 ms | 0 |
 
+The same settings against the deployed page at https://forktrades.xyz on 2026-10-13, image `fork-metropolis:submission-20261013a`, three consecutive runs:
+
+| Run | Performance | Accessibility | FCP | LCP | TBT | CLS |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 90 | 100 | 1.3 s | 2.9 s | 90 ms | 0 |
+| 2 | 94 | 100 | 1.1 s | 2.8 s | 100 ms | 0 |
+| 3 | 92 | 100 | 1.5 s | 2.4 s | 190 ms | 0 |
+
 The largest paint is the hero's lead paragraph. Three fixes got the page here from a first pass at 85 to 86 performance and 97 accessibility:
 
 - The hero headline faded in from zero opacity, which delays the largest paint until the animation runs. It is now painted from the first frame and only comes into focus.
@@ -49,7 +57,6 @@ Against the local production build with the live indexer (`FORK_SMOKE_LIVE=1`), 
 
 ### Not done
 
-- No Lighthouse run against forktrades.xyz: the page is not deployed.
 - No screen reader pass with a human listener.
 - Motion was judged from captures and recordings, not on a phone in hand.
 
