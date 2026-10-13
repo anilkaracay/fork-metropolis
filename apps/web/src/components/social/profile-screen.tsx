@@ -89,8 +89,8 @@ export function ProfileScreen({ handle }: { handle: string }) {
           handle={p.identity.handle}
         />
         <div className="profile-name">
-          <h1>@{p.identity.handle}</h1>
-          <span>{p.identity.displayName}</span>
+          <h1>{p.identity.displayName}</h1>
+          <span>@{p.identity.handle}</span>
           {p.bio && <p className="profile-bio">{p.bio}</p>}
           <div className="profile-wallet">
             <code title={p.identity.wallet}>
@@ -149,7 +149,7 @@ export function ProfileScreen({ handle }: { handle: string }) {
           <span>Originality</span>
           <strong>{r.originality.label}</strong>
           <p>
-            {r.successfulRoots} of {r.eligibleRoots} original ideas that others
+            {r.successfulRoots} / {r.eligibleRoots} original ideas that others
             forked
           </p>
         </div>
@@ -157,7 +157,7 @@ export function ProfileScreen({ handle }: { handle: string }) {
           <span>Contribution</span>
           <strong>{r.contribution.label}</strong>
           <p>
-            {r.successfulForks} of {r.eligibleForks} forks that others forked
+            {r.successfulForks} / {r.eligibleForks} forks that others forked
           </p>
         </div>
         <div>
