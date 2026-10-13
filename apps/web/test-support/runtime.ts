@@ -3,7 +3,12 @@ import { eq, sql } from "drizzle-orm";
 import { testDatabase } from "@fork/db/testing";
 import { schema } from "@fork/db";
 import { keccak256, stringToHex } from "viem";
-import { MIN_BACKING_WEI, resolveMvpContext, splitBacking } from "@fork/shared";
+import {
+  MIN_BACKING_WEI,
+  resolveMvpContext,
+  splitBacking,
+  type BackingCredit,
+} from "@fork/shared";
 import fixture from "../../../packages/shared/test/fixtures/perpl-context-2026-10-04.json";
 import type { Runtime } from "../src/server/runtime";
 import type { GraphSource } from "../src/server/graph";
@@ -72,6 +77,7 @@ type TestRuntime = Runtime & {
     amountWei: bigint,
   ): Promise<{ txHash: string }>;
   withdraw(session: Session): Promise<{ txHash: string }>;
+  previewSplit(thesisId: string, amountWei: bigint): Promise<BackingCredit[]>;
   setFaucetBalance(balance: bigint): void;
   reset(): Promise<void>;
   context: ReturnType<typeof resolveMvpContext>;
@@ -314,6 +320,39 @@ async function create(): Promise<TestRuntime> {
     new Set([testIdentities.carol.did]),
     { source: backingSource, address: backingAddress },
   );
+  // What FORKBacking.previewSplit returns for this graph.
+  async function split(thesisId: string, amountWei: bigint) {
+    const nodes = (await snapshot()).nodes,
+      find = (id: string) => nodes.find((node) => node.thesisId === id),
+      thesis = find(thesisId);
+    assert(
+      thesis,
+      "THESIS_NOT_FOUND",
+      "This idea could not be found.",
+      404,
+      "Return to Feed.",
+    );
+    const parent = find(thesis.parentId),
+      grandparent = parent && find(parent.parentId);
+    return {
+      thesis,
+      credits: splitBacking(
+        {
+          thesisId,
+          author: thesis.author,
+          parent: parent && {
+            thesisId: parent.thesisId,
+            author: parent.author,
+          },
+          grandparent: grandparent && {
+            thesisId: grandparent.thesisId,
+            author: grandparent.author,
+          },
+        },
+        amountWei,
+      ),
+    };
+  }
   return {
     core,
     auth,
@@ -373,17 +412,11 @@ async function create(): Promise<TestRuntime> {
       return { txHash };
     },
     // What FORKBacking.back would do, replayed through the real indexer handlers.
+    async previewSplit(thesisId, amountWei) {
+      return (await split(thesisId, amountWei)).credits;
+    },
     async back(session, thesisId, amountWei) {
-      const nodes = (await snapshot()).nodes,
-        find = (id: string) => nodes.find((node) => node.thesisId === id),
-        thesis = find(thesisId);
-      assert(
-        thesis,
-        "THESIS_NOT_FOUND",
-        "This idea could not be found.",
-        404,
-        "Return to Feed.",
-      );
+      const { thesis, credits } = await split(thesisId, amountWei);
       assert(
         thesis.author !== session.wallet,
         "SELF_BACKING",
@@ -405,23 +438,6 @@ async function create(): Promise<TestRuntime> {
         "Your wallet does not hold enough testnet MON.",
         409,
         "Choose a smaller amount or add testnet MON, then retry.",
-      );
-      const parent = find(thesis.parentId),
-        grandparent = parent && find(parent.parentId);
-      const credits = splitBacking(
-        {
-          thesisId,
-          author: thesis.author,
-          parent: parent && {
-            thesisId: parent.thesisId,
-            author: parent.author,
-          },
-          grandparent: grandparent && {
-            thesisId: grandparent.thesisId,
-            author: grandparent.author,
-          },
-        },
-        amountWei,
       );
       const before = await backed();
       const earlier = z

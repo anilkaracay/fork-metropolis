@@ -15,7 +15,7 @@ import {
 } from "@tanstack/react-query";
 import type { Hex, TypedDataDefinition } from "viem";
 import type { Session } from "@/server/auth";
-import type { PublishIntent } from "@fork/shared";
+import type { BackingCredit, PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
 import type { Confirmation } from "@/lib/confirmation";
 import { DevelopmentPublishObservation } from "./publish-observation";
@@ -37,6 +37,12 @@ export type SessionValue = {
   // Sends native MON to FORKBacking for one thesis, or collects the caller's credits.
   back: (contract: string, thesisId: string, amountWei: bigint) => Promise<Hex>;
   withdraw: (contract: string) => Promise<Hex>;
+  // FORKBacking.previewSplit, read from the chain rather than the indexer.
+  previewSplit: (
+    contract: string,
+    thesisId: string,
+    amountWei: bigint,
+  ) => Promise<BackingCredit[]>;
   // Resolves when this browser first sees the receipt; started is a performance.now() value.
   confirm: (txHash: Hex, started: number) => Promise<Confirmation>;
   signTypedData: (data: TypedDataDefinition) => Promise<Hex>;
@@ -75,6 +81,7 @@ const pendingSession: SessionValue = {
   submit: async () => Promise.reject(loading()),
   back: async () => Promise.reject(loading()),
   withdraw: async () => Promise.reject(loading()),
+  previewSplit: async () => Promise.reject(loading()),
   confirm: async () => Promise.reject(loading()),
   signTypedData: async () => Promise.reject(loading()),
   sendSelfTransaction: async () => Promise.reject(loading()),
@@ -320,6 +327,12 @@ function LocalSession({
       });
       return response.txHash;
     },
+    previewSplit: async (_contract, thesisId, amountWei) =>
+      (
+        await api<(Omit<BackingCredit, "amount"> & { amount: string })[]>(
+          `test/preview-split?thesisId=${thesisId}&amountWei=${amountWei}`,
+        )
+      ).map((credit) => ({ ...credit, amount: BigInt(credit.amount) })),
     // The test workspace has no chain: a submitted transaction is confirmed at once.
     confirm: async (txHash, started) => ({
       txHash,

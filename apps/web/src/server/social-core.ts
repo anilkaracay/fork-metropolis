@@ -489,6 +489,12 @@ export class SocialCore {
       ),
     };
   }
+  /** Where backing is sent in this deployment, from configuration alone. Null while it is not live. */
+  backingContract() {
+    return this.backing
+      ? { address: this.backing.address, chainId: this.namespace.chainId }
+      : null;
+  }
   /** Who a backing of this thesis is split between, what it has received and where it went. */
   async backingView(id: string): Promise<ThesisBackingView> {
     const thesis = await this.graph.get(id);
@@ -524,9 +530,7 @@ export class SocialCore {
     ]);
     return {
       thesisId: id,
-      contract: this.backing
-        ? { address: this.backing.address, chainId: this.namespace.chainId }
-        : null,
+      contract: this.backingContract(),
       lineage: chain.map(({ role, node }) => ({
         role,
         thesisId: node.thesisId,

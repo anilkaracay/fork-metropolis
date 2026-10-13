@@ -17,6 +17,8 @@ Every response has `{ok:true,data}` or `{ok:false,error:{code,message,recovery,r
 | GET /theses/:id | ThesisDetail, trusted/missing/integrity-mismatch/hidden metadata state, parent attribution/diff, 8 direct-child previews, latest 50 comments. |
 | GET /theses/:id/tree | ThesisTree, root/selected IDs, ancestry, 250 nodes plus selected ancestors, explicit truncation. |
 | GET /profiles/:handle | Identity, selected-wallet display, exact reputation aggregates and at most 100 recent authored ideas. |
+| GET /theses/:id/backing | ThesisBackingView: contract, the lineage a backing is split between, totals, early supporters, recent backings and value sent and received. |
+| GET /backing | The FORKBacking contract and chain from configuration, without the indexer, so Back stays usable when the backing read fails. Null while backing is not live. |
 | GET /context | Validated unauthenticated Perpl Testnet public context; local tests use the dated Phase 1 context fixture. |
 
 Bare route IDs resolve within the configured chain/registry namespace. Corrupted metadata is never returned as trusted reasoning. Hidden content is excluded from Feed/Explore; graph nodes and authorship remain visible in lineage.
@@ -47,7 +49,7 @@ Persistent atomic database limits: draft 20/hour; finalization 60/minute; Agree 
 
 ## Test-only routes
 
-`test/identity`, `test/submit`, `test/faucet` and `test/reset` exist only for the explicit development test workspace on loopback, with same-origin browser access. Submitted synthetic confirmations pass through normal draft/finalization/composition code and actual Envio test handlers. Production rejects test configuration and returns 404 for test routes. Tests never grant production reputation credit.
+`test/identity`, `test/submit`, `test/faucet`, `test/back`, `test/withdraw`, `test/preview-split` and `test/reset` exist only for the explicit development test workspace on loopback, with same-origin browser access. Submitted synthetic confirmations pass through normal draft/finalization/composition code and actual Envio test handlers. Production rejects test configuration and returns 404 for test routes. Tests never grant production reputation credit.
 
 ## Phase 3 readiness endpoints
 

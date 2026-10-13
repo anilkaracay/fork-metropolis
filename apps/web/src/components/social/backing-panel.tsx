@@ -9,22 +9,31 @@ import { Ticker } from "@/components/ui/motion";
 import { formatEther } from "viem";
 import { Avatar, age } from "./common";
 import { Icon } from "./icon";
-import { BackSheet, backingKey } from "./back-sheet";
+import { BackSheet, backingKey, useBackingContract } from "./back-sheet";
 
 const total = (flows: { amountWei: string }[]) =>
   flows.reduce((sum, flow) => sum + BigInt(flow.amountWei), 0n);
 const monLabel = (value: number) =>
   value.toLocaleString("en-US", { maximumFractionDigits: 4 });
 
-/** The Back button of a thesis. Renders nothing while backing is not live. */
-export function BackButton({ thesisId }: { thesisId: string }) {
-  const [open, setOpen] = useState(false);
-  const view = useQuery({
+function useBackingView(thesisId: string) {
+  return useQuery({
     queryKey: backingKey(thesisId),
     queryFn: () => api<ThesisBackingView>(`theses/${thesisId}/backing`),
     staleTime: 10000,
+    // One automatic retry. A later mount of the same failed read does not start another.
+    retry: 1,
+    retryOnMount: false,
   });
-  const live = Boolean(view.data?.contract);
+}
+
+/** The Back button of a thesis. Renders nothing while backing is not live. */
+export function BackButton({ thesisId }: { thesisId: string }) {
+  const [open, setOpen] = useState(false);
+  const view = useBackingView(thesisId),
+    configured = useBackingContract();
+  // A failed backing read does not hide Back: the contract comes from configuration.
+  const live = Boolean(view.data ? view.data.contract : configured.data);
   // A card's Back link lands here with #back: open the sheet once it can be used.
   useEffect(() => {
     if (!live || window.location.hash !== "#back") return;
@@ -54,12 +63,29 @@ export function BackButton({ thesisId }: { thesisId: string }) {
 
 /** What a thesis has received, who backed it first and where the value went. */
 export function BackingPanel({ thesisId }: { thesisId: string }) {
-  const view = useQuery({
-    queryKey: backingKey(thesisId),
-    queryFn: () => api<ThesisBackingView>(`theses/${thesisId}/backing`),
-    staleTime: 10000,
-  });
-  const data = view.data;
+  const view = useBackingView(thesisId),
+    configured = useBackingContract();
+  const data = view.data,
+    [failed, setFailed] = useState(false);
+  // A retry clears the error while it runs; the failure stays on screen until data arrives.
+  if (view.error && !failed) setFailed(true);
+  if (data && failed) setFailed(false);
+  if (!data && (view.error || failed) && configured.data)
+    return (
+      <section className="backing-panel v2-card" aria-label="Backing">
+        <p className="backing-failed" role="alert">
+          Backing could not load.
+        </p>
+        <button
+          type="button"
+          className="button secondary"
+          disabled={view.isFetching}
+          onClick={() => void view.refetch()}
+        >
+          {view.isFetching ? "Retrying…" : "Retry"}
+        </button>
+      </section>
+    );
   if (!data?.contract) return null;
   const { summary } = data,
     sent = total(data.sent),

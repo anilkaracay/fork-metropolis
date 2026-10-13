@@ -29,6 +29,18 @@ import { Icon } from "./icon";
 import { walletKey, type WalletAccount } from "./account-wallet";
 
 export const backingKey = (thesisId: string) => ["thesis-backing", thesisId];
+const ONE_MON = 10n ** 18n;
+/** Where backing goes, from configuration alone: it answers even when backing reads fail. */
+export function useBackingContract() {
+  return useQuery({
+    queryKey: ["backing-contract"],
+    queryFn: () =>
+      api<{ contract: ThesisBackingView["contract"] }>("backing").then(
+        (result) => result.contract,
+      ),
+    staleTime: Infinity,
+  });
+}
 const roleNote = (credit: BackingCredit, backedId: string) =>
   credit.role === 0
     ? "wrote this idea"
@@ -115,14 +127,20 @@ export function BackSheet({
     queryKey: backingKey(thesisId),
     queryFn: () => api<ThesisBackingView>(`theses/${thesisId}/backing`),
     staleTime: 10000,
+    retry: 1,
+    retryOnMount: false,
   });
+  const configured = useBackingContract();
   const account = client.getQueryData<WalletAccount>(
     walletKey(session?.wallet),
   );
   const data = view.data,
     author = data?.lineage[0]?.author,
     amount = choice === "custom" ? parseMon(custom) : parseMon(choice),
-    credits = useMemo(() => {
+    // When the backing read fails, the sheet still knows the contract and asks it for the split.
+    contract = data ? data.contract : configured.data,
+    onChain = !data && Boolean(view.error) && Boolean(contract),
+    fromLineage = useMemo(() => {
       if (!data || !amount) return [];
       const [own, parent, grandparent] = data.lineage;
       return splitBacking(
@@ -141,10 +159,22 @@ export function BackSheet({
         amount,
       );
     }, [data, amount]);
+  const preview = useQuery({
+    queryKey: ["back-split", thesisId, String(amount ?? ONE_MON)],
+    queryFn: () =>
+      auth.previewSplit(contract!.address, thesisId, amount ?? ONE_MON),
+    enabled: open && onChain,
+    staleTime: 30000,
+    retry: 1,
+  });
+  const credits = data ? fromLineage : amount ? (preview.data ?? []) : [];
   const people = new Map(
     data?.lineage.map((entry) => [entry.author.wallet, entry.author]),
   );
-  const own = Boolean(session && author && session.wallet === author.wallet),
+  const writer =
+      author?.wallet ??
+      preview.data?.find((credit) => credit.role === 0)?.recipient,
+    own = Boolean(session && writer && session.wallet === writer),
     balance = account ? BigInt(account.balanceWei) : null,
     alreadyBacker = data?.recent.some(
       (event) => event.backer.wallet === session?.wallet,
@@ -162,11 +192,11 @@ export function BackSheet({
 
   async function back() {
     if (!session) return auth.login();
-    if (!data?.contract || !amount || problem || own) return;
+    if (!contract || !amount || problem || own) return;
     setError(null);
     setStep("wallet");
     try {
-      const txHash = await auth.back(data.contract.address, thesisId, amount);
+      const txHash = await auth.back(contract.address, thesisId, amount);
       const started = performance.now();
       setStep("confirming");
       const confirmation = await auth.confirm(txHash, started);
@@ -396,20 +426,39 @@ export function BackSheet({
                   <div className="back-split-skeleton" role="status">
                     Reading the lineage…
                   </div>
-                ) : view.error ? (
+                ) : onChain && preview.data ? (
+                  <ul className="back-split">
+                    {preview.data.map((credit) => (
+                      <SplitRow
+                        key={credit.creditedThesisId + credit.role}
+                        credit={credit}
+                        total={amount ?? ONE_MON}
+                        person={undefined}
+                        backedId={thesisId}
+                        pending={!amount}
+                      />
+                    ))}
+                  </ul>
+                ) : onChain && preview.isFetching ? (
+                  <div className="back-split-skeleton" role="status">
+                    Reading the split from Monad…
+                  </div>
+                ) : !data ? (
                   <p className="back-problem" role="alert">
-                    The lineage could not be read.{" "}
+                    The split could not be read.{" "}
                     <button
                       type="button"
                       className="text-button"
-                      onClick={() => void view.refetch()}
+                      onClick={() =>
+                        void (onChain ? preview.refetch() : view.refetch())
+                      }
                     >
                       Try again
                     </button>
                   </p>
                 ) : (
                   <ul className="back-split">
-                    {(amount ? credits : splitPlaceholder(data!)).map(
+                    {(amount ? credits : splitPlaceholder(data)).map(
                       (credit) => (
                         <SplitRow
                           key={credit.creditedThesisId + credit.role}
@@ -443,7 +492,7 @@ export function BackSheet({
                   busy ||
                   own ||
                   (Boolean(session) &&
-                    (!amount || Boolean(problem) || !data?.contract))
+                    (!amount || Boolean(problem) || !contract))
                 }
               >
                 {!session

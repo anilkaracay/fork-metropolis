@@ -290,6 +290,14 @@
   padding: 20px 0 0;
   border-top: 1px solid var(--border);
 }
+.backing-failed {
+  margin: 0;
+  font-weight: 600;
+}
+.backing-failed + .button {
+  justify-self: start;
+  align-self: flex-start;
+}
 .backing-total strong {
   display: block;
   font-family: var(--font-mono);
