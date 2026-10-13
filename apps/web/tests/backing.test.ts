@@ -12,7 +12,7 @@ import { testDatabase } from "@fork/db/testing";
 import type { BackingSummary, GraphThesis, LineageFlow } from "@fork/shared";
 import { SocialCore } from "../src/server/social-core";
 import { synchronizeIdentity } from "../src/server/auth";
-import type { GraphSource } from "../src/server/graph";
+import { forgetEnvioAnswers, type GraphSource } from "../src/server/graph";
 import {
   backingRows,
   envioBacking,
@@ -239,7 +239,10 @@ describe("backing in the thesis views", () => {
 });
 
 describe("reading the backing graph from Envio", () => {
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    forgetEnvioAnswers();
+  });
   const respond = (data: unknown) =>
     vi.stubGlobal(
       "fetch",
