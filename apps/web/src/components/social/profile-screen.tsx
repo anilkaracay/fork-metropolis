@@ -14,7 +14,8 @@ import { AccountWallet } from "./account-wallet";
 import { requestHandleClaim } from "./handle-claim";
 import { formatMon } from "@/lib/mon";
 import { ApiError } from "@/lib/api-client";
-import { confirmationText, type Confirmation } from "@/lib/confirmation";
+import { confirmationText } from "@/lib/confirmation";
+import { useWithdraw } from "./withdraw";
 export function MyProfile() {
   const auth = useSession(),
     router = useRouter();
@@ -80,12 +81,47 @@ export function ProfileScreen({ handle }: { handle: string }) {
     );
   return (
     <div className="profile-screen social-polish">
-      <span className="eyebrow">A contributor to the idea graph</span>
       <header className="profile-header">
-        <Avatar name={p.identity.displayName} wallet={p.identity.wallet} />
+        <Avatar
+          size={88}
+          name={p.identity.displayName}
+          wallet={p.identity.wallet}
+          handle={p.identity.handle}
+        />
         <div className="profile-name">
           <h1>{p.identity.displayName}</h1>
           <span>@{p.identity.handle}</span>
+          {p.bio && <p className="profile-bio">{p.bio}</p>}
+          <div className="profile-wallet">
+            <code title={p.identity.wallet}>
+              {p.identity.wallet.slice(0, 6)}…{p.identity.wallet.slice(-4)}
+            </code>
+            <button
+              className="v2-btn v2-ghost v2-sm"
+              aria-label="Copy wallet address"
+              onClick={() => void copyWallet(p.identity.wallet)}
+            >
+              {copyState}
+            </button>
+            <span className="sr-only" role="status">
+              {copyState === "Copied"
+                ? "Wallet address copied."
+                : copyState === "Select wallet to copy"
+                  ? "Clipboard unavailable. Expand the wallet address below to select it."
+                  : ""}
+            </span>
+            <span>
+              {r.eligibleRoots}{" "}
+              {r.eligibleRoots === 1 ? "original idea" : "original ideas"},{" "}
+              {r.eligibleForks} {r.eligibleForks === 1 ? "fork" : "forks"}
+            </span>
+            {copyState === "Select wallet to copy" && (
+              <details className="wallet-copy-fallback" open>
+                <summary>Wallet address</summary>
+                <code>{p.identity.wallet}</code>
+              </details>
+            )}
+          </div>
         </div>
         {isOwner && (
           <button
@@ -96,7 +132,6 @@ export function ProfileScreen({ handle }: { handle: string }) {
           </button>
         )}
       </header>
-      {p.bio && <p className="profile-bio">{p.bio}</p>}
       {isOwner && (
         <div className="profile-account">
           {auth.session?.handleClaimed === false && (
@@ -107,66 +142,28 @@ export function ProfileScreen({ handle }: { handle: string }) {
           <AccountWallet />
         </div>
       )}
-      <div className="profile-wallet">
-        <span className="network-label">
-          <i />
-          Monad Testnet
-        </span>
-        <code title={p.identity.wallet}>
-          {p.identity.wallet.slice(0, 8)}…{p.identity.wallet.slice(-6)}
-        </code>
-        <button
-          className="text-button"
-          aria-label="Copy wallet address"
-          onClick={() => void copyWallet(p.identity.wallet)}
-        >
-          {copyState}
-        </button>
-        <span className="sr-only" role="status">
-          {copyState === "Copied"
-            ? "Wallet address copied."
-            : copyState === "Select wallet to copy"
-              ? "Clipboard unavailable. Expand the wallet address below to select it."
-              : ""}
-        </span>
-        {copyState === "Select wallet to copy" && (
-          <details className="wallet-copy-fallback" open>
-            <summary>Wallet address</summary>
-            <code>{p.identity.wallet}</code>
-          </details>
-        )}
-        <span>
-          {r.eligibleRoots}{" "}
-          {r.eligibleRoots === 1 ? "original idea" : "original ideas"} ·{" "}
-          {r.eligibleForks} {r.eligibleForks === 1 ? "fork" : "forks"}
-        </span>
-      </div>
       {editing && <ProfileEditor profile={p} />}
-      <div className="section-title reputation-heading">
-        <h2>A reputation you can trace.</h2>
-        <span>Counted from the public graph</span>
-      </div>
+      <h2 className="sr-only">A reputation you can trace</h2>
       <div className="reputation-grid">
         <div>
           <span>Originality</span>
           <strong>{r.originality.label}</strong>
           <p>
-            {r.successfulRoots} / {r.eligibleRoots} roots received an external
-            fork
+            {r.successfulRoots} / {r.eligibleRoots} original ideas that others
+            forked
           </p>
         </div>
         <div>
           <span>Contribution</span>
           <strong>{r.contribution.label}</strong>
           <p>
-            {r.successfulForks} / {r.eligibleForks} forks received an external
-            fork
+            {r.successfulForks} / {r.eligibleForks} forks that others forked
           </p>
         </div>
         <div>
           <span>Influence</span>
           <strong>{r.influence}</strong>
-          <p>Unique external wallets directly forking authored ideas</p>
+          <p>Distinct people who forked these ideas</p>
         </div>
       </div>
       <Earnings profile={p} owner={isOwner} />
@@ -212,19 +209,13 @@ export function ProfileScreen({ handle }: { handle: string }) {
           Moderation queue <Icon name="arrow" size={15} />
         </Link>
       )}
-      <div className="section-title profile-work-heading">
-        <h2>Ideas & contributions</h2>
-        <span>
-          {r.eligibleRoots} {r.eligibleRoots === 1 ? "original" : "originals"} ·{" "}
-          {r.eligibleForks} {r.eligibleForks === 1 ? "fork" : "forks"}
-        </span>
-      </div>
+      <h2 className="sr-only">Ideas and contributions</h2>
       <ReadStatus
         error={query.error}
         refreshing={query.isFetching}
         retry={() => void query.refetch()}
       />
-      <div className="feed-tabs" role="group" aria-label="Profile activity">
+      <div className="v2-seg" role="group" aria-label="Profile activity">
         {(["all", "roots", "forks"] as const).map((t) => (
           <button
             key={t}
@@ -232,11 +223,7 @@ export function ProfileScreen({ handle }: { handle: string }) {
             aria-pressed={tab === t}
             onClick={() => setTab(t)}
           >
-            {t === "all"
-              ? "Recent activity"
-              : t === "roots"
-                ? "Original ideas"
-                : "Forks"}
+            {t === "all" ? "Ideas" : t === "roots" ? "Originals" : "Forks"}
           </button>
         ))}
       </div>
@@ -331,45 +318,21 @@ function Earnings({
   profile: ProfileSummary;
   owner: boolean;
 }) {
-  const auth = useSession(),
-    client = useQueryClient(),
-    [step, setStep] = useState<"idle" | "wallet" | "confirming">("idle"),
-    [error, setError] = useState<unknown>(null),
-    [confirmation, setConfirmation] = useState<Confirmation | null>(null);
-  const contract = profile.backingContract;
-  if (!contract) return null;
+  const { step, error, confirmation, withdraw } = useWithdraw(profile);
+  if (!profile.backingContract) return null;
   const { earnings, support } = profile,
     claimable = BigInt(earnings.claimableWei);
-  async function withdraw() {
-    setError(null);
-    setStep("wallet");
-    try {
-      const txHash = await auth.withdraw(contract!);
-      const started = performance.now();
-      setStep("confirming");
-      setConfirmation(await auth.confirm(txHash, started));
-      // The indexer follows the chain: refresh once it shows the balance as collected.
-      for (let attempt = 0; attempt < 15; attempt++) {
-        const latest = await api<ProfileSummary>(
-          `profiles/${profile.identity.handle}`,
-        ).catch(() => null);
-        if (latest?.earnings.claimableWei === "0") break;
-        await new Promise((done) => setTimeout(done, 1000));
-      }
-      await client.invalidateQueries();
-    } catch (failure) {
-      setError(failure);
-    } finally {
-      setStep("idle");
-    }
-  }
   return (
     <section aria-label="Backing earned and given">
-      <div className="section-title reputation-heading">
-        <h2>Value that followed the ideas.</h2>
-        <span>Testnet MON · split along each lineage</span>
-      </div>
+      <h2 className="sr-only">Value that followed the ideas</h2>
       <dl className="earnings">
+        <div className="earnings-forks">
+          <dt>Earned from forks</dt>
+          <dd>
+            {formatMon(earnings.earnedFromForksWei)} <small>MON</small>
+          </dd>
+          <p>Income that arrives because someone else improved these ideas.</p>
+        </div>
         <div>
           <dt>Earned as author</dt>
           <dd>
@@ -378,22 +341,15 @@ function Earnings({
           <p>From backing of ideas this author wrote.</p>
         </div>
         <div>
-          <dt>Earned from forks</dt>
-          <dd>
-            {formatMon(earnings.earnedFromForksWei)} <small>MON</small>
-          </dd>
-          <p>From backing of other people’s forks of these ideas.</p>
-        </div>
-        <div>
           <dt>Early support</dt>
           <dd>{support.earlySupportCount}</dd>
           <p>
-            Ideas backed among the first ten. {support.thesesBacked}{" "}
+            Ideas backed among their first ten. {support.thesesBacked}{" "}
             {support.thesesBacked === 1 ? "idea" : "ideas"} backed with{" "}
             {formatMon(support.totalBackedWei)} MON in total.
           </p>
         </div>
-        <div>
+        <div className="earnings-claimable">
           <dt>Claimable</dt>
           <dd>
             {formatMon(claimable)} <small>MON</small>
@@ -401,7 +357,7 @@ function Earnings({
           <p>{formatMon(earnings.withdrawnWei)} MON withdrawn so far.</p>
           {owner && claimable > 0n && (
             <button
-              className="button primary"
+              className="v2-btn v2-back"
               disabled={step !== "idle"}
               onClick={() => void withdraw()}
             >

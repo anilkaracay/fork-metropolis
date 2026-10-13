@@ -181,7 +181,7 @@ test("an author cannot back their own idea, and earnings can be withdrawn", asyn
 
   await page.goto(`/t/${leaf}`);
   await signIn(page, "carol");
-  await page.getByRole("button", { name: /^Back/ }).click();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
   const sheet = page.getByRole("dialog", { name: /Back @carol's idea/ });
   await expect(
     sheet.getByText("You wrote this idea. Backing comes from other people."),

@@ -151,8 +151,8 @@ for (const width of [1440, 1024, 768, 390, 375])
     await capture(page, `handle-claim-${width}`);
     await dialog.getByRole("button", { name: "Claim handle" }).click();
     await expect(dialog).toBeHidden();
-    // Phones have no sidebar: the wallet sits on the owner's profile there.
-    if (width <= 680)
+    // Below 860px there is no sidebar: the wallet sits on the owner's profile there.
+    if (width < 860)
       await page.getByRole("link", { name: "Profile", exact: true }).click();
     const wallet = page.getByRole("region", { name: "Your wallet" });
     await expect(wallet.locator(".wallet-balance")).toHaveText("0.2 MON");

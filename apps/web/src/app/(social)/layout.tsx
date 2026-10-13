@@ -6,6 +6,7 @@ import { testMode } from "@/server/runtime";
 import "./signature.css";
 import "./polish.css";
 import "./backing.css";
+import "./app-v2.css";
 
 export default function SocialLayout({ children }: { children: ReactNode }) {
   return (

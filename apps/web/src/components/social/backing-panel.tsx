@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { EARLY_BACKER_LIMIT, type ThesisBackingView } from "@fork/shared";
 import { api } from "@/lib/api-client";
@@ -24,7 +24,15 @@ export function BackButton({ thesisId }: { thesisId: string }) {
     queryFn: () => api<ThesisBackingView>(`theses/${thesisId}/backing`),
     staleTime: 10000,
   });
-  if (!view.data?.contract) return null;
+  const live = Boolean(view.data?.contract);
+  // A card's Back link lands here with #back: open the sheet once it can be used.
+  useEffect(() => {
+    if (!live || window.location.hash !== "#back") return;
+    window.history.replaceState(null, "", window.location.pathname);
+    const opening = setTimeout(() => setOpen(true));
+    return () => clearTimeout(opening);
+  }, [live]);
+  if (!live) return null;
   return (
     <>
       <button
@@ -32,11 +40,8 @@ export function BackButton({ thesisId }: { thesisId: string }) {
         className="button secondary back-button"
         onClick={() => setOpen(true)}
       >
-        <Icon name="stake" size={17} />
+        <Icon name="diamond" size={16} />
         Back
-        {view.data.summary.backers > 0 && (
-          <span>{formatMon(view.data.summary.totalWei)}</span>
-        )}
       </button>
       <BackSheet
         thesisId={thesisId}
@@ -60,9 +65,9 @@ export function BackingPanel({ thesisId }: { thesisId: string }) {
     sent = total(data.sent),
     received = total(data.received);
   return (
-    <section className="backing-panel" aria-label="Backing">
+    <section className="backing-panel v2-card" aria-label="Backing">
       <div className="backing-total">
-        <span className="eyebrow">Backed</span>
+        <span className="v2-label">Backing</span>
         <strong>
           <Ticker
             value={Number(formatEther(BigInt(summary.totalWei)))}
@@ -78,9 +83,8 @@ export function BackingPanel({ thesisId }: { thesisId: string }) {
       </div>
       {data.earlyBackers.length > 0 && (
         <div className="backing-early">
-          <span className="eyebrow">
-            Early supporters · {data.earlyBackers.length} of{" "}
-            {EARLY_BACKER_LIMIT}
+          <span className="v2-label">
+            Early supporters, {data.earlyBackers.length} of {EARLY_BACKER_LIMIT}
           </span>
           <ol>
             {data.earlyBackers.map((person, index) => (
@@ -94,14 +98,30 @@ export function BackingPanel({ thesisId }: { thesisId: string }) {
                   title={`@${person.handle}`}
                 >
                   <Avatar
-                    small
+                    size={30}
                     name={person.displayName}
                     wallet={person.wallet}
+                    handle={person.handle}
                   />
                   <span className="sr-only">@{person.handle}</span>
                 </Link>
               </li>
             ))}
+            {Array.from(
+              {
+                length: Math.min(
+                  3,
+                  EARLY_BACKER_LIMIT - data.earlyBackers.length,
+                ),
+              },
+              (_, index) => (
+                <li
+                  key={`open-${index}`}
+                  className="backing-open"
+                  aria-hidden="true"
+                />
+              ),
+            )}
           </ol>
         </div>
       )}

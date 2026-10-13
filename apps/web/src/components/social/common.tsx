@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { ApiError } from "@/lib/api-client";
 import { Icon } from "./icon";
 export function ErrorState({
@@ -91,18 +92,27 @@ export function ReadStatus({
 export function Avatar({
   name,
   wallet,
+  handle,
   small = false,
+  size,
 }: {
   name: string;
   wallet: string;
+  handle?: string | undefined;
   small?: boolean;
+  size?: number;
 }) {
   const palette = ["#2d493e", "#41415c", "#594435", "#344d61", "#584552"];
   const index = parseInt(wallet.slice(-4) || "0", 16) % palette.length;
+  const [failed, setFailed] = useState(false);
+  const seed = handle && /^[a-z0-9_]{1,32}$/.test(handle) ? handle : null;
   return (
     <span
       className={`avatar ${small ? "small" : ""}`}
-      style={{ background: palette[index] }}
+      style={{
+        background: palette[index],
+        ...(size ? { width: size, height: size, fontSize: size * 0.36 } : {}),
+      }}
       aria-hidden="true"
     >
       {name
@@ -111,7 +121,40 @@ export function Avatar({
         .slice(0, 2)
         .join("")
         .toUpperCase()}
+      {seed && !failed && (
+        // A static, cacheable SVG from our own route; next/image adds nothing here.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={`/avatar/${seed}`}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          onError={() => setFailed(true)}
+        />
+      )}
     </span>
+  );
+}
+const TOKEN_MARKS = ["ETH", "BTC", "SOL", "USDC", "MON"];
+/** A market's token mark, from the static marks the landing page ships. */
+export function TokenMark({
+  symbol,
+  size = 26,
+}: {
+  symbol: string;
+  size?: number;
+}) {
+  if (!TOKEN_MARKS.includes(symbol)) return null;
+  return (
+    // Static SVG marks; next/image adds nothing for them.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      className="token-mark"
+      src={`/landing/tokens/${symbol.toLowerCase()}.svg`}
+      alt=""
+      width={size}
+      height={size}
+    />
   );
 }
 export function age(seconds: number) {
