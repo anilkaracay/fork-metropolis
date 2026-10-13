@@ -217,8 +217,8 @@ test("public discovery and contributor filters use the real two-author dataset",
     page.locator('[data-thesis-id="2"] .card-change-summary'),
   ).toContainText("$4,400");
   for (const [label, mode] of [
-    ["Most Forked", "most-forked"],
-    ["Smart Signal", "smart-signal"],
+    ["Most forked", "most-forked"],
+    ["Smart signal", "smart-signal"],
     ["Fresh", "fresh"],
   ] as const) {
     const items = (await read<{ items: Item[] }>(request, `feed?mode=${mode}`))

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { EARLY_BACKER_LIMIT, type ThesisBackingView } from "@fork/shared";
 import { api } from "@/lib/api-client";
@@ -24,7 +24,15 @@ export function BackButton({ thesisId }: { thesisId: string }) {
     queryFn: () => api<ThesisBackingView>(`theses/${thesisId}/backing`),
     staleTime: 10000,
   });
-  if (!view.data?.contract) return null;
+  const live = Boolean(view.data?.contract);
+  // A card's Back link lands here with #back: open the sheet once it can be used.
+  useEffect(() => {
+    if (!live || window.location.hash !== "#back") return;
+    window.history.replaceState(null, "", window.location.pathname);
+    const opening = setTimeout(() => setOpen(true));
+    return () => clearTimeout(opening);
+  }, [live]);
+  if (!live) return null;
   return (
     <>
       <button
@@ -32,11 +40,8 @@ export function BackButton({ thesisId }: { thesisId: string }) {
         className="button secondary back-button"
         onClick={() => setOpen(true)}
       >
-        <Icon name="stake" size={17} />
+        <Icon name="diamond" size={16} />
         Back
-        {view.data.summary.backers > 0 && (
-          <span>{formatMon(view.data.summary.totalWei)}</span>
-        )}
       </button>
       <BackSheet
         thesisId={thesisId}

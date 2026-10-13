@@ -76,7 +76,7 @@ test("trusted Feed differences and Explore filters preserve root/fork discovery"
   await expect(card).toContainText(`Forked from #${root}`);
   await expect(card.locator(".card-change-summary")).toContainText("$4,200");
   await expect(card.locator(".card-change-summary")).toContainText("$4,400");
-  for (const name of ["Most Forked", "Smart Signal", "Fresh"]) {
+  for (const name of ["Most forked", "Smart signal", "Fresh"]) {
     await page.getByRole("button", { name, exact: true }).click();
     await expect(page.locator(".thesis-card")).toHaveCount(2);
   }

@@ -1,18 +1,106 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useSession } from "./social/session";
 import { Icon } from "./social/icon";
-import { Avatar } from "./social/common";
+import { Avatar, TokenMark } from "./social/common";
 import { AccountWallet, WelcomeDrip } from "./social/account-wallet";
 import { HandleClaim, requestHandleClaim } from "./social/handle-claim";
+import { useProfile, useWithdraw } from "./social/withdraw";
+import { formatMon } from "@/lib/mon";
+import { ApiError } from "@/lib/api-client";
 const navigation = [
   { name: "Feed", href: "/feed", icon: "feed" },
   { name: "Explore", href: "/explore", icon: "explore" },
   { name: "Create", href: "/new", icon: "create" },
   { name: "Profile", href: "/u/me", icon: "profile" },
 ] as const;
+function Logo() {
+  return (
+    <>
+      <span className="brand-mark">
+        <Icon name="fork" size={26} />
+      </span>
+      FORK<span className="brand-dot">.</span>
+    </>
+  );
+}
+/** The signed-in author's claimable MON, with the same Withdraw the profile offers. */
+function ClaimableCard() {
+  const auth = useSession(),
+    profile = useProfile(auth.session?.handle).data,
+    { step, error, withdraw } = useWithdraw(profile);
+  if (!profile?.backingContract) return null;
+  const claimable = BigInt(profile.earnings.claimableWei);
+  if (claimable === 0n && step === "idle" && !error) return null;
+  return (
+    <section className="v2-card claimable-card" aria-label="Claimable">
+      <span className="v2-label">Claimable</span>
+      <p className="claimable-amount">
+        <span>{formatMon(claimable)}</span>
+        <small>MON</small>
+      </p>
+      <button
+        type="button"
+        className="v2-btn v2-back v2-sm"
+        disabled={step !== "idle" || claimable === 0n}
+        onClick={() => void withdraw()}
+      >
+        {step === "wallet"
+          ? "Confirm in wallet…"
+          : step === "confirming"
+            ? "Waiting for Monad…"
+            : "Withdraw"}
+      </button>
+      {error ? (
+        <p role="alert" className="claimable-error">
+          {error instanceof Error
+            ? error.message
+            : "The withdrawal did not go through."}{" "}
+          {error instanceof ApiError ? error.recovery : "Try again."}
+        </p>
+      ) : null}
+    </section>
+  );
+}
+function MobileClaimable() {
+  const auth = useSession(),
+    profile = useProfile(auth.session?.handle).data;
+  if (!auth.session || !profile?.backingContract) return null;
+  const claimable = BigInt(profile.earnings.claimableWei);
+  if (claimable === 0n) return null;
+  return (
+    <Link className="mobile-claimable" href={`/u/${auth.session.handle}`}>
+      {formatMon(claimable)} claimable
+    </Link>
+  );
+}
+function TopSearch() {
+  const router = useRouter();
+  return (
+    <form
+      role="search"
+      className="top-search"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const term = new FormData(e.currentTarget).get("q");
+        router.push(
+          `/explore${typeof term === "string" && term.trim() ? `?q=${encodeURIComponent(term.trim())}` : ""}`,
+        );
+      }}
+    >
+      <Icon name="search" size={18} />
+      <input
+        type="search"
+        name="q"
+        placeholder="Search ideas, markets and people"
+        aria-label="Search"
+        maxLength={100}
+      />
+    </form>
+  );
+}
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname(),
     auth = useSession();
@@ -30,16 +118,12 @@ export function AppShell({ children }: { children: ReactNode }) {
       </a>
       <aside className={`sidebar ${auth.session ? "signed-in" : ""}`}>
         <Link className="brand" href="/feed" aria-label="FORK home">
-          <span className="brand-mark">
-            <Icon name="fork" size={28} />
-          </span>
-          FORK<span className="brand-dot">.</span>
+          <Logo />
         </Link>
-        <p className="brand-caption">Ideas evolve in public.</p>
         <nav aria-label="Main navigation" className="main-nav">
           {navigation.map((n) => (
             <Link
-              className={`nav-link ${active === n.name ? "active" : ""}`}
+              className={`nav-link ${active === n.name ? "active" : ""} nav-${n.icon}`}
               aria-current={active === n.name ? "page" : undefined}
               key={n.name}
               href={n.href}
@@ -50,24 +134,21 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Link>
           ))}
         </nav>
-        <div className="sidebar-note">
-          <Icon name="tree" />
-          <p>
-            A thesis is a beginning.
-            <br />
-            See where it branches.
-          </p>
-          <Link href="/explore">
-            Explore the idea graph <Icon name="arrow" size={14} />
-          </Link>
-        </div>
-        <div className="sidebar-account">
+        <p className="sidebar-network">
+          <TokenMark symbol="MON" size={18} />
+          Monad Testnet
+        </p>
+        <div className="sidebar-spacer" />
+        {auth.session && <ClaimableCard />}
+        <div className="sidebar-account v2-card">
           {auth.session ? (
             <>
               <Link href={`/u/${auth.session.handle}`} className="account-row">
                 <Avatar
+                  size={40}
                   name={auth.session.displayName}
                   wallet={auth.session.wallet}
+                  handle={auth.session.handle}
                 />
                 <span>
                   <strong>{auth.session.displayName}</strong>
@@ -83,7 +164,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </>
           ) : (
             <button
-              className="button secondary full"
+              className="v2-btn v2-ghost full"
               onClick={auth.login}
               aria-busy={!auth.ready}
             >
@@ -94,32 +175,32 @@ export function AppShell({ children }: { children: ReactNode }) {
       </aside>
       <div className="workspace">
         <header className="topbar">
-          <Link className="mobile-brand" href="/feed">
-            FORK<span>.</span>
+          <Link className="mobile-brand" href="/feed" aria-label="FORK home">
+            <Logo />
           </Link>
-          <span className="topbar-caption">
-            A network of ideas, built together.
-          </span>
+          <TopSearch />
           <div className="topbar-actions">
-            <span className="network-label">
-              <i />
-              Monad Testnet
-            </span>
+            <Link className="v2-btn v2-fork new-idea" href="/new">
+              <Icon name="create" size={18} />
+              <span>New idea</span>
+            </Link>
+            <MobileClaimable />
             {auth.session ? (
               <Link
-                className="mini-account"
+                className="v2-btn v2-ghost mini-account"
                 href={`/u/${auth.session.handle}`}
                 aria-label="Open your profile"
               >
                 <Avatar
-                  small
+                  size={30}
                   name={auth.session.displayName}
                   wallet={auth.session.wallet}
+                  handle={auth.session.handle}
                 />
               </Link>
             ) : (
-              <button className="text-button" onClick={auth.login}>
-                Sign in <Icon name="arrow" size={14} />
+              <button className="v2-btn v2-ghost" onClick={auth.login}>
+                Sign in
               </button>
             )}
           </div>
@@ -132,9 +213,6 @@ export function AppShell({ children }: { children: ReactNode }) {
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>
-        <footer className="product-footer">
-          Ideas are perspectives, not promises. Keep your reasoning visible.
-        </footer>
       </div>
       {auth.session && <WelcomeDrip key={auth.session.userId} />}
       <HandleClaim />

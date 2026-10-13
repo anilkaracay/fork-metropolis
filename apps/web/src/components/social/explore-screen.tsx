@@ -10,9 +10,11 @@ import { Icon } from "./icon";
 export function ExploreScreen({
   initialMarket = "",
   initialTag = "",
+  initialSearch = "",
 }: {
   initialMarket?: string;
   initialTag?: string;
+  initialSearch?: string;
 }) {
   const query = useQuery({
       queryKey: ["explore"],
@@ -25,7 +27,7 @@ export function ExploreScreen({
     context = useMarkets(),
     [market, setMarket] = useState(initialMarket),
     [tag, setTag] = useState(initialTag),
-    [search, setSearch] = useState(""),
+    [search, setSearch] = useState(initialSearch.slice(0, 100)),
     [kind, setKind] = useState("all"),
     [sort, setSort] = useState("newest");
   const data = query.data,
