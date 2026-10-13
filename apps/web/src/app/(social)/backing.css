@@ -22,6 +22,20 @@
 .back-sheet[open] {
   animation: back-sheet-in 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+/* From the signature request on, the sheet sits in the page, under the wallet's prompt. */
+.back-sheet.in-page {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  height: fit-content;
+  animation: none;
+}
+.back-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 69;
+  background: rgba(6, 8, 10, 0.72);
+}
 @keyframes back-sheet-in {
   from {
     opacity: 0;
