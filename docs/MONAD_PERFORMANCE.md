@@ -42,7 +42,9 @@ The summary gives the minimum, median, 95th percentile (nearest rank) and maximu
 
 ## What a user sees
 
-When someone publishes, forks or backs, the product shows how long their own transaction took: the time from the wallet returning the transaction hash to the first receipt the browser sees, polling every 100 ms. The code is in [`apps/web/src/lib/confirmation.ts`](../apps/web/src/lib/confirmation.ts). That value belongs to one transaction in one browser and is never aggregated or reused as a claim.
+When someone publishes, forks, backs or withdraws, the product shows how long their own transaction took: the time from the wallet returning the transaction hash, right after broadcast, to the first receipt the browser sees, polling every 100 ms. The code is in [`apps/web/src/lib/confirmation.ts`](../apps/web/src/lib/confirmation.ts) and the `confirm` step of [`privy-session.tsx`](../apps/web/src/components/social/privy-session.tsx). That value belongs to one transaction in one browser and is never aggregated or reused as a claim.
+
+Before 2026-10-13 (D-061) Privy's transaction screens returned the hash only after their own success step, so the time shown was a lookup of a receipt that already existed, not a confirmation time. Those screens are now off and FORK's buttons are the consent. If a receipt already exists when the hash arrives, the product shows no time rather than a wrong one.
 
 ## Reading the numbers
 

@@ -18,6 +18,7 @@ import type { Session } from "@/server/auth";
 import type { BackingCredit, PublishIntent } from "@fork/shared";
 import { api, ApiError } from "@/lib/api-client";
 import type { Confirmation } from "@/lib/confirmation";
+import { takeConsent } from "@/lib/consent";
 import { DevelopmentPublishObservation } from "./publish-observation";
 import { MotionRoot } from "@/components/ui/motion";
 
@@ -44,7 +45,8 @@ export type SessionValue = {
     amountWei: bigint,
   ) => Promise<BackingCredit[]>;
   // Resolves when this browser first sees the receipt; started is a performance.now() value.
-  confirm: (txHash: Hex, started: number) => Promise<Confirmation>;
+  // Null when no honest measurement exists for this transaction.
+  confirm: (txHash: Hex, started: number) => Promise<Confirmation | null>;
   signTypedData: (data: TypedDataDefinition) => Promise<Hex>;
   sendSelfTransaction: () => Promise<Hex>;
   // Account actions the sign-in provider offers for this user; null when not applicable.
@@ -295,6 +297,7 @@ function LocalSession({
     },
     selectWallet: async () => {},
     submit: async (_intent, draftId) => {
+      takeConsent("publish");
       if (!test)
         throw new ApiError(
           "CONFIGURATION_REQUIRED",
@@ -311,6 +314,7 @@ function LocalSession({
       return response.txHash;
     },
     back: async (_contract, thesisId, amountWei) => {
+      takeConsent("back");
       const response = await api<{ txHash: Hex }>("test/back", {
         method: "POST",
         body: { thesisId, amountWei: amountWei.toString() },
@@ -320,6 +324,7 @@ function LocalSession({
       return response.txHash;
     },
     withdraw: async () => {
+      takeConsent("withdraw");
       const response = await api<{ txHash: Hex }>("test/withdraw", {
         method: "POST",
         token: accessToken,
