@@ -24,7 +24,10 @@ import { RECEIPT_POLL_MS } from "@/lib/confirmation";
 import {
   backCalldata,
   creationCalldata,
+  forkBackingAbi,
   withdrawCalldata,
+  type BackingCredit,
+  type BackingRole,
   type PublishIntent,
 } from "@fork/shared";
 
@@ -215,6 +218,25 @@ function SessionBridge({ children }: { children: ReactNode }) {
       } catch (error) {
         throw walletError(error);
       }
+    },
+    previewSplit: async (contract, thesisId, amountWei) => {
+      const credits = (await monad.readContract({
+        address: contract as Address,
+        abi: forkBackingAbi,
+        functionName: "previewSplit",
+        args: [BigInt(thesisId), amountWei],
+      })) as readonly {
+        recipient: Address;
+        creditedThesisId: bigint;
+        role: number;
+        amount: bigint;
+      }[];
+      return credits.map((credit): BackingCredit => ({
+        recipient: credit.recipient.toLowerCase(),
+        creditedThesisId: credit.creditedThesisId.toString(),
+        role: credit.role as BackingRole,
+        amount: credit.amount,
+      }));
     },
     confirm: async (txHash, started) => {
       const receipt = await monad.waitForTransactionReceipt({

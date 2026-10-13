@@ -164,6 +164,59 @@ test("backing a fork shows the split, confirms, and credits the whole lineage", 
   await expect(chip).toContainText("1 backer");
 });
 
+test("a failed backing read keeps Back and the panel, and retries once", async ({
+  page,
+  request,
+}) => {
+  const { leaf } = await lineage(request);
+  // The indexer read fails; configuration and the chain still answer.
+  const backing = `**/api/theses/${leaf}/backing`;
+  let reads = 0;
+  await page.route(backing, async (route) => {
+    reads++;
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: false,
+        error: {
+          code: "GRAPH_UNAVAILABLE",
+          message: "The idea graph is not reachable.",
+          recovery: "Try again.",
+        },
+      }),
+    });
+  });
+  await page.goto(`/t/${leaf}`);
+  const panel = page.getByRole("region", { name: "Backing", exact: true });
+  await expect(panel).toContainText("Backing could not load.");
+  await expect(panel.getByRole("button", { name: "Retry" })).toBeVisible();
+  // One automatic retry, then the person decides.
+  expect(reads).toBe(2);
+
+  await signIn(page, "dana");
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  const sheet = page.locator("dialog.back-sheet");
+  // The split comes from previewSplit: 70%, 20% and 10% of the preselected 0.1 MON.
+  const rows = sheet
+    .getByRole("region", { name: "Where it goes" })
+    .getByRole("listitem");
+  await expect(rows).toHaveCount(3);
+  await expect(rows.nth(0)).toContainText("0.07 MON");
+  await expect(rows.nth(1)).toContainText("0.02 MON");
+  await expect(rows.nth(2)).toContainText("0.01 MON");
+  await expect(
+    sheet.getByRole("button", { name: "Back with 0.1 MON" }),
+  ).toBeEnabled();
+  await sheet.getByRole("button", { name: "Close" }).click();
+  await expect(sheet).toBeHidden();
+
+  // When reads recover, Retry restores the panel.
+  await page.unroute(backing);
+  await panel.getByRole("button", { name: "Retry" }).click();
+  await expect(panel).toContainText("No backers yet.");
+});
+
 test("an author cannot back their own idea, and earnings can be withdrawn", async ({
   page,
   request,

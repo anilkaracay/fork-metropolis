@@ -136,6 +136,23 @@ export async function handleApi(request: Request, path: string[]) {
           await runtime.back(session, v.thesisId, BigInt(v.amountWei)),
         );
       }
+      if (route === "test/preview-split" && method === "GET") {
+        const credits = await runtime.previewSplit(
+          uint64IdSchema.parse(url.searchParams.get("thesisId")),
+          BigInt(
+            z
+              .string()
+              .regex(/^\d{1,30}$/)
+              .parse(url.searchParams.get("amountWei")),
+          ),
+        );
+        return reply(
+          credits.map((credit) => ({
+            ...credit,
+            amount: credit.amount.toString(),
+          })),
+        );
+      }
       if (route === "test/withdraw" && method === "POST")
         return reply(
           await runtime.withdraw(
@@ -214,6 +231,9 @@ export async function handleApi(request: Request, path: string[]) {
         return reply(await core.feed(mode, offset));
       }
       if (route === "explore") return reply(await core.explore());
+      // Read without the indexer, so Back stays usable when backing reads fail.
+      if (route === "backing")
+        return reply({ contract: core.backingContract() });
       if (path[0] === "theses" && path.length === 2)
         return reply(await core.detail(uint64IdSchema.parse(path[1])));
       if (path[0] === "theses" && path[2] === "backing" && path.length === 3)
