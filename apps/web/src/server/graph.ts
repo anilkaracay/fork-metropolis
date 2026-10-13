@@ -88,12 +88,32 @@ export function normalizeGraph(input: unknown): GraphThesis {
     },
   });
 }
+// The hosted indexer allows 100 requests a minute for the whole site, and one page read
+// costs several. So an identical query is answered once for a few seconds and shared by
+// requests that arrive together. When the indexer refuses or fails, the last answer to the
+// same query stands in for up to a minute; after that the read fails closed as before.
+const FRESH_MS = 5_000;
+const STALE_MS = 60_000;
+const ANSWER_LIMIT = 500;
+type Data = Record<string, unknown>;
+const answers = new Map<string, { at: number; data: Data }>();
+const pending = new Map<string, Promise<Data>>();
+/** Drops every held answer. For tests. */
+export function forgetEnvioAnswers() {
+  answers.clear();
+  pending.clear();
+}
+function remember(key: string, data: Data) {
+  answers.delete(key);
+  answers.set(key, { at: Date.now(), data });
+  // Oldest first: a Map keeps insertion order.
+  while (answers.size > ANSWER_LIMIT)
+    answers.delete(answers.keys().next().value!);
+}
+
 /** Posts one GraphQL query to the Envio endpoint and returns its data, or fails closed. */
 export function envioQuery(endpoint: string) {
-  return async function query(
-    query: string,
-    variables: Record<string, unknown>,
-  ) {
+  async function ask(body: string): Promise<Data> {
     const response = z
       .object({
         data: z.record(z.string(), z.unknown()).optional(),
@@ -103,7 +123,7 @@ export function envioQuery(endpoint: string) {
         await fetchJson(endpoint, {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ query, variables }),
+          body,
         }),
       );
     if (response.errors?.length || !response.data)
@@ -114,6 +134,31 @@ export function envioQuery(endpoint: string) {
         "Retry after the indexer recovers.",
       );
     return response.data;
+  }
+  return async function query(
+    query: string,
+    variables: Record<string, unknown>,
+  ) {
+    const body = JSON.stringify({ query, variables }),
+      key = `${endpoint}\n${body}`,
+      held = answers.get(key);
+    if (held && Date.now() - held.at < FRESH_MS) return held.data;
+    let asking = pending.get(key);
+    if (!asking) {
+      asking = ask(body)
+        .then((data) => {
+          remember(key, data);
+          return data;
+        })
+        .finally(() => pending.delete(key));
+      pending.set(key, asking);
+    }
+    try {
+      return await asking;
+    } catch (error) {
+      if (held && Date.now() - held.at < STALE_MS) return held.data;
+      throw error;
+    }
   };
 }
 export function envioGraph(
