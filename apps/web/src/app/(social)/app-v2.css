@@ -959,14 +959,14 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin: 0;
     padding: 0;
     border: 0;
   }
   .detail-actions .button {
     min-height: 44px;
-    padding: 0 18px;
+    padding: 0 16px;
     border-radius: 12px;
     font-size: 15px;
     font-weight: 600;
@@ -999,7 +999,7 @@
   }
   .detail-actions .text-button {
     min-height: 44px;
-    padding: 0 8px;
+    padding: 0 4px;
     font-size: 14px;
     color: var(--v2-muted);
   }
@@ -2147,6 +2147,7 @@
   .earnings dd small,
   .backing-total strong small {
     margin-left: 2px;
+    letter-spacing: 0;
   }
   .earnings > div {
     margin: 0;

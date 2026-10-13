@@ -34,7 +34,6 @@ function ago(at: number, now: number) {
   if (seconds < 172800) return `${Math.round(seconds / 3600)} h ago`;
   return `${Math.round(seconds / 86400)} d ago`;
 }
-const initials = (handle: string) => handle.replace(/^u_/, "").slice(0, 2);
 
 function Event({ event, now }: { event: LandingEvent; now: number }) {
   const said =
@@ -54,9 +53,17 @@ function Event({ event, now }: { event: LandingEvent; now: number }) {
         prefetch={false}
         className={`l3-event l3-event-${event.kind}`}
       >
-        <span className="l3-event-face" aria-hidden="true">
-          {initials(event.handle)}
-        </span>
+        {/* Each person's avatar, seeded by their handle. Decorative: the name follows. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="l3-event-face"
+          src={`/avatar/${event.handle}`}
+          width={26}
+          height={26}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
         <span className="l3-event-text">{said}</span>
         <span className="mono l3-event-detail">{detail}</span>
         <time

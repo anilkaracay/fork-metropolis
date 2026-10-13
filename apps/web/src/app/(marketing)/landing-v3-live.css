@@ -70,20 +70,8 @@ main.l3-main {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #0b0d10;
-  background: #ffe38f;
-}
-.fk .l3-event-forked .l3-event-face {
-  background: #b1d6ac;
-}
-.fk .l3-event-backed .l3-event-face {
-  background: #c5b6ff;
+  flex: none;
+  background: #1c2026;
 }
 .fk .l3-event-text {
   font-size: 16px;
