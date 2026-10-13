@@ -217,6 +217,18 @@ test("a failed backing read keeps Back and the panel, and retries once", async (
   await expect(panel).toContainText("No backers yet.");
 });
 
+test("signing in from the Back sheet closes it so the sign-in is not covered", async ({
+  page,
+  request,
+}) => {
+  const { leaf } = await lineage(request);
+  await page.goto(`/t/${leaf}`);
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  const sheet = page.locator("dialog.back-sheet");
+  await sheet.getByRole("button", { name: "Sign in to back" }).click();
+  await expect(sheet).toBeHidden();
+});
+
 test("an author cannot back their own idea, and earnings can be withdrawn", async ({
   page,
   request,
